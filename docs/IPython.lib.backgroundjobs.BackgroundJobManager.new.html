@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.html'>IPython</a>.
+                            <a class="dropbtn" href='IPython.html'>IPython</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.lib.html'>lib</a>.
+                            <a class="dropbtn" href='IPython.lib.html'>lib</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.core.html">core</a>
                         <a href="IPython.display.html">display</a>
@@ -343,7 +346,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.lib.backgroundjobs.html'>backgroundjobs</a>.
+                            <a class="dropbtn" href='IPython.lib.backgroundjobs.html'>backgroundjobs</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.lib.backgroundjobs.html">backgroundjobs</a>
                         <a href="IPython.lib.clipboard.html">clipboard</a>
@@ -357,7 +361,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.lib.backgroundjobs.BackgroundJobManager.html'>BackgroundJobManager</a>
+                            <a class="dropbtn" href='IPython.lib.backgroundjobs.BackgroundJobManager.html'>BackgroundJobManager</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.lib.backgroundjobs.BackgroundJobBase.html">BackgroundJobBase</a>
                         <a href="IPython.lib.backgroundjobs.BackgroundJobExpr.html">BackgroundJobExpr</a>
@@ -370,7 +375,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.lib.backgroundjobs.BackgroundJobManager.new.html'>new</a>.
+                            <a class="dropbtn" href='IPython.lib.backgroundjobs.BackgroundJobManager.new.html'>new</a>
+                        
                         <div class="dropdown-content">
                         <a href="IPython.lib.backgroundjobs.BackgroundJobManager.__call__.html">__call__</a>
                         <a href="IPython.lib.backgroundjobs.BackgroundJobManager._group_flush.html">_group_flush</a>
@@ -404,7 +410,9 @@ user-select: none;
     <a href="#">Related</a>
     <hr/>
     <a>Narrative Docs</a>
-    <hr/>
+    <hr/><a href="#section-Notes">Notes</a>
+
+    
 </div>
 
 
@@ -445,8 +453,12 @@ user-select: none;
     
         <!-- rendering Summary -->
         
-           <p >Add a new background job and start it in a separate thread. </p>
+           
+               
+        <p >Add a new background job and start it in a separate thread. </p>
 
+    
+           
        
     
 
@@ -455,64 +467,117 @@ user-select: none;
     
         <!-- rendering Extended Summary -->
         
-           <p >There are two types of jobs which can be created: </p>
+           
+               
+        <p >There are two types of jobs which can be created: </p>
 
+    
+           
+               
+        <p >1. Jobs based on expressions which can be passed to an eval() call. The expression must be given as a string.  For example: </p>
+
+    
+           
+               
+        <p >  job_manager.new(&#39;myfunc(x,y,z=1)&#39;[,glob[,loc]])  </p>
+
+    
+           
+               
+        <p >The given expression is passed to eval(), along with the optional global/local dicts provided.  If no dicts are given, they are extracted automatically from the caller&#39;s frame. </p>
+
+    
+           
+               
+        <p >A Python statement is NOT a valid eval() expression.  Basically, you can only use as an eval() argument something which can go on the right of an &#39;=&#39; sign and be assigned to a variable. </p>
+
+    
+           
+               
+        <p >For example,&#34;print &#39;hello&#39;&#34; is not valid, but &#39;2+3&#39; is. </p>
+
+    
+           
+               
+        <p >2. Jobs given a function object, optionally passing additional positional arguments: </p>
+
+    
+           
+               
+        <p >  job_manager.new(myfunc, x, y)  </p>
+
+    
+           
+               
+        <p >The function is called with the given arguments. </p>
+
+    
+           
+               
+        <p >If you need to pass keyword arguments to your function, you must supply them as a dict named kw: </p>
+
+    
+           
+               
+        <p >  job_manager.new(myfunc, x, y, kw=dict(z=1))  </p>
+
+    
+           
+               
+        <p >The reason for this assymmetry is that the new() method needs to maintain access to its own keywords, and this prevents name collisions between arguments to new() and arguments to your own functions. </p>
+
+    
+           
+               
+        <p >In both cases, the result is stored in the job.result field of the background job object. </p>
+
+    
+           
+               
+        <p >You can set 
+            <code>daemon (UNHANDLED DIRECTIVE,None, ([32m[0m[35m`daemon`[0m, Undefined) )</code>
+             attribute of the thread by giving the keyword argument 
+            <code>daemon (UNHANDLED DIRECTIVE,None, ([32m[0m[35m`daemon`[0m, Undefined) )</code>
+            . </p>
+
+    
+           
+               
+        <p >Notes and caveats: </p>
+
+    
+           
+               
+        <p >1. All threads running share the same standard output.  Thus, if your background jobs generate output, it will come out on top of whatever you are currently writing.  For this reason, background jobs are best used with silent functions which simply return their output. </p>
+
+    
+           
+               
+        <p >2. Threads also all work within the same global namespace, and this system does not lock interactive variables.  So if you send job to the background which operates on a mutable object for a long time, and start modifying that same mutable object interactively (or in another backgrounded job), all sorts of bizarre behaviour will occur. </p>
+
+    
+           
+               
+        <p >3. If a background job is spending a lot of time inside a C extension module which does not release the Python Global Interpreter Lock (GIL), this will block the IPython prompt.  This is simply because the Python interpreter can only switch between threads at Python bytecodes.  While the execution is inside C code, the interpreter must simply wait unless the extension module releases the GIL. </p>
+
+    
+           
+               
+        <p >4. There is no way, due to limitations in the Python threads library, to kill a thread once it has started. </p>
+
+    
+           
        
-           <p >1. Jobs based on expressions which can be passed to an eval() call. The expression must be given as a string.  For example: </p>
+    
 
-       
-           <p >  job_manager.new(&#39;myfunc(x,y,z=1)&#39;[,glob[,loc]])  </p>
 
-       
-           <p >The given expression is passed to eval(), along with the optional global/local dicts provided.  If no dicts are given, they are extracted automatically from the caller&#39;s frame. </p>
-
-       
-           <p >A Python statement is NOT a valid eval() expression.  Basically, you can only use as an eval() argument something which can go on the right of an &#39;=&#39; sign and be assigned to a variable. </p>
-
-       
-           <p >For example,&#34;print &#39;hello&#39;&#34; is not valid, but &#39;2+3&#39; is. </p>
-
-       
-           <p >2. Jobs given a function object, optionally passing additional positional arguments: </p>
-
-       
-           <p >  job_manager.new(myfunc, x, y)  </p>
-
-       
-           <p >The function is called with the given arguments. </p>
-
-       
-           <p >If you need to pass keyword arguments to your function, you must supply them as a dict named kw: </p>
-
-       
-           <p >  job_manager.new(myfunc, x, y, kw=dict(z=1))  </p>
-
-       
-           <p >The reason for this assymmetry is that the new() method needs to maintain access to its own keywords, and this prevents name collisions between arguments to new() and arguments to your own functions. </p>
-
-       
-           <p >In both cases, the result is stored in the job.result field of the background job object. </p>
-
-       
-           <p >You can set <code><a href="daemon.html" class='missing'>daemon</a></code>
-         attribute of the thread by giving the keyword argument <code><a href="daemon.html" class='missing'>daemon</a></code>
-        . </p>
-
-       
-           <p >Notes and caveats: </p>
-
-       
-           <p >1. All threads running share the same standard output.  Thus, if your background jobs generate output, it will come out on top of whatever you are currently writing.  For this reason, background jobs are best used with silent functions which simply return their output. </p>
-
-       
-           <p >2. Threads also all work within the same global namespace, and this system does not lock interactive variables.  So if you send job to the background which operates on a mutable object for a long time, and start modifying that same mutable object interactively (or in another backgrounded job), all sorts of bizarre behaviour will occur. </p>
-
-       
-           <p >3. If a background job is spending a lot of time inside a C extension module which does not release the Python Global Interpreter Lock (GIL), this will block the IPython prompt.  This is simply because the Python interpreter can only switch between threads at Python bytecodes.  While the execution is inside C code, the interpreter must simply wait unless the extension module releases the GIL. </p>
-
-       
-           <p >4. There is no way, due to limitations in the Python threads library, to kill a thread once it has started. </p>
-
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
        
     
 

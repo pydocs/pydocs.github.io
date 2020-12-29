@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.html'>IPython</a>.
+                            <a class="dropbtn" href='IPython.html'>IPython</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.core.html'>core</a>.
+                            <a class="dropbtn" href='IPython.core.html'>core</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.core.html">core</a>
                         <a href="IPython.display.html">display</a>
@@ -343,7 +346,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.core.interactiveshell.html'>interactiveshell</a>.
+                            <a class="dropbtn" href='IPython.core.interactiveshell.html'>interactiveshell</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.core.alias.html">alias</a>
                         <a href="IPython.core.application.html">application</a>
@@ -393,7 +397,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='IPython.core.interactiveshell._ast_asyncify.html'>_ast_asyncify</a>.
+                            <a class="dropbtn" href='IPython.core.interactiveshell._ast_asyncify.html'>_ast_asyncify</a>
+                        
                         <div class="dropdown-content">
                         <a href="IPython.core.interactiveshell.DummyMod.html">DummyMod</a>
                         <a href="IPython.core.interactiveshell.ExecutionInfo.html">ExecutionInfo</a>
@@ -431,6 +436,8 @@ user-select: none;
     <hr/><a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Notes">Notes</a>
 
     
 </div>
@@ -473,8 +480,21 @@ user-select: none;
     
         <!-- rendering Summary -->
         
-           <p >Parse a cell with top-level await and modify the AST to be able to run it later. </p>
+           
+               
+        <p >Parse a cell with top-level await and modify the AST to be able to run it later. </p>
 
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
        
     
 
@@ -490,20 +510,30 @@ user-select: none;
                 <dt><a id="cell: str">cell: str</a> : </dt>
             
         </dl>
-           <dd>
-           
-        <p>The code cell to asyncronify </p>
-            </dd>
+
+        <dd>
+            
+                
+        <p >The code cell to asyncronify </p>
+
+    
+            
+        </dd>
        
             
                 <dt><a id="wrapper_name: str">wrapper_name: str</a> : </dt>
             
         </dl>
-           <dd>
-           
-        <p>The name of the function to be used to wrap the passed <code><a href="cell.html" class='missing'>cell</a></code>
+
+        <dd>
+            
+                
+        <p >The name of the function to be used to wrap the passed <code><a href="cell.html" class='missing'>cell</a></code>
         . It is advised to **not** use a python identifier in order to not pollute the global namespace in which the function will be ran. </p>
-            </dd>
+
+    
+            
+        </dd>
        
 
    </pre>
@@ -521,25 +551,57 @@ user-select: none;
                 <dt>ModuleType:</dt>
             
         </dl>
-           <dd>
-           
-        <p>A module object AST containing **one** function named <code><a href="wrapper_name.html" class='missing'>wrapper_name</a></code>
+
+        <dd>
+            
+                
+        <p >A module object AST containing **one** function named <code><a href="wrapper_name.html" class='missing'>wrapper_name</a></code>
         . </p>
-        <p>The given code is wrapped in a async-def function, parsed into an AST, and the resulting function definition AST is modified to return the last expression. </p>
-        <p>The last expression or await node is moved into a return statement at the end of the function, and removed from its original location. If the last node is not Expr or Await nothing is done. </p>
-        <p>The function <code><a href="__code__.html" class='missing'>__code__</a></code>
+
+    
+            
+                
+        <p >The given code is wrapped in a async-def function, parsed into an AST, and the resulting function definition AST is modified to return the last expression. </p>
+
+    
+            
+                
+        <p >The last expression or await node is moved into a return statement at the end of the function, and removed from its original location. If the last node is not Expr or Await nothing is done. </p>
+
+    
+            
+                
+        <p >The function <code><a href="__code__.html" class='missing'>__code__</a></code>
          will need to be later modified  (by 
         <code class='verbatim'>removed_co_newlocals</code>
     ) in a subsequent step to not create new <code><a href="locals().html" class='missing'>locals()</a></code>
          meaning that the local and global scope are the same, ie as if the body of the function was at module level. </p>
-        <p>Lastly a call to <code><a href="locals().html" class='missing'>locals()</a></code>
+
+    
+            
+                
+        <p >Lastly a call to <code><a href="locals().html" class='missing'>locals()</a></code>
          is made just before the last expression of the function, or just after the last assignment or statement to make sure the global dict is updated as python function work with a local fast cache which is updated only on <code><a href="local().html" class='missing'>local()</a></code>
          calls. </p>
-            </dd>
+
+    
+            
+        </dd>
        
 
    </pre>
    
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
 
 
 

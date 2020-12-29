@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.html'>matplotlib</a>.
+                            <a class="dropbtn" href='matplotlib.html'>matplotlib</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.patches.html'>patches</a>.
+                            <a class="dropbtn" href='matplotlib.patches.html'>patches</a>.
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.ExecutableNotFoundError.html">ExecutableNotFoundError</a>
                         <a href="matplotlib.RcParams.html">RcParams</a>
@@ -434,7 +437,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.patches.Arc.html'>Arc</a>.
+                            <a class="dropbtn" href='matplotlib.patches.Arc.html'>Arc</a>.
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.patches.Arc.html">Arc</a>
                         <a href="matplotlib.patches.Arrow.html">Arrow</a>
@@ -468,7 +472,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.patches.Arc.draw.html'>draw</a>
+                            <a class="dropbtn" href='matplotlib.patches.Arc.draw.html'>draw</a>
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.patches.Arc.__init__.html">__init__</a>
                         <a href="matplotlib.patches.Arc.draw.html">draw</a>
@@ -537,8 +542,21 @@ user-select: none;
     
         <!-- rendering Summary -->
         
-           <p >Draw the arc to the given *renderer*. </p>
+           
+               
+        <p >Draw the arc to the given *renderer*. </p>
 
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
        
     
 
@@ -549,35 +567,65 @@ user-select: none;
     
         <!-- rendering Notes -->
         
-           <p >Ellipses are normally drawn using an approximation that uses eight cubic Bezier splines.  The error of this approximation is 1.89818e-6, according to this unverified source: </p>
+           
+               
+        <p >Ellipses are normally drawn using an approximation that uses eight cubic Bezier splines.  The error of this approximation is 1.89818e-6, according to this unverified source: </p>
+
+    
+           
+               
+        <p >  Lancaster, Don.  *Approximating a Circle or an Ellipse Using   Four Bezier Cubic Splines.*    https://www.tinaja.com/glib/ellipse4.pdf  </p>
+
+    
+           
+               
+        <p >There is a use case where very large ellipses must be drawn with very high accuracy, and it is too expensive to render the entire ellipse with enough segments (either splines or line segments).  Therefore, in the case where either radius of the ellipse is large enough that the error of the spline approximation will be visible (greater than one pixel offset from the ideal), a different technique is used. </p>
+
+    
+           
+               
+        <p >In that case, only the visible parts of the ellipse are drawn, with each visible arc using a fixed number of spline segments (8).  The algorithm proceeds as follows: </p>
+
+    
+           
+               
+           1. The points where the ellipse intersects the axes bounding
+    
+
+   box are located.  (This is done be performing an inverse
+       transformation on the axes bbox such that it is relative
+       to the unit circle -- this makes the intersection
+       calculation much easier than doing rotated ellipse
+       intersection directly).
+    
+       This uses the &#34;line intersecting a circle&#34; algorithm from:
+    
+           Vince, John.  *Geometry for Computer Graphics: Formulae,
+           Examples &amp; Proofs.*  London: Springer-Verlag, 2005.
+    
+    
+    <br/>
 
        
-           <p >  Lancaster, Don.  *Approximating a Circle or an Ellipse Using   Four Bezier Cubic Splines.*    https://www.tinaja.com/glib/ellipse4.pdf  </p>
+           
+               
+        <p >2. The angles of each of the intersection points are calculated. </p>
+
+    
+           
+               
+           3. Proceeding counterclockwise starting in the positive
+    
+
+   x-direction, each of the visible arc-segments between the
+       pairs of vertices are drawn using the Bezier arc
+       approximation technique implemented in `.Path.arc`.
+    
+    <br/>
 
        
-           <p >There is a use case where very large ellipses must be drawn with very high accuracy, and it is too expensive to render the entire ellipse with enough segments (either splines or line segments).  Therefore, in the case where either radius of the ellipse is large enough that the error of the spline approximation will be visible (greater than one pixel offset from the ideal), a different technique is used. </p>
-
+           
        
-           <p >In that case, only the visible parts of the ellipse are drawn, with each visible arc using a fixed number of spline segments (8).  The algorithm proceeds as follows: </p>
-
-       
-           <code>Some DefListItem Not implemented yet</code>1. The points where the ellipse intersects the axes bounding</pre><pre>   box are located.  (This is done be performing an inverse
-   transformation on the axes bbox such that it is relative
-   to the unit circle -- this makes the intersection
-   calculation much easier than doing rotated ellipse
-   intersection directly).
-
-   This uses the &#34;line intersecting a circle&#34; algorithm from:
-
-       Vince, John.  *Geometry for Computer Graphics: Formulae,
-       Examples &amp; Proofs.*  London: Springer-Verlag, 2005.
-</pre>
-           <p >2. The angles of each of the intersection points are calculated. </p>
-
-       
-           <code>Some DefListItem Not implemented yet</code>3. Proceeding counterclockwise starting in the positive</pre><pre>   x-direction, each of the visible arc-segments between the
-   pairs of vertices are drawn using the Bezier arc
-   approximation technique implemented in `.Path.arc`.</pre>
     
 
 

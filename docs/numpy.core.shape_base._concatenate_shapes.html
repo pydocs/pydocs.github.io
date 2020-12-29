@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='numpy.html'>numpy</a>.
+                            <a class="dropbtn" href='numpy.html'>numpy</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='numpy.core.html'>core</a>.
+                            <a class="dropbtn" href='numpy.core.html'>core</a>.
+                        
                         <div class="dropdown-content">
                         <a href="numpy.AxisError.html">AxisError</a>
                         <a href="numpy.ComplexWarning.html">ComplexWarning</a>
@@ -698,7 +701,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='numpy.core.shape_base.html'>shape_base</a>.
+                            <a class="dropbtn" href='numpy.core.shape_base.html'>shape_base</a>.
+                        
                         <div class="dropdown-content">
                         <a href="numpy.core._add_newdocs.html">_add_newdocs</a>
                         <a href="numpy.core._asarray.html">_asarray</a>
@@ -734,7 +738,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='numpy.core.shape_base._concatenate_shapes.html'>_concatenate_shapes</a>
+                            <a class="dropbtn" href='numpy.core.shape_base._concatenate_shapes.html'>_concatenate_shapes</a>
+                        
                         <div class="dropdown-content">
                         <a href="numpy.core.shape_base._block.html">_block</a>
                         <a href="numpy.core.shape_base._block_check_depths_match.html">_block_check_depths_match</a>
@@ -764,7 +769,9 @@ user-select: none;
     <a href="#">Related</a>
     <hr/>
     <a>Narrative Docs</a>
-    <hr/>
+    <hr/><a href="#section-Notes">Notes</a>
+
+    
 </div>
 
 
@@ -805,8 +812,12 @@ user-select: none;
     
         <!-- rendering Summary -->
         
-           <p >Given array shapes, return the resulting shape and slices prefixes. </p>
+           
+               
+        <p >Given array shapes, return the resulting shape and slices prefixes. </p>
 
+    
+           
        
     
 
@@ -815,36 +826,62 @@ user-select: none;
     
         <!-- rendering Extended Summary -->
         
-           <p >These help in nested concatation. Returns ------- shape: tuple of int </p>
+           
+               
+        <p >These help in nested concatation. Returns ------- shape: tuple of int </p>
 
-       
-           <p >    This tuple satisfies:     
+    
+           
+               
+        <p >    This tuple satisfies:     
         <code class='verbatim'></code>
         shape, _ = _concatenate_shapes([arr.shape for shape in arrs], axis)     shape == concatenate(arrs, axis).shape     
         <code class='verbatim'></code>
      </p>
 
+    
+           
+               
+           slice_prefixes: tuple of (slice(start, end), )
+    
+
+    For a list of arrays being concatenated, this returns the slice
+        in the larger array at axis that needs to be sliced into.
+    
+        For example, the following holds:
+        ```
+        ret = concatenate([a, b, c], axis)
+        _, (sl_a, sl_b, sl_c) = concatenate_slices([a, b, c], axis)
+    
+        ret[(slice(None),) * axis + sl_a] == a
+        ret[(slice(None),) * axis + sl_b] == b
+        ret[(slice(None),) * axis + sl_c] == c
+        ```
+    
+        These are called slice prefixes since they are used in the recursive
+        blocking algorithm to compute the left-most slices during the
+        recursion. Therefore, they must be prepended to rest of the slice
+        that was computed deeper in the recursion.
+    
+        These are returned as tuples to ensure that they can quickly be added
+        to existing slice tuple without creating a new tuple every time.
+    
+    <br/>
+
        
-           <code>Some DefListItem Not implemented yet</code>slice_prefixes: tuple of (slice(start, end), )</pre><pre>    For a list of arrays being concatenated, this returns the slice
-    in the larger array at axis that needs to be sliced into.
+           
+       
+    
 
-    For example, the following holds:
-    ```
-    ret = concatenate([a, b, c], axis)
-    _, (sl_a, sl_b, sl_c) = concatenate_slices([a, b, c], axis)
 
-    ret[(slice(None),) * axis + sl_a] == a
-    ret[(slice(None),) * axis + sl_b] == b
-    ret[(slice(None),) * axis + sl_c] == c
-    ```
-
-    These are called slice prefixes since they are used in the recursive
-    blocking algorithm to compute the left-most slices during the
-    recursion. Therefore, they must be prepended to rest of the slice
-    that was computed deeper in the recursion.
-
-    These are returned as tuples to ensure that they can quickly be added
-    to existing slice tuple without creating a new tuple every time.</pre>
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
     
 
 

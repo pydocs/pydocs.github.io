@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='scipy.html'>scipy</a>.
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='scipy._lib.html'>_lib</a>.
+                            <a class="dropbtn" href='scipy._lib.html'>_lib</a>.
+                        
                         <div class="dropdown-content">
                         <a href="scipy.__config__.html">__config__</a>
                         <a href="scipy._distributor_init.html">_distributor_init</a>
@@ -337,7 +340,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='scipy._lib._uarray.html'>_uarray</a>.
+                            <a class="dropbtn" href='scipy._lib._uarray.html'>_uarray</a>.
+                        
                         <div class="dropdown-content">
                         <a href="scipy._lib._ccallback.html">_ccallback</a>
                         <a href="scipy._lib._ccallback_c.html">_ccallback_c</a>
@@ -353,8 +357,7 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                                <a class="dropbtn" >+</a>
-                        
+                            <a class="dropbtn" >+</a>
                         
                         <div class="dropdown-content">
                         <a href="scipy._lib._uarray._backend.html">_backend</a>
@@ -381,7 +384,9 @@ user-select: none;
     <a href="#">Related</a>
     <hr/>
     <a>Narrative Docs</a>
-    <hr/>
+    <hr/><a href="#section-Notes">Notes</a>
+
+    
 </div>
 
 
@@ -416,13 +421,18 @@ user-select: none;
     
         <!-- rendering Summary -->
         
+           
+               
             <div class='block_directive'>
     <div class='head'>.. note::: []</div>
-    <p >    If you are looking for overrides for NumPy-specific methods, see the     documentation for <code><a href="unumpy.html" class='missing'>unumpy</a></code>
-        . This page explains how to write     back-ends and multimethods. </p>
+    <p >    If you are looking for overrides for NumPy-specific methods, see the     documentation for 
+            <code>unumpy (UNHANDLED DIRECTIVE,None, ([32m:obj:[0m[35m`unumpy`[0m, Undefined) )</code>
+            . This page explains how to write     back-ends and multimethods. </p>
 
 </div>
 
+       
+           
        
     
 
@@ -431,16 +441,22 @@ user-select: none;
     
         <!-- rendering Extended Summary -->
         
-           <p >
+           
+               
+        <p >
         <code class='verbatim'>uarray</code>
-     is built around a back-end protocol and overridable multimethods. It is necessary to define multimethods for back-ends to be able to override them. See the documentation of <code><a href="scipy._lib._uarray._backend.generate_multimethod.html" class='exists'>generate_multimethod</a></code>
+     is built around a back-end protocol and overridable multimethods. It is necessary to define multimethods for back-ends to be able to override them. See the documentation of <code><a link href=".html" class='exists'>generate_multimethod</a></code>
          on how to write multimethods. </p>
 
-       
-           <p >Let&#39;s start with the simplest: </p>
+    
+           
+               
+        <p >Let&#39;s start with the simplest: </p>
 
-       
-           <p >
+    
+           
+               
+        <p >
         <code class='verbatim'>__ua_domain__</code>
      defines the back-end *domain*. The domain consists of period- separated string consisting of the modules you extend plus the submodule. For example, if a submodule 
         <code class='verbatim'>module2.submodule</code>
@@ -452,31 +468,57 @@ user-select: none;
         <code class='verbatim'>&#34;module1.module2.submodule&#34;</code>
     . </p>
 
-       
-           <p >For the purpose of this demonstration, we&#39;ll be creating an object and setting its attributes directly. However, note that you can use a module or your own type as a backend as well. </p>
+    
+           
+               
+        <p >For the purpose of this demonstration, we&#39;ll be creating an object and setting its attributes directly. However, note that you can use a module or your own type as a backend as well. </p>
+
+    
+           
+               
+           &gt;&gt;&gt; class Backend: pass
+    &gt;&gt;&gt; be = Backend()
+    &gt;&gt;&gt; be.__ua_domain__ = &#34;ua_examples&#34;
+    
+
+    
+
+    <br/>
 
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; class Backend: pass
-&gt;&gt;&gt; be = Backend()
-&gt;&gt;&gt; be.__ua_domain__ = &#34;ua_examples&#34;</pre><pre></pre>
-           <p >It might be useful at this point to sidetrack to the documentation of <code><a href="scipy._lib._uarray._backend.generate_multimethod.html" class='exists'>generate_multimethod</a></code>
-         to find out how to generate a multimethod overridable by <code><a href="scipy._lib.uarray.html" class='exists'>uarray</a></code>
+           
+               
+        <p >It might be useful at this point to sidetrack to the documentation of <code><a link href=".html" class='exists'>generate_multimethod</a></code>
+         to find out how to generate a multimethod overridable by <code><a link href=".html" class='exists'>uarray</a></code>
         . Needless to say, writing a backend and creating multimethods are mostly orthogonal activities, and knowing one doesn&#39;t necessarily require knowledge of the other, although it is certainly helpful. We expect core API designers/specifiers to write the multimethods, and implementors to override them. But, as is often the case, similar people write both. </p>
 
-       
-           <p >Without further ado, here&#39;s an example multimethod: </p>
+    
+           
+               
+        <p >Without further ado, here&#39;s an example multimethod: </p>
+
+    
+           
+               
+           &gt;&gt;&gt; import uarray as ua
+    &gt;&gt;&gt; from uarray import Dispatchable
+    &gt;&gt;&gt; def override_me(a, b):
+    ...   return Dispatchable(a, int),
+    &gt;&gt;&gt; def override_replacer(args, kwargs, dispatchables):
+    ...     return (dispatchables[0], args[1]), {}
+    &gt;&gt;&gt; overridden_me = ua.generate_multimethod(
+    ...     override_me, override_replacer, &#34;ua_examples&#34;
+    ... )
+    
+
+    
+
+    <br/>
 
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; import uarray as ua
-&gt;&gt;&gt; from uarray import Dispatchable
-&gt;&gt;&gt; def override_me(a, b):
-...   return Dispatchable(a, int),
-&gt;&gt;&gt; def override_replacer(args, kwargs, dispatchables):
-...     return (dispatchables[0], args[1]), {}
-&gt;&gt;&gt; overridden_me = ua.generate_multimethod(
-...     override_me, override_replacer, &#34;ua_examples&#34;
-... )</pre><pre></pre>
-           <p >Next comes the part about overriding the multimethod. This requires the 
+           
+               
+        <p >Next comes the part about overriding the multimethod. This requires the 
         <code class='verbatim'>__ua_function__</code>
      protocol, and the 
         <code class='verbatim'>__ua_convert__</code>
@@ -494,11 +536,22 @@ user-select: none;
         <code class='verbatim'>dispatchables</code>
      is the list of converted dispatchables passed in. </p>
 
+    
+           
+               
+           &gt;&gt;&gt; def __ua_function__(method, args, kwargs):
+    ...     return method.__name__, args, kwargs
+    &gt;&gt;&gt; be.__ua_function__ = __ua_function__
+    
+
+    
+
+    <br/>
+
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; def __ua_function__(method, args, kwargs):
-...     return method.__name__, args, kwargs
-&gt;&gt;&gt; be.__ua_function__ = __ua_function__</pre><pre></pre>
-           <p >The other protocol of interest is the 
+           
+               
+        <p >The other protocol of interest is the 
         <code class='verbatim'>__ua_convert__</code>
      protocol. It has the signature 
         <code class='verbatim'>(dispatchables, coerce)</code>
@@ -510,58 +563,128 @@ user-select: none;
         <code class='verbatim'>O(1)</code>
      operation, but it means that no memory copying should be involved, only views of the existing data. </p>
 
-       
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; def __ua_convert__(dispatchables, coerce):
-...     for d in dispatchables:
-...         if d.type is int:
-...             if coerce and d.coercible:
-...                 yield str(d.value)
-...             else:
-...                 yield d.value
-&gt;&gt;&gt; be.__ua_convert__ = __ua_convert__</pre><pre></pre>
-           <p >Now that we have defined the backend, the next thing to do is to call the multimethod. </p>
+    
+           
+               
+           &gt;&gt;&gt; def __ua_convert__(dispatchables, coerce):
+    ...     for d in dispatchables:
+    ...         if d.type is int:
+    ...             if coerce and d.coercible:
+    ...                 yield str(d.value)
+    ...             else:
+    ...                 yield d.value
+    &gt;&gt;&gt; be.__ua_convert__ = __ua_convert__
+    
+
+    
+
+    <br/>
 
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; with ua.set_backend(be):
-...      overridden_me(1, &#34;2&#34;)
-(&#39;override_me&#39;, (1, &#39;2&#39;), {})</pre><pre></pre>
-           <p >Note that the marked type has no effect on the actual type of the passed object. We can also coerce the type of the input. </p>
+           
+               
+        <p >Now that we have defined the backend, the next thing to do is to call the multimethod. </p>
+
+    
+           
+               
+           &gt;&gt;&gt; with ua.set_backend(be):
+    ...      overridden_me(1, &#34;2&#34;)
+    (&#39;override_me&#39;, (1, &#39;2&#39;), {})
+    
+
+    
+
+    <br/>
 
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; with ua.set_backend(be, coerce=True):
-...     overridden_me(1, &#34;2&#34;)
-...     overridden_me(1.0, &#34;2&#34;)
-(&#39;override_me&#39;, (&#39;1&#39;, &#39;2&#39;), {})
-(&#39;override_me&#39;, (&#39;1.0&#39;, &#39;2&#39;), {})</pre><pre></pre>
-           <p >Another feature is that if you remove 
+           
+               
+        <p >Note that the marked type has no effect on the actual type of the passed object. We can also coerce the type of the input. </p>
+
+    
+           
+               
+           &gt;&gt;&gt; with ua.set_backend(be, coerce=True):
+    ...     overridden_me(1, &#34;2&#34;)
+    ...     overridden_me(1.0, &#34;2&#34;)
+    (&#39;override_me&#39;, (&#39;1&#39;, &#39;2&#39;), {})
+    (&#39;override_me&#39;, (&#39;1.0&#39;, &#39;2&#39;), {})
+    
+
+    
+
+    <br/>
+
+       
+           
+               
+        <p >Another feature is that if you remove 
         <code class='verbatim'>__ua_convert__</code>
     , the arguments are not converted at all and it&#39;s up to the backend to handle that. </p>
 
+    
+           
+               
+           &gt;&gt;&gt; del be.__ua_convert__
+    &gt;&gt;&gt; with ua.set_backend(be):
+    ...     overridden_me(1, &#34;2&#34;)
+    (&#39;override_me&#39;, (1, &#39;2&#39;), {})
+    
+
+    
+
+    <br/>
+
        
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; del be.__ua_convert__
-&gt;&gt;&gt; with ua.set_backend(be):
-...     overridden_me(1, &#34;2&#34;)
-(&#39;override_me&#39;, (1, &#39;2&#39;), {})</pre><pre></pre>
-           <p >You also have the option to return 
+           
+               
+        <p >You also have the option to return 
         <code class='verbatim'>NotImplemented</code>
     , in which case processing moves on to the next back-end, which, in this case, doesn&#39;t exist. The same applies to 
         <code class='verbatim'>__ua_convert__</code>
     . </p>
 
-       
-           <code>Some Example Not implemented yet</code>&gt;&gt;&gt; be.__ua_function__ = lambda *a, **kw: NotImplemented
-&gt;&gt;&gt; with ua.set_backend(be):
-...     overridden_me(1, &#34;2&#34;)
-Traceback (most recent call last):</pre><pre>    ...</pre>
-           <p >uarray.backend.BackendNotImplementedError: ... </p>
+    
+           
+               
+           &gt;&gt;&gt; be.__ua_function__ = lambda *a, **kw: NotImplemented
+    &gt;&gt;&gt; with ua.set_backend(be):
+    ...     overridden_me(1, &#34;2&#34;)
+    Traceback (most recent call last):
+    
+
+    ...
+    
+    <br/>
 
        
-           <p >The last possibility is if we don&#39;t have 
+           
+               
+        <p >uarray.backend.BackendNotImplementedError: ... </p>
+
+    
+           
+               
+        <p >The last possibility is if we don&#39;t have 
         <code class='verbatim'>__ua_convert__</code>
     , in which case the job is left up to 
         <code class='verbatim'>__ua_function__</code>
     , but putting things back into arrays after conversion will not be possible. </p>
 
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
        
     
 

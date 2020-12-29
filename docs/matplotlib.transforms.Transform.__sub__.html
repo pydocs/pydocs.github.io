@@ -309,9 +309,11 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.html'>matplotlib</a>.
+                            <a class="dropbtn" href='matplotlib.html'>matplotlib</a>.
+                        
                         <div class="dropdown-content">
                         <a href="IPython.html">IPython</a>
+                        <a href="dask.html">dask</a>
                         <a href="matplotlib.html">matplotlib</a>
                         <a href="numpy.html">numpy</a>
                         <a href="scipy.html">scipy</a>
@@ -323,7 +325,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.transforms.html'>transforms</a>.
+                            <a class="dropbtn" href='matplotlib.transforms.html'>transforms</a>.
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.ExecutableNotFoundError.html">ExecutableNotFoundError</a>
                         <a href="matplotlib.RcParams.html">RcParams</a>
@@ -434,7 +437,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.transforms.Transform.html'>Transform</a>.
+                            <a class="dropbtn" href='matplotlib.transforms.Transform.html'>Transform</a>.
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.transforms.Affine2D.html">Affine2D</a>
                         <a href="matplotlib.transforms.Affine2DBase.html">Affine2DBase</a>
@@ -475,7 +479,8 @@ user-select: none;
                 
                     <div class="dropdown">
                         
-                        <a class="dropbtn" href='matplotlib.transforms.Transform.__sub__.html'>__sub__</a>.
+                            <a class="dropbtn" href='matplotlib.transforms.Transform.__sub__.html'>__sub__</a>
+                        
                         <div class="dropdown-content">
                         <a href="matplotlib.transforms.Transform.__add__.html">__add__</a>
                         <a href="matplotlib.transforms.Transform.__array__.html">__array__</a>
@@ -517,7 +522,9 @@ user-select: none;
     <a href="#">Related</a>
     <hr/>
     <a>Narrative Docs</a>
-    <hr/>
+    <hr/><a href="#section-Notes">Notes</a>
+
+    
 </div>
 
 
@@ -558,8 +565,12 @@ user-select: none;
     
         <!-- rendering Summary -->
         
-           <p >Compose *self* with the inverse of *other*, cancelling identical terms if any:: </p>
+           
+               
+        <p >Compose *self* with the inverse of *other*, cancelling identical terms if any:: </p>
 
+    
+           
        
     
 
@@ -568,29 +579,71 @@ user-select: none;
     
         <!-- rendering Extended Summary -->
         
-           <code>Some DefListItem Not implemented yet</code>:: workaround numpyoc summary/ext summary bug </pre><pre>    # In general:
-    A - B == A + B.inverted()
-    # (but see note regarding frozen transforms below).
+           
+               
+           :: workaround numpyoc summary/ext summary bug
+    
 
-    # If A &#34;ends with&#34; B (i.e. A == A&#39; + B for some A&#39;) we can cancel
-    # out B:
-    (A&#39; + B) - B == A&#39;
+    # In general:
+        A - B == A + B.inverted()
+        # (but see note regarding frozen transforms below).
+    
+        # If A &#34;ends with&#34; B (i.e. A == A&#39; + B for some A&#39;) we can cancel
+        # out B:
+        (A&#39; + B) - B == A&#39;
+    
+        # Likewise, if B &#34;starts with&#34; A (B = A + B&#39;), we can cancel out A:
+        A - (A + B&#39;) == B&#39;.inverted() == B&#39;^-1
+    
+    
+    <br/>
 
-    # Likewise, if B &#34;starts with&#34; A (B = A + B&#39;), we can cancel out A:
-    A - (A + B&#39;) == B&#39;.inverted() == B&#39;^-1
-</pre>
-           <p >Cancellation (rather than naively returning 
+       
+           
+               
+        <p >Cancellation (rather than naively returning 
         <code class='verbatim'>A + B.inverted()</code>
     ) is important for multiple reasons: </p>
 
+    
+           
+               
+           - It avoids floating-point inaccuracies when computing the inverse of
+    
+
+  B: ``B - B`` is guaranteed to cancel out exactly (resulting in the
+      identity transform), whereas ``B + B.inverted()`` may differ by a
+      small epsilon.
+    
+    <br/>
+
        
-           <code>Some DefListItem Not implemented yet</code>- It avoids floating-point inaccuracies when computing the inverse of</pre><pre>  B: ``B - B`` is guaranteed to cancel out exactly (resulting in the
-  identity transform), whereas ``B + B.inverted()`` may differ by a
-  small epsilon.</pre>
-           <code>Some DefListItem Not implemented yet</code>- ``B.inverted()`` always returns a frozen transform: if one computes</pre><pre>  ``A + B + B.inverted()`` and later mutates ``B``, then
-  ``B.inverted()`` won&#39;t be updated and the last two terms won&#39;t cancel
-  out anymore; on the other hand, ``A + B - B`` will always be equal to
-  ``A`` even if ``B`` is mutated.</pre>
+           
+               
+           - ``B.inverted()`` always returns a frozen transform: if one computes
+    
+
+  ``A + B + B.inverted()`` and later mutates ``B``, then
+      ``B.inverted()`` won&#39;t be updated and the last two terms won&#39;t cancel
+      out anymore; on the other hand, ``A + B - B`` will always be equal to
+      ``A`` even if ``B`` is mutated.
+    
+    <br/>
+
+       
+           
+       
+    
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
     
 
 
