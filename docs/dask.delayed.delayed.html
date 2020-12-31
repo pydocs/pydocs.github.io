@@ -304,22 +304,34 @@ user-select: none;
         
         
         <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
-        <nav> <a href='/' >/ p</a>  / <a href=dask>dask</a> / <a>2020.12.0+22.ga82bec5a5</a> / <a>api</a>&nbsp;/&nbsp;
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=dask>dask</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="IPython.html">IPython</a>
+                            <a href="dask.html">dask</a>
+                            <a href="matplotlib.html">matplotlib</a>
+                            <a href="numpy.html">numpy</a>
+                            <a href="scipy.html">scipy</a>
+                            <a href="skimage.html">skimage</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=dask>2020.12.0+22.ga82bec5a5</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="dask.html">2020.12.0+22.ga82bec5a5</a>
+                            
+                    </div>
+                </div>
+                <a>api</a>&nbsp;/&nbsp;
             
                 
                     <div class="dropdown">
                         
                             <a class="dropbtn" href='dask.html'>dask</a>.
                         
-                        <div class="dropdown-content">
-                        <a href="IPython.html">IPython</a>
-                        <a href="dask.html">dask</a>
-                        <a href="matplotlib.html">matplotlib</a>
-                        <a href="numpy.html">numpy</a>
-                        <a href="scipy.html">scipy</a>
-                        <a href="skimage.html">skimage</a>
                         
-                        </div>
                     </div>
                 
                 
@@ -327,10 +339,12 @@ user-select: none;
                         
                             <a class="dropbtn" href='dask.delayed.html'>delayed</a>
                         
-                        <div class="dropdown-content">
-                        <a href="dask.delayed.delayed.html">delayed</a>
                         
-                        </div>
+                            <div class="dropdown-content">
+                            <a href="dask.delayed.delayed.html">delayed</a>
+                            
+                            </div>
+                        
                     </div>
                 </nav>
     </header>
@@ -353,15 +367,10 @@ user-select: none;
     <a>Narrative Docs</a>
     <hr/><a href="#section-Parameters">Parameters</a>
 
-    <a href="#section-Notes">Notes</a>
-
     <a href="#section-Examples">Examples</a>
 
     
 </div>
-
-
-
 
 
 
@@ -402,7 +411,7 @@ user-select: none;
                
         <p >Wraps a function or object to produce a 
         <code class='verbatim'>Delayed</code>
-    . </p>
+    .</p>
 
     
            
@@ -418,7 +427,7 @@ user-select: none;
                
         <p >
         <code class='verbatim'>Delayed</code>
-     objects act as proxies for the object they wrap, but all operations on them are done lazily by building up a dask graph internally. </p>
+     objects act as proxies for the object they wrap, but all operations on them are done lazily by building up a dask graph internally.</p>
 
     
            
@@ -430,135 +439,58 @@ user-select: none;
         <h3 id="section-Parameters">Parameters</h3>
     
     
-
-       <dl>
-           
-            
-                <dt><a id="obj">obj</a> : object</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p >The function or object to wrap </p>
-
-    
-            
-        </dd>
        
-            
-                <dt><a id="name">name</a> : string or hashable, optional</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p >The key to use in the underlying graph for the wrapped object. Defaults to hashing content. Note that this only affects the name of the object wrapped by this call to delayed, and *not* the output of delayed function calls - for that use 
-        <code class='verbatim'>dask_key_name=</code>
-     as described below. </p>
-
-    
-            
-                
-            <div class='block_directive'>
-    <div class='head'>.. note:: [&#39;&#39;]</div>
-    <p >   Because this 
-        <code class='verbatim'>name</code>
-     is used as the key in task graphs, you should    ensure that it uniquely identifies 
-        <code class='verbatim'>obj</code>
-    . If you&#39;d like to provide    a descriptive name that is still unique, combine the descriptive name    with 
-            <code>dask.base.tokenize (UNHANDLED DIRECTIVE,None, ([32m:func:[0m[35m`dask.base.tokenize`[0m, Undefined) )</code>
-             of the 
-        <code class='verbatim'>array_like</code>
-    . See    
-            <code>graphs (UNHANDLED DIRECTIVE,None, ([32m:ref:[0m[35m`graphs`[0m, Undefined) )</code>
-             for more. </p>
-
-</div>
-
-       
-            
-        </dd>
-       
-            
-                <dt><a id="pure">pure</a> : bool, optional</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p >Indicates whether calling the resulting 
-        <code class='verbatim'>Delayed</code>
-     object is a pure operation. If True, arguments to the call are hashed to produce deterministic keys. If not provided, the default is to check the global 
-        <code class='verbatim'>delayed_pure</code>
-     setting, and fallback to 
-        <code class='verbatim'>False</code>
-     if unset. </p>
-
-    
-            
-        </dd>
-       
-            
-                <dt><a id="nout">nout</a> : int, optional</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p >The number of outputs returned from calling the resulting 
-        <code class='verbatim'>Delayed</code>
-     object. If provided, the 
-        <code class='verbatim'>Delayed</code>
-     output of the call can be iterated into 
-        <code class='verbatim'>nout</code>
-     objects, allowing for unpacking of results. By default iteration over 
-        <code class='verbatim'>Delayed</code>
-     objects will error. Note, that 
-        <code class='verbatim'>nout=1</code>
-     expects 
-        <code class='verbatim'>obj</code>
-     to return a tuple of length 1, and consequently for 
-        <code class='verbatim'>nout=0</code>
-    , 
-        <code class='verbatim'>obj</code>
-     should return an empty tuple. </p>
-
-    
-            
-        </dd>
-       
-            
-                <dt><a id="traverse">traverse</a> : bool, optional</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p >By default dask traverses builtin python collections looking for dask objects passed to 
-        <code class='verbatim'>delayed</code>
-    . For large collections this can be expensive. If 
-        <code class='verbatim'>obj</code>
-     doesn&#39;t contain any dask objects, set 
-        <code class='verbatim'>traverse=False</code>
-     to avoid doing this traversal. </p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
    
 
 
     
-        <h3 id="section-Notes">Notes</h3>
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
     
     
         <!-- rendering Notes -->
@@ -569,167 +501,296 @@ user-select: none;
 
 
     
+    
+       
+   
+
+
+    
         <h3 id="section-Examples">Examples</h3>
     
     
         
+                
+        <p >Apply to functions to delay execution:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=dask, href="dask.html">dask</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="k">def</span><span class=""> </span><a class="foo nf" title=__main__.inc, href="__main__.inc.html">inc</a><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">x</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span>
 </pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=__main__.inc, href="__main__.inc.html">inc</a><span class="">(</span><span class="mi">10</span><span class="">)</span>
 11</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><a class="foo " title=__main__.inc, href="__main__.inc.html">inc</a><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><span class="">(</span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo nb" title=builtins.type, href="builtins.type.html">type</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="">)</span><span class=""> </span><span class="o">==</span><span class=""> </span><span class="">Delayed</span><span class="">              </span><span class="c1"># doctest: +SKIP</span>
 True</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span>
 11</pre>
             
             
          
+                
+        <p >Can be used as a decorator:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="nd">@delayed</span><span class="">(</span><span class="">pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="k">def</span><span class=""> </span><a class="foo nf" title=__main__.add, href="__main__.add.html">add</a><span class="">(</span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">a</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">b</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span>
 3</pre>
             
             
          
+                
+        <p >
+        <code class='verbatim'>delayed</code>
+     also accepts an optional keyword 
+        <code class='verbatim'>pure</code>
+    . If False, then subsequent calls will always produce a different 
+        <code class='verbatim'>Delayed</code>
+    . This is useful for non-pure functions (such as 
+        <code class='verbatim'>time</code>
+     or 
+        <code class='verbatim'>random</code>
+    ).</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=random, href="random.html">random</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=_random.Random.random, href="_random.Random.random.html">random</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">out1</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><a class="foo " title=_random.Random.random, href="_random.Random.random.html">random</a><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">False</span><span class="">)</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">out2</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><a class="foo " title=_random.Random.random, href="_random.Random.random.html">random</a><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">False</span><span class="">)</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">out1</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">out2</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a>
 False</pre>
             
             
          
+                
+        <p >If you know a function is pure (output only depends on the input, with no global state), then you can set 
+        <code class='verbatim'>pure=True</code>
+    . This will attempt to apply a consistent name to the output, but will fallback on the same behavior of 
+        <code class='verbatim'>pure=False</code>
+     if this fails.</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="nd">@delayed</span><span class="">(</span><span class="">pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="k">def</span><span class=""> </span><a class="foo nf" title=__main__.add, href="__main__.add.html">add</a><span class="">(</span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">a</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">b</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="">out1</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">out2</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">out1</span><span class="o">.</span><span class="">key</span><span class=""> </span><span class="o">==</span><span class=""> </span><span class="">out2</span><span class="o">.</span><span class="">key</span>
 True</pre>
             
             
          
+                
+        <p >Instead of setting 
+        <code class='verbatim'>pure</code>
+     as a property of the callable, you can also set it contextually using the 
+        <code class='verbatim'>delayed_pure</code>
+     setting. Note that this influences the *call* and not the *creation* of the callable:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="nd">@delayed</span><br><span class='nsl'>...&nbsp;</span><span class="k">def</span><span class=""> </span><a class="foo nf" title=__main__.mul, href="__main__.mul.html">mul</a><span class="">(</span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">a</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">b</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="kn">import</span><span class=""> </span><a class="foo nn" title=dask, href="dask.html">dask</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="k">with</span><span class=""> </span><a class="foo " title=dask, href="dask.html">dask</a><span class="o">.</span><a class="foo " title=dask.config, href="dask.config.html">config</a><span class="o">.</span><a class="foo " title=dask.config.set, href="dask.config.set.html">set</a><span class="">(</span><span class="">delayed_pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo nb" title=builtins.print, href="builtins.print.html">print</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">mul</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">mul</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class="">)</span>
 True</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">with</span><span class=""> </span><a class="foo " title=dask, href="dask.html">dask</a><span class="o">.</span><a class="foo " title=dask.config, href="dask.config.html">config</a><span class="o">.</span><a class="foo " title=dask.config.set, href="dask.config.set.html">set</a><span class="">(</span><span class="">delayed_pure</span><span class="o">=</span><span class="kc">False</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo nb" title=builtins.print, href="builtins.print.html">print</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">mul</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">mul</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class="">)</span>
 False</pre>
             
             
          
+                
+        <p >The key name of the result of calling a delayed object is determined by hashing the arguments by default. To explicitly set the name, you can use the 
+        <code class='verbatim'>dask_key_name</code>
+     keyword when calling the function:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">   </span><span class="c1"># doctest: +SKIP</span>
 Delayed(&#39;add-3dce7c56edd1ac2614add714086e950f&#39;)</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">dask_key_name</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">three</span><span class="s2">&#34;</span><span class="">)</span>
 Delayed(&#39;three&#39;)</pre>
             
             
          
+                
+        <p >Note that objects with the same key name are assumed to have the same result. If you set the names explicitly you should make sure your key names are different for different results.</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">dask_key_name</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">three</span><span class="s2">&#34;</span><span class="">)</span>
 Delayed(&#39;three&#39;)</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="">dask_key_name</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">three</span><span class="s2">&#34;</span><span class="">)</span>
 Delayed(&#39;three&#39;)</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">add</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">dask_key_name</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">four</span><span class="s2">&#34;</span><span class="">)</span>
 Delayed(&#39;four&#39;)</pre>
             
             
          
+                
+        <p >
+        <code class='verbatim'>delayed</code>
+     can also be applied to objects to make operations on them lazy:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo nb" title=builtins.isinstance, href="builtins.isinstance.html">isinstance</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="">,</span><span class=""> </span><span class="">Delayed</span><span class="">)</span><span class="">      </span><span class="c1"># doctest: +SKIP</span>
 True</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span>
 [1, 2, 3]</pre>
             
             
          
+                
+        <p >The key name of a delayed object is hashed by default if 
+        <code class='verbatim'>pure=True</code>
+     or is generated randomly if 
+        <code class='verbatim'>pure=False</code>
+     (default).  To explicitly set the name, you can use the 
+        <code class='verbatim'>name</code>
+     keyword. To ensure that the key is unique you should include the tokenized value as well, or otherwise ensure that it&#39;s unique:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=dask, href="dask.html">dask</a><span class="nn">.</span><a class="foo nn" title=dask.base, href="dask.base.html">base</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=dask.base.tokenize, href="dask.base.tokenize.html">tokenize</a><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.list, href="builtins.list.html">data</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><a class="foo " title=builtins.list, href="builtins.list.html">data</a><span class="">,</span><span class=""> </span><span class="">name</span><span class="o">=</span><span class="s1">&#39;</span><span class="s1">mylist-</span><span class="s1">&#39;</span><span class=""> </span><span class="o">+</span><span class=""> </span><a class="foo " title=dask.base.tokenize, href="dask.base.tokenize.html">tokenize</a><span class="">(</span><a class="foo " title=builtins.list, href="builtins.list.html">data</a><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="">  </span><span class="c1"># doctest: +SKIP</span>
 Delayed(&#39;mylist-55af65871cb378a4fa6de1660c3e8fb7&#39;)</pre>
             
             
          
+                
+        <p >Delayed results act as a proxy to the underlying object. Many operators are supported:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span><span class="">      </span><span class="c1"># doctest: +SKIP</span>
 [1, 2, 3, 1, 2]</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="">[</span><span class="mi">1</span><span class="">]</span><span class="o">.</span><span class="">compute</span><span class="">(</span><span class="">)</span><span class="">              </span><span class="c1"># doctest: +SKIP</span>
 2</pre>
             
             
          
+                
+        <p >Method and attribute access also works:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">count</a><span class="">(</span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span><span class="">        </span><span class="c1"># doctest: +SKIP</span>
 1</pre>
             
             
          
+                
+        <p >Note that if a method doesn&#39;t exist, no error will be thrown until runtime:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">res</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">not_a_real_method</a><span class="">(</span><span class="">)</span><span class=""> </span><span class="c1"># doctest: +SKIP</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">res</a><span class="o">.</span><a class="foo " title=dask.base.DaskMethodsMixin.compute, href="dask.base.DaskMethodsMixin.compute.html">compute</a><span class="">(</span><span class="">)</span><span class="">  </span><span class="c1"># doctest: +SKIP</span>
 AttributeError(&#34;&#39;list&#39; object has no attribute &#39;not_a_real_method&#39;&#34;)</pre>
             
             
          
+                
+        <p >&#34;Magic&#34; methods (e.g. operators and attribute access) are assumed to be pure, meaning that subsequent calls must return the same results. This behavior is not overrideable through the 
+        <code class='verbatim'>delayed</code>
+     call, but can be modified using other ways as described below.</p>
+
+    
             
+            
+         
+                
+        <p >To invoke an impure attribute or operator, you&#39;d need to use it in a delayed function with 
+        <code class='verbatim'>pure=False</code>
+    :</p>
+
+    
+            
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">class</span><span class=""> </span><a class="foo nc" title=__main__.Incrementer, href="__main__.Incrementer.html">Incrementer</a><span class="">(</span><a class="foo nb" title=builtins.object, href="builtins.object.html">object</a><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">def</span><span class=""> </span><a class="foo fm" title=__main__.Incrementer.__init__, href="__main__.Incrementer.__init__.html">__init__</a><span class="">(</span><a class="foo bp" title=__main__.Incrementer, href="__main__.Incrementer.html">self</a><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><a class="foo bp" title=__main__.Incrementer, href="__main__.Incrementer.html">self</a><span class="o">.</span><a class="foo " title=builtins.int, href="builtins.int.html">_n</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="nd">@property</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">def</span><span class=""> </span><a class="foo nf" title=__main__.Incrementer.n, href="__main__.Incrementer.n.html">n</a><span class="">(</span><a class="foo bp" title=__main__.Incrementer, href="__main__.Incrementer.html">self</a><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><a class="foo bp" title=__main__.Incrementer, href="__main__.Incrementer.html">self</a><span class="o">.</span><a class="foo " title=builtins.int, href="builtins.int.html">_n</a><span class=""> </span><span class="o">+</span><span class="o">=</span><span class=""> </span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="k">return</span><span class=""> </span><a class="foo bp" title=__main__.Incrementer, href="__main__.Incrementer.html">self</a><span class="o">.</span><a class="foo " title=builtins.int, href="builtins.int.html">_n</a>
 ...</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><a class="foo " title=__main__.Incrementer, href="__main__.Incrementer.html">Incrementer</a><span class="">(</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">n</a><span class="o">.</span><a class="foo " title=builtins.str, href="builtins.str.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">n</a><span class="o">.</span><span class="">key</span>
 True</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">get_n</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=dask.delayed.delayed, href="dask.delayed.delayed.html">delayed</a><span class="">(</span><span class="k">lambda</span><span class=""> </span><span class="">x</span><span class="">:</span><span class=""> </span><span class="">x</span><span class="o">.</span><span class="">n</span><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">False</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">get_n</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">get_n</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">x</a><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a>
 False</pre>
             
             
          
+                
+        <p >In contrast, methods are assumed to be impure by default, meaning that subsequent calls may return different results. To assume purity, set 
+        <code class='verbatim'>pure=True</code>
+    . This allows sharing of any intermediate values.</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">count</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><span class="o">.</span><a class="foo " title=builtins.bool, href="builtins.bool.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">count</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><span class="o">.</span><span class="">key</span>
 True</pre>
             
             
          
+                
+        <p >As with function calls, method calls also respect the global 
+        <code class='verbatim'>delayed_pure</code>
+     setting and support the 
+        <code class='verbatim'>dask_key_name</code>
+     keyword:</p>
+
+    
             
+            
+         
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">count</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">dask_key_name</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">count_2</span><span class="s2">&#34;</span><span class="">)</span>
 Delayed(&#39;count_2&#39;)</pre>
             
             
          
-            
                 <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">import</span><span class=""> </span><a class="foo nn" title=dask, href="dask.html">dask</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="k">with</span><span class=""> </span><a class="foo " title=dask, href="dask.html">dask</a><span class="o">.</span><a class="foo " title=dask.config, href="dask.config.html">config</a><span class="o">.</span><a class="foo " title=dask.config.set, href="dask.config.set.html">set</a><span class="">(</span><span class="">delayed_pure</span><span class="o">=</span><span class="kc">True</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo nb" title=builtins.print, href="builtins.print.html">print</a><span class="">(</span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">count</a><span class="">(</span><span class="mi">2</span><span class="">)</span><span class="o">.</span><a class="foo " title=dask.delayed.DelayedAttr, href="dask.delayed.DelayedAttr.html">key</a><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo " title=dask.delayed.Delayed, href="dask.delayed.Delayed.html">a</a><span class="o">.</span><span class="">count</span><span class="">(</span><span class="mi">2</span><span class="">)</span><span class="o">.</span><span class="">key</span><span class="">)</span>
 True</pre>
             
