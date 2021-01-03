@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 60%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+
+    <header>
+        
+        
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2020.12.0+22.ga82bec5a5/api/dask.html">dask</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.html">numpy</a>
+                            <a href="/p/scipy/1.5.4/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.16.2/api/skimage.html">skimage</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=numpy>1.19.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="numpy.html">1.19.4</a>
+                            
+                    </div>
+                </div>
+                <a>api</a>&nbsp;/&nbsp;
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='numpy.html'>numpy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='numpy.where.html'>where</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/numpy/1.19.4/api/numpy.AxisError.html">numpy.AxisError</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ComplexWarning.html">numpy.ComplexWarning</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.DataSource.html">numpy.DataSource</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.MachAr.html">numpy.MachAr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ModuleDeprecationWarning.html">numpy.ModuleDeprecationWarning</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.RankWarning.html">numpy.RankWarning</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.VisibleDeprecationWarning.html">numpy.VisibleDeprecationWarning</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.__config__.html">numpy.__config__</a>
+                            <a href="/p/numpy/1.19.4/api/numpy._distributor_init.html">numpy._distributor_init</a>
+                            <a href="/p/numpy/1.19.4/api/numpy._globals.html">numpy._globals</a>
+                            <a href="/p/numpy/1.19.4/api/numpy._pytesttester.html">numpy._pytesttester</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.alen.html">numpy.alen</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.all.html">numpy.all</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.allclose.html">numpy.allclose</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.alltrue.html">numpy.alltrue</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.amax.html">numpy.amax</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.amin.html">numpy.amin</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.angle.html">numpy.angle</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.any.html">numpy.any</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.append.html">numpy.append</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.apply_along_axis.html">numpy.apply_along_axis</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.apply_over_axes.html">numpy.apply_over_axes</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.arange.html">numpy.arange</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.argmax.html">numpy.argmax</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.argmin.html">numpy.argmin</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.argpartition.html">numpy.argpartition</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.argsort.html">numpy.argsort</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.argwhere.html">numpy.argwhere</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.around.html">numpy.around</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array.html">numpy.array</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array2string.html">numpy.array2string</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array_equal.html">numpy.array_equal</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array_equiv.html">numpy.array_equiv</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array_repr.html">numpy.array_repr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array_split.html">numpy.array_split</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.array_str.html">numpy.array_str</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asanyarray.html">numpy.asanyarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asarray.html">numpy.asarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asarray_chkfinite.html">numpy.asarray_chkfinite</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ascontiguousarray.html">numpy.ascontiguousarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asfarray.html">numpy.asfarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asfortranarray.html">numpy.asfortranarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asmatrix.html">numpy.asmatrix</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.asscalar.html">numpy.asscalar</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.atleast_1d.html">numpy.atleast_1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.atleast_2d.html">numpy.atleast_2d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.atleast_3d.html">numpy.atleast_3d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.average.html">numpy.average</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.bartlett.html">numpy.bartlett</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.base_repr.html">numpy.base_repr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.binary_repr.html">numpy.binary_repr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.bincount.html">numpy.bincount</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.blackman.html">numpy.blackman</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.block.html">numpy.block</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.bmat.html">numpy.bmat</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.bool_.html">numpy.bool_</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.broadcast.html">numpy.broadcast</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.broadcast_arrays.html">numpy.broadcast_arrays</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.broadcast_to.html">numpy.broadcast_to</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.busday_count.html">numpy.busday_count</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.busday_offset.html">numpy.busday_offset</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.busdaycalendar.html">numpy.busdaycalendar</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.can_cast.html">numpy.can_cast</a>
+                            <a href="/p/?/?/api/numpy.char.html">numpy.char</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.character.html">numpy.character</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.chararray.html">numpy.chararray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.choose.html">numpy.choose</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.clip.html">numpy.clip</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.column_stack.html">numpy.column_stack</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.common_type.html">numpy.common_type</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.compat.html">numpy.compat</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.complex128.html">numpy.complex128</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.complex256.html">numpy.complex256</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.complex64.html">numpy.complex64</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.complexfloating.html">numpy.complexfloating</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.compress.html">numpy.compress</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.concatenate.html">numpy.concatenate</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.convolve.html">numpy.convolve</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.copy.html">numpy.copy</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.copyto.html">numpy.copyto</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.core.html">numpy.core</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.corrcoef.html">numpy.corrcoef</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.correlate.html">numpy.correlate</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.count_nonzero.html">numpy.count_nonzero</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.cov.html">numpy.cov</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.cross.html">numpy.cross</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ctypeslib.html">numpy.ctypeslib</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.cumprod.html">numpy.cumprod</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.cumproduct.html">numpy.cumproduct</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.cumsum.html">numpy.cumsum</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.datetime_as_string.html">numpy.datetime_as_string</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.datetime_data.html">numpy.datetime_data</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.delete.html">numpy.delete</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diag.html">numpy.diag</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diag_indices.html">numpy.diag_indices</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diag_indices_from.html">numpy.diag_indices_from</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diagflat.html">numpy.diagflat</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diagonal.html">numpy.diagonal</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.diff.html">numpy.diff</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.digitize.html">numpy.digitize</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.dot.html">numpy.dot</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.dsplit.html">numpy.dsplit</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.dstack.html">numpy.dstack</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.dtype.html">numpy.dtype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ediff1d.html">numpy.ediff1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.einsum.html">numpy.einsum</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.einsum_path.html">numpy.einsum_path</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.empty.html">numpy.empty</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.empty_like.html">numpy.empty_like</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.errstate.html">numpy.errstate</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.expand_dims.html">numpy.expand_dims</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.extract.html">numpy.extract</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.eye.html">numpy.eye</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fft.html">numpy.fft</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fill_diagonal.html">numpy.fill_diagonal</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.find_common_type.html">numpy.find_common_type</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.finfo.html">numpy.finfo</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fix.html">numpy.fix</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.flatiter.html">numpy.flatiter</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.flatnonzero.html">numpy.flatnonzero</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.flexible.html">numpy.flexible</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.flip.html">numpy.flip</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fliplr.html">numpy.fliplr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.flipud.html">numpy.flipud</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.float128.html">numpy.float128</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.float16.html">numpy.float16</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.float32.html">numpy.float32</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.float64.html">numpy.float64</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.floating.html">numpy.floating</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.format_float_positional.html">numpy.format_float_positional</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.format_float_scientific.html">numpy.format_float_scientific</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.format_parser.html">numpy.format_parser</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.frombuffer.html">numpy.frombuffer</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fromfile.html">numpy.fromfile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fromfunction.html">numpy.fromfunction</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fromiter.html">numpy.fromiter</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.frompyfunc.html">numpy.frompyfunc</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fromregex.html">numpy.fromregex</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fromstring.html">numpy.fromstring</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.full.html">numpy.full</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.full_like.html">numpy.full_like</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.fv.html">numpy.fv</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.generic.html">numpy.generic</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.genfromtxt.html">numpy.genfromtxt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.geomspace.html">numpy.geomspace</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.get_printoptions.html">numpy.get_printoptions</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.getbufsize.html">numpy.getbufsize</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.geterr.html">numpy.geterr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.geterrcall.html">numpy.geterrcall</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.geterrobj.html">numpy.geterrobj</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.gradient.html">numpy.gradient</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.hamming.html">numpy.hamming</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.hanning.html">numpy.hanning</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.histogram.html">numpy.histogram</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.histogram2d.html">numpy.histogram2d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.histogram_bin_edges.html">numpy.histogram_bin_edges</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.histogramdd.html">numpy.histogramdd</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.hsplit.html">numpy.hsplit</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.hstack.html">numpy.hstack</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.i0.html">numpy.i0</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.identity.html">numpy.identity</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.iinfo.html">numpy.iinfo</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.imag.html">numpy.imag</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.in1d.html">numpy.in1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.indices.html">numpy.indices</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.inexact.html">numpy.inexact</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.info.html">numpy.info</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.inner.html">numpy.inner</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.insert.html">numpy.insert</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.int16.html">numpy.int16</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.int32.html">numpy.int32</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.int64.html">numpy.int64</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.int8.html">numpy.int8</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.integer.html">numpy.integer</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.interp.html">numpy.interp</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.intersect1d.html">numpy.intersect1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ipmt.html">numpy.ipmt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.irr.html">numpy.irr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.is_busday.html">numpy.is_busday</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isclose.html">numpy.isclose</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.iscomplex.html">numpy.iscomplex</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.iscomplexobj.html">numpy.iscomplexobj</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isfortran.html">numpy.isfortran</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isin.html">numpy.isin</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isneginf.html">numpy.isneginf</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isposinf.html">numpy.isposinf</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isreal.html">numpy.isreal</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isrealobj.html">numpy.isrealobj</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.isscalar.html">numpy.isscalar</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.issctype.html">numpy.issctype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.issubclass_.html">numpy.issubclass_</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.issubdtype.html">numpy.issubdtype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.issubsctype.html">numpy.issubsctype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.iterable.html">numpy.iterable</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ix_.html">numpy.ix_</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.kaiser.html">numpy.kaiser</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.kron.html">numpy.kron</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.lexsort.html">numpy.lexsort</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.lib.html">numpy.lib</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.linalg.html">numpy.linalg</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.linspace.html">numpy.linspace</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.load.html">numpy.load</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.loadtxt.html">numpy.loadtxt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.logspace.html">numpy.logspace</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.longlong.html">numpy.longlong</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.lookfor.html">numpy.lookfor</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ma.html">numpy.ma</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.mask_indices.html">numpy.mask_indices</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.matrix.html">numpy.matrix</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.matrixlib.html">numpy.matrixlib</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.maximum_sctype.html">numpy.maximum_sctype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.may_share_memory.html">numpy.may_share_memory</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.mean.html">numpy.mean</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.median.html">numpy.median</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.memmap.html">numpy.memmap</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.meshgrid.html">numpy.meshgrid</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.min_scalar_type.html">numpy.min_scalar_type</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.mintypecode.html">numpy.mintypecode</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.mirr.html">numpy.mirr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.moveaxis.html">numpy.moveaxis</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.msort.html">numpy.msort</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nan_to_num.html">numpy.nan_to_num</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanargmax.html">numpy.nanargmax</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanargmin.html">numpy.nanargmin</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nancumprod.html">numpy.nancumprod</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nancumsum.html">numpy.nancumsum</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanmax.html">numpy.nanmax</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanmean.html">numpy.nanmean</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanmedian.html">numpy.nanmedian</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanmin.html">numpy.nanmin</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanpercentile.html">numpy.nanpercentile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanprod.html">numpy.nanprod</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanquantile.html">numpy.nanquantile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanstd.html">numpy.nanstd</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nansum.html">numpy.nansum</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nanvar.html">numpy.nanvar</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ndarray.html">numpy.ndarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ndenumerate.html">numpy.ndenumerate</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ndim.html">numpy.ndim</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ndindex.html">numpy.ndindex</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nditer.html">numpy.nditer</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nested_iters.html">numpy.nested_iters</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nonzero.html">numpy.nonzero</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.nper.html">numpy.nper</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.npv.html">numpy.npv</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.number.html">numpy.number</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.obj2sctype.html">numpy.obj2sctype</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.object_.html">numpy.object_</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ones.html">numpy.ones</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ones_like.html">numpy.ones_like</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.outer.html">numpy.outer</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.packbits.html">numpy.packbits</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.pad.html">numpy.pad</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.partition.html">numpy.partition</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.percentile.html">numpy.percentile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.piecewise.html">numpy.piecewise</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.place.html">numpy.place</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.pmt.html">numpy.pmt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.poly.html">numpy.poly</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.poly1d.html">numpy.poly1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polyadd.html">numpy.polyadd</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polyder.html">numpy.polyder</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polydiv.html">numpy.polydiv</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polyfit.html">numpy.polyfit</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polyint.html">numpy.polyint</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polymul.html">numpy.polymul</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polynomial.html">numpy.polynomial</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polysub.html">numpy.polysub</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.polyval.html">numpy.polyval</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ppmt.html">numpy.ppmt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.printoptions.html">numpy.printoptions</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.prod.html">numpy.prod</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.product.html">numpy.product</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.promote_types.html">numpy.promote_types</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ptp.html">numpy.ptp</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.put.html">numpy.put</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.put_along_axis.html">numpy.put_along_axis</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.putmask.html">numpy.putmask</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.pv.html">numpy.pv</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.quantile.html">numpy.quantile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.random.html">numpy.random</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.rate.html">numpy.rate</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ravel.html">numpy.ravel</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ravel_multi_index.html">numpy.ravel_multi_index</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.real.html">numpy.real</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.real_if_close.html">numpy.real_if_close</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.recarray.html">numpy.recarray</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.record.html">numpy.record</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.repeat.html">numpy.repeat</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.require.html">numpy.require</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.reshape.html">numpy.reshape</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.resize.html">numpy.resize</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.result_type.html">numpy.result_type</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.roll.html">numpy.roll</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.rollaxis.html">numpy.rollaxis</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.roots.html">numpy.roots</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.rot90.html">numpy.rot90</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.round_.html">numpy.round_</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.save.html">numpy.save</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.savetxt.html">numpy.savetxt</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.savez.html">numpy.savez</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.savez_compressed.html">numpy.savez_compressed</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sctype2char.html">numpy.sctype2char</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.searchsorted.html">numpy.searchsorted</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.select.html">numpy.select</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.set_numeric_ops.html">numpy.set_numeric_ops</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.set_printoptions.html">numpy.set_printoptions</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.setbufsize.html">numpy.setbufsize</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.setdiff1d.html">numpy.setdiff1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.seterr.html">numpy.seterr</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.seterrcall.html">numpy.seterrcall</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.seterrobj.html">numpy.seterrobj</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.setxor1d.html">numpy.setxor1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.shape.html">numpy.shape</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.shares_memory.html">numpy.shares_memory</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.signedinteger.html">numpy.signedinteger</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sinc.html">numpy.sinc</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.size.html">numpy.size</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sometrue.html">numpy.sometrue</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sort.html">numpy.sort</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sort_complex.html">numpy.sort_complex</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.source.html">numpy.source</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.split.html">numpy.split</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.squeeze.html">numpy.squeeze</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.stack.html">numpy.stack</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.std.html">numpy.std</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.sum.html">numpy.sum</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.swapaxes.html">numpy.swapaxes</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.take.html">numpy.take</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.take_along_axis.html">numpy.take_along_axis</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tensordot.html">numpy.tensordot</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.testing.html">numpy.testing</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tile.html">numpy.tile</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.trace.html">numpy.trace</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.transpose.html">numpy.transpose</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.trapz.html">numpy.trapz</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tri.html">numpy.tri</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tril.html">numpy.tril</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tril_indices.html">numpy.tril_indices</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.tril_indices_from.html">numpy.tril_indices_from</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.trim_zeros.html">numpy.trim_zeros</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.triu.html">numpy.triu</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.triu_indices.html">numpy.triu_indices</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.triu_indices_from.html">numpy.triu_indices_from</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.typename.html">numpy.typename</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.uint16.html">numpy.uint16</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.uint32.html">numpy.uint32</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.uint64.html">numpy.uint64</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.uint8.html">numpy.uint8</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.ulonglong.html">numpy.ulonglong</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.union1d.html">numpy.union1d</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.unique.html">numpy.unique</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.unpackbits.html">numpy.unpackbits</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.unravel_index.html">numpy.unravel_index</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.unsignedinteger.html">numpy.unsignedinteger</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.unwrap.html">numpy.unwrap</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.vander.html">numpy.vander</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.var.html">numpy.var</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.vdot.html">numpy.vdot</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.vectorize.html">numpy.vectorize</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.version.html">numpy.version</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.vsplit.html">numpy.vsplit</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.vstack.html">numpy.vstack</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.where.html">numpy.where</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.zeros.html">numpy.zeros</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.zeros_like.html">numpy.zeros_like</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="img/numpy/1.19.4/assets/logo.png"/>
+    
+    <a href="#">Library: numpy</a>
+    <a href="#">Version: 1.19.4</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/><a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-See Also">See Also</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Examples">Examples</a>
+
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+       <code class='signature'>where(condition, [x, y])</code>
+    
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p >Return elements chosen from <code>:None:None:`x`</code> or <code>:None:None:`y`</code> depending on <code><a link href="#condition" class='local'>condition</a></code>.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+            <div class='block_directive'>
+    <div class='head'>.. note:: [&#39;&#39;]</div>
+    
+        <p >    When only <code><a link href="#condition" class='local'>condition</a></code> is provided, this function is a shorthand for     
+        <code class='verbatim'>np.asarray(condition).nonzero()</code>
+    . Using <code><a link href="numpy.nonzero.html" class='exists'>nonzero</a></code>
+         directly should be     preferred, as it behaves correctly for subclasses. The rest of this     documentation covers only the case where all three arguments are     provided.</p>
+
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-See Also">See Also</h3>
+    
+    
+        
+            <dl>
+                <dt><a>
+                <a href="numpy.nonzero.html" class='exists'>nonzero</a>
+    </a></dt>
+                <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+                <dd>
+   
+        <p>The function that is called when x and y are omitted</p></dd>
+            </dl>
+        
+            <dl>
+                <dt><a>
+                <a href="numpy.choose.html" class='exists'>choose</a>
+    </a></dt>
+                <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+                <dd></dd>
+            </dl>
+        
+
+    
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p >If all the arrays are 1-D, <code><a link href="numpy.where.html" class='exists'>where</a></code>
+         is equivalent to::</p>
+
+    
+           
+               
+            <pre>[xv if c else yv
+ for c, xv, yv in zip(condition, x, y)]</pre>
+       
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Examples">Examples</h3>
+    
+    
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.arange, href="numpy.arange.html">arange</a><span class="">(</span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a>
+array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.where, href="numpy.where.html">where</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class=""> </span><span class="o">&lt;</span><span class=""> </span><span class="mi">5</span><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class="">,</span><span class=""> </span><span class="mi">10</span><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class="">)</span>
+array([ 0,  1,  2,  3,  4, 50, 60, 70, 80, 90])</pre>
+            
+            
+         
+                
+        <p >This can be used on multidimensional arrays too:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.where, href="numpy.where.html">where</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="kc">True</span><span class="">,</span><span class=""> </span><span class="kc">False</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="kc">True</span><span class="">,</span><span class=""> </span><span class="kc">True</span><span class="">]</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">]</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="">[</span><span class="mi">9</span><span class="">,</span><span class=""> </span><span class="mi">8</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">7</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">]</span><span class="">]</span><span class="">)</span>
+array([[1, 8],
+       [3, 4]])</pre>
+            
+            
+         
+                
+        <p >The shapes of x, y, and the condition are broadcast together:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.lib.index_tricks.OGridClass, href="numpy.lib.index_tricks.OGridClass.html">ogrid</a><span class="">[</span><span class="">:</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.where, href="numpy.where.html">where</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class=""> </span><span class="o">&lt;</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">,</span><span class=""> </span><span class="mi">10</span><span class=""> </span><span class="o">+</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">)</span><span class="">  </span><span class="c1"># both x and 10+y are broadcast</span>
+array([[10,  0,  0,  0],
+       [10, 11,  1,  1],
+       [10, 11, 12,  2]])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.array, href="numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">]</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.where, href="numpy.where.html">where</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class=""> </span><span class="o">&lt;</span><span class=""> </span><span class="mi">4</span><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mi">1</span><span class="">)</span><span class="">  </span><span class="c1"># -1 is broadcast</span>
+array([[ 0,  1,  2],
+       [ 0,  2, -1],
+       [ 0,  3, -1]])</pre>
+            
+            
+         
+         See :
+         
+            <a class='exists' href='numpy.choose.html'>choose</a>,
+         
+            <a class='exists' href='numpy.nonzero.html'>nonzero</a>,
+         
+            <a class='exists' href='numpy.html'>numpy</a>,
+         
+            <a class='exists' href='numpy.arange.html'>numpy.arange</a>,
+         
+            <a class='exists' href='numpy.array.html'>numpy.array</a>,
+         
+            <a class='exists' href='numpy.lib.index_tricks.OGridClass.html'>numpy.lib.index_tricks.OGridClass</a>,
+         
+            <a class='exists' href='numpy.ndarray.html'>numpy.ndarray</a>,
+         
+            <a class='exists' href='numpy.where.html'>numpy.where</a>,
+         
+            <a class='exists' href='numpy.where.html'>where</a>,
+         
+   
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: &lt;__array_function__ internals&gt; </br>
+Line: None </br>
+type: None </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+</body>
+</html>

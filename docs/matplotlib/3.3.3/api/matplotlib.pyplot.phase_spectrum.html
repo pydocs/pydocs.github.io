@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 60%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+
+    <header>
+        
+        
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=matplotlib>matplotlib</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2020.12.0+22.ga82bec5a5/api/dask.html">dask</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.19.4/api/numpy.html">numpy</a>
+                            <a href="/p/scipy/1.5.4/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.16.2/api/skimage.html">skimage</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=matplotlib>3.3.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="matplotlib.html">3.3.3</a>
+                            
+                    </div>
+                </div>
+                <a>api</a>&nbsp;/&nbsp;
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='matplotlib.html'>matplotlib</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='matplotlib.pyplot.html'>pyplot</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.ExecutableNotFoundError.html">matplotlib.ExecutableNotFoundError</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.RcParams.html">matplotlib.RcParams</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._ExecInfo.html">matplotlib._ExecInfo</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._add_data_doc.html">matplotlib._add_data_doc</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._animation_data.html">matplotlib._animation_data</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._cm.html">matplotlib._cm</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._cm_listed.html">matplotlib._cm_listed</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._color_data.html">matplotlib._color_data</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._constrained_layout.html">matplotlib._constrained_layout</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._ensure_handler.html">matplotlib._ensure_handler</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._get_executable_info.html">matplotlib._get_executable_info</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._get_xdg_cache_dir.html">matplotlib._get_xdg_cache_dir</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._get_xdg_config_dir.html">matplotlib._get_xdg_config_dir</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._image.html">matplotlib._image</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._layoutbox.html">matplotlib._layoutbox</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._logged_cached.html">matplotlib._logged_cached</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._mathtext_data.html">matplotlib._mathtext_data</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._path.html">matplotlib._path</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._preprocess_data.html">matplotlib._preprocess_data</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._pylab_helpers.html">matplotlib._pylab_helpers</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._rc_params_in_file.html">matplotlib._rc_params_in_file</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._replacer.html">matplotlib._replacer</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._text_layout.html">matplotlib._text_layout</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib._version.html">matplotlib._version</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.afm.html">matplotlib.afm</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.animation.html">matplotlib.animation</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.artist.html">matplotlib.artist</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.axes.html">matplotlib.axes</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.axis.html">matplotlib.axis</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.backend_bases.html">matplotlib.backend_bases</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.backend_managers.html">matplotlib.backend_managers</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.backend_tools.html">matplotlib.backend_tools</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.backends.html">matplotlib.backends</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.bezier.html">matplotlib.bezier</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.blocking_input.html">matplotlib.blocking_input</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.category.html">matplotlib.category</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.cbook.html">matplotlib.cbook</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.checkdep_ps_distiller.html">matplotlib.checkdep_ps_distiller</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.cm.html">matplotlib.cm</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.collections.html">matplotlib.collections</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.colorbar.html">matplotlib.colorbar</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.colors.html">matplotlib.colors</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.compare_versions.html">matplotlib.compare_versions</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.container.html">matplotlib.container</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.contour.html">matplotlib.contour</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.dates.html">matplotlib.dates</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.docstring.html">matplotlib.docstring</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.dviread.html">matplotlib.dviread</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.figure.html">matplotlib.figure</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.font_manager.html">matplotlib.font_manager</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.fontconfig_pattern.html">matplotlib.fontconfig_pattern</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.ft2font.html">matplotlib.ft2font</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.get_backend.html">matplotlib.get_backend</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.get_cachedir.html">matplotlib.get_cachedir</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.get_configdir.html">matplotlib.get_configdir</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.get_data_path.html">matplotlib.get_data_path</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.get_home.html">matplotlib.get_home</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.gridspec.html">matplotlib.gridspec</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.image.html">matplotlib.image</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.interactive.html">matplotlib.interactive</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.is_interactive.html">matplotlib.is_interactive</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.is_url.html">matplotlib.is_url</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.legend.html">matplotlib.legend</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.legend_handler.html">matplotlib.legend_handler</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.lines.html">matplotlib.lines</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.markers.html">matplotlib.markers</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.mathtext.html">matplotlib.mathtext</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.matplotlib_fname.html">matplotlib.matplotlib_fname</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.mlab.html">matplotlib.mlab</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.offsetbox.html">matplotlib.offsetbox</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.patches.html">matplotlib.patches</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.path.html">matplotlib.path</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.projections.html">matplotlib.projections</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.html">matplotlib.pyplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.quiver.html">matplotlib.quiver</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc.html">matplotlib.rc</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc_context.html">matplotlib.rc_context</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc_file.html">matplotlib.rc_file</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc_file_defaults.html">matplotlib.rc_file_defaults</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc_params.html">matplotlib.rc_params</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rc_params_from_file.html">matplotlib.rc_params_from_file</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rcdefaults.html">matplotlib.rcdefaults</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.rcsetup.html">matplotlib.rcsetup</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.scale.html">matplotlib.scale</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.set_loglevel.html">matplotlib.set_loglevel</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.spines.html">matplotlib.spines</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.stackplot.html">matplotlib.stackplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.streamplot.html">matplotlib.streamplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.style.html">matplotlib.style</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.table.html">matplotlib.table</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.test.html">matplotlib.test</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.texmanager.html">matplotlib.texmanager</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.text.html">matplotlib.text</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.textpath.html">matplotlib.textpath</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.ticker.html">matplotlib.ticker</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.tight_bbox.html">matplotlib.tight_bbox</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.tight_layout.html">matplotlib.tight_layout</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.transforms.html">matplotlib.transforms</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.tri.html">matplotlib.tri</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.units.html">matplotlib.units</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.use.html">matplotlib.use</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.widgets.html">matplotlib.widgets</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='matplotlib.pyplot.phase_spectrum.html'>phase_spectrum</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot._auto_draw_if_interactive.html">matplotlib.pyplot._auto_draw_if_interactive</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot._setup_pyplot_info_docstrings.html">matplotlib.pyplot._setup_pyplot_info_docstrings</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.acorr.html">matplotlib.pyplot.acorr</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.angle_spectrum.html">matplotlib.pyplot.angle_spectrum</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.annotate.html">matplotlib.pyplot.annotate</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.arrow.html">matplotlib.pyplot.arrow</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.autoscale.html">matplotlib.pyplot.autoscale</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.autumn.html">matplotlib.pyplot.autumn</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axes.html">matplotlib.pyplot.axes</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axhline.html">matplotlib.pyplot.axhline</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axhspan.html">matplotlib.pyplot.axhspan</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axis.html">matplotlib.pyplot.axis</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axline.html">matplotlib.pyplot.axline</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axvline.html">matplotlib.pyplot.axvline</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.axvspan.html">matplotlib.pyplot.axvspan</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.bar.html">matplotlib.pyplot.bar</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.barbs.html">matplotlib.pyplot.barbs</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.barh.html">matplotlib.pyplot.barh</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.bone.html">matplotlib.pyplot.bone</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.box.html">matplotlib.pyplot.box</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.boxplot.html">matplotlib.pyplot.boxplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.broken_barh.html">matplotlib.pyplot.broken_barh</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.cla.html">matplotlib.pyplot.cla</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.clabel.html">matplotlib.pyplot.clabel</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.clf.html">matplotlib.pyplot.clf</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.clim.html">matplotlib.pyplot.clim</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.close.html">matplotlib.pyplot.close</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.cohere.html">matplotlib.pyplot.cohere</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.colorbar.html">matplotlib.pyplot.colorbar</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.colormaps.html">matplotlib.pyplot.colormaps</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.connect.html">matplotlib.pyplot.connect</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.contour.html">matplotlib.pyplot.contour</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.contourf.html">matplotlib.pyplot.contourf</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.cool.html">matplotlib.pyplot.cool</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.copper.html">matplotlib.pyplot.copper</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.csd.html">matplotlib.pyplot.csd</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.delaxes.html">matplotlib.pyplot.delaxes</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.disconnect.html">matplotlib.pyplot.disconnect</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.draw.html">matplotlib.pyplot.draw</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.errorbar.html">matplotlib.pyplot.errorbar</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.eventplot.html">matplotlib.pyplot.eventplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figimage.html">matplotlib.pyplot.figimage</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figlegend.html">matplotlib.pyplot.figlegend</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.fignum_exists.html">matplotlib.pyplot.fignum_exists</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figtext.html">matplotlib.pyplot.figtext</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figure.html">matplotlib.pyplot.figure</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.fill.html">matplotlib.pyplot.fill</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.fill_between.html">matplotlib.pyplot.fill_between</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.fill_betweenx.html">matplotlib.pyplot.fill_betweenx</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.findobj.html">matplotlib.pyplot.findobj</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.flag.html">matplotlib.pyplot.flag</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.gca.html">matplotlib.pyplot.gca</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.gcf.html">matplotlib.pyplot.gcf</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.gci.html">matplotlib.pyplot.gci</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.get.html">matplotlib.pyplot.get</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.get_current_fig_manager.html">matplotlib.pyplot.get_current_fig_manager</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.get_figlabels.html">matplotlib.pyplot.get_figlabels</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.get_fignums.html">matplotlib.pyplot.get_fignums</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.get_plot_commands.html">matplotlib.pyplot.get_plot_commands</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.getp.html">matplotlib.pyplot.getp</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ginput.html">matplotlib.pyplot.ginput</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.gray.html">matplotlib.pyplot.gray</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.grid.html">matplotlib.pyplot.grid</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hexbin.html">matplotlib.pyplot.hexbin</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hist.html">matplotlib.pyplot.hist</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hist2d.html">matplotlib.pyplot.hist2d</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hlines.html">matplotlib.pyplot.hlines</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hot.html">matplotlib.pyplot.hot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.hsv.html">matplotlib.pyplot.hsv</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.imread.html">matplotlib.pyplot.imread</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.imsave.html">matplotlib.pyplot.imsave</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.imshow.html">matplotlib.pyplot.imshow</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.inferno.html">matplotlib.pyplot.inferno</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.install_repl_displayhook.html">matplotlib.pyplot.install_repl_displayhook</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ioff.html">matplotlib.pyplot.ioff</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ion.html">matplotlib.pyplot.ion</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.isinteractive.html">matplotlib.pyplot.isinteractive</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.jet.html">matplotlib.pyplot.jet</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.legend.html">matplotlib.pyplot.legend</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.locator_params.html">matplotlib.pyplot.locator_params</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.loglog.html">matplotlib.pyplot.loglog</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.magma.html">matplotlib.pyplot.magma</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.magnitude_spectrum.html">matplotlib.pyplot.magnitude_spectrum</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.margins.html">matplotlib.pyplot.margins</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.matshow.html">matplotlib.pyplot.matshow</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.minorticks_off.html">matplotlib.pyplot.minorticks_off</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.minorticks_on.html">matplotlib.pyplot.minorticks_on</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.new_figure_manager.html">matplotlib.pyplot.new_figure_manager</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.nipy_spectral.html">matplotlib.pyplot.nipy_spectral</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.pause.html">matplotlib.pyplot.pause</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.pcolor.html">matplotlib.pyplot.pcolor</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.pcolormesh.html">matplotlib.pyplot.pcolormesh</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.phase_spectrum.html">matplotlib.pyplot.phase_spectrum</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.pie.html">matplotlib.pyplot.pie</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.pink.html">matplotlib.pyplot.pink</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.plasma.html">matplotlib.pyplot.plasma</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.plot.html">matplotlib.pyplot.plot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.plot_date.html">matplotlib.pyplot.plot_date</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.plotting.html">matplotlib.pyplot.plotting</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.polar.html">matplotlib.pyplot.polar</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.prism.html">matplotlib.pyplot.prism</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.psd.html">matplotlib.pyplot.psd</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.quiver.html">matplotlib.pyplot.quiver</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.quiverkey.html">matplotlib.pyplot.quiverkey</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.rc.html">matplotlib.pyplot.rc</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.rc_context.html">matplotlib.pyplot.rc_context</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.rcdefaults.html">matplotlib.pyplot.rcdefaults</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.rgrids.html">matplotlib.pyplot.rgrids</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.savefig.html">matplotlib.pyplot.savefig</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.sca.html">matplotlib.pyplot.sca</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.scatter.html">matplotlib.pyplot.scatter</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.sci.html">matplotlib.pyplot.sci</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.semilogx.html">matplotlib.pyplot.semilogx</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.semilogy.html">matplotlib.pyplot.semilogy</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.set_cmap.html">matplotlib.pyplot.set_cmap</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.setp.html">matplotlib.pyplot.setp</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.show.html">matplotlib.pyplot.show</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.specgram.html">matplotlib.pyplot.specgram</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.spring.html">matplotlib.pyplot.spring</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.spy.html">matplotlib.pyplot.spy</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.stackplot.html">matplotlib.pyplot.stackplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.stem.html">matplotlib.pyplot.stem</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.step.html">matplotlib.pyplot.step</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.streamplot.html">matplotlib.pyplot.streamplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplot.html">matplotlib.pyplot.subplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplot2grid.html">matplotlib.pyplot.subplot2grid</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplot_mosaic.html">matplotlib.pyplot.subplot_mosaic</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplot_tool.html">matplotlib.pyplot.subplot_tool</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplots.html">matplotlib.pyplot.subplots</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplots_adjust.html">matplotlib.pyplot.subplots_adjust</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.summer.html">matplotlib.pyplot.summer</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.suptitle.html">matplotlib.pyplot.suptitle</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.switch_backend.html">matplotlib.pyplot.switch_backend</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.table.html">matplotlib.pyplot.table</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.text.html">matplotlib.pyplot.text</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.thetagrids.html">matplotlib.pyplot.thetagrids</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.tick_params.html">matplotlib.pyplot.tick_params</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ticklabel_format.html">matplotlib.pyplot.ticklabel_format</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.tight_layout.html">matplotlib.pyplot.tight_layout</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.title.html">matplotlib.pyplot.title</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.tricontour.html">matplotlib.pyplot.tricontour</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.tricontourf.html">matplotlib.pyplot.tricontourf</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.tripcolor.html">matplotlib.pyplot.tripcolor</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.triplot.html">matplotlib.pyplot.triplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.twinx.html">matplotlib.pyplot.twinx</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.twiny.html">matplotlib.pyplot.twiny</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.uninstall_repl_displayhook.html">matplotlib.pyplot.uninstall_repl_displayhook</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.violinplot.html">matplotlib.pyplot.violinplot</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.viridis.html">matplotlib.pyplot.viridis</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.vlines.html">matplotlib.pyplot.vlines</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.waitforbuttonpress.html">matplotlib.pyplot.waitforbuttonpress</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.winter.html">matplotlib.pyplot.winter</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xcorr.html">matplotlib.pyplot.xcorr</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xkcd.html">matplotlib.pyplot.xkcd</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xlabel.html">matplotlib.pyplot.xlabel</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xlim.html">matplotlib.pyplot.xlim</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xscale.html">matplotlib.pyplot.xscale</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.xticks.html">matplotlib.pyplot.xticks</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ylabel.html">matplotlib.pyplot.ylabel</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.ylim.html">matplotlib.pyplot.ylim</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.yscale.html">matplotlib.pyplot.yscale</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.yticks.html">matplotlib.pyplot.yticks</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="img/matplotlib/3.3.3/assets/logo.png"/>
+    
+    <a href="#">Library: matplotlib</a>
+    <a href="#">Version: 3.3.3</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/><a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Other Parameters">Other Parameters</a>
+
+    <a href="#section-See Also">See Also</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+       <code class='signature'>phase_spectrum(x, Fs=None, Fc=None, window=None, pad_to=None, sides=None, *, data=None, **kwargs)</code>
+    
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p >Plot the phase spectrum.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p >Compute the phase spectrum (unwrapped angle spectrum) of *x*. Data is padded to a length of *pad_to* and the windowing function *window* is applied to the signal.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Other Parameters">Other Parameters</h3>
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-See Also">See Also</h3>
+    
+    
+        
+            <dl>
+                <dt><a>
+                <a href="matplotlib.pyplot.angle_spectrum.html" class='exists'>angle_spectrum</a>
+    </a></dt>
+                <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+                <dd>
+   
+        <p>Plots the wrapped version of this function.</p></dd>
+            </dl>
+        
+            <dl>
+                <dt><a>
+                <a href="matplotlib.pyplot.specgram.html" class='exists'>specgram</a>
+    </a></dt>
+                <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+                <dd>
+   
+        <p>Can plot the phase spectrum of segments within the signal in a colormap.</p></dd>
+            </dl>
+        
+            <dl>
+                <dt><a>
+                <a href="matplotlib.pyplot.magnitude_spectrum.html" class='exists'>magnitude_spectrum</a>
+    </a></dt>
+                <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+                <dd>
+   
+        <p>Plots the magnitudes of the corresponding frequencies.</p></dd>
+            </dl>
+        
+
+    
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+            <div class='block_directive'>
+    <div class='head'>.. note:: [&#39;&#39;]</div>
+    
+        <p >    In addition to the above described arguments, this function can take     a *data* keyword argument. If such a *data* argument is given,     the following arguments can also be string 
+        <code class='verbatim'>s</code>
+    , which is     interpreted as 
+        <code class='verbatim'>data[s]</code>
+     (unless this raises an exception):     *x*.      Objects passed as **data** must support item access (
+        <code class='verbatim'>data[s]</code>
+    ) and     membership test (
+        <code class='verbatim'>s in data</code>
+    ).</p>
+
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/matplotlib/pyplot.py </br>
+Line: 2810 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+</body>
+</html>
