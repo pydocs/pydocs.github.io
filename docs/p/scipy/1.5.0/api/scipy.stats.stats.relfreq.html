@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.stats.html'>stats</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.html">_binned_statistic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._constants.html">_constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._continuous_distns.html">_continuous_distns</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._discrete_distns.html">_discrete_distns</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._distn_infrastructure.html">_distn_infrastructure</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._distr_params.html">_distr_params</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._hypotests.html">_hypotests</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._ksstats.html">_ksstats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._multivariate.html">_multivariate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._rvs_sampling.html">_rvs_sampling</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._stats.html">_stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._stats_mstats_common.html">_stats_mstats_common</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._tukeylambda_stats.html">_tukeylambda_stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._wilcoxon_data.html">_wilcoxon_data</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.contingency.html">contingency</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.distributions.html">distributions</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.kde.html">kde</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.morestats.html">morestats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats.html">mstats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats_basic.html">mstats_basic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats_extras.html">mstats_extras</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mvn.html">mvn</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.statlib.html">statlib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.html">stats</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.stats.relfreq.html'>relfreq</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.BrunnerMunzelResult.html">BrunnerMunzelResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.CumfreqResult.html">CumfreqResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.DescribeResult.html">DescribeResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.F_onewayBadInputSizesWarning.html">F_onewayBadInputSizesWarning</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.F_onewayConstantInputWarning.html">F_onewayConstantInputWarning</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.F_onewayResult.html">F_onewayResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.FriedmanchisquareResult.html">FriedmanchisquareResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.HistogramResult.html">HistogramResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.Jarque_beraResult.html">Jarque_beraResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.KendalltauResult.html">KendalltauResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.KruskalResult.html">KruskalResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.KstestResult.html">KstestResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.KurtosistestResult.html">KurtosistestResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.MGCResult.html">MGCResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.MannwhitneyuResult.html">MannwhitneyuResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ModeResult.html">ModeResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.NormaltestResult.html">NormaltestResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.PearsonRConstantInputWarning.html">PearsonRConstantInputWarning</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.PearsonRNearConstantInputWarning.html">PearsonRNearConstantInputWarning</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.PointbiserialrResult.html">PointbiserialrResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.Power_divergenceResult.html">Power_divergenceResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.RanksumsResult.html">RanksumsResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.RelfreqResult.html">RelfreqResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.RepeatedResults.html">RepeatedResults</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.SigmaclipResult.html">SigmaclipResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.SkewtestResult.html">SkewtestResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.SpearmanRConstantInputWarning.html">SpearmanRConstantInputWarning</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.SpearmanrResult.html">SpearmanrResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.Ttest_1sampResult.html">Ttest_1sampResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.Ttest_indResult.html">Ttest_indResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.Ttest_relResult.html">Ttest_relResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.WeightedTauResult.html">WeightedTauResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._ParallelP.html">_ParallelP</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._attempt_exact_2kssamp.html">_attempt_exact_2kssamp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._broadcast_shapes.html">_broadcast_shapes</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._broadcast_shapes_with_dropped_axis.html">_broadcast_shapes_with_dropped_axis</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._cdf_distance.html">_cdf_distance</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._compute_dminus.html">_compute_dminus</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._compute_dplus.html">_compute_dplus</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._compute_prob_inside_method.html">_compute_prob_inside_method</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._compute_prob_outside_square.html">_compute_prob_outside_square</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._count.html">_count</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._create_f_oneway_nan_result.html">_create_f_oneway_nan_result</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._first.html">_first</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._histogram.html">_histogram</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._mask_to_limits.html">_mask_to_limits</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._mgc_stat.html">_mgc_stat</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._perm_test.html">_perm_test</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._shape_with_dropped_axis.html">_shape_with_dropped_axis</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._smooth_mgc_map.html">_smooth_mgc_map</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._square_of_sums.html">_square_of_sums</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._threshold_mgc_map.html">_threshold_mgc_map</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._ttest_finish.html">_ttest_finish</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._ttest_nans.html">_ttest_nans</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._two_sample_transform.html">_two_sample_transform</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats._validate_distribution.html">_validate_distribution</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.brunnermunzel.html">brunnermunzel</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.chisquare.html">chisquare</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.combine_pvalues.html">combine_pvalues</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.cumfreq.html">cumfreq</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.describe.html">describe</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.energy_distance.html">energy_distance</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.f_oneway.html">f_oneway</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.find_repeats.html">find_repeats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.fisher_exact.html">fisher_exact</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.friedmanchisquare.html">friedmanchisquare</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.gmean.html">gmean</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.gstd.html">gstd</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.hmean.html">hmean</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.iqr.html">iqr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.jarque_bera.html">jarque_bera</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.kendalltau.html">kendalltau</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.kruskal.html">kruskal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ks_1samp.html">ks_1samp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ks_2samp.html">ks_2samp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.kstest.html">kstest</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.kurtosis.html">kurtosis</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.kurtosistest.html">kurtosistest</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.mannwhitneyu.html">mannwhitneyu</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.median_abs_deviation.html">median_abs_deviation</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.mode.html">mode</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.moment.html">moment</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.multiscale_graphcorr.html">multiscale_graphcorr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.normaltest.html">normaltest</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.obrientransform.html">obrientransform</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.pearsonr.html">pearsonr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.percentileofscore.html">percentileofscore</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.pointbiserialr.html">pointbiserialr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.power_divergence.html">power_divergence</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.rankdata.html">rankdata</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ranksums.html">ranksums</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.relfreq.html">relfreq</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.scoreatpercentile.html">scoreatpercentile</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.sem.html">sem</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.sigmaclip.html">sigmaclip</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.skew.html">skew</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.skewtest.html">skewtest</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.spearmanr.html">spearmanr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tiecorrect.html">tiecorrect</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tmax.html">tmax</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tmean.html">tmean</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tmin.html">tmin</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.trim1.html">trim1</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.trim_mean.html">trim_mean</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.trimboth.html">trimboth</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tsem.html">tsem</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tstd.html">tstd</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ttest_1samp.html">ttest_1samp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ttest_ind.html">ttest_ind</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ttest_ind_from_stats.html">ttest_ind_from_stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.ttest_rel.html">ttest_rel</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.tvar.html">tvar</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.variation.html">variation</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.wasserstein_distance.html">wasserstein_distance</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.weightedtau.html">weightedtau</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.zmap.html">zmap</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.zscore.html">zscore</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>relfreq(a, numbins=10, defaultreallimits=None, weights=None)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Return a relative frequency histogram, using the histogram function.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>A relative frequency  histogram is a mapping of the number of observations in each of the bins relative to the total of observations.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="a">a</a> : array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Input array.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="numbins">numbins</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The number of bins to use for the histogram. Default is 10.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="defaultreallimits">defaultreallimits</a> : tuple (lower, upper), optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The lower and upper values for the range of the histogram. If no value is given, a range slightly larger than the range of the values in a is used. Specifically 
+        <code class='verbatim'>(a.min() - s, a.max() + s)</code>
+    , where 
+        <code class='verbatim'>s = (1/2)(a.max() - a.min()) / (numbins - 1)</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="weights">weights</a> : array_like, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The weights for each value in <code><a link href="#a" class='local'>a</a></code>. Default is None, which gives each value a weight of 1.0</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="frequency">frequency</a> : ndarray</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Binned values of relative frequency.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="lowerlimit">lowerlimit</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Lower real limit.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="binsize">binsize</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Width of each bin.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="extrapoints">extrapoints</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Extra points.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        <a class='exists' href='scipy.stats.stats.relfreq.html'>scipy.stats.stats.relfreq</a>
+    
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">import</span><span class=""> </span><a class="foo nn" title=matplotlib, href="matplotlib.html">matplotlib</a><span class="nn">.</span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">pyplot</a><span class=""> </span><span class="k">as</span><span class=""> </span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=scipy, href="scipy.html">scipy</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.array, href="numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats.stats.relfreq, href="scipy.stats.stats.relfreq.html">relfreq</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">a</a><span class="">,</span><span class=""> </span><span class="">numbins</span><span class="o">=</span><span class="mi">4</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res</span><span class="o">.</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">frequency</a>
+array([ 0.16666667, 0.5       , 0.16666667,  0.16666667])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.sum, href="numpy.sum.html">sum</a><span class="">(</span><span class="">res</span><span class="o">.</span><span class="">frequency</span><span class="">)</span><span class="">  </span><span class="c1"># relative frequencies should add up to 1</span>
+1.0</pre>
+            
+            
+         
+                
+        <p>Create a normal distribution with 1000 random values</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy.random.mtrand.RandomState, href="numpy.random.mtrand.RandomState.html">rng</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.random, href="numpy.random.html">random</a><span class="o">.</span><a class="foo " title=numpy.random.mtrand.RandomState, href="numpy.random.mtrand.RandomState.html">RandomState</a><span class="">(</span><span class="">seed</span><span class="o">=</span><span class="mi">12345</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.float, href="builtins.float.html">samples</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats._continuous_distns.norm_gen, href="scipy.stats._continuous_distns.norm_gen.html">norm</a><span class="o">.</span><a class="foo " title=scipy.stats._distn_infrastructure.rv_generic.rvs, href="scipy.stats._distn_infrastructure.rv_generic.rvs.html">rvs</a><span class="">(</span><span class="">size</span><span class="o">=</span><span class="mi">1000</span><span class="">,</span><span class=""> </span><span class="">random_state</span><span class="o">=</span><a class="foo " title=numpy.random.mtrand.RandomState, href="numpy.random.mtrand.RandomState.html">rng</a><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Calculate relative frequencies</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats.stats.relfreq, href="scipy.stats.stats.relfreq.html">relfreq</a><span class="">(</span><a class="foo " title=builtins.float, href="builtins.float.html">samples</a><span class="">,</span><span class=""> </span><span class="">numbins</span><span class="o">=</span><span class="mi">25</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Calculate space of values for x</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=builtins.int, href="builtins.int.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">res</span><span class="o">.</span><a class="foo " title=builtins.int, href="builtins.int.html">lowerlimit</a><span class=""> </span><span class="o">+</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="">res</span><span class="o">.</span><span class="">binsize</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">res</span><span class="o">.</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">frequency</a><span class="o">.</span><span class="">size</span><span class="">,</span><span class=""> </span><span class="">res</span><span class="o">.</span><span class="">frequency</span><span class="o">.</span><span class="">size</span><br><span class='nsl'>...&nbsp;</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Plot relative frequency histogram</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">fig</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.figure, href="matplotlib.pyplot.figure.html">figure</a><span class="">(</span><span class="">figsize</span><span class="o">=</span><span class="">(</span><span class="mi">5</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.figure.Figure, href="matplotlib.figure.Figure.html">fig</a><span class="o">.</span><a class="foo " title=matplotlib.figure.Figure.add_subplot, href="matplotlib.figure.Figure.add_subplot.html">add_subplot</a><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class="o">.</span><span class="">bar</span><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">x</a><span class="">,</span><span class=""> </span><span class="">res</span><span class="o">.</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">frequency</a><span class="">,</span><span class=""> </span><span class="">width</span><span class="o">=</span><span class="">res</span><span class="o">.</span><span class="">binsize</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class="o">.</span><span class="">set_title</span><span class="">(</span><span class="s2">&#34;</span><span class="s2">Relative frequency histogram</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class="o">.</span><span class="">set_xlim</span><span class="">(</span><span class="">[</span><a class="foo " title=builtins.int, href="builtins.int.html">x</a><span class="o">.</span><span class="">min</span><span class="">(</span><span class="">)</span><span class="">,</span><span class=""> </span><a class="foo " title=builtins.int, href="builtins.int.html">x</a><span class="o">.</span><span class="">max</span><span class="">(</span><span class="">)</span><span class="">]</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.show, href="matplotlib.pyplot.show.html">show</a><span class="">(</span><span class="">)</span>
+</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="builtins.NoneType.html" class='exists'>builtins.NoneType</a></code>
+        
+         
+             <code><a link href="builtins.float.html" class='exists'>builtins.float</a></code>
+        
+         
+             <code><a link href="builtins.int.html" class='exists'>builtins.int</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.figure.Figure.html" class='exists'>matplotlib.figure.Figure</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.figure.Figure.add_subplot.html" class='exists'>matplotlib.figure.Figure.add_subplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figure.html" class='exists'>matplotlib.pyplot.figure</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.linspace.html" class='exists'>numpy.linspace</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.random.html" class='exists'>numpy.random</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.random.mtrand.RandomState.html" class='exists'>numpy.random.mtrand.RandomState</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.sum.html" class='exists'>numpy.sum</a></code>
+        
+         
+             <code><a link href="scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="scipy.stats.html" class='exists'>scipy.stats</a></code>
+        
+         
+             <code><a link href="scipy.stats._continuous_distns.norm_gen.html" class='exists'>scipy.stats._continuous_distns.norm_gen</a></code>
+        
+         
+             <code><a link href="scipy.stats._distn_infrastructure.rv_generic.rvs.html" class='exists'>scipy.stats._distn_infrastructure.rv_generic.rvs</a></code>
+        
+         
+             <code><a link href="scipy.stats.stats.relfreq.html" class='exists'>scipy.stats.stats.relfreq</a></code>
+        
+         
+     
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/stats/stats.py </br>
+Line: 2201 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

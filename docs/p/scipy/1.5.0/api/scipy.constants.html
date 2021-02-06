@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.constants.html'>constants</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" >+</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.codata.html">codata</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.constants.html">constants</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Was not able to parse docstring for scipy.constants</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        <a class='exists' href='scipy.constants.codata.find.html'>scipy.constants.codata.find</a>
+    
+        <a class='exists' href='scipy.constants.codata.precision.html'>scipy.constants.codata.precision</a>
+    
+        <a class='exists' href='scipy.constants.codata.unit.html'>scipy.constants.codata.unit</a>
+    
+        <a class='exists' href='scipy.constants.codata.value.html'>scipy.constants.codata.value</a>
+    
+        <a class='exists' href='scipy.constants.constants.convert_temperature.html'>scipy.constants.constants.convert_temperature</a>
+    
+        <a class='exists' href='scipy.constants.constants.lambda2nu.html'>scipy.constants.constants.lambda2nu</a>
+    
+        <a class='exists' href='scipy.constants.constants.nu2lambda.html'>scipy.constants.constants.nu2lambda</a>
+    
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+     
+
+
+    
+        <h1>Constants (:mod:`scipy.constants`)</h1>
+    
+
+    
+           
+               
+        <p>Physical and mathematical constants and units. </p>
+
+    
+           
+       
+
+    
+        <h1>Mathematical constants</h1>
+    
+
+    
+           
+               
+        <p>================ ================================================================= 
+        <code class='verbatim'>pi</code>
+     Pi 
+        <code class='verbatim'>golden</code>
+     Golden ratio 
+        <code class='verbatim'>golden_ratio</code>
+     Golden ratio ================ ================================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Physical constants</h1>
+    
+
+    
+           
+               
+        <p>=========================== ================================================================= 
+        <code class='verbatim'>c</code>
+     speed of light in vacuum 
+        <code class='verbatim'>speed_of_light</code>
+     speed of light in vacuum 
+        <code class='verbatim'>mu_0</code>
+     the magnetic constant <code>:None:None:`math:`\mu_0`</code> 
+        <code class='verbatim'>epsilon_0</code>
+     the electric constant (vacuum permittivity), <code>:None:None:`math:`\epsilon_0`</code> 
+        <code class='verbatim'>h</code>
+     the Planck constant <code>:None:None:`math:`h`</code> 
+        <code class='verbatim'>Planck</code>
+     the Planck constant <code>:None:None:`math:`h`</code> 
+        <code class='verbatim'>hbar</code>
+     <code>:None:None:`math:`\hbar = h/(2\pi)`</code> 
+        <code class='verbatim'>G</code>
+     Newtonian constant of gravitation 
+        <code class='verbatim'>gravitational_constant</code>
+     Newtonian constant of gravitation 
+        <code class='verbatim'>g</code>
+     standard acceleration of gravity 
+        <code class='verbatim'>e</code>
+     elementary charge 
+        <code class='verbatim'>elementary_charge</code>
+     elementary charge 
+        <code class='verbatim'>R</code>
+     molar gas constant 
+        <code class='verbatim'>gas_constant</code>
+     molar gas constant 
+        <code class='verbatim'>alpha</code>
+     fine - structure constant 
+        <code class='verbatim'>fine_structure</code>
+     fine - structure constant 
+        <code class='verbatim'>N_A</code>
+     Avogadro constant 
+        <code class='verbatim'>Avogadro</code>
+     Avogadro constant 
+        <code class='verbatim'>k</code>
+     Boltzmann constant 
+        <code class='verbatim'>Boltzmann</code>
+     Boltzmann constant 
+        <code class='verbatim'>sigma</code>
+     Stefan - Boltzmann constant <code>:None:None:`math:`\sigma`</code> 
+        <code class='verbatim'>Stefan_Boltzmann</code>
+     Stefan - Boltzmann constant <code>:None:None:`math:`\sigma`</code> 
+        <code class='verbatim'>Wien</code>
+     Wien displacement law constant 
+        <code class='verbatim'>Rydberg</code>
+     Rydberg constant 
+        <code class='verbatim'>m_e</code>
+     electron mass 
+        <code class='verbatim'>electron_mass</code>
+     electron mass 
+        <code class='verbatim'>m_p</code>
+     proton mass 
+        <code class='verbatim'>proton_mass</code>
+     proton mass 
+        <code class='verbatim'>m_n</code>
+     neutron mass 
+        <code class='verbatim'>neutron_mass</code>
+     neutron mass =========================== ================================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Constants database</h1>
+    
+
+    
+           
+               
+        <p>In addition to the above variables, <code>:None:None:`mod:`scipy.constants`</code> also contains the 2018 CODATA recommended values database containing more physical constants. </p>
+
+    
+           
+               
+        <p>Available constants : </p>
+
+    
+           
+               
+        <p>====================================================================== ==== 
+        <code class='verbatim'>alpha particle mass</code>
+     6.6446573357e - 27 kg 
+        <code class='verbatim'>alpha particle mass energy equivalent</code>
+     5.9719201914e - 10 J 
+        <code class='verbatim'>alpha particle mass energy equivalent in MeV</code>
+     3727.3794066 MeV 
+        <code class='verbatim'>alpha particle mass in u</code>
+     4.001506179127 u 
+        <code class='verbatim'>alpha particle molar mass</code>
+     0.0040015061777 kg mol^ - 1 
+        <code class='verbatim'>alpha particle relative atomic mass</code>
+     4.001506179127 
+        <code class='verbatim'>alpha particle-electron mass ratio</code>
+     7294.29954142 
+        <code class='verbatim'>alpha particle-proton mass ratio</code>
+     3.97259969009 
+        <code class='verbatim'>Angstrom star</code>
+     1.00001495e - 10 m 
+        <code class='verbatim'>atomic mass constant</code>
+     1.6605390666e - 27 kg 
+        <code class='verbatim'>atomic mass constant energy equivalent</code>
+     1.4924180856e - 10 J 
+        <code class='verbatim'>atomic mass constant energy equivalent in MeV</code>
+     931.49410242 MeV 
+        <code class='verbatim'>atomic mass unit-electron volt relationship</code>
+     931494102.42 eV 
+        <code class='verbatim'>atomic mass unit-hartree relationship</code>
+     34231776.874 E_h 
+        <code class='verbatim'>atomic mass unit-hertz relationship</code>
+     2.25234271871e+23 Hz 
+        <code class='verbatim'>atomic mass unit-inverse meter relationship</code>
+     751300661040000.0 m^ - 1 
+        <code class='verbatim'>atomic mass unit-joule relationship</code>
+     1.4924180856e - 10 J 
+        <code class='verbatim'>atomic mass unit-kelvin relationship</code>
+     10809540191600.0 K 
+        <code class='verbatim'>atomic mass unit-kilogram relationship</code>
+     1.6605390666e - 27 kg 
+        <code class='verbatim'>atomic unit of 1st hyperpolarizability</code>
+     3.2063613061e - 53 C^3 m^3 J^ - 2 
+        <code class='verbatim'>atomic unit of 2nd hyperpolarizability</code>
+     6.2353799905e - 65 C^4 m^4 J^ - 3 
+        <code class='verbatim'>atomic unit of action</code>
+     1.054571817e - 34 J s 
+        <code class='verbatim'>atomic unit of charge</code>
+     1.602176634e - 19 C 
+        <code class='verbatim'>atomic unit of charge density</code>
+     1081202384570.0 C m^ - 3 
+        <code class='verbatim'>atomic unit of current</code>
+     0.00662361823751 A 
+        <code class='verbatim'>atomic unit of electric dipole mom.</code>
+     8.4783536255e - 30 C m 
+        <code class='verbatim'>atomic unit of electric field</code>
+     514220674763.0 V m^ - 1 
+        <code class='verbatim'>atomic unit of electric field gradient</code>
+     9.7173624292e+21 V m^ - 2 
+        <code class='verbatim'>atomic unit of electric polarizability</code>
+     1.64877727436e - 41 C^2 m^2 J^ - 1 
+        <code class='verbatim'>atomic unit of electric potential</code>
+     27.211386245988 V 
+        <code class='verbatim'>atomic unit of electric quadrupole mom.</code>
+     4.4865515246e - 40 C m^2 
+        <code class='verbatim'>atomic unit of energy</code>
+     4.3597447222071e - 18 J 
+        <code class='verbatim'>atomic unit of force</code>
+     8.2387234983e - 08 N 
+        <code class='verbatim'>atomic unit of length</code>
+     5.29177210903e - 11 m 
+        <code class='verbatim'>atomic unit of mag. dipole mom.</code>
+     1.85480201566e - 23 J T^ - 1 
+        <code class='verbatim'>atomic unit of mag. flux density</code>
+     235051.756758 T 
+        <code class='verbatim'>atomic unit of magnetizability</code>
+     7.8910366008e - 29 J T^ - 2 
+        <code class='verbatim'>atomic unit of mass</code>
+     9.1093837015e - 31 kg 
+        <code class='verbatim'>atomic unit of momentum</code>
+     1.9928519141e - 24 kg m s^ - 1 
+        <code class='verbatim'>atomic unit of permittivity</code>
+     1.11265005545e - 10 F m^ - 1 
+        <code class='verbatim'>atomic unit of time</code>
+     2.4188843265857e - 17 s 
+        <code class='verbatim'>atomic unit of velocity</code>
+     2187691.26364 m s^ - 1 
+        <code class='verbatim'>Avogadro constant</code>
+     6.02214076e+23 mol^ - 1 
+        <code class='verbatim'>Bohr magneton</code>
+     9.2740100783e - 24 J T^ - 1 
+        <code class='verbatim'>Bohr magneton in eV/T</code>
+     5.788381806e - 05 eV T^ - 1 
+        <code class='verbatim'>Bohr magneton in Hz/T</code>
+     13996244936.1 Hz T^ - 1 
+        <code class='verbatim'>Bohr magneton in inverse meter per tesla</code>
+     46.686447783 m^ - 1 T^ - 1 
+        <code class='verbatim'>Bohr magneton in K/T</code>
+     0.67171381563 K T^ - 1 
+        <code class='verbatim'>Bohr radius</code>
+     5.29177210903e - 11 m 
+        <code class='verbatim'>Boltzmann constant</code>
+     1.380649e - 23 J K^ - 1 
+        <code class='verbatim'>Boltzmann constant in eV/K</code>
+     8.617333262e - 05 eV K^ - 1 
+        <code class='verbatim'>Boltzmann constant in Hz/K</code>
+     20836619120.0 Hz K^ - 1 
+        <code class='verbatim'>Boltzmann constant in inverse meter per kelvin</code>
+     69.50348004 m^ - 1 K^ - 1 
+        <code class='verbatim'>classical electron radius</code>
+     2.8179403262e - 15 m 
+        <code class='verbatim'>Compton wavelength</code>
+     2.42631023867e - 12 m 
+        <code class='verbatim'>conductance quantum</code>
+     7.748091729e - 05 S 
+        <code class='verbatim'>conventional value of ampere-90</code>
+     1.00000008887 A 
+        <code class='verbatim'>conventional value of coulomb-90</code>
+     1.00000008887 C 
+        <code class='verbatim'>conventional value of farad-90</code>
+     0.9999999822 F 
+        <code class='verbatim'>conventional value of henry-90</code>
+     1.00000001779 H 
+        <code class='verbatim'>conventional value of Josephson constant</code>
+     483597900000000.0 Hz V^ - 1 
+        <code class='verbatim'>conventional value of ohm-90</code>
+     1.00000001779 ohm 
+        <code class='verbatim'>conventional value of volt-90</code>
+     1.00000010666 V 
+        <code class='verbatim'>conventional value of von Klitzing constant</code>
+     25812.807 ohm 
+        <code class='verbatim'>conventional value of watt-90</code>
+     1.00000019553 W 
+        <code class='verbatim'>Cu x unit</code>
+     1.00207697e - 13 m 
+        <code class='verbatim'>deuteron g factor</code>
+     0.8574382338 
+        <code class='verbatim'>deuteron mag. mom.</code>
+     4.330735094e - 27 J T^ - 1 
+        <code class='verbatim'>deuteron mag. mom. to Bohr magneton ratio</code>
+     0.000466975457 
+        <code class='verbatim'>deuteron mag. mom. to nuclear magneton ratio</code>
+     0.8574382338 
+        <code class='verbatim'>deuteron mass</code>
+     3.3435837724e - 27 kg 
+        <code class='verbatim'>deuteron mass energy equivalent</code>
+     3.00506323102e - 10 J 
+        <code class='verbatim'>deuteron mass energy equivalent in MeV</code>
+     1875.61294257 MeV 
+        <code class='verbatim'>deuteron mass in u</code>
+     2.013553212745 u 
+        <code class='verbatim'>deuteron molar mass</code>
+     0.00201355321205 kg mol^ - 1 
+        <code class='verbatim'>deuteron relative atomic mass</code>
+     2.013553212745 
+        <code class='verbatim'>deuteron rms charge radius</code>
+     2.12799e - 15 m 
+        <code class='verbatim'>deuteron-electron mag. mom. ratio</code>
+     - 0.0004664345551 
+        <code class='verbatim'>deuteron-electron mass ratio</code>
+     3670.48296788 
+        <code class='verbatim'>deuteron-neutron mag. mom. ratio</code>
+     - 0.44820653 
+        <code class='verbatim'>deuteron-proton mag. mom. ratio</code>
+     0.30701220939 
+        <code class='verbatim'>deuteron-proton mass ratio</code>
+     1.99900750139 
+        <code class='verbatim'>electron charge to mass quotient</code>
+     - 175882001076.0 C kg^ - 1 
+        <code class='verbatim'>electron g factor</code>
+     - 2.00231930436256 
+        <code class='verbatim'>electron gyromag. ratio</code>
+     176085963023.0 s^ - 1 T^ - 1 
+        <code class='verbatim'>electron gyromag. ratio in MHz/T</code>
+     28024.9514242 MHz T^ - 1 
+        <code class='verbatim'>electron mag. mom.</code>
+     - 9.2847647043e - 24 J T^ - 1 
+        <code class='verbatim'>electron mag. mom. anomaly</code>
+     0.00115965218128 
+        <code class='verbatim'>electron mag. mom. to Bohr magneton ratio</code>
+     - 1.00115965218128 
+        <code class='verbatim'>electron mag. mom. to nuclear magneton ratio</code>
+     - 1838.28197188 
+        <code class='verbatim'>electron mass</code>
+     9.1093837015e - 31 kg 
+        <code class='verbatim'>electron mass energy equivalent</code>
+     8.1871057769e - 14 J 
+        <code class='verbatim'>electron mass energy equivalent in MeV</code>
+     0.51099895 MeV 
+        <code class='verbatim'>electron mass in u</code>
+     0.000548579909065 u 
+        <code class='verbatim'>electron molar mass</code>
+     5.4857990888e - 07 kg mol^ - 1 
+        <code class='verbatim'>electron relative atomic mass</code>
+     0.000548579909065 
+        <code class='verbatim'>electron to alpha particle mass ratio</code>
+     0.0001370933554787 
+        <code class='verbatim'>electron to shielded helion mag. mom. ratio</code>
+     864.058257 
+        <code class='verbatim'>electron to shielded proton mag. mom. ratio</code>
+     - 658.2275971 
+        <code class='verbatim'>electron volt</code>
+     1.602176634e - 19 J 
+        <code class='verbatim'>electron volt-atomic mass unit relationship</code>
+     1.07354410233e - 09 u 
+        <code class='verbatim'>electron volt-hartree relationship</code>
+     0.036749322175655 E_h 
+        <code class='verbatim'>electron volt-hertz relationship</code>
+     241798924200000.0 Hz 
+        <code class='verbatim'>electron volt-inverse meter relationship</code>
+     806554.3937 m^ - 1 
+        <code class='verbatim'>electron volt-joule relationship</code>
+     1.602176634e - 19 J 
+        <code class='verbatim'>electron volt-kelvin relationship</code>
+     11604.51812 K 
+        <code class='verbatim'>electron volt-kilogram relationship</code>
+     1.782661921e - 36 kg 
+        <code class='verbatim'>electron-deuteron mag. mom. ratio</code>
+     - 2143.9234915 
+        <code class='verbatim'>electron-deuteron mass ratio</code>
+     0.0002724437107462 
+        <code class='verbatim'>electron-helion mass ratio</code>
+     0.0001819543074573 
+        <code class='verbatim'>electron-muon mag. mom. ratio</code>
+     206.7669883 
+        <code class='verbatim'>electron-muon mass ratio</code>
+     0.00483633169 
+        <code class='verbatim'>electron-neutron mag. mom. ratio</code>
+     960.9205 
+        <code class='verbatim'>electron-neutron mass ratio</code>
+     0.00054386734424 
+        <code class='verbatim'>electron-proton mag. mom. ratio</code>
+     - 658.21068789 
+        <code class='verbatim'>electron-proton mass ratio</code>
+     0.000544617021487 
+        <code class='verbatim'>electron-tau mass ratio</code>
+     0.000287585 
+        <code class='verbatim'>electron-triton mass ratio</code>
+     0.0001819200062251 
+        <code class='verbatim'>elementary charge</code>
+     1.602176634e - 19 C 
+        <code class='verbatim'>elementary charge over h-bar</code>
+     1519267447000000.0 A J^ - 1 
+        <code class='verbatim'>Faraday constant</code>
+     96485.33212 C mol^ - 1 
+        <code class='verbatim'>Fermi coupling constant</code>
+     1.1663787e - 05 GeV^ - 2 
+        <code class='verbatim'>fine-structure constant</code>
+     0.0072973525693 
+        <code class='verbatim'>first radiation constant</code>
+     3.741771852e - 16 W m^2 
+        <code class='verbatim'>first radiation constant for spectral radiance</code>
+     1.191042972e - 16 W m^2 sr^ - 1 
+        <code class='verbatim'>Hartree energy</code>
+     4.3597447222071e - 18 J 
+        <code class='verbatim'>Hartree energy in eV</code>
+     27.211386245988 eV 
+        <code class='verbatim'>hartree-atomic mass unit relationship</code>
+     2.92126232205e - 08 u 
+        <code class='verbatim'>hartree-electron volt relationship</code>
+     27.211386245988 eV 
+        <code class='verbatim'>hartree-hertz relationship</code>
+     6579683920502000.0 Hz 
+        <code class='verbatim'>hartree-inverse meter relationship</code>
+     21947463.13632 m^ - 1 
+        <code class='verbatim'>hartree-joule relationship</code>
+     4.3597447222071e - 18 J 
+        <code class='verbatim'>hartree-kelvin relationship</code>
+     315775.02480407 K 
+        <code class='verbatim'>hartree-kilogram relationship</code>
+     4.8508702095432e - 35 kg 
+        <code class='verbatim'>helion g factor</code>
+     - 4.255250615 
+        <code class='verbatim'>helion mag. mom.</code>
+     - 1.074617532e - 26 J T^ - 1 
+        <code class='verbatim'>helion mag. mom. to Bohr magneton ratio</code>
+     - 0.001158740958 
+        <code class='verbatim'>helion mag. mom. to nuclear magneton ratio</code>
+     - 2.127625307 
+        <code class='verbatim'>helion mass</code>
+     5.0064127796e - 27 kg 
+        <code class='verbatim'>helion mass energy equivalent</code>
+     4.4995394125e - 10 J 
+        <code class='verbatim'>helion mass energy equivalent in MeV</code>
+     2808.39160743 MeV 
+        <code class='verbatim'>helion mass in u</code>
+     3.014932247175 u 
+        <code class='verbatim'>helion molar mass</code>
+     0.00301493224613 kg mol^ - 1 
+        <code class='verbatim'>helion relative atomic mass</code>
+     3.014932247175 
+        <code class='verbatim'>helion shielding shift</code>
+     5.996743e - 05 
+        <code class='verbatim'>helion-electron mass ratio</code>
+     5495.88528007 
+        <code class='verbatim'>helion-proton mass ratio</code>
+     2.99315267167 
+        <code class='verbatim'>hertz-atomic mass unit relationship</code>
+     4.4398216652e - 24 u 
+        <code class='verbatim'>hertz-electron volt relationship</code>
+     4.135667696e - 15 eV 
+        <code class='verbatim'>hertz-hartree relationship</code>
+     1.519829846057e - 16 E_h 
+        <code class='verbatim'>hertz-inverse meter relationship</code>
+     3.3356409519815204e - 09 m^ - 1 
+        <code class='verbatim'>hertz-joule relationship</code>
+     6.62607015e - 34 J 
+        <code class='verbatim'>hertz-kelvin relationship</code>
+     4.799243073e - 11 K 
+        <code class='verbatim'>hertz-kilogram relationship</code>
+     7.372497323e - 51 kg 
+        <code class='verbatim'>hyperfine transition frequency of Cs-133</code>
+     9192631770.0 Hz 
+        <code class='verbatim'>inverse fine-structure constant</code>
+     137.035999084 
+        <code class='verbatim'>inverse meter-atomic mass unit relationship</code>
+     1.3310250501e - 15 u 
+        <code class='verbatim'>inverse meter-electron volt relationship</code>
+     1.239841984e - 06 eV 
+        <code class='verbatim'>inverse meter-hartree relationship</code>
+     4.556335252912e - 08 E_h 
+        <code class='verbatim'>inverse meter-hertz relationship</code>
+     299792458.0 Hz 
+        <code class='verbatim'>inverse meter-joule relationship</code>
+     1.986445857e - 25 J 
+        <code class='verbatim'>inverse meter-kelvin relationship</code>
+     0.01438776877 K 
+        <code class='verbatim'>inverse meter-kilogram relationship</code>
+     2.210219094e - 42 kg 
+        <code class='verbatim'>inverse of conductance quantum</code>
+     12906.40372 ohm 
+        <code class='verbatim'>Josephson constant</code>
+     483597848400000.0 Hz V^ - 1 
+        <code class='verbatim'>joule-atomic mass unit relationship</code>
+     6700535256.5 u 
+        <code class='verbatim'>joule-electron volt relationship</code>
+     6.241509074e+18 eV 
+        <code class='verbatim'>joule-hartree relationship</code>
+     2.2937122783963e+17 E_h 
+        <code class='verbatim'>joule-hertz relationship</code>
+     1.509190179e+33 Hz 
+        <code class='verbatim'>joule-inverse meter relationship</code>
+     5.034116567e+24 m^ - 1 
+        <code class='verbatim'>joule-kelvin relationship</code>
+     7.242970516e+22 K 
+        <code class='verbatim'>joule-kilogram relationship</code>
+     1.1126500560536185e - 17 kg 
+        <code class='verbatim'>kelvin-atomic mass unit relationship</code>
+     9.2510873014e - 14 u 
+        <code class='verbatim'>kelvin-electron volt relationship</code>
+     8.617333262e - 05 eV 
+        <code class='verbatim'>kelvin-hartree relationship</code>
+     3.1668115634556e - 06 E_h 
+        <code class='verbatim'>kelvin-hertz relationship</code>
+     20836619120.0 Hz 
+        <code class='verbatim'>kelvin-inverse meter relationship</code>
+     69.50348004 m^ - 1 
+        <code class='verbatim'>kelvin-joule relationship</code>
+     1.380649e - 23 J 
+        <code class='verbatim'>kelvin-kilogram relationship</code>
+     1.536179187e - 40 kg 
+        <code class='verbatim'>kilogram-atomic mass unit relationship</code>
+     6.0221407621e+26 u 
+        <code class='verbatim'>kilogram-electron volt relationship</code>
+     5.609588603e+35 eV 
+        <code class='verbatim'>kilogram-hartree relationship</code>
+     2.0614857887409e+34 E_h 
+        <code class='verbatim'>kilogram-hertz relationship</code>
+     1.356392489e+50 Hz 
+        <code class='verbatim'>kilogram-inverse meter relationship</code>
+     4.524438335e+41 m^ - 1 
+        <code class='verbatim'>kilogram-joule relationship</code>
+     8.987551787368176e+16 J 
+        <code class='verbatim'>kilogram-kelvin relationship</code>
+     6.50965726e+39 K 
+        <code class='verbatim'>lattice parameter of silicon</code>
+     5.431020511e - 10 m 
+        <code class='verbatim'>lattice spacing of ideal Si (220)</code>
+     1.920155716e - 10 m 
+        <code class='verbatim'>Loschmidt constant (273.15 K, 100 kPa)</code>
+     2.651645804e+25 m^ - 3 
+        <code class='verbatim'>Loschmidt constant (273.15 K, 101.325 kPa)</code>
+     2.686780111e+25 m^ - 3 
+        <code class='verbatim'>luminous efficacy</code>
+     683.0 lm W^ - 1 
+        <code class='verbatim'>mag. flux quantum</code>
+     2.067833848e - 15 Wb 
+        <code class='verbatim'>Mo x unit</code>
+     1.00209952e - 13 m 
+        <code class='verbatim'>molar gas constant</code>
+     8.314462618 J mol^ - 1 K^ - 1 
+        <code class='verbatim'>molar mass constant</code>
+     0.00099999999965 kg mol^ - 1 
+        <code class='verbatim'>molar mass of carbon-12</code>
+     0.0119999999958 kg mol^ - 1 
+        <code class='verbatim'>molar Planck constant</code>
+     3.990312712e - 10 J Hz^ - 1 mol^ - 1 
+        <code class='verbatim'>molar volume of ideal gas (273.15 K, 100 kPa)</code>
+     0.02271095464 m^3 mol^ - 1 
+        <code class='verbatim'>molar volume of ideal gas (273.15 K, 101.325 kPa)</code>
+     0.02241396954 m^3 mol^ - 1 
+        <code class='verbatim'>molar volume of silicon</code>
+     1.205883199e - 05 m^3 mol^ - 1 
+        <code class='verbatim'>muon Compton wavelength</code>
+     1.17344411e - 14 m 
+        <code class='verbatim'>muon g factor</code>
+     - 2.0023318418 
+        <code class='verbatim'>muon mag. mom.</code>
+     - 4.4904483e - 26 J T^ - 1 
+        <code class='verbatim'>muon mag. mom. anomaly</code>
+     0.00116592089 
+        <code class='verbatim'>muon mag. mom. to Bohr magneton ratio</code>
+     - 0.00484197047 
+        <code class='verbatim'>muon mag. mom. to nuclear magneton ratio</code>
+     - 8.89059703 
+        <code class='verbatim'>muon mass</code>
+     1.883531627e - 28 kg 
+        <code class='verbatim'>muon mass energy equivalent</code>
+     1.692833804e - 11 J 
+        <code class='verbatim'>muon mass energy equivalent in MeV</code>
+     105.6583755 MeV 
+        <code class='verbatim'>muon mass in u</code>
+     0.1134289259 u 
+        <code class='verbatim'>muon molar mass</code>
+     0.0001134289259 kg mol^ - 1 
+        <code class='verbatim'>muon-electron mass ratio</code>
+     206.768283 
+        <code class='verbatim'>muon-neutron mass ratio</code>
+     0.112454517 
+        <code class='verbatim'>muon-proton mag. mom. ratio</code>
+     - 3.183345142 
+        <code class='verbatim'>muon-proton mass ratio</code>
+     0.1126095264 
+        <code class='verbatim'>muon-tau mass ratio</code>
+     0.0594635 
+        <code class='verbatim'>natural unit of action</code>
+     1.054571817e - 34 J s 
+        <code class='verbatim'>natural unit of action in eV s</code>
+     6.582119569e - 16 eV s 
+        <code class='verbatim'>natural unit of energy</code>
+     8.1871057769e - 14 J 
+        <code class='verbatim'>natural unit of energy in MeV</code>
+     0.51099895 MeV 
+        <code class='verbatim'>natural unit of length</code>
+     3.8615926796e - 13 m 
+        <code class='verbatim'>natural unit of mass</code>
+     9.1093837015e - 31 kg 
+        <code class='verbatim'>natural unit of momentum</code>
+     2.730924488e - 22 kg m s^ - 1 
+        <code class='verbatim'>natural unit of momentum in MeV/c</code>
+     0.5109989461 MeV/ c 
+        <code class='verbatim'>natural unit of time</code>
+     1.28808866819e - 21 s 
+        <code class='verbatim'>natural unit of velocity</code>
+     299792458.0 m s^ - 1 
+        <code class='verbatim'>neutron Compton wavelength</code>
+     1.31959090581e - 15 m 
+        <code class='verbatim'>neutron g factor</code>
+     - 3.82608545 
+        <code class='verbatim'>neutron gyromag. ratio</code>
+     183247171.0 s^ - 1 T^ - 1 
+        <code class='verbatim'>neutron gyromag. ratio in MHz/T</code>
+     29.1646931 MHz T^ - 1 
+        <code class='verbatim'>neutron mag. mom.</code>
+     - 9.6623651e - 27 J T^ - 1 
+        <code class='verbatim'>neutron mag. mom. to Bohr magneton ratio</code>
+     - 0.00104187563 
+        <code class='verbatim'>neutron mag. mom. to nuclear magneton ratio</code>
+     - 1.91304273 
+        <code class='verbatim'>neutron mass</code>
+     1.67492749804e - 27 kg 
+        <code class='verbatim'>neutron mass energy equivalent</code>
+     1.50534976287e - 10 J 
+        <code class='verbatim'>neutron mass energy equivalent in MeV</code>
+     939.56542052 MeV 
+        <code class='verbatim'>neutron mass in u</code>
+     1.00866491595 u 
+        <code class='verbatim'>neutron molar mass</code>
+     0.0010086649156 kg mol^ - 1 
+        <code class='verbatim'>neutron relative atomic mass</code>
+     1.00866491595 
+        <code class='verbatim'>neutron to shielded proton mag. mom. ratio</code>
+     - 0.68499694 
+        <code class='verbatim'>neutron-electron mag. mom. ratio</code>
+     0.00104066882 
+        <code class='verbatim'>neutron-electron mass ratio</code>
+     1838.68366173 
+        <code class='verbatim'>neutron-muon mass ratio</code>
+     8.89248406 
+        <code class='verbatim'>neutron-proton mag. mom. ratio</code>
+     - 0.68497934 
+        <code class='verbatim'>neutron-proton mass difference</code>
+     2.30557435e - 30 kg 
+        <code class='verbatim'>neutron-proton mass difference energy equivalent</code>
+     2.07214689e - 13 J 
+        <code class='verbatim'>neutron-proton mass difference energy equivalent in MeV</code>
+     1.29333236 MeV 
+        <code class='verbatim'>neutron-proton mass difference in u</code>
+     0.00138844933 u 
+        <code class='verbatim'>neutron-proton mass ratio</code>
+     1.00137841931 
+        <code class='verbatim'>neutron-tau mass ratio</code>
+     0.528779 
+        <code class='verbatim'>Newtonian constant of gravitation</code>
+     6.6743e - 11 m^3 kg^ - 1 s^ - 2 
+        <code class='verbatim'>Newtonian constant of gravitation over h-bar c</code>
+     6.70883e - 39 (GeV/ c^2)^ - 2 
+        <code class='verbatim'>nuclear magneton</code>
+     5.0507837461e - 27 J T^ - 1 
+        <code class='verbatim'>nuclear magneton in eV/T</code>
+     3.15245125844e - 08 eV T^ - 1 
+        <code class='verbatim'>nuclear magneton in inverse meter per tesla</code>
+     0.0254262341353 m^ - 1 T^ - 1 
+        <code class='verbatim'>nuclear magneton in K/T</code>
+     0.00036582677756 K T^ - 1 
+        <code class='verbatim'>nuclear magneton in MHz/T</code>
+     7.6225932291 MHz T^ - 1 
+        <code class='verbatim'>Planck constant</code>
+     6.62607015e - 34 J Hz^ - 1 
+        <code class='verbatim'>Planck constant in eV/Hz</code>
+     4.135667696e - 15 eV Hz^ - 1 
+        <code class='verbatim'>Planck length</code>
+     1.616255e - 35 m 
+        <code class='verbatim'>Planck mass</code>
+     2.176434e - 08 kg 
+        <code class='verbatim'>Planck mass energy equivalent in GeV</code>
+     1.22089e+19 GeV 
+        <code class='verbatim'>Planck temperature</code>
+     1.416784e+32 K 
+        <code class='verbatim'>Planck time</code>
+     5.391247e - 44 s 
+        <code class='verbatim'>proton charge to mass quotient</code>
+     95788331.56 C kg^ - 1 
+        <code class='verbatim'>proton Compton wavelength</code>
+     1.32140985539e - 15 m 
+        <code class='verbatim'>proton g factor</code>
+     5.5856946893 
+        <code class='verbatim'>proton gyromag. ratio</code>
+     267522187.44 s^ - 1 T^ - 1 
+        <code class='verbatim'>proton gyromag. ratio in MHz/T</code>
+     42.577478518 MHz T^ - 1 
+        <code class='verbatim'>proton mag. mom.</code>
+     1.41060679736e - 26 J T^ - 1 
+        <code class='verbatim'>proton mag. mom. to Bohr magneton ratio</code>
+     0.0015210322023 
+        <code class='verbatim'>proton mag. mom. to nuclear magneton ratio</code>
+     2.79284734463 
+        <code class='verbatim'>proton mag. shielding correction</code>
+     2.5689e - 05 
+        <code class='verbatim'>proton mass</code>
+     1.67262192369e - 27 kg 
+        <code class='verbatim'>proton mass energy equivalent</code>
+     1.50327761598e - 10 J 
+        <code class='verbatim'>proton mass energy equivalent in MeV</code>
+     938.27208816 MeV 
+        <code class='verbatim'>proton mass in u</code>
+     1.007276466621 u 
+        <code class='verbatim'>proton molar mass</code>
+     0.00100727646627 kg mol^ - 1 
+        <code class='verbatim'>proton relative atomic mass</code>
+     1.007276466621 
+        <code class='verbatim'>proton rms charge radius</code>
+     8.414e - 16 m 
+        <code class='verbatim'>proton-electron mass ratio</code>
+     1836.15267343 
+        <code class='verbatim'>proton-muon mass ratio</code>
+     8.88024337 
+        <code class='verbatim'>proton-neutron mag. mom. ratio</code>
+     - 1.45989805 
+        <code class='verbatim'>proton-neutron mass ratio</code>
+     0.99862347812 
+        <code class='verbatim'>proton-tau mass ratio</code>
+     0.528051 
+        <code class='verbatim'>quantum of circulation</code>
+     0.00036369475516 m^2 s^ - 1 
+        <code class='verbatim'>quantum of circulation times 2</code>
+     0.00072738951032 m^2 s^ - 1 
+        <code class='verbatim'>reduced Compton wavelength</code>
+     3.8615926796e - 13 m 
+        <code class='verbatim'>reduced muon Compton wavelength</code>
+     1.867594306e - 15 m 
+        <code class='verbatim'>reduced neutron Compton wavelength</code>
+     2.1001941552e - 16 m 
+        <code class='verbatim'>reduced Planck constant</code>
+     1.054571817e - 34 J s 
+        <code class='verbatim'>reduced Planck constant in eV s</code>
+     6.582119569e - 16 eV s 
+        <code class='verbatim'>reduced Planck constant times c in MeV fm</code>
+     197.3269804 MeV fm 
+        <code class='verbatim'>reduced proton Compton wavelength</code>
+     2.10308910336e - 16 m 
+        <code class='verbatim'>reduced tau Compton wavelength</code>
+     1.110538e - 16 m 
+        <code class='verbatim'>Rydberg constant</code>
+     10973731.56816 m^ - 1 
+        <code class='verbatim'>Rydberg constant times c in Hz</code>
+     3289841960250800.0 Hz 
+        <code class='verbatim'>Rydberg constant times hc in eV</code>
+     13.605693122994 eV 
+        <code class='verbatim'>Rydberg constant times hc in J</code>
+     2.1798723611035e - 18 J 
+        <code class='verbatim'>Sackur-Tetrode constant (1 K, 100 kPa)</code>
+     - 1.15170753706 
+        <code class='verbatim'>Sackur-Tetrode constant (1 K, 101.325 kPa)</code>
+     - 1.16487052358 
+        <code class='verbatim'>second radiation constant</code>
+     0.01438776877 m K 
+        <code class='verbatim'>shielded helion gyromag. ratio</code>
+     203789456.9 s^ - 1 T^ - 1 
+        <code class='verbatim'>shielded helion gyromag. ratio in MHz/T</code>
+     32.43409942 MHz T^ - 1 
+        <code class='verbatim'>shielded helion mag. mom.</code>
+     - 1.07455309e - 26 J T^ - 1 
+        <code class='verbatim'>shielded helion mag. mom. to Bohr magneton ratio</code>
+     - 0.001158671471 
+        <code class='verbatim'>shielded helion mag. mom. to nuclear magneton ratio</code>
+     - 2.127497719 
+        <code class='verbatim'>shielded helion to proton mag. mom. ratio</code>
+     - 0.7617665618 
+        <code class='verbatim'>shielded helion to shielded proton mag. mom. ratio</code>
+     - 0.7617861313 
+        <code class='verbatim'>shielded proton gyromag. ratio</code>
+     267515315.1 s^ - 1 T^ - 1 
+        <code class='verbatim'>shielded proton gyromag. ratio in MHz/T</code>
+     42.57638474 MHz T^ - 1 
+        <code class='verbatim'>shielded proton mag. mom.</code>
+     1.41057056e - 26 J T^ - 1 
+        <code class='verbatim'>shielded proton mag. mom. to Bohr magneton ratio</code>
+     0.001520993128 
+        <code class='verbatim'>shielded proton mag. mom. to nuclear magneton ratio</code>
+     2.792775599 
+        <code class='verbatim'>shielding difference of d and p in HD</code>
+     2.02e - 08 
+        <code class='verbatim'>shielding difference of t and p in HT</code>
+     2.414e - 08 
+        <code class='verbatim'>speed of light in vacuum</code>
+     299792458.0 m s^ - 1 
+        <code class='verbatim'>standard acceleration of gravity</code>
+     9.80665 m s^ - 2 
+        <code class='verbatim'>standard atmosphere</code>
+     101325.0 Pa 
+        <code class='verbatim'>standard-state pressure</code>
+     100000.0 Pa 
+        <code class='verbatim'>Stefan-Boltzmann constant</code>
+     5.670374419e - 08 W m^ - 2 K^ - 4 
+        <code class='verbatim'>tau Compton wavelength</code>
+     6.97771e - 16 m 
+        <code class='verbatim'>tau energy equivalent</code>
+     1776.86 MeV 
+        <code class='verbatim'>tau mass</code>
+     3.16754e - 27 kg 
+        <code class='verbatim'>tau mass energy equivalent</code>
+     2.84684e - 10 J 
+        <code class='verbatim'>tau mass in u</code>
+     1.90754 u 
+        <code class='verbatim'>tau molar mass</code>
+     0.00190754 kg mol^ - 1 
+        <code class='verbatim'>tau-electron mass ratio</code>
+     3477.23 
+        <code class='verbatim'>tau-muon mass ratio</code>
+     16.817 
+        <code class='verbatim'>tau-neutron mass ratio</code>
+     1.89115 
+        <code class='verbatim'>tau-proton mass ratio</code>
+     1.89376 
+        <code class='verbatim'>Thomson cross section</code>
+     6.6524587321e - 29 m^2 
+        <code class='verbatim'>triton g factor</code>
+     5.957924931 
+        <code class='verbatim'>triton mag. mom.</code>
+     1.5046095202e - 26 J T^ - 1 
+        <code class='verbatim'>triton mag. mom. to Bohr magneton ratio</code>
+     0.0016223936651 
+        <code class='verbatim'>triton mag. mom. to nuclear magneton ratio</code>
+     2.9789624656 
+        <code class='verbatim'>triton mass</code>
+     5.0073567446e - 27 kg 
+        <code class='verbatim'>triton mass energy equivalent</code>
+     4.500387806e - 10 J 
+        <code class='verbatim'>triton mass energy equivalent in MeV</code>
+     2808.92113298 MeV 
+        <code class='verbatim'>triton mass in u</code>
+     3.01550071621 u 
+        <code class='verbatim'>triton molar mass</code>
+     0.00301550071517 kg mol^ - 1 
+        <code class='verbatim'>triton relative atomic mass</code>
+     3.01550071621 
+        <code class='verbatim'>triton to proton mag. mom. ratio</code>
+     1.0666399191 
+        <code class='verbatim'>triton-electron mass ratio</code>
+     5496.92153573 
+        <code class='verbatim'>triton-proton mass ratio</code>
+     2.99371703414 
+        <code class='verbatim'>unified atomic mass unit</code>
+     1.6605390666e - 27 kg 
+        <code class='verbatim'>vacuum electric permittivity</code>
+     8.8541878128e - 12 F m^ - 1 
+        <code class='verbatim'>vacuum mag. permeability</code>
+     1.25663706212e - 06 N A^ - 2 
+        <code class='verbatim'>von Klitzing constant</code>
+     25812.80745 ohm 
+        <code class='verbatim'>W to Z mass ratio</code>
+     0.88153 
+        <code class='verbatim'>weak mixing angle</code>
+     0.2229 
+        <code class='verbatim'>Wien frequency displacement law constant</code>
+     58789257570.0 Hz K^ - 1 
+        <code class='verbatim'>Wien wavelength displacement law constant</code>
+     0.002897771955 m K ====================================================================== ==== </p>
+
+    
+           
+       
+
+    
+        <h1>Units</h1>
+    
+
+    
+           
+       
+
+    
+        <h1>SI prefixes</h1>
+    
+
+    
+           
+               
+        <p>============ ================================================================= 
+        <code class='verbatim'>yotta</code>
+     <code>:None:None:`math:`10^{24}`</code> 
+        <code class='verbatim'>zetta</code>
+     <code>:None:None:`math:`10^{21}`</code> 
+        <code class='verbatim'>exa</code>
+     <code>:None:None:`math:`10^{18}`</code> 
+        <code class='verbatim'>peta</code>
+     <code>:None:None:`math:`10^{15}`</code> 
+        <code class='verbatim'>tera</code>
+     <code>:None:None:`math:`10^{12}`</code> 
+        <code class='verbatim'>giga</code>
+     <code>:None:None:`math:`10^{9}`</code> 
+        <code class='verbatim'>mega</code>
+     <code>:None:None:`math:`10^{6}`</code> 
+        <code class='verbatim'>kilo</code>
+     <code>:None:None:`math:`10^{3}`</code> 
+        <code class='verbatim'>hecto</code>
+     <code>:None:None:`math:`10^{2}`</code> 
+        <code class='verbatim'>deka</code>
+     <code>:None:None:`math:`10^{1}`</code> 
+        <code class='verbatim'>deci</code>
+     <code>:None:None:`math:`10^{-1}`</code> 
+        <code class='verbatim'>centi</code>
+     <code>:None:None:`math:`10^{-2}`</code> 
+        <code class='verbatim'>milli</code>
+     <code>:None:None:`math:`10^{-3}`</code> 
+        <code class='verbatim'>micro</code>
+     <code>:None:None:`math:`10^{-6}`</code> 
+        <code class='verbatim'>nano</code>
+     <code>:None:None:`math:`10^{-9}`</code> 
+        <code class='verbatim'>pico</code>
+     <code>:None:None:`math:`10^{-12}`</code> 
+        <code class='verbatim'>femto</code>
+     <code>:None:None:`math:`10^{-15}`</code> 
+        <code class='verbatim'>atto</code>
+     <code>:None:None:`math:`10^{-18}`</code> 
+        <code class='verbatim'>zepto</code>
+     <code>:None:None:`math:`10^{-21}`</code> ============ ================================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Binary prefixes</h1>
+    
+
+    
+           
+               
+        <p>============ ================================================================= 
+        <code class='verbatim'>kibi</code>
+     <code>:None:None:`math:`2^{10}`</code> 
+        <code class='verbatim'>mebi</code>
+     <code>:None:None:`math:`2^{20}`</code> 
+        <code class='verbatim'>gibi</code>
+     <code>:None:None:`math:`2^{30}`</code> 
+        <code class='verbatim'>tebi</code>
+     <code>:None:None:`math:`2^{40}`</code> 
+        <code class='verbatim'>pebi</code>
+     <code>:None:None:`math:`2^{50}`</code> 
+        <code class='verbatim'>exbi</code>
+     <code>:None:None:`math:`2^{60}`</code> 
+        <code class='verbatim'>zebi</code>
+     <code>:None:None:`math:`2^{70}`</code> 
+        <code class='verbatim'>yobi</code>
+     <code>:None:None:`math:`2^{80}`</code> ============ ================================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Mass</h1>
+    
+
+    
+           
+               
+        <p>================= ============================================================ 
+        <code class='verbatim'>gram</code>
+     <code>:None:None:`math:`10^{-3}`</code> kg 
+        <code class='verbatim'>metric_ton</code>
+     <code>:None:None:`math:`10^{3}`</code> kg 
+        <code class='verbatim'>grain</code>
+     one grain in kg 
+        <code class='verbatim'>lb</code>
+     one pound (avoirdupous) in kg 
+        <code class='verbatim'>pound</code>
+     one pound (avoirdupous) in kg 
+        <code class='verbatim'>blob</code>
+     one inch version of a slug in kg (added in 1.0.0) 
+        <code class='verbatim'>slinch</code>
+     one inch version of a slug in kg (added in 1.0.0) 
+        <code class='verbatim'>slug</code>
+     one slug in kg (added in 1.0.0) 
+        <code class='verbatim'>oz</code>
+     one ounce in kg 
+        <code class='verbatim'>ounce</code>
+     one ounce in kg 
+        <code class='verbatim'>stone</code>
+     one stone in kg 
+        <code class='verbatim'>grain</code>
+     one grain in kg 
+        <code class='verbatim'>long_ton</code>
+     one long ton in kg 
+        <code class='verbatim'>short_ton</code>
+     one short ton in kg 
+        <code class='verbatim'>troy_ounce</code>
+     one Troy ounce in kg 
+        <code class='verbatim'>troy_pound</code>
+     one Troy pound in kg 
+        <code class='verbatim'>carat</code>
+     one carat in kg 
+        <code class='verbatim'>m_u</code>
+     atomic mass constant (in kg) 
+        <code class='verbatim'>u</code>
+     atomic mass constant (in kg) 
+        <code class='verbatim'>atomic_mass</code>
+     atomic mass constant (in kg) ================= ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Angle</h1>
+    
+
+    
+           
+               
+        <p>================= ============================================================ 
+        <code class='verbatim'>degree</code>
+     degree in radians 
+        <code class='verbatim'>arcmin</code>
+     arc minute in radians 
+        <code class='verbatim'>arcminute</code>
+     arc minute in radians 
+        <code class='verbatim'>arcsec</code>
+     arc second in radians 
+        <code class='verbatim'>arcsecond</code>
+     arc second in radians ================= ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Time</h1>
+    
+
+    
+           
+               
+        <p>================= ============================================================ 
+        <code class='verbatim'>minute</code>
+     one minute in seconds 
+        <code class='verbatim'>hour</code>
+     one hour in seconds 
+        <code class='verbatim'>day</code>
+     one day in seconds 
+        <code class='verbatim'>week</code>
+     one week in seconds 
+        <code class='verbatim'>year</code>
+     one year (365 days) in seconds 
+        <code class='verbatim'>Julian_year</code>
+     one Julian year (365.25 days) in seconds ================= ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Length</h1>
+    
+
+    
+           
+               
+        <p>===================== ============================================================ 
+        <code class='verbatim'>inch</code>
+     one inch in meters 
+        <code class='verbatim'>foot</code>
+     one foot in meters 
+        <code class='verbatim'>yard</code>
+     one yard in meters 
+        <code class='verbatim'>mile</code>
+     one mile in meters 
+        <code class='verbatim'>mil</code>
+     one mil in meters 
+        <code class='verbatim'>pt</code>
+     one point in meters 
+        <code class='verbatim'>point</code>
+     one point in meters 
+        <code class='verbatim'>survey_foot</code>
+     one survey foot in meters 
+        <code class='verbatim'>survey_mile</code>
+     one survey mile in meters 
+        <code class='verbatim'>nautical_mile</code>
+     one nautical mile in meters 
+        <code class='verbatim'>fermi</code>
+     one Fermi in meters 
+        <code class='verbatim'>angstrom</code>
+     one Angstrom in meters 
+        <code class='verbatim'>micron</code>
+     one micron in meters 
+        <code class='verbatim'>au</code>
+     one astronomical unit in meters 
+        <code class='verbatim'>astronomical_unit</code>
+     one astronomical unit in meters 
+        <code class='verbatim'>light_year</code>
+     one light year in meters 
+        <code class='verbatim'>parsec</code>
+     one parsec in meters ===================== ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Pressure</h1>
+    
+
+    
+           
+               
+        <p>================= ============================================================ 
+        <code class='verbatim'>atm</code>
+     standard atmosphere in pascals 
+        <code class='verbatim'>atmosphere</code>
+     standard atmosphere in pascals 
+        <code class='verbatim'>bar</code>
+     one bar in pascals 
+        <code class='verbatim'>torr</code>
+     one torr (mmHg) in pascals 
+        <code class='verbatim'>mmHg</code>
+     one torr (mmHg) in pascals 
+        <code class='verbatim'>psi</code>
+     one psi in pascals ================= ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Area</h1>
+    
+
+    
+           
+               
+        <p>================= ============================================================ 
+        <code class='verbatim'>hectare</code>
+     one hectare in square meters 
+        <code class='verbatim'>acre</code>
+     one acre in square meters ================= ============================================================ </p>
+
+    
+           
+       
+
+    
+        <h1>Volume</h1>
+    
+
+    
+           
+               
+        <p>=================== ======================================================== 
+        <code class='verbatim'>liter</code>
+     one liter in cubic meters 
+        <code class='verbatim'>litre</code>
+     one liter in cubic meters 
+        <code class='verbatim'>gallon</code>
+     one gallon (US) in cubic meters 
+        <code class='verbatim'>gallon_US</code>
+     one gallon (US) in cubic meters 
+        <code class='verbatim'>gallon_imp</code>
+     one gallon (UK) in cubic meters 
+        <code class='verbatim'>fluid_ounce</code>
+     one fluid ounce (US) in cubic meters 
+        <code class='verbatim'>fluid_ounce_US</code>
+     one fluid ounce (US) in cubic meters 
+        <code class='verbatim'>fluid_ounce_imp</code>
+     one fluid ounce (UK) in cubic meters 
+        <code class='verbatim'>bbl</code>
+     one barrel in cubic meters 
+        <code class='verbatim'>barrel</code>
+     one barrel in cubic meters =================== ======================================================== </p>
+
+    
+           
+       
+
+    
+        <h1>Speed</h1>
+    
+
+    
+           
+               
+        <p>================== ========================================================== 
+        <code class='verbatim'>kmh</code>
+     kilometers per hour in meters per second 
+        <code class='verbatim'>mph</code>
+     miles per hour in meters per second 
+        <code class='verbatim'>mach</code>
+     one Mach (approx., at 15 C, 1 atm) in meters per second 
+        <code class='verbatim'>speed_of_sound</code>
+     one Mach (approx., at 15 C, 1 atm) in meters per second 
+        <code class='verbatim'>knot</code>
+     one knot in meters per second ================== ========================================================== </p>
+
+    
+           
+       
+
+    
+        <h1>Temperature</h1>
+    
+
+    
+           
+               
+        <p>===================== ======================================================= 
+        <code class='verbatim'>zero_Celsius</code>
+     zero of Celsius scale in Kelvin 
+        <code class='verbatim'>degree_Fahrenheit</code>
+     one Fahrenheit (only differences) in Kelvins ===================== ======================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Energy</h1>
+    
+
+    
+           
+               
+        <p>==================== ======================================================= 
+        <code class='verbatim'>eV</code>
+     one electron volt in Joules 
+        <code class='verbatim'>electron_volt</code>
+     one electron volt in Joules 
+        <code class='verbatim'>calorie</code>
+     one calorie (thermochemical) in Joules 
+        <code class='verbatim'>calorie_th</code>
+     one calorie (thermochemical) in Joules 
+        <code class='verbatim'>calorie_IT</code>
+     one calorie (International Steam Table calorie, 1956) in Joules 
+        <code class='verbatim'>erg</code>
+     one erg in Joules 
+        <code class='verbatim'>Btu</code>
+     one British thermal unit (International Steam Table) in Joules 
+        <code class='verbatim'>Btu_IT</code>
+     one British thermal unit (International Steam Table) in Joules 
+        <code class='verbatim'>Btu_th</code>
+     one British thermal unit (thermochemical) in Joules 
+        <code class='verbatim'>ton_TNT</code>
+     one ton of TNT in Joules ==================== ======================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Power</h1>
+    
+
+    
+           
+               
+        <p>==================== ======================================================= 
+        <code class='verbatim'>hp</code>
+     one horsepower in watts 
+        <code class='verbatim'>horsepower</code>
+     one horsepower in watts ==================== ======================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Force</h1>
+    
+
+    
+           
+               
+        <p>==================== ======================================================= 
+        <code class='verbatim'>dyn</code>
+     one dyne in newtons 
+        <code class='verbatim'>dyne</code>
+     one dyne in newtons 
+        <code class='verbatim'>lbf</code>
+     one pound force in newtons 
+        <code class='verbatim'>pound_force</code>
+     one pound force in newtons 
+        <code class='verbatim'>kgf</code>
+     one kilogram force in newtons 
+        <code class='verbatim'>kilogram_force</code>
+     one kilogram force in newtons ==================== ======================================================= </p>
+
+    
+           
+       
+
+    
+        <h1>Optics</h1>
+    
+
+    
+           
+       
+
+    
+        <h1>References</h1>
+    
+
+    
+           
+       
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/constants/__init__.py </br>
+Line: 0 </br>
+type: &lt;class &#39;module&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.interpolate.html'>interpolate</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.interpolate._cubic.html'>_cubic</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._bspl.html">_bspl</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._bsplines.html">_bsplines</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.html">_cubic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._fitpack.html">_fitpack</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._fitpack_impl.html">_fitpack_impl</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._pade.html">_pade</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._ppoly.html">_ppoly</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.dfitpack.html">dfitpack</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.fitpack.html">fitpack</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.fitpack2.html">fitpack2</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.interpnd.html">interpnd</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.ndgriddata.html">ndgriddata</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.polyint.html">polyint</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.rbf.html">rbf</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.interpolate._cubic.CubicSpline.html'>CubicSpline</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.Akima1DInterpolator.html">Akima1DInterpolator</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.CubicHermiteSpline.html">CubicHermiteSpline</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.CubicSpline.html">CubicSpline</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.PchipInterpolator.html">PchipInterpolator</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.pchip_interpolate.html">pchip_interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate._cubic.prepare_input.html">prepare_input</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Attributes">Attributes</a>
+
+    <a href="#section-Methods">Methods</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>CubicSpline(x, y, axis=0, bc_type=&#39;not-a-knot&#39;, extrapolate=None)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Cubic spline data interpolator.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>Interpolate data with a piecewise cubic polynomial which is twice continuously differentiable [1]_. The result is represented as a <code>:None:None:`PPoly`</code> instance with breakpoints matching the given data.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="x">x</a> : array_like, shape (n,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>1-D array containing values of the independent variable. Values must be real, finite and in strictly increasing order.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="y">y</a> : array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Array containing values of the dependent variable. It can have arbitrary number of dimensions, but the length along 
+        <code class='verbatim'>axis</code>
+     (see below) must match the length of 
+        <code class='verbatim'>x</code>
+    . Values must be finite.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="axis">axis</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Axis along which <code><a link href="#y" class='local'>y</a></code> is assumed to be varying. Meaning that for 
+        <code class='verbatim'>x[i]</code>
+     the corresponding values are 
+        <code class='verbatim'>np.take(y, i, axis=axis)</code>
+    . Default is 0.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="bc_type">bc_type</a> : string or 2-tuple, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Boundary condition type. Two additional equations, given by the boundary conditions, are required to determine all coefficients of polynomials on each segment [2]_.</p>
+
+    
+            
+                
+        <p>If <code><a link href="#bc_type" class='local'>bc_type</a></code> is a string, then the specified condition will be applied at both ends of a spline. Available conditions are:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* &#39;not-a-knot&#39; (default): The first and second segment at a curve end</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>are the same polynomial. It is a good default when there is no information on boundary conditions.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;periodic&#39;: The interpolated functions is assumed to be periodic</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>of period 
+        <code class='verbatim'>x[-1] - x[0]</code>
+    . The first and last value of <code><a link href="#y" class='local'>y</a></code> must be identical: 
+        <code class='verbatim'>y[0] == y[-1]</code>
+    . This boundary condition will result in 
+        <code class='verbatim'>y&#39;[0] == y&#39;[-1]</code>
+     and 
+        <code class='verbatim'>y&#39;&#39;[0] == y&#39;&#39;[-1]</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;clamped&#39;: The first derivative at curves ends are zero. Assuming</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>a 1D <code><a link href="#y" class='local'>y</a></code>, 
+        <code class='verbatim'>bc_type=((1, 0.0), (1, 0.0))</code>
+     is the same condition.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;natural&#39;: The second derivative at curve ends are zero. Assuming</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>a 1D <code><a link href="#y" class='local'>y</a></code>, 
+        <code class='verbatim'>bc_type=((2, 0.0), (2, 0.0))</code>
+     is the same condition. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>If <code><a link href="#bc_type" class='local'>bc_type</a></code> is a 2-tuple, the first and the second value will be applied at the curve start and end respectively. The tuple values can be one of the previously mentioned strings (except &#39;periodic&#39;) or a tuple <code>:None:None:`(order, deriv_values)`</code> allowing to specify arbitrary derivatives at curve ends:</p>
+
+    
+            
+                
+        <p>* <code>:None:None:`order`</code>: the derivative order, 1 or 2. * <code>:None:None:`deriv_value`</code>: array_like containing derivative values, shape must</p>
+
+    
+            
+                
+        <p>  be the same as <code><a link href="#y" class='local'>y</a></code>, excluding 
+        <code class='verbatim'>axis</code>
+     dimension. For example, if   <code><a link href="#y" class='local'>y</a></code> is 1-D, then <code>:None:None:`deriv_value`</code> must be a scalar. If <code><a link href="#y" class='local'>y</a></code> is 3-D with   the shape (n0, n1, n2) and axis=2, then <code>:None:None:`deriv_value`</code> must be 2-D   and have the shape (n0, n1).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="extrapolate">extrapolate</a> : {bool, &#39;periodic&#39;, None}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If bool, determines whether to extrapolate to out-of-bounds points based on first and last intervals, or to return NaNs. If &#39;periodic&#39;, periodic extrapolation is used. If None (default), 
+        <code class='verbatim'>extrapolate</code>
+     is set to &#39;periodic&#39; for 
+        <code class='verbatim'>bc_type=&#39;periodic&#39;</code>
+     and to True otherwise.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Attributes">Attributes</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="x">x</a> : ndarray, shape (n,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Breakpoints. The same 
+        <code class='verbatim'>x</code>
+     which was passed to the constructor.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="c">c</a> : ndarray, shape (4, n-1, ...)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Coefficients of the polynomials on each segment. The trailing dimensions match the dimensions of <code><a link href="#y" class='local'>y</a></code>, excluding 
+        <code class='verbatim'>axis</code>
+    . For example, if <code><a link href="#y" class='local'>y</a></code> is 1-d, then 
+        <code class='verbatim'>c[k, i]</code>
+     is a coefficient for 
+        <code class='verbatim'>(x-x[i])**(3-k)</code>
+     on the segment between 
+        <code class='verbatim'>x[i]</code>
+     and 
+        <code class='verbatim'>x[i+1]</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="axis">axis</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Interpolation axis. The same axis which was passed to the constructor.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Methods">Methods</h3>
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Parameters <code><a link href="#bc_type" class='local'>bc_type</a></code> and 
+        <code class='verbatim'>interpolate</code>
+     work independently, i.e. the former controls only construction of a spline, and the latter only evaluation.</p>
+
+    
+           
+               
+        <p>When a boundary condition is &#39;not-a-knot&#39; and n = 2, it is replaced by a condition that the first derivative is equal to the linear interpolant slope. When both boundary conditions are &#39;not-a-knot&#39; and n = 3, the solution is sought as a parabola passing through given points.</p>
+
+    
+           
+               
+        <p>When &#39;not-a-knot&#39; boundary conditions is applied to both ends, the resulting spline will be the same as returned by <code>:None:None:`splrep`</code> (with 
+        <code class='verbatim'>s=0</code>
+    ) and <code><a link href="scipy.interpolate.fitpack2.InterpolatedUnivariateSpline.html" class='exists'>InterpolatedUnivariateSpline</a></code>
+        , but these two methods use a representation in B-spline basis.</p>
+
+    
+           
+               
+            <div class='block_directive'>
+    <div class='head'>.. versionadded:: [&#39; 0.18.0&#39;]</div>
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        <a class='exists' href='scipy.interpolate._cubic.CubicSpline.html'>scipy.interpolate._cubic.CubicSpline</a>
+    
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                
+        <p>In this example the cubic spline is used to interpolate a sampled sinusoid. You can see that the spline continuity property holds for the first and second derivatives and violates only for the third derivative.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=scipy, href="scipy.html">scipy</a><span class="nn">.</span><a class="foo nn" title=scipy.interpolate, href="scipy.interpolate.html">interpolate</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">CubicSpline</a><br><span class='nsl'>...&nbsp;</span><span class="kn">import</span><span class=""> </span><a class="foo nn" title=matplotlib, href="matplotlib.html">matplotlib</a><span class="nn">.</span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">pyplot</a><span class=""> </span><span class="k">as</span><span class=""> </span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.arange, href="numpy.arange.html">arange</a><span class="">(</span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.ufunc, href="numpy.ufunc.html">sin</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">CubicSpline</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.arange, href="numpy.arange.html">arange</a><span class="">(</span><span class="o">-</span><span class="mf">0.5</span><span class="">,</span><span class=""> </span><span class="mf">9.6</span><span class="">,</span><span class=""> </span><span class="mf">0.1</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">fig</span><span class="">,</span><span class=""> </span><span class="">ax</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.subplots, href="matplotlib.pyplot.subplots.html">subplots</a><span class="">(</span><span class="">figsize</span><span class="o">=</span><span class="">(</span><span class="mf">6.5</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">,</span><span class=""> </span><span class="s2">&#34;</span><span class="s2">o</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">data</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.ufunc, href="numpy.ufunc.html">sin</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">true</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">S</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">S</span><span class="s2">&#39;</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">S</span><span class="s2">&#39;</span><span class="s2">&#39;</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">xs</a><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">S</span><span class="s2">&#39;</span><span class="s2">&#39;</span><span class="s2">&#39;</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._base._AxesBase.set_xlim, href="matplotlib.axes._base._AxesBase.set_xlim.html">set_xlim</a><span class="">(</span><span class="o">-</span><span class="mf">0.5</span><span class="">,</span><span class=""> </span><span class="mf">9.5</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.legend, href="matplotlib.axes._axes.Axes.legend.html">legend</a><span class="">(</span><span class="">loc</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">lower left</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">ncol</span><span class="o">=</span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.show, href="matplotlib.pyplot.show.html">show</a><span class="">(</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <div><img src="/p/scipy/1.5.0/img/fig-scipy.interpolate._cubic.CubicSpline-1.png"/></div>
+            
+            
+         
+                
+        <p>In the second example, the unit circle is interpolated with a spline. A periodic boundary condition is used. You can see that the first derivative values, ds/dx=0, ds/dy=1 at the periodic point (1, 0) are correctly computed. Note that a circle cannot be exactly represented by a cubic spline. To increase precision, more breakpoints would be required.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=builtins.int, href="builtins.int.html">theta</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">2</span><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=builtins.float, href="builtins.float.html">pi</a><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">5</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.lib.index_tricks.CClass, href="numpy.lib.index_tricks.CClass.html">c_</a><span class="">[</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.cos, href="numpy.cos.html">cos</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">theta</a><span class="">)</span><span class="">,</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.sin, href="numpy.sin.html">sin</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">theta</a><span class="">)</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">CubicSpline</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">theta</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">,</span><span class=""> </span><span class="">bc_type</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">periodic</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo nb" title=builtins.print, href="builtins.print.html">print</a><span class="">(</span><span class="s2">&#34;</span><span class="s2">ds/dx=</span><span class="si">{:.1f}</span><span class="s2"> ds/dy=</span><span class="si">{:.1f}</span><span class="s2">&#34;</span><span class="o">.</span><a class="foo " title=builtins.str.format, href="builtins.str.format.html">format</a><span class="">(</span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">)</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">)</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class="">)</span><span class="">)</span>
+ds/dx=0.0 ds/dy=1.0</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=builtins.int, href="builtins.int.html">xs</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">2</span><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=builtins.float, href="builtins.float.html">pi</a><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">100</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">fig</span><span class="">,</span><span class=""> </span><span class="">ax</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.subplots, href="matplotlib.pyplot.subplots.html">subplots</a><span class="">(</span><span class="">figsize</span><span class="o">=</span><span class="">(</span><span class="mf">6.5</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">[</span><span class="">:</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">[</span><span class="">:</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="s2">&#34;</span><span class="s2">o</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">data</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.cos, href="numpy.cos.html">cos</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">xs</a><span class="">)</span><span class="">,</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.sin, href="numpy.sin.html">sin</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">xs</a><span class="">)</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">true</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.plot, href="matplotlib.axes._axes.Axes.plot.html">plot</a><span class="">(</span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">xs</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=builtins.int, href="builtins.int.html">xs</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">spline</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">axes</a><span class="o">.</span><a class="foo " title=matplotlib.axes._base._AxesBase.set_aspect, href="matplotlib.axes._base._AxesBase.set_aspect.html">set_aspect</a><span class="">(</span><span class="s2">&#34;</span><span class="s2">equal</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.axes._subplots.AxesSubplot, href="matplotlib.axes._subplots.AxesSubplot.html">ax</a><span class="o">.</span><a class="foo " title=matplotlib.axes._axes.Axes.legend, href="matplotlib.axes._axes.Axes.legend.html">legend</a><span class="">(</span><span class="">loc</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">center</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.show, href="matplotlib.pyplot.show.html">show</a><span class="">(</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <div><img src="/p/scipy/1.5.0/img/fig-scipy.interpolate._cubic.CubicSpline-2.png"/></div>
+            
+            
+         
+                
+        <p>The third example is the interpolation of a polynomial y = x**3 on the interval 0 &lt;= x&lt;= 1. A cubic spline can represent this function exactly. To achieve that we need to specify values and first derivatives at endpoints of the interval. Note that y&#39; = 3 * x**2 and thus y&#39;(0) = 0 and y&#39;(1) = 3.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">CubicSpline</a><span class="">(</span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">bc_type</span><span class="o">=</span><span class="">(</span><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.allclose, href="numpy.allclose.html">allclose</a><span class="">(</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">3</span><span class="">,</span><span class=""> </span><a class="foo " title=scipy.interpolate._cubic.CubicSpline, href="scipy.interpolate._cubic.CubicSpline.html">cs</a><span class="">(</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class="">)</span><span class="">)</span>
+True</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="Akima1DInterpolator.html" class='exists'>Akima1DInterpolator</a></code>
+        
+         
+             <code><a link href="PPoly.html" class='exists'>PPoly</a></code>
+        
+         
+             <code><a link href="PchipInterpolator.html" class='exists'>PchipInterpolator</a></code>
+        
+         
+             <code><a link href="builtins.float.html" class='exists'>builtins.float</a></code>
+        
+         
+             <code><a link href="builtins.int.html" class='exists'>builtins.int</a></code>
+        
+         
+             <code><a link href="builtins.print.html" class='exists'>builtins.print</a></code>
+        
+         
+             <code><a link href="builtins.str.format.html" class='exists'>builtins.str.format</a></code>
+        
+         
+             <code><a link href="builtins.tuple.html" class='exists'>builtins.tuple</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.axes._axes.Axes.legend.html" class='exists'>matplotlib.axes._axes.Axes.legend</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.axes._axes.Axes.plot.html" class='exists'>matplotlib.axes._axes.Axes.plot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.axes._base._AxesBase.set_aspect.html" class='exists'>matplotlib.axes._base._AxesBase.set_aspect</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.axes._base._AxesBase.set_xlim.html" class='exists'>matplotlib.axes._base._AxesBase.set_xlim</a></code>
+        
+         
+             <code><a link href="matplotlib.axes._subplots.AxesSubplot.html" class='exists'>matplotlib.axes._subplots.AxesSubplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.subplots.html" class='exists'>matplotlib.pyplot.subplots</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.allclose.html" class='exists'>numpy.allclose</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
+        
+         
+             <code><a link href="numpy.cos.html" class='exists'>numpy.cos</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.lib.index_tricks.CClass.html" class='exists'>numpy.lib.index_tricks.CClass</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.linspace.html" class='exists'>numpy.linspace</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
+             <code><a link href="numpy.sin.html" class='exists'>numpy.sin</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
+             <code><a link href="scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="scipy.interpolate.html" class='exists'>scipy.interpolate</a></code>
+        
+         
+             <code><a link href="scipy.interpolate._cubic.CubicSpline.html" class='exists'>scipy.interpolate._cubic.CubicSpline</a></code>
+        
+         
+     
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/interpolate/_cubic.py </br>
+Line: 464 </br>
+type: &lt;class &#39;type&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

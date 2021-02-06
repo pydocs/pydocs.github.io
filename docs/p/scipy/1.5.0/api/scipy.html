@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" >+</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Was not able to parse docstring for scipy</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        
+         <h3>scipy</h3>
+         
+        <details>
+        <summary>758 Elements</summary>
+        
+            <a class='exists' href='scipy._lib.deprecation.deprecate_cython_api.html'>scipy._lib.deprecation.deprecate_cython_api</a>
+        
+            <a class='exists' href='scipy.constants.codata.find.html'>scipy.constants.codata.find</a>
+        
+            <a class='exists' href='scipy.constants.codata.precision.html'>scipy.constants.codata.precision</a>
+        
+            <a class='exists' href='scipy.constants.codata.unit.html'>scipy.constants.codata.unit</a>
+        
+            <a class='exists' href='scipy.constants.codata.value.html'>scipy.constants.codata.value</a>
+        
+            <a class='exists' href='scipy.constants.constants.convert_temperature.html'>scipy.constants.constants.convert_temperature</a>
+        
+            <a class='exists' href='scipy.constants.constants.lambda2nu.html'>scipy.constants.constants.lambda2nu</a>
+        
+            <a class='exists' href='scipy.constants.constants.nu2lambda.html'>scipy.constants.constants.nu2lambda</a>
+        
+            <a class='exists' href='scipy.fft._backend.register_backend.html'>scipy.fft._backend.register_backend</a>
+        
+            <a class='exists' href='scipy.fft._backend.set_backend.html'>scipy.fft._backend.set_backend</a>
+        
+            <a class='exists' href='scipy.fft._backend.set_global_backend.html'>scipy.fft._backend.set_global_backend</a>
+        
+            <a class='exists' href='scipy.fft._backend.skip_backend.html'>scipy.fft._backend.skip_backend</a>
+        
+            <a class='exists' href='scipy.fft._basic.fft.html'>scipy.fft._basic.fft</a>
+        
+            <a class='exists' href='scipy.fft._basic.fft2.html'>scipy.fft._basic.fft2</a>
+        
+            <a class='exists' href='scipy.fft._basic.fftn.html'>scipy.fft._basic.fftn</a>
+        
+            <a class='exists' href='scipy.fft._basic.hfft.html'>scipy.fft._basic.hfft</a>
+        
+            <a class='exists' href='scipy.fft._basic.hfftn.html'>scipy.fft._basic.hfftn</a>
+        
+            <a class='exists' href='scipy.fft._basic.ifft.html'>scipy.fft._basic.ifft</a>
+        
+            <a class='exists' href='scipy.fft._basic.ifft2.html'>scipy.fft._basic.ifft2</a>
+        
+            <a class='exists' href='scipy.fft._basic.ifftn.html'>scipy.fft._basic.ifftn</a>
+        
+            <a class='exists' href='scipy.fft._basic.ihfft.html'>scipy.fft._basic.ihfft</a>
+        
+            <a class='exists' href='scipy.fft._basic.ihfftn.html'>scipy.fft._basic.ihfftn</a>
+        
+            <a class='exists' href='scipy.fft._basic.irfft.html'>scipy.fft._basic.irfft</a>
+        
+            <a class='exists' href='scipy.fft._basic.irfftn.html'>scipy.fft._basic.irfftn</a>
+        
+            <a class='exists' href='scipy.fft._basic.rfft.html'>scipy.fft._basic.rfft</a>
+        
+            <a class='exists' href='scipy.fft._basic.rfftn.html'>scipy.fft._basic.rfftn</a>
+        
+            <a class='exists' href='scipy.fft._helper.next_fast_len.html'>scipy.fft._helper.next_fast_len</a>
+        
+            <a class='exists' href='scipy.fft._pocketfft.helper.get_workers.html'>scipy.fft._pocketfft.helper.get_workers</a>
+        
+            <a class='exists' href='scipy.fft._pocketfft.helper.set_workers.html'>scipy.fft._pocketfft.helper.set_workers</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.dct.html'>scipy.fft._realtransforms.dct</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.dctn.html'>scipy.fft._realtransforms.dctn</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.dstn.html'>scipy.fft._realtransforms.dstn</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.idct.html'>scipy.fft._realtransforms.idct</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.idctn.html'>scipy.fft._realtransforms.idctn</a>
+        
+            <a class='exists' href='scipy.fft._realtransforms.idstn.html'>scipy.fft._realtransforms.idstn</a>
+        
+            <a class='exists' href='scipy.integrate._bvp.solve_bvp.html'>scipy.integrate._bvp.solve_bvp</a>
+        
+            <a class='exists' href='scipy.integrate._ivp.ivp.solve_ivp.html'>scipy.integrate._ivp.ivp.solve_ivp</a>
+        
+            <a class='exists' href='scipy.integrate._ode.ode.html'>scipy.integrate._ode.ode</a>
+        
+            <a class='exists' href='scipy.integrate._quad_vec.quad_vec.html'>scipy.integrate._quad_vec.quad_vec</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.cumtrapz.html'>scipy.integrate._quadrature.cumtrapz</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.fixed_quad.html'>scipy.integrate._quadrature.fixed_quad</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.newton_cotes.html'>scipy.integrate._quadrature.newton_cotes</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.quadrature.html'>scipy.integrate._quadrature.quadrature</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.romb.html'>scipy.integrate._quadrature.romb</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.romberg.html'>scipy.integrate._quadrature.romberg</a>
+        
+            <a class='exists' href='scipy.integrate._quadrature.simps.html'>scipy.integrate._quadrature.simps</a>
+        
+            <a class='exists' href='scipy.integrate.odepack.odeint.html'>scipy.integrate.odepack.odeint</a>
+        
+            <a class='exists' href='scipy.integrate.quadpack.dblquad.html'>scipy.integrate.quadpack.dblquad</a>
+        
+            <a class='exists' href='scipy.integrate.quadpack.nquad.html'>scipy.integrate.quadpack.nquad</a>
+        
+            <a class='exists' href='scipy.integrate.quadpack.quad.html'>scipy.integrate.quadpack.quad</a>
+        
+            <a class='exists' href='scipy.integrate.quadpack.quad_explain.html'>scipy.integrate.quadpack.quad_explain</a>
+        
+            <a class='exists' href='scipy.integrate.quadpack.tplquad.html'>scipy.integrate.quadpack.tplquad</a>
+        
+            <a class='exists' href='scipy.interpolate._bsplines.BSpline.html'>scipy.interpolate._bsplines.BSpline</a>
+        
+            <a class='exists' href='scipy.interpolate._bsplines.BSpline.integrate.html'>scipy.interpolate._bsplines.BSpline.integrate</a>
+        
+            <a class='exists' href='scipy.interpolate._bsplines.make_interp_spline.html'>scipy.interpolate._bsplines.make_interp_spline</a>
+        
+            <a class='exists' href='scipy.interpolate._bsplines.make_lsq_spline.html'>scipy.interpolate._bsplines.make_lsq_spline</a>
+        
+            <a class='exists' href='scipy.interpolate._cubic.CubicSpline.html'>scipy.interpolate._cubic.CubicSpline</a>
+        
+            <a class='exists' href='scipy.interpolate._cubic.pchip_interpolate.html'>scipy.interpolate._cubic.pchip_interpolate</a>
+        
+            <a class='exists' href='scipy.interpolate._fitpack_impl.splantider.html'>scipy.interpolate._fitpack_impl.splantider</a>
+        
+            <a class='exists' href='scipy.interpolate._fitpack_impl.splder.html'>scipy.interpolate._fitpack_impl.splder</a>
+        
+            <a class='exists' href='scipy.interpolate._pade.pade.html'>scipy.interpolate._pade.pade</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack.splantider.html'>scipy.interpolate.fitpack.splantider</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack.splder.html'>scipy.interpolate.fitpack.splder</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack.splprep.html'>scipy.interpolate.fitpack.splprep</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack.splrep.html'>scipy.interpolate.fitpack.splrep</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.InterpolatedUnivariateSpline.html'>scipy.interpolate.fitpack2.InterpolatedUnivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.LSQSphereBivariateSpline.html'>scipy.interpolate.fitpack2.LSQSphereBivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.LSQUnivariateSpline.html'>scipy.interpolate.fitpack2.LSQUnivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.RectSphereBivariateSpline.html'>scipy.interpolate.fitpack2.RectSphereBivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.SmoothSphereBivariateSpline.html'>scipy.interpolate.fitpack2.SmoothSphereBivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.UnivariateSpline.html'>scipy.interpolate.fitpack2.UnivariateSpline</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.UnivariateSpline.antiderivative.html'>scipy.interpolate.fitpack2.UnivariateSpline.antiderivative</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.UnivariateSpline.derivative.html'>scipy.interpolate.fitpack2.UnivariateSpline.derivative</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.UnivariateSpline.derivatives.html'>scipy.interpolate.fitpack2.UnivariateSpline.derivatives</a>
+        
+            <a class='exists' href='scipy.interpolate.fitpack2.UnivariateSpline.integral.html'>scipy.interpolate.fitpack2.UnivariateSpline.integral</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.BPoly.html'>scipy.interpolate.interpolate.BPoly</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.PPoly.solve.html'>scipy.interpolate.interpolate.PPoly.solve</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.RegularGridInterpolator.html'>scipy.interpolate.interpolate.RegularGridInterpolator</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.interp1d.html'>scipy.interpolate.interpolate.interp1d</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.interp2d.html'>scipy.interpolate.interpolate.interp2d</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.interpn.html'>scipy.interpolate.interpolate.interpn</a>
+        
+            <a class='exists' href='scipy.interpolate.interpolate.lagrange.html'>scipy.interpolate.interpolate.lagrange</a>
+        
+            <a class='exists' href='scipy.interpolate.ndgriddata.griddata.html'>scipy.interpolate.ndgriddata.griddata</a>
+        
+            <a class='exists' href='scipy.interpolate.polyint.KroghInterpolator.html'>scipy.interpolate.polyint.KroghInterpolator</a>
+        
+            <a class='exists' href='scipy.interpolate.polyint._Interpolator1DWithDerivatives.derivatives.html'>scipy.interpolate.polyint._Interpolator1DWithDerivatives.derivatives</a>
+        
+            <a class='exists' href='scipy.interpolate.polyint.approximate_taylor_polynomial.html'>scipy.interpolate.polyint.approximate_taylor_polynomial</a>
+        
+            <a class='exists' href='scipy.interpolate.polyint.barycentric_interpolate.html'>scipy.interpolate.polyint.barycentric_interpolate</a>
+        
+            <a class='exists' href='scipy.interpolate.polyint.krogh_interpolate.html'>scipy.interpolate.polyint.krogh_interpolate</a>
+        
+            <a class='exists' href='scipy.interpolate.rbf.Rbf.html'>scipy.interpolate.rbf.Rbf</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_cossin.cossin.html'>scipy.linalg._decomp_cossin.cossin</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_ldl.ldl.html'>scipy.linalg._decomp_ldl.ldl</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_polar.polar.html'>scipy.linalg._decomp_polar.polar</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_qz.ordqz.html'>scipy.linalg._decomp_qz.ordqz</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_qz.qz.html'>scipy.linalg._decomp_qz.qz</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_update.qr_delete.html'>scipy.linalg._decomp_update.qr_delete</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_update.qr_insert.html'>scipy.linalg._decomp_update.qr_insert</a>
+        
+            <a class='exists' href='scipy.linalg._decomp_update.qr_update.html'>scipy.linalg._decomp_update.qr_update</a>
+        
+            <a class='exists' href='scipy.linalg._expm_frechet.expm_cond.html'>scipy.linalg._expm_frechet.expm_cond</a>
+        
+            <a class='exists' href='scipy.linalg._expm_frechet.expm_frechet.html'>scipy.linalg._expm_frechet.expm_frechet</a>
+        
+            <a class='exists' href='scipy.linalg._matfuncs_sqrtm.sqrtm.html'>scipy.linalg._matfuncs_sqrtm.sqrtm</a>
+        
+            <a class='exists' href='scipy.linalg._procrustes.orthogonal_procrustes.html'>scipy.linalg._procrustes.orthogonal_procrustes</a>
+        
+            <a class='exists' href='scipy.linalg._solvers.solve_continuous_are.html'>scipy.linalg._solvers.solve_continuous_are</a>
+        
+            <a class='exists' href='scipy.linalg._solvers.solve_continuous_lyapunov.html'>scipy.linalg._solvers.solve_continuous_lyapunov</a>
+        
+            <a class='exists' href='scipy.linalg._solvers.solve_discrete_are.html'>scipy.linalg._solvers.solve_discrete_are</a>
+        
+            <a class='exists' href='scipy.linalg._solvers.solve_discrete_lyapunov.html'>scipy.linalg._solvers.solve_discrete_lyapunov</a>
+        
+            <a class='exists' href='scipy.linalg._solvers.solve_sylvester.html'>scipy.linalg._solvers.solve_sylvester</a>
+        
+            <a class='exists' href='scipy.linalg.basic.det.html'>scipy.linalg.basic.det</a>
+        
+            <a class='exists' href='scipy.linalg.basic.inv.html'>scipy.linalg.basic.inv</a>
+        
+            <a class='exists' href='scipy.linalg.basic.lstsq.html'>scipy.linalg.basic.lstsq</a>
+        
+            <a class='exists' href='scipy.linalg.basic.matrix_balance.html'>scipy.linalg.basic.matrix_balance</a>
+        
+            <a class='exists' href='scipy.linalg.basic.pinv.html'>scipy.linalg.basic.pinv</a>
+        
+            <a class='exists' href='scipy.linalg.basic.pinv2.html'>scipy.linalg.basic.pinv2</a>
+        
+            <a class='exists' href='scipy.linalg.basic.pinvh.html'>scipy.linalg.basic.pinvh</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solve.html'>scipy.linalg.basic.solve</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solve_banded.html'>scipy.linalg.basic.solve_banded</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solve_circulant.html'>scipy.linalg.basic.solve_circulant</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solve_toeplitz.html'>scipy.linalg.basic.solve_toeplitz</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solve_triangular.html'>scipy.linalg.basic.solve_triangular</a>
+        
+            <a class='exists' href='scipy.linalg.basic.solveh_banded.html'>scipy.linalg.basic.solveh_banded</a>
+        
+            <a class='exists' href='scipy.linalg.blas.find_best_blas_type.html'>scipy.linalg.blas.find_best_blas_type</a>
+        
+            <a class='exists' href='scipy.linalg.blas.get_blas_funcs.html'>scipy.linalg.blas.get_blas_funcs</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.cdf2rdf.html'>scipy.linalg.decomp.cdf2rdf</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eig.html'>scipy.linalg.decomp.eig</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eig_banded.html'>scipy.linalg.decomp.eig_banded</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigh.html'>scipy.linalg.decomp.eigh</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigh_tridiagonal.html'>scipy.linalg.decomp.eigh_tridiagonal</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigvals.html'>scipy.linalg.decomp.eigvals</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigvals_banded.html'>scipy.linalg.decomp.eigvals_banded</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigvalsh.html'>scipy.linalg.decomp.eigvalsh</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.eigvalsh_tridiagonal.html'>scipy.linalg.decomp.eigvalsh_tridiagonal</a>
+        
+            <a class='exists' href='scipy.linalg.decomp.hessenberg.html'>scipy.linalg.decomp.hessenberg</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_cholesky.cho_factor.html'>scipy.linalg.decomp_cholesky.cho_factor</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_cholesky.cho_solve.html'>scipy.linalg.decomp_cholesky.cho_solve</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_cholesky.cho_solve_banded.html'>scipy.linalg.decomp_cholesky.cho_solve_banded</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_cholesky.cholesky.html'>scipy.linalg.decomp_cholesky.cholesky</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_cholesky.cholesky_banded.html'>scipy.linalg.decomp_cholesky.cholesky_banded</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_lu.lu.html'>scipy.linalg.decomp_lu.lu</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_lu.lu_factor.html'>scipy.linalg.decomp_lu.lu_factor</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_lu.lu_solve.html'>scipy.linalg.decomp_lu.lu_solve</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_qr.qr.html'>scipy.linalg.decomp_qr.qr</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_qr.qr_multiply.html'>scipy.linalg.decomp_qr.qr_multiply</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_qr.rq.html'>scipy.linalg.decomp_qr.rq</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_schur.rsf2csf.html'>scipy.linalg.decomp_schur.rsf2csf</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_schur.schur.html'>scipy.linalg.decomp_schur.schur</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.diagsvd.html'>scipy.linalg.decomp_svd.diagsvd</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.null_space.html'>scipy.linalg.decomp_svd.null_space</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.orth.html'>scipy.linalg.decomp_svd.orth</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.subspace_angles.html'>scipy.linalg.decomp_svd.subspace_angles</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.svd.html'>scipy.linalg.decomp_svd.svd</a>
+        
+            <a class='exists' href='scipy.linalg.decomp_svd.svdvals.html'>scipy.linalg.decomp_svd.svdvals</a>
+        
+            <a class='exists' href='scipy.linalg.lapack._compute_lwork.html'>scipy.linalg.lapack._compute_lwork</a>
+        
+            <a class='exists' href='scipy.linalg.lapack.get_lapack_funcs.html'>scipy.linalg.lapack.get_lapack_funcs</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.coshm.html'>scipy.linalg.matfuncs.coshm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.cosm.html'>scipy.linalg.matfuncs.cosm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.expm.html'>scipy.linalg.matfuncs.expm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.fractional_matrix_power.html'>scipy.linalg.matfuncs.fractional_matrix_power</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.funm.html'>scipy.linalg.matfuncs.funm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.khatri_rao.html'>scipy.linalg.matfuncs.khatri_rao</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.logm.html'>scipy.linalg.matfuncs.logm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.signm.html'>scipy.linalg.matfuncs.signm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.sinhm.html'>scipy.linalg.matfuncs.sinhm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.sinm.html'>scipy.linalg.matfuncs.sinm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.tanhm.html'>scipy.linalg.matfuncs.tanhm</a>
+        
+            <a class='exists' href='scipy.linalg.matfuncs.tanm.html'>scipy.linalg.matfuncs.tanm</a>
+        
+            <a class='exists' href='scipy.linalg.misc.norm.html'>scipy.linalg.misc.norm</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.block_diag.html'>scipy.linalg.special_matrices.block_diag</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.circulant.html'>scipy.linalg.special_matrices.circulant</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.companion.html'>scipy.linalg.special_matrices.companion</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.convolution_matrix.html'>scipy.linalg.special_matrices.convolution_matrix</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.dft.html'>scipy.linalg.special_matrices.dft</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.fiedler.html'>scipy.linalg.special_matrices.fiedler</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.fiedler_companion.html'>scipy.linalg.special_matrices.fiedler_companion</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.hadamard.html'>scipy.linalg.special_matrices.hadamard</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.hankel.html'>scipy.linalg.special_matrices.hankel</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.helmert.html'>scipy.linalg.special_matrices.helmert</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.hilbert.html'>scipy.linalg.special_matrices.hilbert</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.invhilbert.html'>scipy.linalg.special_matrices.invhilbert</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.invpascal.html'>scipy.linalg.special_matrices.invpascal</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.kron.html'>scipy.linalg.special_matrices.kron</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.leslie.html'>scipy.linalg.special_matrices.leslie</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.pascal.html'>scipy.linalg.special_matrices.pascal</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.toeplitz.html'>scipy.linalg.special_matrices.toeplitz</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.tri.html'>scipy.linalg.special_matrices.tri</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.tril.html'>scipy.linalg.special_matrices.tril</a>
+        
+            <a class='exists' href='scipy.linalg.special_matrices.triu.html'>scipy.linalg.special_matrices.triu</a>
+        
+            <a class='exists' href='scipy.misc.common.ascent.html'>scipy.misc.common.ascent</a>
+        
+            <a class='exists' href='scipy.misc.common.central_diff_weights.html'>scipy.misc.common.central_diff_weights</a>
+        
+            <a class='exists' href='scipy.misc.common.derivative.html'>scipy.misc.common.derivative</a>
+        
+            <a class='exists' href='scipy.misc.common.electrocardiogram.html'>scipy.misc.common.electrocardiogram</a>
+        
+            <a class='exists' href='scipy.misc.common.face.html'>scipy.misc.common.face</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.convolve.html'>scipy.ndimage.filters.convolve</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.convolve1d.html'>scipy.ndimage.filters.convolve1d</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.correlate.html'>scipy.ndimage.filters.correlate</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.correlate1d.html'>scipy.ndimage.filters.correlate1d</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.gaussian_filter.html'>scipy.ndimage.filters.gaussian_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.gaussian_filter1d.html'>scipy.ndimage.filters.gaussian_filter1d</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.gaussian_gradient_magnitude.html'>scipy.ndimage.filters.gaussian_gradient_magnitude</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.gaussian_laplace.html'>scipy.ndimage.filters.gaussian_laplace</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.laplace.html'>scipy.ndimage.filters.laplace</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.maximum_filter.html'>scipy.ndimage.filters.maximum_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.maximum_filter1d.html'>scipy.ndimage.filters.maximum_filter1d</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.median_filter.html'>scipy.ndimage.filters.median_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.minimum_filter.html'>scipy.ndimage.filters.minimum_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.minimum_filter1d.html'>scipy.ndimage.filters.minimum_filter1d</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.percentile_filter.html'>scipy.ndimage.filters.percentile_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.prewitt.html'>scipy.ndimage.filters.prewitt</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.rank_filter.html'>scipy.ndimage.filters.rank_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.sobel.html'>scipy.ndimage.filters.sobel</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.uniform_filter.html'>scipy.ndimage.filters.uniform_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.filters.uniform_filter1d.html'>scipy.ndimage.filters.uniform_filter1d</a>
+        
+            <a class='exists' href='scipy.ndimage.fourier.fourier_ellipsoid.html'>scipy.ndimage.fourier.fourier_ellipsoid</a>
+        
+            <a class='exists' href='scipy.ndimage.fourier.fourier_gaussian.html'>scipy.ndimage.fourier.fourier_gaussian</a>
+        
+            <a class='exists' href='scipy.ndimage.fourier.fourier_shift.html'>scipy.ndimage.fourier.fourier_shift</a>
+        
+            <a class='exists' href='scipy.ndimage.fourier.fourier_uniform.html'>scipy.ndimage.fourier.fourier_uniform</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.geometric_transform.html'>scipy.ndimage.interpolation.geometric_transform</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.map_coordinates.html'>scipy.ndimage.interpolation.map_coordinates</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.rotate.html'>scipy.ndimage.interpolation.rotate</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.spline_filter.html'>scipy.ndimage.interpolation.spline_filter</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.spline_filter1d.html'>scipy.ndimage.interpolation.spline_filter1d</a>
+        
+            <a class='exists' href='scipy.ndimage.interpolation.zoom.html'>scipy.ndimage.interpolation.zoom</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.center_of_mass.html'>scipy.ndimage.measurements.center_of_mass</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.extrema.html'>scipy.ndimage.measurements.extrema</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.find_objects.html'>scipy.ndimage.measurements.find_objects</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.histogram.html'>scipy.ndimage.measurements.histogram</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.label.html'>scipy.ndimage.measurements.label</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.labeled_comprehension.html'>scipy.ndimage.measurements.labeled_comprehension</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.maximum.html'>scipy.ndimage.measurements.maximum</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.maximum_position.html'>scipy.ndimage.measurements.maximum_position</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.mean.html'>scipy.ndimage.measurements.mean</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.median.html'>scipy.ndimage.measurements.median</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.minimum.html'>scipy.ndimage.measurements.minimum</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.minimum_position.html'>scipy.ndimage.measurements.minimum_position</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.standard_deviation.html'>scipy.ndimage.measurements.standard_deviation</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.sum.html'>scipy.ndimage.measurements.sum</a>
+        
+            <a class='exists' href='scipy.ndimage.measurements.variance.html'>scipy.ndimage.measurements.variance</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_closing.html'>scipy.ndimage.morphology.binary_closing</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_dilation.html'>scipy.ndimage.morphology.binary_dilation</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_erosion.html'>scipy.ndimage.morphology.binary_erosion</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_fill_holes.html'>scipy.ndimage.morphology.binary_fill_holes</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_hit_or_miss.html'>scipy.ndimage.morphology.binary_hit_or_miss</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_opening.html'>scipy.ndimage.morphology.binary_opening</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.binary_propagation.html'>scipy.ndimage.morphology.binary_propagation</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.distance_transform_edt.html'>scipy.ndimage.morphology.distance_transform_edt</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.generate_binary_structure.html'>scipy.ndimage.morphology.generate_binary_structure</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.grey_closing.html'>scipy.ndimage.morphology.grey_closing</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.grey_dilation.html'>scipy.ndimage.morphology.grey_dilation</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.grey_erosion.html'>scipy.ndimage.morphology.grey_erosion</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.grey_opening.html'>scipy.ndimage.morphology.grey_opening</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.iterate_structure.html'>scipy.ndimage.morphology.iterate_structure</a>
+        
+            <a class='exists' href='scipy.ndimage.morphology.morphological_gradient.html'>scipy.ndimage.morphology.morphological_gradient</a>
+        
+            <a class='exists' href='scipy.optimize._basinhopping.basinhopping.html'>scipy.optimize._basinhopping.basinhopping</a>
+        
+            <a class='exists' href='scipy.optimize._constraints.NonlinearConstraint.html'>scipy.optimize._constraints.NonlinearConstraint</a>
+        
+            <a class='exists' href='scipy.optimize._differentialevolution.differential_evolution.html'>scipy.optimize._differentialevolution.differential_evolution</a>
+        
+            <a class='exists' href='scipy.optimize._dual_annealing.dual_annealing.html'>scipy.optimize._dual_annealing.dual_annealing</a>
+        
+            <a class='exists' href='scipy.optimize._linprog.linprog.html'>scipy.optimize._linprog.linprog</a>
+        
+            <a class='exists' href='scipy.optimize._lsap.linear_sum_assignment.html'>scipy.optimize._lsap.linear_sum_assignment</a>
+        
+            <a class='exists' href='scipy.optimize._lsq.lsq_linear.lsq_linear.html'>scipy.optimize._lsq.lsq_linear.lsq_linear</a>
+        
+            <a class='exists' href='scipy.optimize._minimize.minimize.html'>scipy.optimize._minimize.minimize</a>
+        
+            <a class='exists' href='scipy.optimize._minimize.minimize_scalar.html'>scipy.optimize._minimize.minimize_scalar</a>
+        
+            <a class='exists' href='scipy.optimize._nnls.nnls.html'>scipy.optimize._nnls.nnls</a>
+        
+            <a class='exists' href='scipy.optimize._numdiff.approx_derivative.html'>scipy.optimize._numdiff.approx_derivative</a>
+        
+            <a class='exists' href='scipy.optimize._numdiff.check_derivative.html'>scipy.optimize._numdiff.check_derivative</a>
+        
+            <a class='exists' href='scipy.optimize._root.root.html'>scipy.optimize._root.root</a>
+        
+            <a class='exists' href='scipy.optimize._root_scalar.root_scalar.html'>scipy.optimize._root_scalar.root_scalar</a>
+        
+            <a class='exists' href='scipy.optimize._shgo.shgo.html'>scipy.optimize._shgo.shgo</a>
+        
+            <a class='exists' href='scipy.optimize.linesearch.line_search_wolfe2.html'>scipy.optimize.linesearch.line_search_wolfe2</a>
+        
+            <a class='exists' href='scipy.optimize.minpack.curve_fit.html'>scipy.optimize.minpack.curve_fit</a>
+        
+            <a class='exists' href='scipy.optimize.minpack.fixed_point.html'>scipy.optimize.minpack.fixed_point</a>
+        
+            <a class='exists' href='scipy.optimize.minpack.fsolve.html'>scipy.optimize.minpack.fsolve</a>
+        
+            <a class='exists' href='scipy.optimize.minpack.leastsq.html'>scipy.optimize.minpack.leastsq</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.approx_fprime.html'>scipy.optimize.optimize.approx_fprime</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.bracket.html'>scipy.optimize.optimize.bracket</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.brent.html'>scipy.optimize.optimize.brent</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.brute.html'>scipy.optimize.optimize.brute</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.check_grad.html'>scipy.optimize.optimize.check_grad</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.fmin.html'>scipy.optimize.optimize.fmin</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.fmin_cg.html'>scipy.optimize.optimize.fmin_cg</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.fmin_powell.html'>scipy.optimize.optimize.fmin_powell</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.fminbound.html'>scipy.optimize.optimize.fminbound</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.golden.html'>scipy.optimize.optimize.golden</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.rosen.html'>scipy.optimize.optimize.rosen</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.rosen_der.html'>scipy.optimize.optimize.rosen_der</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.rosen_hess.html'>scipy.optimize.optimize.rosen_hess</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.rosen_hess_prod.html'>scipy.optimize.optimize.rosen_hess_prod</a>
+        
+            <a class='exists' href='scipy.optimize.optimize.show_options.html'>scipy.optimize.optimize.show_options</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.bisect.html'>scipy.optimize.zeros.bisect</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.brenth.html'>scipy.optimize.zeros.brenth</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.brentq.html'>scipy.optimize.zeros.brentq</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.newton.html'>scipy.optimize.zeros.newton</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.ridder.html'>scipy.optimize.zeros.ridder</a>
+        
+            <a class='exists' href='scipy.optimize.zeros.toms748.html'>scipy.optimize.zeros.toms748</a>
+        
+            <a class='exists' href='scipy.signal._arraytools.const_ext.html'>scipy.signal._arraytools.const_ext</a>
+        
+            <a class='exists' href='scipy.signal._arraytools.even_ext.html'>scipy.signal._arraytools.even_ext</a>
+        
+            <a class='exists' href='scipy.signal._arraytools.odd_ext.html'>scipy.signal._arraytools.odd_ext</a>
+        
+            <a class='exists' href='scipy.signal._arraytools.zero_ext.html'>scipy.signal._arraytools.zero_ext</a>
+        
+            <a class='exists' href='scipy.signal._max_len_seq.max_len_seq.html'>scipy.signal._max_len_seq.max_len_seq</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.argrelextrema.html'>scipy.signal._peak_finding.argrelextrema</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.argrelmax.html'>scipy.signal._peak_finding.argrelmax</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.argrelmin.html'>scipy.signal._peak_finding.argrelmin</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.find_peaks.html'>scipy.signal._peak_finding.find_peaks</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.find_peaks_cwt.html'>scipy.signal._peak_finding.find_peaks_cwt</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.peak_prominences.html'>scipy.signal._peak_finding.peak_prominences</a>
+        
+            <a class='exists' href='scipy.signal._peak_finding.peak_widths.html'>scipy.signal._peak_finding.peak_widths</a>
+        
+            <a class='exists' href='scipy.signal._savitzky_golay.savgol_coeffs.html'>scipy.signal._savitzky_golay.savgol_coeffs</a>
+        
+            <a class='exists' href='scipy.signal._savitzky_golay.savgol_filter.html'>scipy.signal._savitzky_golay.savgol_filter</a>
+        
+            <a class='exists' href='scipy.signal._upfirdn.upfirdn.html'>scipy.signal._upfirdn.upfirdn</a>
+        
+            <a class='exists' href='scipy.signal.barthann.html'>scipy.signal.barthann</a>
+        
+            <a class='exists' href='scipy.signal.bartlett.html'>scipy.signal.bartlett</a>
+        
+            <a class='exists' href='scipy.signal.blackman.html'>scipy.signal.blackman</a>
+        
+            <a class='exists' href='scipy.signal.blackmanharris.html'>scipy.signal.blackmanharris</a>
+        
+            <a class='exists' href='scipy.signal.bohman.html'>scipy.signal.bohman</a>
+        
+            <a class='exists' href='scipy.signal.boxcar.html'>scipy.signal.boxcar</a>
+        
+            <a class='exists' href='scipy.signal.bsplines.qspline1d.html'>scipy.signal.bsplines.qspline1d</a>
+        
+            <a class='exists' href='scipy.signal.bsplines.qspline1d_eval.html'>scipy.signal.bsplines.qspline1d_eval</a>
+        
+            <a class='exists' href='scipy.signal.chebwin.html'>scipy.signal.chebwin</a>
+        
+            <a class='exists' href='scipy.signal.cosine.html'>scipy.signal.cosine</a>
+        
+            <a class='exists' href='scipy.signal.exponential.html'>scipy.signal.exponential</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.bessel.html'>scipy.signal.filter_design.bessel</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.bilinear.html'>scipy.signal.filter_design.bilinear</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.bilinear_zpk.html'>scipy.signal.filter_design.bilinear_zpk</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.butter.html'>scipy.signal.filter_design.butter</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.buttord.html'>scipy.signal.filter_design.buttord</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.cheb1ord.html'>scipy.signal.filter_design.cheb1ord</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.cheb2ord.html'>scipy.signal.filter_design.cheb2ord</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.cheby1.html'>scipy.signal.filter_design.cheby1</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.cheby2.html'>scipy.signal.filter_design.cheby2</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.ellip.html'>scipy.signal.filter_design.ellip</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.ellipord.html'>scipy.signal.filter_design.ellipord</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.findfreqs.html'>scipy.signal.filter_design.findfreqs</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.freqs.html'>scipy.signal.filter_design.freqs</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.freqs_zpk.html'>scipy.signal.filter_design.freqs_zpk</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.freqz.html'>scipy.signal.filter_design.freqz</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.freqz_zpk.html'>scipy.signal.filter_design.freqz_zpk</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.group_delay.html'>scipy.signal.filter_design.group_delay</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.iirdesign.html'>scipy.signal.filter_design.iirdesign</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.iirfilter.html'>scipy.signal.filter_design.iirfilter</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.iirnotch.html'>scipy.signal.filter_design.iirnotch</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.iirpeak.html'>scipy.signal.filter_design.iirpeak</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.lp2bp.html'>scipy.signal.filter_design.lp2bp</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.lp2bs.html'>scipy.signal.filter_design.lp2bs</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.lp2hp.html'>scipy.signal.filter_design.lp2hp</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.lp2lp.html'>scipy.signal.filter_design.lp2lp</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.sosfreqz.html'>scipy.signal.filter_design.sosfreqz</a>
+        
+            <a class='exists' href='scipy.signal.filter_design.zpk2sos.html'>scipy.signal.filter_design.zpk2sos</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.firls.html'>scipy.signal.fir_filter_design.firls</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.firwin.html'>scipy.signal.fir_filter_design.firwin</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.firwin2.html'>scipy.signal.fir_filter_design.firwin2</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.kaiser_atten.html'>scipy.signal.fir_filter_design.kaiser_atten</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.kaiser_beta.html'>scipy.signal.fir_filter_design.kaiser_beta</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.kaiserord.html'>scipy.signal.fir_filter_design.kaiserord</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.minimum_phase.html'>scipy.signal.fir_filter_design.minimum_phase</a>
+        
+            <a class='exists' href='scipy.signal.fir_filter_design.remez.html'>scipy.signal.fir_filter_design.remez</a>
+        
+            <a class='exists' href='scipy.signal.flattop.html'>scipy.signal.flattop</a>
+        
+            <a class='exists' href='scipy.signal.gaussian.html'>scipy.signal.gaussian</a>
+        
+            <a class='exists' href='scipy.signal.general_gaussian.html'>scipy.signal.general_gaussian</a>
+        
+            <a class='exists' href='scipy.signal.hamming.html'>scipy.signal.hamming</a>
+        
+            <a class='exists' href='scipy.signal.hann.html'>scipy.signal.hann</a>
+        
+            <a class='exists' href='scipy.signal.kaiser.html'>scipy.signal.kaiser</a>
+        
+            <a class='exists' href='scipy.signal.lti_conversion.ss2tf.html'>scipy.signal.lti_conversion.ss2tf</a>
+        
+            <a class='exists' href='scipy.signal.lti_conversion.tf2ss.html'>scipy.signal.lti_conversion.tf2ss</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.StateSpace.html'>scipy.signal.ltisys.StateSpace</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.StateSpaceContinuous.html'>scipy.signal.ltisys.StateSpaceContinuous</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.StateSpaceDiscrete.html'>scipy.signal.ltisys.StateSpaceDiscrete</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.TransferFunction.html'>scipy.signal.ltisys.TransferFunction</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.TransferFunctionContinuous.html'>scipy.signal.ltisys.TransferFunctionContinuous</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.TransferFunctionDiscrete.html'>scipy.signal.ltisys.TransferFunctionDiscrete</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.ZerosPolesGain.html'>scipy.signal.ltisys.ZerosPolesGain</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.ZerosPolesGainContinuous.html'>scipy.signal.ltisys.ZerosPolesGainContinuous</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.ZerosPolesGainDiscrete.html'>scipy.signal.ltisys.ZerosPolesGainDiscrete</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.bode.html'>scipy.signal.ltisys.bode</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dbode.html'>scipy.signal.ltisys.dbode</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dfreqresp.html'>scipy.signal.ltisys.dfreqresp</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dimpulse.html'>scipy.signal.ltisys.dimpulse</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dlsim.html'>scipy.signal.ltisys.dlsim</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dlti.html'>scipy.signal.ltisys.dlti</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dlti.bode.html'>scipy.signal.ltisys.dlti.bode</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.dstep.html'>scipy.signal.ltisys.dstep</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.freqresp.html'>scipy.signal.ltisys.freqresp</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.impulse.html'>scipy.signal.ltisys.impulse</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.impulse2.html'>scipy.signal.ltisys.impulse2</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.lsim.html'>scipy.signal.ltisys.lsim</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.lsim2.html'>scipy.signal.ltisys.lsim2</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.lti.html'>scipy.signal.ltisys.lti</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.lti.bode.html'>scipy.signal.ltisys.lti.bode</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.place_poles.html'>scipy.signal.ltisys.place_poles</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.step.html'>scipy.signal.ltisys.step</a>
+        
+            <a class='exists' href='scipy.signal.ltisys.step2.html'>scipy.signal.ltisys.step2</a>
+        
+            <a class='exists' href='scipy.signal.nuttall.html'>scipy.signal.nuttall</a>
+        
+            <a class='exists' href='scipy.signal.parzen.html'>scipy.signal.parzen</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.choose_conv_method.html'>scipy.signal.signaltools.choose_conv_method</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.cmplx_sort.html'>scipy.signal.signaltools.cmplx_sort</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.convolve.html'>scipy.signal.signaltools.convolve</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.convolve2d.html'>scipy.signal.signaltools.convolve2d</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.correlate.html'>scipy.signal.signaltools.correlate</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.correlate2d.html'>scipy.signal.signaltools.correlate2d</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.deconvolve.html'>scipy.signal.signaltools.deconvolve</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.detrend.html'>scipy.signal.signaltools.detrend</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.fftconvolve.html'>scipy.signal.signaltools.fftconvolve</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.filtfilt.html'>scipy.signal.signaltools.filtfilt</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.hilbert.html'>scipy.signal.signaltools.hilbert</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.lfilter.html'>scipy.signal.signaltools.lfilter</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.lfilter_zi.html'>scipy.signal.signaltools.lfilter_zi</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.oaconvolve.html'>scipy.signal.signaltools.oaconvolve</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.order_filter.html'>scipy.signal.signaltools.order_filter</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.resample.html'>scipy.signal.signaltools.resample</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.resample_poly.html'>scipy.signal.signaltools.resample_poly</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.sosfilt.html'>scipy.signal.signaltools.sosfilt</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.sosfilt_zi.html'>scipy.signal.signaltools.sosfilt_zi</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.sosfiltfilt.html'>scipy.signal.signaltools.sosfiltfilt</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.unique_roots.html'>scipy.signal.signaltools.unique_roots</a>
+        
+            <a class='exists' href='scipy.signal.signaltools.wiener.html'>scipy.signal.signaltools.wiener</a>
+        
+            <a class='exists' href='scipy.signal.slepian.html'>scipy.signal.slepian</a>
+        
+            <a class='exists' href='scipy.signal.spectral.check_COLA.html'>scipy.signal.spectral.check_COLA</a>
+        
+            <a class='exists' href='scipy.signal.spectral.check_NOLA.html'>scipy.signal.spectral.check_NOLA</a>
+        
+            <a class='exists' href='scipy.signal.spectral.coherence.html'>scipy.signal.spectral.coherence</a>
+        
+            <a class='exists' href='scipy.signal.spectral.csd.html'>scipy.signal.spectral.csd</a>
+        
+            <a class='exists' href='scipy.signal.spectral.istft.html'>scipy.signal.spectral.istft</a>
+        
+            <a class='exists' href='scipy.signal.spectral.lombscargle.html'>scipy.signal.spectral.lombscargle</a>
+        
+            <a class='exists' href='scipy.signal.spectral.periodogram.html'>scipy.signal.spectral.periodogram</a>
+        
+            <a class='exists' href='scipy.signal.spectral.spectrogram.html'>scipy.signal.spectral.spectrogram</a>
+        
+            <a class='exists' href='scipy.signal.spectral.stft.html'>scipy.signal.spectral.stft</a>
+        
+            <a class='exists' href='scipy.signal.spectral.welch.html'>scipy.signal.spectral.welch</a>
+        
+            <a class='exists' href='scipy.signal.triang.html'>scipy.signal.triang</a>
+        
+            <a class='exists' href='scipy.signal.tukey.html'>scipy.signal.tukey</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.chirp.html'>scipy.signal.waveforms.chirp</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.gausspulse.html'>scipy.signal.waveforms.gausspulse</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.sawtooth.html'>scipy.signal.waveforms.sawtooth</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.square.html'>scipy.signal.waveforms.square</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.sweep_poly.html'>scipy.signal.waveforms.sweep_poly</a>
+        
+            <a class='exists' href='scipy.signal.waveforms.unit_impulse.html'>scipy.signal.waveforms.unit_impulse</a>
+        
+            <a class='exists' href='scipy.signal.wavelets.cwt.html'>scipy.signal.wavelets.cwt</a>
+        
+            <a class='exists' href='scipy.signal.wavelets.morlet2.html'>scipy.signal.wavelets.morlet2</a>
+        
+            <a class='exists' href='scipy.signal.wavelets.ricker.html'>scipy.signal.wavelets.ricker</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.barthann.html'>scipy.signal.windows.windows.barthann</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.bartlett.html'>scipy.signal.windows.windows.bartlett</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.blackman.html'>scipy.signal.windows.windows.blackman</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.blackmanharris.html'>scipy.signal.windows.windows.blackmanharris</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.bohman.html'>scipy.signal.windows.windows.bohman</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.boxcar.html'>scipy.signal.windows.windows.boxcar</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.chebwin.html'>scipy.signal.windows.windows.chebwin</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.cosine.html'>scipy.signal.windows.windows.cosine</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.dpss.html'>scipy.signal.windows.windows.dpss</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.exponential.html'>scipy.signal.windows.windows.exponential</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.flattop.html'>scipy.signal.windows.windows.flattop</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.gaussian.html'>scipy.signal.windows.windows.gaussian</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.general_cosine.html'>scipy.signal.windows.windows.general_cosine</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.general_gaussian.html'>scipy.signal.windows.windows.general_gaussian</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.general_hamming.html'>scipy.signal.windows.windows.general_hamming</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.get_window.html'>scipy.signal.windows.windows.get_window</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.hamming.html'>scipy.signal.windows.windows.hamming</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.hann.html'>scipy.signal.windows.windows.hann</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.kaiser.html'>scipy.signal.windows.windows.kaiser</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.nuttall.html'>scipy.signal.windows.windows.nuttall</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.parzen.html'>scipy.signal.windows.windows.parzen</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.slepian.html'>scipy.signal.windows.windows.slepian</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.triang.html'>scipy.signal.windows.windows.triang</a>
+        
+            <a class='exists' href='scipy.signal.windows.windows.tukey.html'>scipy.signal.windows.windows.tukey</a>
+        
+            <a class='exists' href='scipy.sparse._matrix_io.load_npz.html'>scipy.sparse._matrix_io.load_npz</a>
+        
+            <a class='exists' href='scipy.sparse._matrix_io.save_npz.html'>scipy.sparse._matrix_io.save_npz</a>
+        
+            <a class='exists' href='scipy.sparse.base.isspmatrix.html'>scipy.sparse.base.isspmatrix</a>
+        
+            <a class='exists' href='scipy.sparse.base.spmatrix.diagonal.html'>scipy.sparse.base.spmatrix.diagonal</a>
+        
+            <a class='exists' href='scipy.sparse.base.spmatrix.dot.html'>scipy.sparse.base.spmatrix.dot</a>
+        
+            <a class='exists' href='scipy.sparse.base.spmatrix.nonzero.html'>scipy.sparse.base.spmatrix.nonzero</a>
+        
+            <a class='exists' href='scipy.sparse.bsr.bsr_matrix.html'>scipy.sparse.bsr.bsr_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.bsr.bsr_matrix.diagonal.html'>scipy.sparse.bsr.bsr_matrix.diagonal</a>
+        
+            <a class='exists' href='scipy.sparse.bsr.isspmatrix_bsr.html'>scipy.sparse.bsr.isspmatrix_bsr</a>
+        
+            <a class='exists' href='scipy.sparse.compressed._cs_matrix.diagonal.html'>scipy.sparse.compressed._cs_matrix.diagonal</a>
+        
+            <a class='exists' href='scipy.sparse.construct.block_diag.html'>scipy.sparse.construct.block_diag</a>
+        
+            <a class='exists' href='scipy.sparse.construct.bmat.html'>scipy.sparse.construct.bmat</a>
+        
+            <a class='exists' href='scipy.sparse.construct.diags.html'>scipy.sparse.construct.diags</a>
+        
+            <a class='exists' href='scipy.sparse.construct.eye.html'>scipy.sparse.construct.eye</a>
+        
+            <a class='exists' href='scipy.sparse.construct.hstack.html'>scipy.sparse.construct.hstack</a>
+        
+            <a class='exists' href='scipy.sparse.construct.identity.html'>scipy.sparse.construct.identity</a>
+        
+            <a class='exists' href='scipy.sparse.construct.kron.html'>scipy.sparse.construct.kron</a>
+        
+            <a class='exists' href='scipy.sparse.construct.rand.html'>scipy.sparse.construct.rand</a>
+        
+            <a class='exists' href='scipy.sparse.construct.random.html'>scipy.sparse.construct.random</a>
+        
+            <a class='exists' href='scipy.sparse.construct.spdiags.html'>scipy.sparse.construct.spdiags</a>
+        
+            <a class='exists' href='scipy.sparse.construct.vstack.html'>scipy.sparse.construct.vstack</a>
+        
+            <a class='exists' href='scipy.sparse.coo.coo_matrix.html'>scipy.sparse.coo.coo_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.coo.coo_matrix.diagonal.html'>scipy.sparse.coo.coo_matrix.diagonal</a>
+        
+            <a class='exists' href='scipy.sparse.coo.coo_matrix.tocsc.html'>scipy.sparse.coo.coo_matrix.tocsc</a>
+        
+            <a class='exists' href='scipy.sparse.coo.coo_matrix.tocsr.html'>scipy.sparse.coo.coo_matrix.tocsr</a>
+        
+            <a class='exists' href='scipy.sparse.coo.isspmatrix_coo.html'>scipy.sparse.coo.isspmatrix_coo</a>
+        
+            <a class='exists' href='scipy.sparse.csc.csc_matrix.html'>scipy.sparse.csc.csc_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.csc.csc_matrix.nonzero.html'>scipy.sparse.csc.csc_matrix.nonzero</a>
+        
+            <a class='exists' href='scipy.sparse.csc.isspmatrix_csc.html'>scipy.sparse.csc.isspmatrix_csc</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._flow.maximum_flow.html'>scipy.sparse.csgraph._flow.maximum_flow</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._laplacian.laplacian.html'>scipy.sparse.csgraph._laplacian.laplacian</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._matching.maximum_bipartite_matching.html'>scipy.sparse.csgraph._matching.maximum_bipartite_matching</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._min_spanning_tree.minimum_spanning_tree.html'>scipy.sparse.csgraph._min_spanning_tree.minimum_spanning_tree</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._reordering.reverse_cuthill_mckee.html'>scipy.sparse.csgraph._reordering.reverse_cuthill_mckee</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._reordering.structural_rank.html'>scipy.sparse.csgraph._reordering.structural_rank</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._shortest_path.bellman_ford.html'>scipy.sparse.csgraph._shortest_path.bellman_ford</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._shortest_path.dijkstra.html'>scipy.sparse.csgraph._shortest_path.dijkstra</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._shortest_path.floyd_warshall.html'>scipy.sparse.csgraph._shortest_path.floyd_warshall</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._shortest_path.johnson.html'>scipy.sparse.csgraph._shortest_path.johnson</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._shortest_path.shortest_path.html'>scipy.sparse.csgraph._shortest_path.shortest_path</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.construct_dist_matrix.html'>scipy.sparse.csgraph._tools.construct_dist_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.csgraph_from_dense.html'>scipy.sparse.csgraph._tools.csgraph_from_dense</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.csgraph_from_masked.html'>scipy.sparse.csgraph._tools.csgraph_from_masked</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.csgraph_masked_from_dense.html'>scipy.sparse.csgraph._tools.csgraph_masked_from_dense</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.csgraph_to_dense.html'>scipy.sparse.csgraph._tools.csgraph_to_dense</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.csgraph_to_masked.html'>scipy.sparse.csgraph._tools.csgraph_to_masked</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._tools.reconstruct_path.html'>scipy.sparse.csgraph._tools.reconstruct_path</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._traversal.breadth_first_order.html'>scipy.sparse.csgraph._traversal.breadth_first_order</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._traversal.breadth_first_tree.html'>scipy.sparse.csgraph._traversal.breadth_first_tree</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._traversal.connected_components.html'>scipy.sparse.csgraph._traversal.connected_components</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._traversal.depth_first_order.html'>scipy.sparse.csgraph._traversal.depth_first_order</a>
+        
+            <a class='exists' href='scipy.sparse.csgraph._traversal.depth_first_tree.html'>scipy.sparse.csgraph._traversal.depth_first_tree</a>
+        
+            <a class='exists' href='scipy.sparse.csr.csr_matrix.html'>scipy.sparse.csr.csr_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.csr.isspmatrix_csr.html'>scipy.sparse.csr.isspmatrix_csr</a>
+        
+            <a class='exists' href='scipy.sparse.dia.dia_matrix.html'>scipy.sparse.dia.dia_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.dia.dia_matrix.diagonal.html'>scipy.sparse.dia.dia_matrix.diagonal</a>
+        
+            <a class='exists' href='scipy.sparse.dia.isspmatrix_dia.html'>scipy.sparse.dia.isspmatrix_dia</a>
+        
+            <a class='exists' href='scipy.sparse.dok.dok_matrix.html'>scipy.sparse.dok.dok_matrix</a>
+        
+            <a class='exists' href='scipy.sparse.dok.isspmatrix_dok.html'>scipy.sparse.dok.isspmatrix_dok</a>
+        
+            <a class='exists' href='scipy.sparse.extract.find.html'>scipy.sparse.extract.find</a>
+        
+            <a class='exists' href='scipy.sparse.extract.tril.html'>scipy.sparse.extract.tril</a>
+        
+            <a class='exists' href='scipy.sparse.extract.triu.html'>scipy.sparse.extract.triu</a>
+        
+            <a class='exists' href='scipy.sparse.lil.isspmatrix_lil.html'>scipy.sparse.lil.isspmatrix_lil</a>
+        
+            <a class='exists' href='scipy.sparse.linalg._expm_multiply.expm_multiply.html'>scipy.sparse.linalg._expm_multiply.expm_multiply</a>
+        
+            <a class='exists' href='scipy.sparse.linalg._norm.norm.html'>scipy.sparse.linalg._norm.norm</a>
+        
+            <a class='exists' href='scipy.sparse.linalg._onenormest.onenormest.html'>scipy.sparse.linalg._onenormest.onenormest</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.dsolve.linsolve.factorized.html'>scipy.sparse.linalg.dsolve.linsolve.factorized</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.dsolve.linsolve.spilu.html'>scipy.sparse.linalg.dsolve.linsolve.spilu</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.dsolve.linsolve.splu.html'>scipy.sparse.linalg.dsolve.linsolve.splu</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.dsolve.linsolve.spsolve.html'>scipy.sparse.linalg.dsolve.linsolve.spsolve</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.dsolve.linsolve.spsolve_triangular.html'>scipy.sparse.linalg.dsolve.linsolve.spsolve_triangular</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.eigen.arpack.arpack.eigs.html'>scipy.sparse.linalg.eigen.arpack.arpack.eigs</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.eigen.arpack.arpack.eigsh.html'>scipy.sparse.linalg.eigen.arpack.arpack.eigsh</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.eigen.arpack.arpack.svds.html'>scipy.sparse.linalg.eigen.arpack.arpack.svds</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.eigen.lobpcg.lobpcg.lobpcg.html'>scipy.sparse.linalg.eigen.lobpcg.lobpcg.lobpcg</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.interface.LinearOperator.html'>scipy.sparse.linalg.interface.LinearOperator</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.interface.aslinearoperator.html'>scipy.sparse.linalg.interface.aslinearoperator</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.iterative.gmres.html'>scipy.sparse.linalg.isolve.iterative.gmres</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.iterative.qmr.html'>scipy.sparse.linalg.isolve.iterative.qmr</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.lgmres.lgmres.html'>scipy.sparse.linalg.isolve.lgmres.lgmres</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.lsmr.lsmr.html'>scipy.sparse.linalg.isolve.lsmr.lsmr</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.lsqr.lsqr.html'>scipy.sparse.linalg.isolve.lsqr.lsqr</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.isolve.minres.minres.html'>scipy.sparse.linalg.isolve.minres.minres</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.matfuncs.expm.html'>scipy.sparse.linalg.matfuncs.expm</a>
+        
+            <a class='exists' href='scipy.sparse.linalg.matfuncs.inv.html'>scipy.sparse.linalg.matfuncs.inv</a>
+        
+            <a class='exists' href='scipy.spatial._geometric_slerp.geometric_slerp.html'>scipy.spatial._geometric_slerp.geometric_slerp</a>
+        
+            <a class='exists' href='scipy.spatial._plotutils.convex_hull_plot_2d.html'>scipy.spatial._plotutils.convex_hull_plot_2d</a>
+        
+            <a class='exists' href='scipy.spatial._plotutils.delaunay_plot_2d.html'>scipy.spatial._plotutils.delaunay_plot_2d</a>
+        
+            <a class='exists' href='scipy.spatial._plotutils.voronoi_plot_2d.html'>scipy.spatial._plotutils.voronoi_plot_2d</a>
+        
+            <a class='exists' href='scipy.spatial._procrustes.procrustes.html'>scipy.spatial._procrustes.procrustes</a>
+        
+            <a class='exists' href='scipy.spatial._spherical_voronoi.SphericalVoronoi.html'>scipy.spatial._spherical_voronoi.SphericalVoronoi</a>
+        
+            <a class='exists' href='scipy.spatial.distance.braycurtis.html'>scipy.spatial.distance.braycurtis</a>
+        
+            <a class='exists' href='scipy.spatial.distance.canberra.html'>scipy.spatial.distance.canberra</a>
+        
+            <a class='exists' href='scipy.spatial.distance.cdist.html'>scipy.spatial.distance.cdist</a>
+        
+            <a class='exists' href='scipy.spatial.distance.chebyshev.html'>scipy.spatial.distance.chebyshev</a>
+        
+            <a class='exists' href='scipy.spatial.distance.cityblock.html'>scipy.spatial.distance.cityblock</a>
+        
+            <a class='exists' href='scipy.spatial.distance.cosine.html'>scipy.spatial.distance.cosine</a>
+        
+            <a class='exists' href='scipy.spatial.distance.dice.html'>scipy.spatial.distance.dice</a>
+        
+            <a class='exists' href='scipy.spatial.distance.directed_hausdorff.html'>scipy.spatial.distance.directed_hausdorff</a>
+        
+            <a class='exists' href='scipy.spatial.distance.euclidean.html'>scipy.spatial.distance.euclidean</a>
+        
+            <a class='exists' href='scipy.spatial.distance.hamming.html'>scipy.spatial.distance.hamming</a>
+        
+            <a class='exists' href='scipy.spatial.distance.jaccard.html'>scipy.spatial.distance.jaccard</a>
+        
+            <a class='exists' href='scipy.spatial.distance.jensenshannon.html'>scipy.spatial.distance.jensenshannon</a>
+        
+            <a class='exists' href='scipy.spatial.distance.kulsinski.html'>scipy.spatial.distance.kulsinski</a>
+        
+            <a class='exists' href='scipy.spatial.distance.mahalanobis.html'>scipy.spatial.distance.mahalanobis</a>
+        
+            <a class='exists' href='scipy.spatial.distance.minkowski.html'>scipy.spatial.distance.minkowski</a>
+        
+            <a class='exists' href='scipy.spatial.distance.rogerstanimoto.html'>scipy.spatial.distance.rogerstanimoto</a>
+        
+            <a class='exists' href='scipy.spatial.distance.russellrao.html'>scipy.spatial.distance.russellrao</a>
+        
+            <a class='exists' href='scipy.spatial.distance.seuclidean.html'>scipy.spatial.distance.seuclidean</a>
+        
+            <a class='exists' href='scipy.spatial.distance.sokalmichener.html'>scipy.spatial.distance.sokalmichener</a>
+        
+            <a class='exists' href='scipy.spatial.distance.sokalsneath.html'>scipy.spatial.distance.sokalsneath</a>
+        
+            <a class='exists' href='scipy.spatial.distance.sqeuclidean.html'>scipy.spatial.distance.sqeuclidean</a>
+        
+            <a class='exists' href='scipy.spatial.distance.wminkowski.html'>scipy.spatial.distance.wminkowski</a>
+        
+            <a class='exists' href='scipy.spatial.distance.yule.html'>scipy.spatial.distance.yule</a>
+        
+            <a class='exists' href='scipy.spatial.kdtree.KDTree.query.html'>scipy.spatial.kdtree.KDTree.query</a>
+        
+            <a class='exists' href='scipy.spatial.kdtree.KDTree.query_ball_point.html'>scipy.spatial.kdtree.KDTree.query_ball_point</a>
+        
+            <a class='exists' href='scipy.spatial.kdtree.distance_matrix.html'>scipy.spatial.kdtree.distance_matrix</a>
+        
+            <a class='exists' href='scipy.spatial.kdtree.minkowski_distance.html'>scipy.spatial.kdtree.minkowski_distance</a>
+        
+            <a class='exists' href='scipy.spatial.kdtree.minkowski_distance_p.html'>scipy.spatial.kdtree.minkowski_distance_p</a>
+        
+            <a class='exists' href='scipy.spatial.qhull.ConvexHull.html'>scipy.spatial.qhull.ConvexHull</a>
+        
+            <a class='exists' href='scipy.spatial.qhull.Delaunay.html'>scipy.spatial.qhull.Delaunay</a>
+        
+            <a class='exists' href='scipy.spatial.qhull.HalfspaceIntersection.html'>scipy.spatial.qhull.HalfspaceIntersection</a>
+        
+            <a class='exists' href='scipy.spatial.qhull.Voronoi.html'>scipy.spatial.qhull.Voronoi</a>
+        
+            <a class='exists' href='scipy.spatial.qhull.tsearch.html'>scipy.spatial.qhull.tsearch</a>
+        
+            <a class='exists' href='scipy.spatial.transform._rotation_spline.RotationSpline.html'>scipy.spatial.transform._rotation_spline.RotationSpline</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.html'>scipy.spatial.transform.rotation.Rotation</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.__getitem__.html'>scipy.spatial.transform.rotation.Rotation.__getitem__</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.__mul__.html'>scipy.spatial.transform.rotation.Rotation.__mul__</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.apply.html'>scipy.spatial.transform.rotation.Rotation.apply</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.as_euler.html'>scipy.spatial.transform.rotation.Rotation.as_euler</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.as_matrix.html'>scipy.spatial.transform.rotation.Rotation.as_matrix</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.as_quat.html'>scipy.spatial.transform.rotation.Rotation.as_quat</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.as_rotvec.html'>scipy.spatial.transform.rotation.Rotation.as_rotvec</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.inv.html'>scipy.spatial.transform.rotation.Rotation.inv</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.magnitude.html'>scipy.spatial.transform.rotation.Rotation.magnitude</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Rotation.mean.html'>scipy.spatial.transform.rotation.Rotation.mean</a>
+        
+            <a class='exists' href='scipy.spatial.transform.rotation.Slerp.html'>scipy.spatial.transform.rotation.Slerp</a>
+        
+            <a class='exists' href='scipy.special._basic.ai_zeros.html'>scipy.special._basic.ai_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.bi_zeros.html'>scipy.special._basic.bi_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.comb.html'>scipy.special._basic.comb</a>
+        
+            <a class='exists' href='scipy.special._basic.diric.html'>scipy.special._basic.diric</a>
+        
+            <a class='exists' href='scipy.special._basic.erf_zeros.html'>scipy.special._basic.erf_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.euler.html'>scipy.special._basic.euler</a>
+        
+            <a class='exists' href='scipy.special._basic.factorial.html'>scipy.special._basic.factorial</a>
+        
+            <a class='exists' href='scipy.special._basic.factorial2.html'>scipy.special._basic.factorial2</a>
+        
+            <a class='exists' href='scipy.special._basic.factorialk.html'>scipy.special._basic.factorialk</a>
+        
+            <a class='exists' href='scipy.special._basic.jn_zeros.html'>scipy.special._basic.jn_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.jnp_zeros.html'>scipy.special._basic.jnp_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.kvp.html'>scipy.special._basic.kvp</a>
+        
+            <a class='exists' href='scipy.special._basic.perm.html'>scipy.special._basic.perm</a>
+        
+            <a class='exists' href='scipy.special._basic.polygamma.html'>scipy.special._basic.polygamma</a>
+        
+            <a class='exists' href='scipy.special._basic.yn_zeros.html'>scipy.special._basic.yn_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.ynp_zeros.html'>scipy.special._basic.ynp_zeros</a>
+        
+            <a class='exists' href='scipy.special._basic.zeta.html'>scipy.special._basic.zeta</a>
+        
+            <a class='exists' href='scipy.special._ellip_harm.ellip_harm.html'>scipy.special._ellip_harm.ellip_harm</a>
+        
+            <a class='exists' href='scipy.special._ellip_harm.ellip_harm_2.html'>scipy.special._ellip_harm.ellip_harm_2</a>
+        
+            <a class='exists' href='scipy.special._ellip_harm.ellip_normal.html'>scipy.special._ellip_harm.ellip_normal</a>
+        
+            <a class='exists' href='scipy.special._lambertw.lambertw.html'>scipy.special._lambertw.lambertw</a>
+        
+            <a class='exists' href='scipy.special._logsumexp.log_softmax.html'>scipy.special._logsumexp.log_softmax</a>
+        
+            <a class='exists' href='scipy.special._logsumexp.logsumexp.html'>scipy.special._logsumexp.logsumexp</a>
+        
+            <a class='exists' href='scipy.special._logsumexp.softmax.html'>scipy.special._logsumexp.softmax</a>
+        
+            <a class='exists' href='scipy.special._ufuncs.errstate.html'>scipy.special._ufuncs.errstate</a>
+        
+            <a class='exists' href='scipy.special._ufuncs.geterr.html'>scipy.special._ufuncs.geterr</a>
+        
+            <a class='exists' href='scipy.special._ufuncs.seterr.html'>scipy.special._ufuncs.seterr</a>
+        
+            <a class='exists' href='scipy.special.orthogonal.legendre.html'>scipy.special.orthogonal.legendre</a>
+        
+            <a class='exists' href='scipy.stats._binned_statistic.binned_statistic.html'>scipy.stats._binned_statistic.binned_statistic</a>
+        
+            <a class='exists' href='scipy.stats._binned_statistic.binned_statistic_2d.html'>scipy.stats._binned_statistic.binned_statistic_2d</a>
+        
+            <a class='exists' href='scipy.stats._binned_statistic.binned_statistic_dd.html'>scipy.stats._binned_statistic.binned_statistic_dd</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.beta_gen.fit.html'>scipy.stats._continuous_distns.beta_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.expon_gen.fit.html'>scipy.stats._continuous_distns.expon_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.gamma_gen.fit.html'>scipy.stats._continuous_distns.gamma_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.laplace_gen.fit.html'>scipy.stats._continuous_distns.laplace_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.lognorm_gen.fit.html'>scipy.stats._continuous_distns.lognorm_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.norm_gen.fit.html'>scipy.stats._continuous_distns.norm_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.rv_histogram.html'>scipy.stats._continuous_distns.rv_histogram</a>
+        
+            <a class='exists' href='scipy.stats._continuous_distns.uniform_gen.fit.html'>scipy.stats._continuous_distns.uniform_gen.fit</a>
+        
+            <a class='exists' href='scipy.stats._discrete_distns.hypergeom_gen.html'>scipy.stats._discrete_distns.hypergeom_gen</a>
+        
+            <a class='exists' href='scipy.stats._distn_infrastructure.entropy.html'>scipy.stats._distn_infrastructure.entropy</a>
+        
+            <a class='exists' href='scipy.stats._distn_infrastructure.rv_continuous.html'>scipy.stats._distn_infrastructure.rv_continuous</a>
+        
+            <a class='exists' href='scipy.stats._distn_infrastructure.rv_continuous.expect.html'>scipy.stats._distn_infrastructure.rv_continuous.expect</a>
+        
+            <a class='exists' href='scipy.stats._distn_infrastructure.rv_continuous.fit.html'>scipy.stats._distn_infrastructure.rv_continuous.fit</a>
+        
+            <a class='exists' href='scipy.stats._distn_infrastructure.rv_discrete.html'>scipy.stats._distn_infrastructure.rv_discrete</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.dirichlet_gen.html'>scipy.stats._multivariate.dirichlet_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.invwishart_gen.html'>scipy.stats._multivariate.invwishart_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.matrix_normal_gen.html'>scipy.stats._multivariate.matrix_normal_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.multinomial_gen.html'>scipy.stats._multivariate.multinomial_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.multivariate_normal_frozen.__init__.html'>scipy.stats._multivariate.multivariate_normal_frozen.__init__</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.multivariate_normal_gen.html'>scipy.stats._multivariate.multivariate_normal_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.ortho_group_gen.html'>scipy.stats._multivariate.ortho_group_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.random_correlation_gen.html'>scipy.stats._multivariate.random_correlation_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.special_ortho_group_frozen.__init__.html'>scipy.stats._multivariate.special_ortho_group_frozen.__init__</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.special_ortho_group_gen.html'>scipy.stats._multivariate.special_ortho_group_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.unitary_group_gen.html'>scipy.stats._multivariate.unitary_group_gen</a>
+        
+            <a class='exists' href='scipy.stats._multivariate.wishart_gen.html'>scipy.stats._multivariate.wishart_gen</a>
+        
+            <a class='exists' href='scipy.stats._rvs_sampling.rvs_ratio_uniforms.html'>scipy.stats._rvs_sampling.rvs_ratio_uniforms</a>
+        
+            <a class='exists' href='scipy.stats._stats_mstats_common.linregress.html'>scipy.stats._stats_mstats_common.linregress</a>
+        
+            <a class='exists' href='scipy.stats._stats_mstats_common.siegelslopes.html'>scipy.stats._stats_mstats_common.siegelslopes</a>
+        
+            <a class='exists' href='scipy.stats._stats_mstats_common.theilslopes.html'>scipy.stats._stats_mstats_common.theilslopes</a>
+        
+            <a class='exists' href='scipy.stats.contingency.chi2_contingency.html'>scipy.stats.contingency.chi2_contingency</a>
+        
+            <a class='exists' href='scipy.stats.contingency.expected_freq.html'>scipy.stats.contingency.expected_freq</a>
+        
+            <a class='exists' href='scipy.stats.contingency.margins.html'>scipy.stats.contingency.margins</a>
+        
+            <a class='exists' href='scipy.stats.kde.gaussian_kde.html'>scipy.stats.kde.gaussian_kde</a>
+        
+            <a class='exists' href='scipy.stats.kde.gaussian_kde.set_bandwidth.html'>scipy.stats.kde.gaussian_kde.set_bandwidth</a>
+        
+            <a class='exists' href='scipy.stats.morestats._calc_uniform_order_statistic_medians.html'>scipy.stats.morestats._calc_uniform_order_statistic_medians</a>
+        
+            <a class='exists' href='scipy.stats.morestats.anderson_ksamp.html'>scipy.stats.morestats.anderson_ksamp</a>
+        
+            <a class='exists' href='scipy.stats.morestats.bartlett.html'>scipy.stats.morestats.bartlett</a>
+        
+            <a class='exists' href='scipy.stats.morestats.bayes_mvs.html'>scipy.stats.morestats.bayes_mvs</a>
+        
+            <a class='exists' href='scipy.stats.morestats.binom_test.html'>scipy.stats.morestats.binom_test</a>
+        
+            <a class='exists' href='scipy.stats.morestats.boxcox.html'>scipy.stats.morestats.boxcox</a>
+        
+            <a class='exists' href='scipy.stats.morestats.boxcox_llf.html'>scipy.stats.morestats.boxcox_llf</a>
+        
+            <a class='exists' href='scipy.stats.morestats.boxcox_normmax.html'>scipy.stats.morestats.boxcox_normmax</a>
+        
+            <a class='exists' href='scipy.stats.morestats.boxcox_normplot.html'>scipy.stats.morestats.boxcox_normplot</a>
+        
+            <a class='exists' href='scipy.stats.morestats.circmean.html'>scipy.stats.morestats.circmean</a>
+        
+            <a class='exists' href='scipy.stats.morestats.circstd.html'>scipy.stats.morestats.circstd</a>
+        
+            <a class='exists' href='scipy.stats.morestats.circvar.html'>scipy.stats.morestats.circvar</a>
+        
+            <a class='exists' href='scipy.stats.morestats.fligner.html'>scipy.stats.morestats.fligner</a>
+        
+            <a class='exists' href='scipy.stats.morestats.kstat.html'>scipy.stats.morestats.kstat</a>
+        
+            <a class='exists' href='scipy.stats.morestats.levene.html'>scipy.stats.morestats.levene</a>
+        
+            <a class='exists' href='scipy.stats.morestats.median_test.html'>scipy.stats.morestats.median_test</a>
+        
+            <a class='exists' href='scipy.stats.morestats.mood.html'>scipy.stats.morestats.mood</a>
+        
+            <a class='exists' href='scipy.stats.morestats.mvsdist.html'>scipy.stats.morestats.mvsdist</a>
+        
+            <a class='exists' href='scipy.stats.morestats.ppcc_max.html'>scipy.stats.morestats.ppcc_max</a>
+        
+            <a class='exists' href='scipy.stats.morestats.ppcc_plot.html'>scipy.stats.morestats.ppcc_plot</a>
+        
+            <a class='exists' href='scipy.stats.morestats.probplot.html'>scipy.stats.morestats.probplot</a>
+        
+            <a class='exists' href='scipy.stats.morestats.shapiro.html'>scipy.stats.morestats.shapiro</a>
+        
+            <a class='exists' href='scipy.stats.morestats.wilcoxon.html'>scipy.stats.morestats.wilcoxon</a>
+        
+            <a class='exists' href='scipy.stats.morestats.yeojohnson.html'>scipy.stats.morestats.yeojohnson</a>
+        
+            <a class='exists' href='scipy.stats.morestats.yeojohnson_llf.html'>scipy.stats.morestats.yeojohnson_llf</a>
+        
+            <a class='exists' href='scipy.stats.morestats.yeojohnson_normmax.html'>scipy.stats.morestats.yeojohnson_normmax</a>
+        
+            <a class='exists' href='scipy.stats.morestats.yeojohnson_normplot.html'>scipy.stats.morestats.yeojohnson_normplot</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.argstoarray.html'>scipy.stats.mstats_basic.argstoarray</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.count_tied_groups.html'>scipy.stats.mstats_basic.count_tied_groups</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.describe.html'>scipy.stats.mstats_basic.describe</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.kruskal.html'>scipy.stats.mstats_basic.kruskal</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.mode.html'>scipy.stats.mstats_basic.mode</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.mquantiles.html'>scipy.stats.mstats_basic.mquantiles</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.sem.html'>scipy.stats.mstats_basic.sem</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.tmax.html'>scipy.stats.mstats_basic.tmax</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.tmean.html'>scipy.stats.mstats_basic.tmean</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.tmin.html'>scipy.stats.mstats_basic.tmin</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.trim.html'>scipy.stats.mstats_basic.trim</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.trima.html'>scipy.stats.mstats_basic.trima</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.variation.html'>scipy.stats.mstats_basic.variation</a>
+        
+            <a class='exists' href='scipy.stats.mstats_basic.winsorize.html'>scipy.stats.mstats_basic.winsorize</a>
+        
+            <a class='exists' href='scipy.stats.stats.brunnermunzel.html'>scipy.stats.stats.brunnermunzel</a>
+        
+            <a class='exists' href='scipy.stats.stats.chisquare.html'>scipy.stats.stats.chisquare</a>
+        
+            <a class='exists' href='scipy.stats.stats.cumfreq.html'>scipy.stats.stats.cumfreq</a>
+        
+            <a class='exists' href='scipy.stats.stats.describe.html'>scipy.stats.stats.describe</a>
+        
+            <a class='exists' href='scipy.stats.stats.energy_distance.html'>scipy.stats.stats.energy_distance</a>
+        
+            <a class='exists' href='scipy.stats.stats.f_oneway.html'>scipy.stats.stats.f_oneway</a>
+        
+            <a class='exists' href='scipy.stats.stats.find_repeats.html'>scipy.stats.stats.find_repeats</a>
+        
+            <a class='exists' href='scipy.stats.stats.fisher_exact.html'>scipy.stats.stats.fisher_exact</a>
+        
+            <a class='exists' href='scipy.stats.stats.gmean.html'>scipy.stats.stats.gmean</a>
+        
+            <a class='exists' href='scipy.stats.stats.gstd.html'>scipy.stats.stats.gstd</a>
+        
+            <a class='exists' href='scipy.stats.stats.hmean.html'>scipy.stats.stats.hmean</a>
+        
+            <a class='exists' href='scipy.stats.stats.iqr.html'>scipy.stats.stats.iqr</a>
+        
+            <a class='exists' href='scipy.stats.stats.jarque_bera.html'>scipy.stats.stats.jarque_bera</a>
+        
+            <a class='exists' href='scipy.stats.stats.kendalltau.html'>scipy.stats.stats.kendalltau</a>
+        
+            <a class='exists' href='scipy.stats.stats.kruskal.html'>scipy.stats.stats.kruskal</a>
+        
+            <a class='exists' href='scipy.stats.stats.ks_1samp.html'>scipy.stats.stats.ks_1samp</a>
+        
+            <a class='exists' href='scipy.stats.stats.ks_2samp.html'>scipy.stats.stats.ks_2samp</a>
+        
+            <a class='exists' href='scipy.stats.stats.kstest.html'>scipy.stats.stats.kstest</a>
+        
+            <a class='exists' href='scipy.stats.stats.kurtosis.html'>scipy.stats.stats.kurtosis</a>
+        
+            <a class='exists' href='scipy.stats.stats.kurtosistest.html'>scipy.stats.stats.kurtosistest</a>
+        
+            <a class='exists' href='scipy.stats.stats.median_abs_deviation.html'>scipy.stats.stats.median_abs_deviation</a>
+        
+            <a class='exists' href='scipy.stats.stats.mode.html'>scipy.stats.stats.mode</a>
+        
+            <a class='exists' href='scipy.stats.stats.moment.html'>scipy.stats.stats.moment</a>
+        
+            <a class='exists' href='scipy.stats.stats.multiscale_graphcorr.html'>scipy.stats.stats.multiscale_graphcorr</a>
+        
+            <a class='exists' href='scipy.stats.stats.normaltest.html'>scipy.stats.stats.normaltest</a>
+        
+            <a class='exists' href='scipy.stats.stats.obrientransform.html'>scipy.stats.stats.obrientransform</a>
+        
+            <a class='exists' href='scipy.stats.stats.pearsonr.html'>scipy.stats.stats.pearsonr</a>
+        
+            <a class='exists' href='scipy.stats.stats.percentileofscore.html'>scipy.stats.stats.percentileofscore</a>
+        
+            <a class='exists' href='scipy.stats.stats.pointbiserialr.html'>scipy.stats.stats.pointbiserialr</a>
+        
+            <a class='exists' href='scipy.stats.stats.power_divergence.html'>scipy.stats.stats.power_divergence</a>
+        
+            <a class='exists' href='scipy.stats.stats.rankdata.html'>scipy.stats.stats.rankdata</a>
+        
+            <a class='exists' href='scipy.stats.stats.ranksums.html'>scipy.stats.stats.ranksums</a>
+        
+            <a class='exists' href='scipy.stats.stats.relfreq.html'>scipy.stats.stats.relfreq</a>
+        
+            <a class='exists' href='scipy.stats.stats.scoreatpercentile.html'>scipy.stats.stats.scoreatpercentile</a>
+        
+            <a class='exists' href='scipy.stats.stats.sem.html'>scipy.stats.stats.sem</a>
+        
+            <a class='exists' href='scipy.stats.stats.sigmaclip.html'>scipy.stats.stats.sigmaclip</a>
+        
+            <a class='exists' href='scipy.stats.stats.skew.html'>scipy.stats.stats.skew</a>
+        
+            <a class='exists' href='scipy.stats.stats.skewtest.html'>scipy.stats.stats.skewtest</a>
+        
+            <a class='exists' href='scipy.stats.stats.spearmanr.html'>scipy.stats.stats.spearmanr</a>
+        
+            <a class='exists' href='scipy.stats.stats.tiecorrect.html'>scipy.stats.stats.tiecorrect</a>
+        
+            <a class='exists' href='scipy.stats.stats.tmax.html'>scipy.stats.stats.tmax</a>
+        
+            <a class='exists' href='scipy.stats.stats.tmean.html'>scipy.stats.stats.tmean</a>
+        
+            <a class='exists' href='scipy.stats.stats.tmin.html'>scipy.stats.stats.tmin</a>
+        
+            <a class='exists' href='scipy.stats.stats.trim_mean.html'>scipy.stats.stats.trim_mean</a>
+        
+            <a class='exists' href='scipy.stats.stats.trimboth.html'>scipy.stats.stats.trimboth</a>
+        
+            <a class='exists' href='scipy.stats.stats.tsem.html'>scipy.stats.stats.tsem</a>
+        
+            <a class='exists' href='scipy.stats.stats.tstd.html'>scipy.stats.stats.tstd</a>
+        
+            <a class='exists' href='scipy.stats.stats.ttest_1samp.html'>scipy.stats.stats.ttest_1samp</a>
+        
+            <a class='exists' href='scipy.stats.stats.ttest_ind.html'>scipy.stats.stats.ttest_ind</a>
+        
+            <a class='exists' href='scipy.stats.stats.ttest_ind_from_stats.html'>scipy.stats.stats.ttest_ind_from_stats</a>
+        
+            <a class='exists' href='scipy.stats.stats.ttest_rel.html'>scipy.stats.stats.ttest_rel</a>
+        
+            <a class='exists' href='scipy.stats.stats.tvar.html'>scipy.stats.stats.tvar</a>
+        
+            <a class='exists' href='scipy.stats.stats.variation.html'>scipy.stats.stats.variation</a>
+        
+            <a class='exists' href='scipy.stats.stats.wasserstein_distance.html'>scipy.stats.stats.wasserstein_distance</a>
+        
+            <a class='exists' href='scipy.stats.stats.weightedtau.html'>scipy.stats.stats.weightedtau</a>
+        
+            <a class='exists' href='scipy.stats.stats.zmap.html'>scipy.stats.stats.zmap</a>
+        
+            <a class='exists' href='scipy.stats.stats.zscore.html'>scipy.stats.stats.zscore</a>
+        
+        </details>
+        
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+     
+
+
+    
+        <h1>SciPy: A scientific computing package for Python</h1>
+    
+
+    
+           
+               
+        <p>Documentation is available in the docstrings and online at https://docs.scipy.org . </p>
+
+    
+           
+       
+
+    
+        <h1>Contents</h1>
+    
+
+    
+           
+               
+        <p>SciPy imports all the functions from the NumPy namespace, and in addition provides : </p>
+
+    
+           
+       
+
+    
+        <h1>Subpackages</h1>
+    
+
+    
+           
+               
+        <p>Using any of these subpackages requires an explicit import. For example, 
+        <code class='verbatim'>import scipy.cluster</code>
+     . </p>
+
+    
+           
+               
+            <pre>cluster                      --- Vector Quantization / Kmeans
+fft                          --- Discrete Fourier transforms
+fftpack                      --- Legacy discrete Fourier transforms
+integrate                    --- Integration routines
+interpolate                  --- Interpolation Tools
+io                           --- Data input and output
+linalg                       --- Linear algebra routines
+linalg.blas                  --- Wrappers to BLAS library
+linalg.lapack                --- Wrappers to LAPACK library
+misc                         --- Various utilities that don&#39;t have
+                                 another home.
+ndimage                      --- N-D image package
+odr                          --- Orthogonal Distance Regression
+optimize                     --- Optimization Tools
+signal                       --- Signal Processing Tools
+signal.windows               --- Window functions
+sparse                       --- Sparse Matrices
+sparse.linalg                --- Sparse Linear Algebra
+sparse.linalg.dsolve         --- Linear Solvers
+sparse.linalg.dsolve.umfpack --- :Interface to the UMFPACK library:
+                                 Conjugate Gradient Method (LOBPCG)
+sparse.linalg.eigen          --- Sparse Eigenvalue Solvers
+sparse.linalg.eigen.lobpcg   --- Locally Optimal Block Preconditioned
+                                 Conjugate Gradient Method (LOBPCG)
+spatial                      --- Spatial data structures and algorithms
+special                      --- Special functions
+stats                        --- Statistical Functions</pre>
+       
+           
+       
+
+    
+        <h1>Utility tools</h1>
+    
+
+    
+           
+               
+            <pre>test              --- Run scipy unittests
+show_config       --- Show scipy build configuration
+show_numpy_config --- Show numpy build configuration
+__version__       --- SciPy version string
+__numpy_version__ --- Numpy version string</pre>
+       
+           
+       
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/__init__.py </br>
+Line: 0 </br>
+type: &lt;class &#39;module&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

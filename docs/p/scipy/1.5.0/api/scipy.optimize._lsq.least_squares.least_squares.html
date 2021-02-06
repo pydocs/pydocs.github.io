@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize.html'>optimize</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize._lsq.html'>_lsq</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.__nnls.html">__nnls</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._basinhopping.html">_basinhopping</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._bglu_dense.html">_bglu_dense</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._cobyla.html">_cobyla</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._constraints.html">_constraints</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._differentiable_functions.html">_differentiable_functions</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._differentialevolution.html">_differentialevolution</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._dual_annealing.html">_dual_annealing</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._group_columns.html">_group_columns</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._hessian_update_strategy.html">_hessian_update_strategy</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._lbfgsb.html">_lbfgsb</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._linprog.html">_linprog</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._linprog_ip.html">_linprog_ip</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._linprog_rs.html">_linprog_rs</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._linprog_simplex.html">_linprog_simplex</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._linprog_util.html">_linprog_util</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._lsap.html">_lsap</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._lsap_module.html">_lsap_module</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._lsq.html">_lsq</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._minimize.html">_minimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._minpack.html">_minpack</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._nnls.html">_nnls</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._numdiff.html">_numdiff</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._remove_redundancy.html">_remove_redundancy</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._root.html">_root</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._root_scalar.html">_root_scalar</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._shgo.html">_shgo</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._shgo_lib.html">_shgo_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._slsqp.html">_slsqp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._spectral.html">_spectral</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trlib.html">_trlib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion.html">_trustregion</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion_constr.html">_trustregion_constr</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion_dogleg.html">_trustregion_dogleg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion_exact.html">_trustregion_exact</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion_krylov.html">_trustregion_krylov</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._trustregion_ncg.html">_trustregion_ncg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._zeros.html">_zeros</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.cobyla.html">cobyla</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.lbfgsb.html">lbfgsb</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.linesearch.html">linesearch</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.minpack.html">minpack</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.minpack2.html">minpack2</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.moduleTNC.html">moduleTNC</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.nonlin.html">nonlin</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.slsqp.html">slsqp</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.tnc.html">tnc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.zeros.html">zeros</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize._lsq.least_squares.html'>least_squares</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize._lsq.least_squares.least_squares.html">least_squares</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>least_squares(fun, x0, jac=&#39;2-point&#39;, bounds=(-inf, inf), method=&#39;trf&#39;, ftol=1e-08, xtol=1e-08, gtol=1e-08, x_scale=1.0, loss=&#39;linear&#39;, f_scale=1.0, diff_step=None, tr_solver=None, tr_options={}, jac_sparsity=None, max_nfev=None, verbose=0, args=(), kwargs={})</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Solve a nonlinear least-squares problem with bounds on the variables.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>Given the residuals f(x) (an m-D real function of n real variables) and the loss function rho(s) (a scalar function), <code><a link href="/p/scipy/1.5.0/api/scipy.optimize._lsq.least_squares.least_squares.html" class='exists'>least_squares</a></code>
+         finds a local minimum of the cost function F(x)::</p>
+
+    
+           
+               
+            <pre>minimize F(x) = 0.5 * sum(rho(f_i(x)**2), i = 0, ..., m - 1)
+subject to lb &lt;= x &lt;= ub
+</pre>
+       
+           
+               
+        <p>The purpose of the loss function rho(s) is to reduce the influence of outliers on the solution.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="fun">fun</a> : callable</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Function which computes the vector of residuals, with the signature 
+        <code class='verbatim'>fun(x, *args, **kwargs)</code>
+    , i.e., the minimization proceeds with respect to its first argument. The argument 
+        <code class='verbatim'>x</code>
+     passed to this function is an ndarray of shape (n,) (never a scalar, even for n=1). It must allocate and return a 1-D array_like of shape (m,) or a scalar. If the argument 
+        <code class='verbatim'>x</code>
+     is complex or the function 
+        <code class='verbatim'>fun</code>
+     returns complex residuals, it must be wrapped in a real function of real arguments, as shown at the end of the Examples section.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="x0">x0</a> : array_like with shape (n,) or float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Initial guess on independent variables. If float, it will be treated as a 1-D array with one element.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="jac">jac</a> : {&#39;2-point&#39;, &#39;3-point&#39;, &#39;cs&#39;, callable}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Method of computing the Jacobian matrix (an m-by-n matrix, where element (i, j) is the partial derivative of f[i] with respect to x[j]). The keywords select a finite difference scheme for numerical estimation. The scheme &#39;3-point&#39; is more accurate, but requires twice as many operations as &#39;2-point&#39; (default). The scheme &#39;cs&#39; uses complex steps, and while potentially the most accurate, it is applicable only when <code><a link href="#fun" class='local'>fun</a></code> correctly handles complex inputs and can be analytically continued to the complex plane. Method &#39;lm&#39; always uses the &#39;2-point&#39; scheme. If callable, it is used as 
+        <code class='verbatim'>jac(x, *args, **kwargs)</code>
+     and should return a good approximation (or the exact value) for the Jacobian as an array_like (np.atleast_2d is applied), a sparse matrix or a <code>:None:None:`scipy.sparse.linalg.LinearOperator`</code>.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="bounds">bounds</a> : 2-tuple of array_like, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Lower and upper bounds on independent variables. Defaults to no bounds. Each array must match the size of <code><a link href="#x0" class='local'>x0</a></code> or be a scalar, in the latter case a bound will be the same for all variables. Use 
+        <code class='verbatim'>np.inf</code>
+     with an appropriate sign to disable bounds on all or some variables.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="method">method</a> : {&#39;trf&#39;, &#39;dogbox&#39;, &#39;lm&#39;}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Algorithm to perform minimization.</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* &#39;trf&#39; : Trust Region Reflective algorithm, particularly suitable</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>for large sparse problems with bounds. Generally robust method.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;dogbox&#39; : dogleg algorithm with rectangular trust regions,</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>typical use case is small problems with bounds. Not recommended for problems with rank-deficient Jacobian.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;lm&#39; : Levenberg-Marquardt algorithm as implemented in MINPACK.</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Doesn&#39;t handle bounds and sparse Jacobians. Usually the most efficient method for small unconstrained problems. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>Default is &#39;trf&#39;. See Notes for more information.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="ftol">ftol</a> : float or None, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Tolerance for termination by the change of the cost function. Default is 1e-8. The optimization process is stopped when 
+        <code class='verbatim'>dF &lt; ftol * F</code>
+    , and there was an adequate agreement between a local quadratic model and the true model in the last step. If None, the termination by this condition is disabled.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="xtol">xtol</a> : float or None, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Tolerance for termination by the change of the independent variables. Default is 1e-8. The exact condition depends on the <code><a link href="#method" class='local'>method</a></code> used:</p>
+
+    
+            
+                
+        <p>    * For &#39;trf&#39; and &#39;dogbox&#39; : 
+        <code class='verbatim'>norm(dx) &lt; xtol * (xtol + norm(x))</code>
+    .     * For &#39;lm&#39; : 
+        <code class='verbatim'>Delta &lt; xtol * norm(xs)</code>
+    , where 
+        <code class='verbatim'>Delta</code>
+     is</p>
+
+    
+            
+                
+        <p>      a trust-region radius and 
+        <code class='verbatim'>xs</code>
+     is the value of 
+        <code class='verbatim'>x</code>
+           scaled according to <code><a link href="#x_scale" class='local'>x_scale</a></code> parameter (see below).</p>
+
+    
+            
+                
+        <p>If None, the termination by this condition is disabled.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="gtol">gtol</a> : float or None, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Tolerance for termination by the norm of the gradient. Default is 1e-8. The exact condition depends on a <code><a link href="#method" class='local'>method</a></code> used:</p>
+
+    
+            
+                
+        <p>    * For &#39;trf&#39; : 
+        <code class='verbatim'>norm(g_scaled, ord=np.inf) &lt; gtol</code>
+    , where</p>
+
+    
+            
+                
+        <p>      
+        <code class='verbatim'>g_scaled</code>
+     is the value of the gradient scaled to account for       the presence of the bounds [STIR]_.</p>
+
+    
+            
+                
+        <p>    * For &#39;dogbox&#39; : 
+        <code class='verbatim'>norm(g_free, ord=np.inf) &lt; gtol</code>
+    , where</p>
+
+    
+            
+                
+        <p>      
+        <code class='verbatim'>g_free</code>
+     is the gradient with respect to the variables which       are not in the optimal state on the boundary.</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* For &#39;lm&#39; : the maximum absolute value of the cosine of angles</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>between columns of the Jacobian and the residual vector is less than <code><a link href="#gtol" class='local'>gtol</a></code>, or the residual vector is zero. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>If None, the termination by this condition is disabled.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="x_scale">x_scale</a> : array_like or &#39;jac&#39;, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Characteristic scale of each variable. Setting <code><a link href="#x_scale" class='local'>x_scale</a></code> is equivalent to reformulating the problem in scaled variables 
+        <code class='verbatim'>xs = x / x_scale</code>
+    . An alternative view is that the size of a trust region along jth dimension is proportional to 
+        <code class='verbatim'>x_scale[j]</code>
+    . Improved convergence may be achieved by setting <code><a link href="#x_scale" class='local'>x_scale</a></code> such that a step of a given size along any of the scaled variables has a similar effect on the cost function. If set to &#39;jac&#39;, the scale is iteratively updated using the inverse norms of the columns of the Jacobian matrix (as described in [JJMore]_).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="loss">loss</a> : str or callable, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Determines the loss function. The following keyword values are allowed:</p>
+
+    
+            
+                
+        <p>    * &#39;linear&#39; (default) : 
+        <code class='verbatim'>rho(z) = z</code>
+    . Gives a standard</p>
+
+    
+            
+                
+        <p>      least-squares problem.</p>
+
+    
+            
+                
+        <p>    * &#39;soft_l1&#39; : 
+        <code class='verbatim'>rho(z) = 2 * ((1 + z)**0.5 - 1)</code>
+    . The smooth</p>
+
+    
+            
+                
+        <p>      approximation of l1 (absolute value) loss. Usually a good       choice for robust least squares.</p>
+
+    
+            
+                
+        <p>    * &#39;huber&#39; : 
+        <code class='verbatim'>rho(z) = z if z &lt;= 1 else 2*z**0.5 - 1</code>
+    . Works</p>
+
+    
+            
+                
+        <p>      similarly to &#39;soft_l1&#39;.</p>
+
+    
+            
+                
+        <p>    * &#39;cauchy&#39; : 
+        <code class='verbatim'>rho(z) = ln(1 + z)</code>
+    . Severely weakens outliers</p>
+
+    
+            
+                
+        <p>      influence, but may cause difficulties in optimization process.</p>
+
+    
+            
+                
+        <p>    * &#39;arctan&#39; : 
+        <code class='verbatim'>rho(z) = arctan(z)</code>
+    . Limits a maximum loss on</p>
+
+    
+            
+                
+        <p>      a single residual, has properties similar to &#39;cauchy&#39;.</p>
+
+    
+            
+                
+        <p>If callable, it must take a 1-D ndarray 
+        <code class='verbatim'>z=f**2</code>
+     and return an array_like with shape (3, m) where row 0 contains function values, row 1 contains first derivatives and row 2 contains second derivatives. Method &#39;lm&#39; supports only &#39;linear&#39; loss.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="f_scale">f_scale</a> : float, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Value of soft margin between inlier and outlier residuals, default is 1.0. The loss function is evaluated as follows 
+        <code class='verbatim'>rho_(f**2) = C**2 * rho(f**2 / C**2)</code>
+    , where 
+        <code class='verbatim'>C</code>
+     is <code><a link href="#f_scale" class='local'>f_scale</a></code>, and 
+        <code class='verbatim'>rho</code>
+     is determined by <code><a link href="#loss" class='local'>loss</a></code> parameter. This parameter has no effect with 
+        <code class='verbatim'>loss=&#39;linear&#39;</code>
+    , but for other <code><a link href="#loss" class='local'>loss</a></code> values it is of crucial importance.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="max_nfev">max_nfev</a> : None or int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Maximum number of function evaluations before the termination. If None (default), the value is chosen automatically:</p>
+
+    
+            
+                
+        <p>    * For &#39;trf&#39; and &#39;dogbox&#39; : 100 * n.     * For &#39;lm&#39; :  100 * n if <code><a link href="#jac" class='local'>jac</a></code> is callable and 100 * n * (n + 1)</p>
+
+    
+            
+                
+        <p>      otherwise (because &#39;lm&#39; counts function calls in Jacobian       estimation).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="diff_step">diff_step</a> : None or array_like, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Determines the relative step size for the finite difference approximation of the Jacobian. The actual step is computed as 
+        <code class='verbatim'>x * diff_step</code>
+    . If None (default), then <code><a link href="#diff_step" class='local'>diff_step</a></code> is taken to be a conventional &#34;optimal&#34; power of machine epsilon for the finite difference scheme used [NR]_.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="tr_solver">tr_solver</a> : {None, &#39;exact&#39;, &#39;lsmr&#39;}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Method for solving trust-region subproblems, relevant only for &#39;trf&#39; and &#39;dogbox&#39; methods.</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* &#39;exact&#39; is suitable for not very large problems with dense</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Jacobian matrices. The computational complexity per iteration is comparable to a singular value decomposition of the Jacobian matrix.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;lsmr&#39; is suitable for problems with sparse and large Jacobian</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>matrices. It uses the iterative procedure <code><a link href="/p/scipy/1.5.0/api/scipy.sparse.linalg.isolve.lsmr.lsmr.html" class='exists'>scipy.sparse.linalg.lsmr</a></code>
+         for finding a solution of a linear least-squares problem and only requires matrix-vector product evaluations. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>If None (default), the solver is chosen based on the type of Jacobian returned on the first iteration.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="tr_options">tr_options</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Keyword options passed to trust-region solver.</p>
+
+    
+            
+                
+        <p>    * 
+        <code class='verbatim'>tr_solver=&#39;exact&#39;</code>
+    : <code><a link href="#tr_options" class='local'>tr_options</a></code> are ignored.     * 
+        <code class='verbatim'>tr_solver=&#39;lsmr&#39;</code>
+    : options for <code><a link href="/p/scipy/1.5.0/api/scipy.sparse.linalg.isolve.lsmr.lsmr.html" class='exists'>scipy.sparse.linalg.lsmr</a></code>
+        .</p>
+
+    
+            
+                
+        <p>      Additionally,  
+        <code class='verbatim'>method=&#39;trf&#39;</code>
+     supports  &#39;regularize&#39; option       (bool, default is True), which adds a regularization term to the       normal equation, which improves convergence if the Jacobian is       rank-deficient [Byrd]_ (eq. 3.4).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="jac_sparsity">jac_sparsity</a> : {None, array_like, sparse matrix}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Defines the sparsity structure of the Jacobian matrix for finite difference estimation, its shape must be (m, n). If the Jacobian has only few non-zero elements in *each* row, providing the sparsity structure will greatly speed up the computations [Curtis]_. A zero entry means that a corresponding element in the Jacobian is identically zero. If provided, forces the use of &#39;lsmr&#39; trust-region solver. If None (default), then dense differencing will be used. Has no effect for &#39;lm&#39; method.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="verbose">verbose</a> : {0, 1, 2}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Level of algorithm&#39;s verbosity:</p>
+
+    
+            
+                
+        <p>    * 0 (default) : work silently.     * 1 : display a termination report.     * 2 : display progress during iterations (not supported by &#39;lm&#39;</p>
+
+    
+            
+                
+        <p>      method).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="args, kwargs">args, kwargs</a> : tuple and dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Additional arguments passed to <code><a link href="#fun" class='local'>fun</a></code> and <code><a link href="#jac" class='local'>jac</a></code>. Both empty by default. The calling signature is 
+        <code class='verbatim'>fun(x, *args, **kwargs)</code>
+     and the same for <code><a link href="#jac" class='local'>jac</a></code>.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>`OptimizeResult` with the following fields defined:</dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="x">x</a> : ndarray, shape (n,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Solution found.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="cost">cost</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Value of the cost function at the solution.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="fun">fun</a> : ndarray, shape (m,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Vector of residuals at the solution.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="jac">jac</a> : ndarray, sparse matrix or LinearOperator, shape (m, n)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Modified Jacobian matrix at the solution, in the sense that J^T J is a Gauss-Newton approximation of the Hessian of the cost function. The type is the same as the one used by the algorithm.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="grad">grad</a> : ndarray, shape (m,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Gradient of the cost function at the solution.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="optimality">optimality</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>First-order optimality measure. In unconstrained problems, it is always the uniform norm of the gradient. In constrained problems, it is the quantity which was compared with <code><a link href="#gtol" class='local'>gtol</a></code> during iterations.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="active_mask">active_mask</a> : ndarray of int, shape (n,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Each component shows whether a corresponding constraint is active (that is, whether a variable is at the bound):</p>
+
+    
+            
+                
+        <p>    *  0 : a constraint is not active.     * -1 : a lower bound is active.     *  1 : an upper bound is active.</p>
+
+    
+            
+                
+        <p>Might be somewhat arbitrary for &#39;trf&#39; method as it generates a sequence of strictly feasible iterates and <code><a link href="#active_mask" class='local'>active_mask</a></code> is determined within a tolerance threshold.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="nfev">nfev</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of function evaluations done. Methods &#39;trf&#39; and &#39;dogbox&#39; do not count function calls for numerical Jacobian approximation, as opposed to &#39;lm&#39; method.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="njev">njev</a> : int or None</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of Jacobian evaluations done. If numerical Jacobian approximation is used in &#39;lm&#39; method, it is set to None.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="status">status</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The reason for algorithm termination:</p>
+
+    
+            
+                
+        <p>    * -1 : improper input parameters status returned from MINPACK.     *  0 : the maximum number of function evaluations is exceeded.     *  1 : <code><a link href="#gtol" class='local'>gtol</a></code> termination condition is satisfied.     *  2 : <code><a link href="#ftol" class='local'>ftol</a></code> termination condition is satisfied.     *  3 : <code><a link href="#xtol" class='local'>xtol</a></code> termination condition is satisfied.     *  4 : Both <code><a link href="#ftol" class='local'>ftol</a></code> and <code><a link href="#xtol" class='local'>xtol</a></code> termination conditions are satisfied.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="message">message</a> : str</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Verbal description of the termination reason.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="success">success</a> : bool</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>True if one of the convergence criteria is satisfied (<code><a link href="#status" class='local'>status</a></code> &gt; 0).</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Method &#39;lm&#39; (Levenberg-Marquardt) calls a wrapper over least-squares algorithms implemented in MINPACK (lmder, lmdif). It runs the Levenberg-Marquardt algorithm formulated as a trust-region type algorithm. The implementation is based on paper [JJMore]_, it is very robust and efficient with a lot of smart tricks. It should be your first choice for unconstrained problems. Note that it doesn&#39;t support bounds. Also, it doesn&#39;t work when m &lt; n.</p>
+
+    
+           
+               
+        <p>Method &#39;trf&#39; (Trust Region Reflective) is motivated by the process of solving a system of equations, which constitute the first-order optimality condition for a bound-constrained minimization problem as formulated in [STIR]_. The algorithm iteratively solves trust-region subproblems augmented by a special diagonal quadratic term and with trust-region shape determined by the distance from the bounds and the direction of the gradient. This enhancements help to avoid making steps directly into bounds and efficiently explore the whole space of variables. To further improve convergence, the algorithm considers search directions reflected from the bounds. To obey theoretical requirements, the algorithm keeps iterates strictly feasible. With dense Jacobians trust-region subproblems are solved by an exact method very similar to the one described in [JJMore]_ (and implemented in MINPACK). The difference from the MINPACK implementation is that a singular value decomposition of a Jacobian matrix is done once per iteration, instead of a QR decomposition and series of Givens rotation eliminations. For large sparse Jacobians a 2-D subspace approach of solving trust-region subproblems is used [STIR]_, [Byrd]_. The subspace is spanned by a scaled gradient and an approximate Gauss-Newton solution delivered by <code><a link href="/p/scipy/1.5.0/api/scipy.sparse.linalg.isolve.lsmr.lsmr.html" class='exists'>scipy.sparse.linalg.lsmr</a></code>
+        . When no constraints are imposed the algorithm is very similar to MINPACK and has generally comparable performance. The algorithm works quite robust in unbounded and bounded problems, thus it is chosen as a default algorithm.</p>
+
+    
+           
+               
+        <p>Method &#39;dogbox&#39; operates in a trust-region framework, but considers rectangular trust regions as opposed to conventional ellipsoids [Voglis]_. The intersection of a current trust region and initial bounds is again rectangular, so on each iteration a quadratic minimization problem subject to bound constraints is solved approximately by Powell&#39;s dogleg method [NumOpt]_. The required Gauss-Newton step can be computed exactly for dense Jacobians or approximately by <code><a link href="/p/scipy/1.5.0/api/scipy.sparse.linalg.isolve.lsmr.lsmr.html" class='exists'>scipy.sparse.linalg.lsmr</a></code>
+         for large sparse Jacobians. The algorithm is likely to exhibit slow convergence when the rank of Jacobian is less than the number of variables. The algorithm often outperforms &#39;trf&#39; in bounded problems with a small number of variables.</p>
+
+    
+           
+               
+        <p>Robust loss functions are implemented as described in [BA]_. The idea is to modify a residual vector and a Jacobian matrix on each iteration such that computed gradient and Gauss-Newton Hessian approximation match the true gradient and Hessian approximation of the cost function. Then the algorithm proceeds in a normal way, i.e., robust loss functions are implemented as a simple wrapper over standard least-squares algorithms.</p>
+
+    
+           
+               
+            <div class='block_directive'>
+    <div class='head'>.. versionadded:: [&#39; 0.17.0&#39;]</div>
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+             <code><a link href="curve_fit.html" class='exists'>curve_fit</a></code>
+        
+         
+             <code><a link href="leastsq.html" class='exists'>leastsq</a></code>
+        
+         
+     
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/optimize/_lsq/least_squares.py </br>
+Line: 240 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

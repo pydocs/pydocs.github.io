@@ -139,7 +139,7 @@ body{
                 color: var(--nc-ac-tx);
           }
 
-          img {max-width: 60%;}
+          img {max-width: 40%;}
 
           pre.highlight.execed {
             border-left: 3px solid #0070f3;
@@ -299,21 +299,17 @@ user-select: none;
 </style>
 </head>
 <body class="tex2jax_ignore">
-
     <header>
-        
-        
         <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
         <nav> <a href='/' >/ p</a>  / 
                 <div class="dropdown">
                 <a href=IPython>IPython</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
-                            <a href="/p/dask/2020.12.0+22.ga82bec5a5/api/dask.html">dask</a>
                             <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
-                            <a href="/p/numpy/1.19.4/api/numpy.html">numpy</a>
-                            <a href="/p/scipy/1.5.4/api/scipy.html">scipy</a>
-                            <a href="/p/skimage/0.16.2/api/skimage.html">skimage</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
                             
                      </div>
                 </div>
@@ -324,7 +320,15 @@ user-select: none;
                             
                     </div>
                 </div>
-                <a>api</a>&nbsp;/&nbsp;
+
+                <div class="dropdown">
+                <a href='/p/IPython/8.0.0.dev/api/IPython'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.0.0.dev/api/IPython.html">API</a>
+                        <a href="/p/IPython/8.0.0.dev/gallery">Gallery</a>
+                     </div>
+                </div>
+
             
                 
                     <div class="dropdown">
@@ -451,42 +455,44 @@ user-select: none;
     <a href="#">Related</a>
     <hr/>
     <a>Narrative Docs</a>
-    <hr/><a href="#section-Parameters">Parameters</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
 
     
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 
     
-    
-       <code class='signature'>_ast_asyncify(cell: str, wrapper_name: str) -&gt; _ast.Module</code>
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>_ast_asyncify(cell: str, wrapper_name: str) -&gt; _ast.Module</code>
+
+
 
 
     
@@ -495,7 +501,7 @@ user-select: none;
         
            
                
-        <p >Parse a cell with top-level await and modify the AST to be able to run it later.</p>
+        <p>Parse a cell with top-level await and modify the AST to be able to run it later.</p>
 
     
            
@@ -516,7 +522,38 @@ user-select: none;
         <h3 id="section-Parameters">Parameters</h3>
     
     
+       <dl>
+           
+            
+                <dt><a id="cell: str">cell: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The code cell to asyncronify</p>
+
+    
+            
+        </dd>
        
+            
+                <dt><a id="wrapper_name: str">wrapper_name: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The name of the function to be used to wrap the passed <code>:None:None:`cell`</code>. It is advised to **not** use a python identifier in order to not pollute the global namespace in which the function will be ran.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
    
 
 
@@ -524,7 +561,55 @@ user-select: none;
         <h3 id="section-Returns">Returns</h3>
     
     
+       <dl>
+           
+            
+                <dt>ModuleType:</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A module object AST containing **one** function named <code>:None:None:`wrapper_name`</code>.</p>
+
+    
+            
+                
+        <p>The given code is wrapped in a async-def function, parsed into an AST, and the resulting function definition AST is modified to return the last expression.</p>
+
+    
+            
+                
+        <p>The last expression or await node is moved into a return statement at the end of the function, and removed from its original location. If the last node is not Expr or Await nothing is done.</p>
+
+    
+            
+                
+        <p>The function <code>:None:None:`__code__`</code> will need to be later modified  (by 
+        <code class='verbatim'>removed_co_newlocals</code>
+    ) in a subsequent step to not create new <code>:None:None:`locals()`</code> meaning that the local and global scope are the same, ie as if the body of the function was at module level.</p>
+
+    
+            
+                
+        <p>Lastly a call to <code>:None:None:`locals()`</code> is made just before the last expression of the function, or just after the last assignment or statement to make sure the global dict is updated as python function work with a local fast cache which is updated only on <code>:None:None:`local()`</code> calls.</p>
+
+    
+            
+        </dd>
        
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -536,31 +621,37 @@ user-select: none;
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
-   
+       <dl>
+           
 
-
-    
-    
-       
+   </pre>
    
 
 
@@ -586,6 +677,14 @@ user-select: none;
 
 
 
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+     
+
+
+
 <hr>
 
 To Be Done: </br>
@@ -596,6 +695,9 @@ type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
 Tag: </br>
 Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
 </div>
 </body>
 </html>

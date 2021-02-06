@@ -139,7 +139,7 @@ body{
                 color: var(--nc-ac-tx);
           }
 
-          img {max-width: 60%;}
+          img {max-width: 40%;}
 
           pre.highlight.execed {
             border-left: 3px solid #0070f3;
@@ -299,21 +299,17 @@ user-select: none;
 </style>
 </head>
 <body class="tex2jax_ignore">
-
     <header>
-        
-        
         <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
         <nav> <a href='/' >/ p</a>  / 
                 <div class="dropdown">
                 <a href=IPython>IPython</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
-                            <a href="/p/dask/2020.12.0+22.ga82bec5a5/api/dask.html">dask</a>
                             <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
-                            <a href="/p/numpy/1.19.4/api/numpy.html">numpy</a>
-                            <a href="/p/scipy/1.5.4/api/scipy.html">scipy</a>
-                            <a href="/p/skimage/0.16.2/api/skimage.html">skimage</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
                             
                      </div>
                 </div>
@@ -324,7 +320,15 @@ user-select: none;
                             
                     </div>
                 </div>
-                <a>api</a>&nbsp;/&nbsp;
+
+                <div class="dropdown">
+                <a href='/p/IPython/8.0.0.dev/api/IPython'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.0.0.dev/api/IPython.html">API</a>
+                        <a href="/p/IPython/8.0.0.dev/gallery">Gallery</a>
+                     </div>
+                </div>
+
             
                 
                     <div class="dropdown">
@@ -429,7 +433,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-</div>
+    
+
+    </div>
+
+    
+
+
 
 
 
@@ -462,7 +472,7 @@ user-select: none;
         
            
                
-        <p >Was not able to parse docstring for IPython.lib.pretty</p>
+        <p>Was not able to parse docstring for IPython.lib.pretty</p>
 
     
            
@@ -481,7 +491,28 @@ user-select: none;
 
     
     
-       
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -493,37 +524,37 @@ user-select: none;
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
     
     
-       
-   
+       <dl>
+           
 
-
-    
-    
-       
-   
-
-
-    
-    
-       
+   </pre>
    
 
 
@@ -549,6 +580,133 @@ user-select: none;
 
 
 
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+     
+
+
+    
+
+    
+           
+               
+        <p>Python advanced pretty printer. This pretty printer is intended to replace the old <code>:None:None:`pprint`</code> python module which does not allow developers to provide their own pretty print callbacks. </p>
+
+    
+           
+               
+        <p>This module is based on ruby&#39; s <code>:None:None:`prettyprint.rb`</code> library by <code>:None:None:`Tanaka Akira`</code> . </p>
+
+    
+           
+       
+
+    
+        <h1>Example Usage</h1>
+    
+
+    
+           
+               
+        <p>To directly print the representation of an object use <code>:None:None:`pprint`</code> 
+            <pre>from pretty import pprint
+pprint(complex_object)</pre>
+       </p>
+
+    
+           
+               
+        <p>To get a string of the output use <code><a link href="/p/IPython/8.0.0.dev/api/IPython.lib.pretty.html" class='exists'>pretty</a></code>
+         
+            <pre>from pretty import pretty
+string = pretty(complex_object)</pre>
+       </p>
+
+    
+           
+       
+
+    
+        <h1>Extending</h1>
+    
+
+    
+           
+               
+        <p>The pretty library allows developers to add pretty printing rules for their own objects. This process is straightforward. All you have to do is to add a <code>:None:None:`_repr_pretty_`</code> method to your object and call the methods on the pretty printer passed 
+            <pre>class MyObject(object):
+
+    def _repr_pretty_(self, p, cycle):
+        ...</pre>
+       </p>
+
+    
+           
+               
+        <p>Here&#39; s an example for a class with a simple constructor 
+            <pre>class MySimpleObject:
+
+    def __init__(self, a, b, *, c=None):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def _repr_pretty_(self, p, cycle):
+        ctor = CallExpression.factory(self.__class__.__name__)
+        if self.c is None:
+            p.pretty(ctor(a, b))
+        else:
+            p.pretty(ctor(a, b, c=c))</pre>
+       </p>
+
+    
+           
+               
+        <p>Here is an example implementation of a <code>:None:None:`_repr_pretty_`</code> method for a list subclass 
+            <pre>class MyList(list):
+
+    def _repr_pretty_(self, p, cycle):
+        if cycle:
+            p.text(&#39;MyList(...)&#39;)
+        else:
+            with p.group(8, &#39;MyList([&#39;, &#39;])&#39;):
+                for idx, item in enumerate(self):
+                    if idx:
+                        p.text(&#39;,&#39;)
+                        p.breakable()
+                    p.pretty(item)</pre>
+       </p>
+
+    
+           
+               
+        <p>The <code>:None:None:`cycle`</code> parameter is <code>:None:None:`True`</code> if pretty detected a cycle. You to react to that or the result is an infinite loop. <code>:None:None:`p.text()`</code> just adds non breaking text to the output, <code>:None:None:`p.breakable()`</code> either adds a whitespace or breaks here. If you pass it an argument it&#39; s used instead of the default space. <code>:None:None:`p.pretty`</code> prettyprints another object using the pretty print method. </p>
+
+    
+           
+               
+        <p>The first parameter to the <code>:None:None:`group`</code> function specifies the extra indentation of the next line. In this example the next item will either be on the same line (if the items are short enough) or aligned with the right edge of the opening bracket of <code>:None:None:`MyList`</code> . </p>
+
+    
+           
+               
+        <p>If you just want to indent something you can use the group function without open / close parameters. You can also use this code 
+            <pre>with p.indent(2):
+    ...</pre>
+       </p>
+
+    
+           
+               
+        <p>Inheritance diagram : </p>
+
+    
+           
+       
+
+
 <hr>
 
 To Be Done: </br>
@@ -559,6 +717,9 @@ type: &lt;class &#39;module&#39;&gt; </br>
 Commit: </br>
 Tag: </br>
 Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
 </div>
 </body>
 </html>

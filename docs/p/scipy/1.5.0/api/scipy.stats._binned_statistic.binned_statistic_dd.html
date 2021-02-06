@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="scipy.html">1.5.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.stats.html'>stats</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.0/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.stats._binned_statistic.html'>_binned_statistic</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.html">_binned_statistic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._constants.html">_constants</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._continuous_distns.html">_continuous_distns</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._discrete_distns.html">_discrete_distns</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._distn_infrastructure.html">_distn_infrastructure</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._distr_params.html">_distr_params</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._hypotests.html">_hypotests</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._ksstats.html">_ksstats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._multivariate.html">_multivariate</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._rvs_sampling.html">_rvs_sampling</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._stats.html">_stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._stats_mstats_common.html">_stats_mstats_common</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._tukeylambda_stats.html">_tukeylambda_stats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._wilcoxon_data.html">_wilcoxon_data</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.contingency.html">contingency</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.distributions.html">distributions</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.kde.html">kde</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.morestats.html">morestats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats.html">mstats</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats_basic.html">mstats_basic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mstats_extras.html">mstats_extras</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.mvn.html">mvn</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.statlib.html">statlib</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats.stats.html">stats</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.stats._binned_statistic.binned_statistic_dd.html'>binned_statistic_dd</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.BinnedStatistic2dResult.html">BinnedStatistic2dResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.BinnedStatisticResult.html">BinnedStatisticResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.BinnedStatisticddResult.html">BinnedStatisticddResult</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic._bin_edges.html">_bin_edges</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic._bin_numbers.html">_bin_numbers</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.binned_statistic.html">binned_statistic</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.binned_statistic_2d.html">binned_statistic_2d</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.binned_statistic_dd.html">binned_statistic_dd</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.0/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>binned_statistic_dd(sample, values, statistic=&#39;mean&#39;, bins=10, range=None, expand_binnumbers=False, binned_statistic_result=None)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Compute a multidimensional binned statistic for a set of data.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>This is a generalization of a histogramdd function.  A histogram divides the space into bins, and returns the count of the number of points in each bin.  This function allows the computation of the sum, mean, median, or other statistic of the values within each bin.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="sample">sample</a> : array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Data to histogram passed as a sequence of N arrays of length D, or as an (N,D) array.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="values">values</a> : (N,) array_like or list of (N,) array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The data on which the statistic will be computed.  This must be the same shape as <code><a link href="#sample" class='local'>sample</a></code>, or a list of sequences - each with the same shape as <code><a link href="#sample" class='local'>sample</a></code>.  If <code><a link href="#values" class='local'>values</a></code> is such a list, the statistic will be computed on each independently.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="statistic">statistic</a> : string or callable, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The statistic to compute (default is &#39;mean&#39;). The following statistics are available:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* &#39;mean&#39; : compute the mean of values for points within each bin.</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Empty bins will be represented by NaN.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;median&#39; : compute the median of values for points within each</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>bin. Empty bins will be represented by NaN.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;count&#39; : compute the count of points within each bin.  This is</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>identical to an unweighted histogram.  <code><a link href="#values" class='local'>values</a></code> array is not referenced.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;sum&#39; : compute the sum of values for points within each bin.</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>This is identical to a weighted histogram.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;std&#39; : compute the standard deviation within each bin. This</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>is implicitly calculated with ddof=0. If the number of values within a given bin is 0 or 1, the computed standard deviation value will be 0 for the bin.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;min&#39; : compute the minimum of values for points within each bin.</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Empty bins will be represented by NaN.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* &#39;max&#39; : compute the maximum of values for point within each bin.</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Empty bins will be represented by NaN.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* function : a user-defined function which takes a 1D array of</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>values, and outputs a single numerical statistic. This function will be called on the values in each bin.  Empty bins will be represented by function([]), or NaN if this returns an error.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+        </dd>
+       
+            
+                <dt><a id="bins">bins</a> : sequence or positive int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The bin specification must be in one of the following forms:</p>
+
+    
+            
+                
+        <p>  * A sequence of arrays describing the bin edges along each dimension.   * The number of bins for each dimension (nx, ny, ... = bins).   * The number of bins for all dimensions (nx = ny = ... = bins).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="range">range</a> : sequence, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A sequence of lower and upper bin edges to be used if the edges are not given explicitly in <code><a link href="#bins" class='local'>bins</a></code>. Defaults to the minimum and maximum values along each dimension.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="expand_binnumbers">expand_binnumbers</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>&#39;False&#39; (default): the returned <code><a link href="#binnumber" class='local'>binnumber</a></code> is a shape (N,) array of linearized bin indices. &#39;True&#39;: the returned <code><a link href="#binnumber" class='local'>binnumber</a></code> is &#39;unraveled&#39; into a shape (D,N) ndarray, where each row gives the bin numbers in the corresponding dimension. See the <code><a link href="#binnumber" class='local'>binnumber</a></code> returned value, and the <code>:None:None:`Examples`</code> section of <code><a link href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.binned_statistic_2d.html" class='exists'>binned_statistic_2d</a></code>
+        .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="binned_statistic_result">binned_statistic_result</a> : binnedStatisticddResult</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Result of a previous call to the function in order to reuse bin edges and bin numbers with new values and/or a different statistic. To reuse bin numbers, <code><a link href="#expand_binnumbers" class='local'>expand_binnumbers</a></code> must have been set to False (the default)</p>
+
+    
+            
+                
+            <div class='block_directive'>
+    <div class='head'>.. versionadded:: [&#39; 0.17.0&#39;]</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="statistic">statistic</a> : ndarray, shape(nx1, nx2, nx3,...)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The values of the selected statistic in each two-dimensional bin.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="bin_edges">bin_edges</a> : list of ndarrays</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A list of D arrays describing the (nxi + 1) bin edges for each dimension.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="binnumber">binnumber</a> : (N,) array of ints or (D,N) ndarray of ints</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>This assigns to each element of <code><a link href="#sample" class='local'>sample</a></code> an integer that represents the bin in which this observation falls.  The representation depends on the <code><a link href="#expand_binnumbers" class='local'>expand_binnumbers</a></code> argument.  See <code>:None:None:`Notes`</code> for details.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Binedges: All but the last (righthand-most) bin is half-open in each dimension.  In other words, if <code><a link href="#bins" class='local'>bins</a></code> is 
+        <code class='verbatim'>[1, 2, 3, 4]</code>
+    , then the first bin is 
+        <code class='verbatim'>[1, 2)</code>
+     (including 1, but excluding 2) and the second 
+        <code class='verbatim'>[2, 3)</code>
+    .  The last bin, however, is 
+        <code class='verbatim'>[3, 4]</code>
+    , which *includes* 4.</p>
+
+    
+           
+               
+        <p><code><a link href="#binnumber" class='local'>binnumber</a></code>: This returned argument assigns to each element of <code><a link href="#sample" class='local'>sample</a></code> an integer that represents the bin in which it belongs.  The representation depends on the <code><a link href="#expand_binnumbers" class='local'>expand_binnumbers</a></code> argument. If &#39;False&#39; (default): The returned <code><a link href="#binnumber" class='local'>binnumber</a></code> is a shape (N,) array of linearized indices mapping each element of <code><a link href="#sample" class='local'>sample</a></code> to its corresponding bin (using row-major ordering). If &#39;True&#39;: The returned <code><a link href="#binnumber" class='local'>binnumber</a></code> is a shape (D,N) ndarray where each row indicates bin placements for each dimension respectively.  In each dimension, a binnumber of <code>:None:None:`i`</code> means the corresponding value is between (bin_edges[D][i-1], bin_edges[D][i]), for each dimension &#39;D&#39;.</p>
+
+    
+           
+               
+            <div class='block_directive'>
+    <div class='head'>.. versionadded:: [&#39; 0.11.0&#39;]</div>
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        <a class='exists' href='scipy.stats._binned_statistic.binned_statistic_dd.html'>scipy.stats._binned_statistic.binned_statistic_dd</a>
+    
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=scipy, href="scipy.html">scipy</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><br><span class='nsl'>...&nbsp;</span><span class="kn">import</span><span class=""> </span><a class="foo nn" title=matplotlib, href="matplotlib.html">matplotlib</a><span class="nn">.</span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">pyplot</a><span class=""> </span><span class="k">as</span><span class=""> </span><a class="foo nn" title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><a class="foo nn" title=mpl_toolkits, href="mpl_toolkits.html">mpl_toolkits</a><span class="nn">.</span><a class="foo nn" title=mpl_toolkits.mplot3d, href="mpl_toolkits.mplot3d.html">mplot3d</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " title=functools.partial, href="functools.partial.html">Axes3D</a>
+</pre>
+            
+            
+         
+                
+        <p>Take an array of 600 (x, y) coordinates as an example. <code><a link href="/p/scipy/1.5.0/api/scipy.stats._binned_statistic.binned_statistic_dd.html" class='exists'>binned_statistic_dd</a></code>
+         can handle arrays of higher dimension <code>:None:None:`D`</code>. But a plot of dimension <code>:None:None:`D+1`</code> is required.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">mu</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.array, href="numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">0.0</span><span class="">,</span><span class=""> </span><span class="mf">1.0</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">sigma</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.array, href="numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">0.5</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="o">-</span><span class="mf">0.5</span><span class="">,</span><span class=""> </span><span class="mf">1.5</span><span class="">]</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=scipy.stats._multivariate.multivariate_normal_frozen, href="scipy.stats._multivariate.multivariate_normal_frozen.html">multinormal</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats._multivariate.multivariate_normal_gen, href="scipy.stats._multivariate.multivariate_normal_gen.html">multivariate_normal</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">mu</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">sigma</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">data</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats._multivariate.multivariate_normal_frozen, href="scipy.stats._multivariate.multivariate_normal_frozen.html">multinormal</a><span class="o">.</span><a class="foo " title=scipy.stats._multivariate.multivariate_normal_frozen.rvs, href="scipy.stats._multivariate.multivariate_normal_frozen.rvs.html">rvs</a><span class="">(</span><span class="">size</span><span class="o">=</span><span class="mi">600</span><span class="">,</span><span class=""> </span><span class="">random_state</span><span class="o">=</span><span class="mi">235412</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">data</a><span class="o">.</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">shape</a>
+(600, 2)</pre>
+            
+            
+         
+                
+        <p>Create bins and count how many arrays fall in each bin:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " title=builtins.int, href="builtins.int.html">N</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">60</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><span class="o">-</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">,</span><span class=""> </span><a class="foo " title=builtins.int, href="builtins.int.html">N</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">y</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.linspace, href="numpy.linspace.html">linspace</a><span class="">(</span><span class="o">-</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">,</span><span class=""> </span><a class="foo " title=builtins.int, href="builtins.int.html">N</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">ret</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats._binned_statistic.binned_statistic_dd, href="scipy.stats._binned_statistic.binned_statistic_dd.html">binned_statistic_dd</a><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">data</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.arange, href="numpy.arange.html">arange</a><span class="">(</span><span class="mi">600</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">bins</span><span class="o">=</span><span class="">[</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class="">,</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">y</a><span class="">]</span><span class="">,</span><span class=""> </span><span class="">statistic</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">count</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">bincounts</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">ret</span><span class="o">.</span><span class="">statistic</span>
+</pre>
+            
+            
+         
+                
+        <p>Set the volume and the location of bars:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">dx</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class="">[</span><span class="mi">0</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">dy</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">y</a><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">y</a><span class="">[</span><span class="mi">0</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.meshgrid, href="numpy.meshgrid.html">meshgrid</a><span class="">(</span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">x</a><span class="">[</span><span class="">:</span><span class="o">-</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><a class="foo " title=numpy.float64, href="numpy.float64.html">dx</a><span class=""> </span><span class="o">/</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><a class="foo " title=builtins.tuple, href="builtins.tuple.html">y</a><span class="">[</span><span class="">:</span><span class="o">-</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><a class="foo " title=numpy.float64, href="numpy.float64.html">dy</a><span class=""> </span><span class="o">/</span><span class=""> </span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.int, href="builtins.int.html">z</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span>
+</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">bincounts</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">bincounts</a><span class="o">.</span><a class="foo " title=builtins.ndarray.ravel, href="builtins.ndarray.ravel.html">ravel</a><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="o">.</span><a class="foo " title=builtins.ndarray.ravel, href="builtins.ndarray.ravel.html">ravel</a><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="o">.</span><a class="foo " title=builtins.ndarray.ravel, href="builtins.ndarray.ravel.html">ravel</a><span class="">(</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">fig</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.pyplot, href="matplotlib.pyplot.html">plt</a><span class="o">.</span><a class="foo " title=matplotlib.pyplot.figure, href="matplotlib.pyplot.figure.html">figure</a><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=matplotlib.figure.Figure, href="matplotlib.figure.Figure.html">fig</a><span class="o">.</span><a class="foo " title=matplotlib.figure.Figure.add_subplot, href="matplotlib.figure.Figure.add_subplot.html">add_subplot</a><span class="">(</span><span class="mi">111</span><span class="">,</span><span class=""> </span><span class="">projection</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">3d</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="k">with</span><span class=""> </span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.errstate, href="numpy.errstate.html">errstate</a><span class="">(</span><span class="">divide</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">ignore</span><span class="s2">&#34;</span><span class="">)</span><span class="">:</span><span class="">  </span><span class="c1"># silence random axes3d warning</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo " title=builtins.NoneType, href="builtins.NoneType.html">ax</a><span class="o">.</span><span class="">bar3d</span><span class="">(</span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">x</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">y</a><span class="">,</span><span class=""> </span><a class="foo " title=builtins.int, href="builtins.int.html">z</a><span class="">,</span><span class=""> </span><a class="foo " title=builtins.int, href="builtins.int.html">dx</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.floating, href="numpy.floating.html">dy</a><span class="">,</span><span class=""> </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">bincounts</a><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Reuse bin numbers and bin edges with new values:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">ret2</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " title=scipy.stats, href="scipy.stats.html">stats</a><span class="o">.</span><a class="foo " title=scipy.stats._binned_statistic.binned_statistic_dd, href="scipy.stats._binned_statistic.binned_statistic_dd.html">binned_statistic_dd</a><span class="">(</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo " title=numpy.ndarray, href="numpy.ndarray.html">data</a><span class="">,</span><span class=""> </span><span class="o">-</span><a class="foo " title=numpy, href="numpy.html">np</a><span class="o">.</span><a class="foo " title=numpy.arange, href="numpy.arange.html">arange</a><span class="">(</span><span class="mi">600</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">binned_statistic_result</span><span class="o">=</span><span class="">ret</span><span class="">,</span><span class=""> </span><span class="">statistic</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">mean</span><span class="s2">&#34;</span><br><span class='nsl'>...&nbsp;</span><span class="">)</span>
+</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="binned_statistic.html" class='exists'>binned_statistic</a></code>
+        
+         
+             <code><a link href="binned_statistic_2d.html" class='exists'>binned_statistic_2d</a></code>
+        
+         
+             <code><a link href="builtins.NoneType.html" class='exists'>builtins.NoneType</a></code>
+        
+         
+             <code><a link href="builtins.int.html" class='exists'>builtins.int</a></code>
+        
+         
+             <code><a link href="builtins.ndarray.ravel.html" class='exists'>builtins.ndarray.ravel</a></code>
+        
+         
+             <code><a link href="builtins.tuple.html" class='exists'>builtins.tuple</a></code>
+        
+         
+             <code><a link href="functools.partial.html" class='exists'>functools.partial</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.figure.Figure.html" class='exists'>matplotlib.figure.Figure</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.figure.Figure.add_subplot.html" class='exists'>matplotlib.figure.Figure.add_subplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.3.3/api/matplotlib.pyplot.figure.html" class='exists'>matplotlib.pyplot.figure</a></code>
+        
+         
+             <code><a link href="mpl_toolkits.html" class='exists'>mpl_toolkits</a></code>
+        
+         
+             <code><a link href="mpl_toolkits.mplot3d.html" class='exists'>mpl_toolkits.mplot3d</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.digitize.html" class='exists'>numpy.digitize</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.errstate.html" class='exists'>numpy.errstate</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.float64.html" class='exists'>numpy.float64</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.floating.html" class='exists'>numpy.floating</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.histogramdd.html" class='exists'>numpy.histogramdd</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.linspace.html" class='exists'>numpy.linspace</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.meshgrid.html" class='exists'>numpy.meshgrid</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
+             <code><a link href="scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="scipy.stats.html" class='exists'>scipy.stats</a></code>
+        
+         
+             <code><a link href="scipy.stats._binned_statistic.binned_statistic_dd.html" class='exists'>scipy.stats._binned_statistic.binned_statistic_dd</a></code>
+        
+         
+             <code><a link href="scipy.stats._multivariate.multivariate_normal_frozen.html" class='exists'>scipy.stats._multivariate.multivariate_normal_frozen</a></code>
+        
+         
+             <code><a link href="scipy.stats._multivariate.multivariate_normal_frozen.rvs.html" class='exists'>scipy.stats._multivariate.multivariate_normal_frozen.rvs</a></code>
+        
+         
+             <code><a link href="scipy.stats._multivariate.multivariate_normal_gen.html" class='exists'>scipy.stats._multivariate.multivariate_normal_gen</a></code>
+        
+         
+     
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/stats/_binned_statistic.py </br>
+Line: 360 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>
