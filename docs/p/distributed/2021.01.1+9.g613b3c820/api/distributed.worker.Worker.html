@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed {
+            border-left: 3px solid #0070f3;
+          }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=distributed>distributed</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.01.1+8.g34f990a81/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html'>2021.01.1+9.g613b3c820</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">2021.01.1+9.g613b3c820</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">API</a>
+                        <a href="/p/distributed/2021.01.1+9.g613b3c820/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='distributed.html'>distributed</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='distributed.worker.html'>worker</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed._concurrent_futures_thread.html">_concurrent_futures_thread</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed._version.html">_version</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.actor.html">actor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.batched.html">batched</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.cfexecutor.html">cfexecutor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.html">client</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.comm.html">comm</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.compatibility.html">compatibility</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.core.html">core</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.deploy.html">deploy</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.diagnostics.html">diagnostics</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.diskutils.html">diskutils</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.event.html">event</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.http.html">http</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.lock.html">lock</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.locket.html">locket</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.metrics.html">metrics</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.nanny.html">nanny</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.node.html">node</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.preloading.html">preloading</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.process.html">process</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.proctitle.html">proctitle</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.profile.html">profile</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.protocol.html">protocol</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.publish.html">publish</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.pubsub.html">pubsub</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.queues.html">queues</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.recreate_exceptions.html">recreate_exceptions</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.scheduler.html">scheduler</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.security.html">security</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.semaphore.html">semaphore</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.sizeof.html">sizeof</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.stealing.html">stealing</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.system.html">system</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.system_monitor.html">system_monitor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.threadpoolexecutor.html">threadpoolexecutor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.utils.html">utils</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.utils_comm.html">utils_comm</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.utils_perf.html">utils_perf</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.variable.html">variable</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.versions.html">versions</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.html">worker</a>
+                            <a href="/p/?/?/api/distributed.worker_client.html">worker_client</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='distributed.worker.Worker.html'>Worker</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Reschedule.html">Reschedule</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.SerializedTask.html">SerializedTask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.TaskState.html">TaskState</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.html">Worker</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker._deserialize.html">_deserialize</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.apply_function.html">apply_function</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.apply_function_actor.html">apply_function_actor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.convert_args_to_str.html">convert_args_to_str</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.convert_kwargs_to_str.html">convert_kwargs_to_str</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.dumps_function.html">dumps_function</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.dumps_task.html">dumps_task</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.execute_task.html">execute_task</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.get_client.html">get_client</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.get_data_from_worker.html">get_data_from_worker</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.get_msg_safe_str.html">get_msg_safe_str</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.get_worker.html">get_worker</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.loads_function.html">loads_function</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.secede.html">secede</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.warn_dumps.html">warn_dumps</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" >+</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker._get_client.html">_get_client</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.close_gracefully.html">close_gracefully</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.executor_submit.html">executor_submit</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.gather_dep.html">gather_dep</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.get_current_task.html">get_current_task</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.memory_monitor.html">memory_monitor</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.start_ipython.html">start_ipython</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.transition_ready_waiting.html">transition_ready_waiting</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.worker.Worker.trigger_profile.html">trigger_profile</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/distributed/2021.01.1+9.g613b3c820/img/logo.png"/>
+    
+    <a href="#">Library: distributed</a>
+    <a href="#">Version: 2021.01.1+9.g613b3c820</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>Worker(scheduler_ip=None, scheduler_port=None, scheduler_file=None, ncores=None, nthreads=None, loop=None, local_dir=None, local_directory=None, services=None, service_ports=None, service_kwargs=None, name=None, reconnect=True, memory_limit=&#39;auto&#39;, executor=None, resources=None, silence_logs=None, death_timeout=None, preload=None, preload_argv=None, security=None, contact_address=None, memory_monitor_interval=&#39;200ms&#39;, extensions=None, metrics={}, startup_information={}, data=None, interface=None, host=None, port=None, protocol=None, dashboard_address=None, dashboard=False, http_prefix=&#39;/&#39;, nanny=None, plugins=(), low_level_profiler=False, validate=None, profile_cycle_interval=None, lifetime=None, lifetime_stagger=None, lifetime_restart=None, **kwargs)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Worker node in a Dask distributed cluster</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>Workers perform two functions:</p>
+
+    
+           
+               
+        <p>1.  **Serve data** from a local dictionary 2.  **Perform computation** on that data and on data from peers</p>
+
+    
+           
+               
+        <p>Workers keep the scheduler informed of their data and use that scheduler to gather data from other workers when necessary to perform a computation.</p>
+
+    
+           
+               
+        <p>You can start a worker with the 
+        <code class='verbatim'>dask-worker</code>
+     command line application::</p>
+
+    
+           
+               
+            <pre>$ dask-worker scheduler-ip:port
+</pre>
+       
+           
+               
+        <p>Use the 
+        <code class='verbatim'>--help</code>
+     flag to see more options::</p>
+
+    
+           
+               
+            <pre>$ dask-worker --help
+</pre>
+       
+           
+               
+        <p>The rest of this docstring is about the internal state the the worker uses to manage and track internal computations.</p>
+
+    
+           
+               
+        <p>**State**</p>
+
+    
+           
+               
+        <p>**Informational State**</p>
+
+    
+           
+               
+        <p>These attributes don&#39;t change significantly during execution.</p>
+
+    
+           
+               
+        <p>* **nthreads:** 
+        <code class='verbatim'>int</code>
+    :</p>
+
+    
+           
+               
+        <p>    Number of nthreads used by this worker process</p>
+
+    
+           
+               
+        <p>* **executor:** 
+        <code class='verbatim'>concurrent.futures.ThreadPoolExecutor</code>
+    :</p>
+
+    
+           
+               
+        <p>    Executor used to perform computation     This can also be the string &#34;offload&#34; in which case this uses the same     thread pool used for offloading communications.  This results in the     same thread being used for deserialization and computation.</p>
+
+    
+           
+               
+        <p>* **local_directory:** 
+        <code class='verbatim'>path</code>
+    :</p>
+
+    
+           
+               
+        <p>    Path on local machine to store temporary files</p>
+
+    
+           
+               
+        <p>* **scheduler:** 
+        <code class='verbatim'>rpc</code>
+    :</p>
+
+    
+           
+               
+        <p>    Location of scheduler.  See 
+        <code class='verbatim'>.ip/.port</code>
+     attributes.</p>
+
+    
+           
+               
+        <p>* **name:** 
+        <code class='verbatim'>string</code>
+    :</p>
+
+    
+           
+               
+        <p>    Alias</p>
+
+    
+           
+               
+        <p>* **services:** 
+        <code class='verbatim'>{str: Server}</code>
+    :</p>
+
+    
+           
+               
+        <p>    Auxiliary web servers running on this worker</p>
+
+    
+           
+               
+        <p>* **service_ports:** 
+        <code class='verbatim'>{str: port}</code>
+    : * **total_out_connections**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    The maximum number of concurrent outgoing requests for data</p>
+
+    
+           
+               
+        <p>* **total_in_connections**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    The maximum number of concurrent incoming requests for data</p>
+
+    
+           
+               
+        <p>* **total_comm_nbytes**: 
+        <code class='verbatim'>int</code>
+     * **batched_stream**: `<code>:None:None:`BatchedSend`</code>`</p>
+
+    
+           
+               
+        <p>    A batched stream along which we communicate to the scheduler</p>
+
+    
+           
+               
+        <p>* **log**: `<code>:None:None:`[(message)]`</code>`</p>
+
+    
+           
+               
+        <p>    A structured and queryable log.  See `<code>:None:None:`Worker.story`</code>`</p>
+
+    
+           
+               
+        <p>**Volatile State**</p>
+
+    
+           
+               
+        <p>These attributes track the progress of tasks that this worker is trying to complete.  In the descriptions below a 
+        <code class='verbatim'>key</code>
+     is the name of a task that we want to compute and 
+        <code class='verbatim'>dep</code>
+     is the name of a piece of dependent data that we want to collect from others.</p>
+
+    
+           
+               
+        <p>* **tasks**: `<code>:None:None:`{key: TaskState}`</code>`</p>
+
+    
+           
+               
+        <p>    The tasks currently executing on this worker (and any dependencies of those tasks)</p>
+
+    
+           
+               
+        <p>* **data:** 
+        <code class='verbatim'>{key: object}</code>
+    :</p>
+
+    
+           
+               
+        <p>    Prefer using the **host** attribute instead of this, unless     memory_limit and at least one of memory_target_fraction or     memory_spill_fraction values are defined, in that case, this attribute     is a zict.Buffer, from which information on LRU cache can be queried.</p>
+
+    
+           
+               
+        <p>* **data.memory:** 
+        <code class='verbatim'>{key: object}</code>
+    :</p>
+
+    
+           
+               
+        <p>    Dictionary mapping keys to actual values stored in memory. Only     available if condition for **data** being a zict.Buffer is met.</p>
+
+    
+           
+               
+        <p>* **data.disk:** 
+        <code class='verbatim'>{key: object}</code>
+    :</p>
+
+    
+           
+               
+        <p>    Dictionary mapping keys to actual values stored on disk. Only     available if condition for **data** being a zict.Buffer is met.</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* **data_needed**: deque(keys)</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The keys whose data we still lack, arranged in a deque</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* **ready**: [keys]</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Keys that are ready to run.  Stored in a LIFO stack</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* **constrained**: [keys]</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Keys for which we have the data to run, but are waiting on abstract resources like GPUs.  Stored in a FIFO deque</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+           
+               
+        <p>* **executing_count**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    A count of tasks currently executing on this worker</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* **executed_count**: int</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A number of tasks that this worker has run in its lifetime</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* **long_running**: {keys}</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A set of keys of tasks that are running and have started their own long-running clients.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+           
+               
+        <p>* **has_what**: `<code>:None:None:`{worker: {deps}}`</code>`</p>
+
+    
+           
+               
+        <p>    The data that we care about that we think a worker has</p>
+
+    
+           
+               
+        <p>* **pending_data_per_worker**: `<code>:None:None:`{worker: [dep]}`</code>`</p>
+
+    
+           
+               
+        <p>    The data on each worker that we still want, prioritized as a deque</p>
+
+    
+           
+               
+        <p>* **in_flight_tasks**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    A count of the number of tasks that are coming to us in current     peer-to-peer connections</p>
+
+    
+           
+               
+        <p>* **in_flight_workers**: `<code>:None:None:`{worker: {task}}`</code>`</p>
+
+    
+           
+               
+        <p>    The workers from which we are currently gathering data and the     dependencies we expect from those connections</p>
+
+    
+           
+               
+        <p>* **comm_bytes**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    The total number of bytes in flight</p>
+
+    
+           
+               
+        <p>* **threads**: `<code>:None:None:`{key: int}`</code>`</p>
+
+    
+           
+               
+        <p>    The ID of the thread on which the task ran</p>
+
+    
+           
+               
+        <p>* **active_threads**: `<code>:None:None:`{int: key}`</code>`</p>
+
+    
+           
+               
+        <p>    The keys currently running on active threads</p>
+
+    
+           
+               
+        <p>* **waiting_for_data_count**: `<code>:None:None:`int`</code>`</p>
+
+    
+           
+               
+        <p>    A count of how many tasks are currently waiting for data</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="scheduler_ip: str">scheduler_ip: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="scheduler_port: int">scheduler_port: int</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="ip: str, optional">ip: str, optional</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="data: MutableMapping, type, None">data: MutableMapping, type, None</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The object to use for storage, builds a disk-backed LRU dict by default</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="nthreads: int, optional">nthreads: int, optional</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="loop: tornado.ioloop.IOLoop">loop: tornado.ioloop.IOLoop</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="local_directory: str, optional">local_directory: str, optional</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Directory where we place local resources</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="name: str, optional">name: str, optional</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="memory_limit: int, float, string">memory_limit: int, float, string</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of bytes of memory that this worker should use. Set to zero for no limit.  Set to &#39;auto&#39; to calculate as system.MEMORY_LIMIT * min(1, nthreads / total_cores) Use strings or numbers like 5GB or 5e9</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="memory_target_fraction: float">memory_target_fraction: float</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Fraction of memory to try to stay beneath</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="memory_spill_fraction: float">memory_spill_fraction: float</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Fraction of memory at which we start spilling to disk</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="memory_pause_fraction: float">memory_pause_fraction: float</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Fraction of memory at which we stop running new tasks</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="executor: concurrent.futures.Executor">executor: concurrent.futures.Executor</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt><a id="resources: dict">resources: dict</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Resources that this worker has like `<code>:None:None:`{&#39;GPU&#39;: 2}`</code>`</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="nanny: str">nanny: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Address on which to contact nanny, if it exists</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="lifetime: str">lifetime: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Amount of time like &#34;1 hour&#34; after which we gracefully shut down the worker. This defaults to None, meaning no explicit shutdown time.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="lifetime_stagger: str">lifetime_stagger: str</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Amount of time like &#34;5 minutes&#34; to stagger the lifetime value The actual lifetime will be selected uniformly at random between lifetime +/- lifetime_stagger</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="lifetime_restart: bool">lifetime_restart: bool</a> : </dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Whether or not to restart a worker after it has reached its lifetime Default False</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    <h1 id='section-backrefs'>Back References</h1>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+    
+    
+        <a class='exists' href='distributed.deploy.ssh.SSHCluster.html'>distributed.deploy.ssh.SSHCluster</a>
+    
+    
+    
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                
+        <p>Use the command line to start a worker::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>$ dask-scheduler Start scheduler at 127.0.0.1:8786</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>$ dask-worker 127.0.0.1:8786 Start worker at:               127.0.0.1:1234 Registered with scheduler at:  127.0.0.1:8786</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+         See :
+         
+             <code><a link href="distributed.nanny.Nanny.html" class='exists'>distributed.nanny.Nanny</a></code>
+        
+         
+             <code><a link href="distributed.scheduler.Scheduler.html" class='exists'>distributed.scheduler.Scheduler</a></code>
+        
+         
+     
+
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/dev/distributed/distributed/worker.py </br>
+Line: 186 </br>
+type: &lt;class &#39;type&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+</div>
+</body>
+</html>

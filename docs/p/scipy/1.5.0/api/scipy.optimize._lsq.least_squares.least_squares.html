@@ -306,6 +306,8 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.01.1+8.g34f990a81/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
                             <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
                             <a href="/p/papyri/0.0.2/api/papyri.html">papyri</a>
@@ -314,15 +316,15 @@ user-select: none;
                      </div>
                 </div>
                 <div class="dropdown">
-                <a href=scipy>1.5.0</a>&nbsp;/&nbsp;
+                <a href='/p/scipy/1.5.0/api/scipy.html'>1.5.0</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
-                            <a href="scipy.html">1.5.0</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">1.5.0</a>
                             
                     </div>
                 </div>
 
                 <div class="dropdown">
-                <a href='/p/scipy/1.5.0/api/scipy'>api</a>&nbsp;/&nbsp;
+                    <a href='/p/scipy/1.5.0/api/scipy.html'>api</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                         <a href="/p/scipy/1.5.0/api/scipy.html">API</a>
                         <a href="/p/scipy/1.5.0/gallery">Gallery</a>
@@ -1416,6 +1418,267 @@ subject to lb &lt;= x &lt;= ub
 
     <h3 id="section-Examples">Examples</h3>
         
+                
+        <p>In this example we find a minimum of the Rosenbrock function without bounds on independent variables.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">fun_rosenbrock</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">array</span><span class="">(</span><span class="">[</span><span class="mi">10</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">1</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">)</span><span class="">]</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Notice that we only provide the vector of the residuals. The algorithm constructs the cost function as a sum of squares of the residuals, which gives the Rosenbrock function. The exact minimum is at 
+        <code class='verbatim'>x = [1.0, 1.0]</code>
+    .</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">optimize</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">least_squares</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="">x0_rosenbrock</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">array</span><span class="">(</span><span class="">[</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res_1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><span class="">fun_rosenbrock</span><span class="">,</span><span class=""> </span><span class="">x0_rosenbrock</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res_1</span><span class="o">.</span><span class="">x</span>
+array([ 1.,  1.])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_1</span><span class="o">.</span><span class="">cost</span>
+9.8669242910846867e-30</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_1</span><span class="o">.</span><span class="">optimality</span>
+8.8928864934219529e-14</pre>
+            
+            
+         
+                
+        <p>We now constrain the variables, in such a way that the previous solution becomes infeasible. Specifically, we require that 
+        <code class='verbatim'>x[1] &gt;= 1.5</code>
+    , and 
+        <code class='verbatim'>x[0]</code>
+     left unconstrained. To this end, we specify the <code><a link href="#bounds" class='local'>bounds</a></code> parameter to <code><a link href="/p/scipy/1.5.0/api/scipy.optimize._lsq.least_squares.least_squares.html" class='exists'>least_squares</a></code>
+         in the form 
+        <code class='verbatim'>bounds=([-np.inf, 1.5], np.inf)</code>
+    .</p>
+
+    
+            
+            
+         
+                
+        <p>We also provide the analytic Jacobian:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">jac_rosenbrock</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">array</span><span class="">(</span><span class="">[</span><span class="">[</span><span class="o">-</span><span class="mi">20</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="mi">10</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="o">-</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">]</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Putting this all together, we see that the new solution lies on the bound:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_2</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">fun_rosenbrock</span><span class="">,</span><span class=""> </span><span class="">x0_rosenbrock</span><span class="">,</span><span class=""> </span><span class="">jac_rosenbrock</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="o">=</span><span class="">(</span><span class="">[</span><span class="o">-</span><span class="">np</span><span class="o">.</span><span class="">inf</span><span class="">,</span><span class=""> </span><span class="mf">1.5</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">inf</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res_2</span><span class="o">.</span><span class="">x</span>
+array([ 1.22437075,  1.5       ])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_2</span><span class="o">.</span><span class="">cost</span>
+0.025213093946805685</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_2</span><span class="o">.</span><span class="">optimality</span>
+1.5885401433157753e-07</pre>
+            
+            
+         
+                
+        <p>Now we solve a system of equations (i.e., the cost function should be zero at a minimum) for a Broyden tridiagonal vector-valued function of 100000 variables:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">fun_broyden</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">f</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">(</span><span class="mi">3</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">)</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">f</span><span class="">[</span><span class="mi">1</span><span class="">:</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class="o">=</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="">:</span><span class="o">-</span><span class="mi">1</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">f</span><span class="">[</span><span class="">:</span><span class="o">-</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class="o">=</span><span class=""> </span><span class="mi">2</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">:</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">f</span>
+</pre>
+            
+            
+         
+                
+        <p>The corresponding Jacobian matrix is sparse. We tell the algorithm to estimate it by finite differences and provide the sparsity structure of Jacobian to significantly speed up this process.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">sparse</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">lil_matrix</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="k">def</span><span class=""> </span><span class="nf">sparsity_broyden</span><span class="">(</span><span class="">n</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">sparsity</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">lil_matrix</span><span class="">(</span><span class="">(</span><span class="">n</span><span class="">,</span><span class=""> </span><span class="">n</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">int</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">i</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">arange</span><span class="">(</span><span class="">n</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">sparsity</span><span class="">[</span><span class="">i</span><span class="">,</span><span class=""> </span><span class="">i</span><span class="">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">i</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">arange</span><span class="">(</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="">n</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">sparsity</span><span class="">[</span><span class="">i</span><span class="">,</span><span class=""> </span><span class="">i</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">i</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">arange</span><span class="">(</span><span class="">n</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mi">1</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">sparsity</span><span class="">[</span><span class="">i</span><span class="">,</span><span class=""> </span><span class="">i</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">sparsity</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">n</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">100000</span><br><span class='nsl'>...&nbsp;</span><span class="">x0_broyden</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="o">-</span><span class="">np</span><span class="o">.</span><span class="">ones</span><span class="">(</span><span class="">n</span><span class="">)</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_3</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><span class="">fun_broyden</span><span class="">,</span><span class=""> </span><span class="">x0_broyden</span><span class="">,</span><span class=""> </span><span class="">jac_sparsity</span><span class="o">=</span><span class="">sparsity_broyden</span><span class="">(</span><span class="">n</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res_3</span><span class="o">.</span><span class="">cost</span>
+4.5687069299604613e-23</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_3</span><span class="o">.</span><span class="">optimality</span>
+1.1650454296851518e-11</pre>
+            
+            
+         
+                
+        <p>Let&#39;s also solve a curve fitting problem using robust loss function to take care of outliers in the data. Define the model function as 
+        <code class='verbatim'>y = a + b * exp(c * t)</code>
+    , where t is a predictor variable, y is an observation and a, b, c are parameters to estimate.</p>
+
+    
+            
+            
+         
+                
+        <p>First, define the function which generates the data with noise and outliers, define the model parameters, and generate data:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">gen_data</span><span class="">(</span><span class="">t</span><span class="">,</span><span class=""> </span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">,</span><span class=""> </span><span class="">c</span><span class="">,</span><span class=""> </span><span class="">noise</span><span class="o">=</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="">n_outliers</span><span class="o">=</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="">random_state</span><span class="o">=</span><span class="mi">0</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">a</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">b</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">exp</span><span class="">(</span><span class="">t</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">c</span><span class="">)</span>
+...
+...     rnd = np.random.RandomState(random_state)
+...     error = noise * rnd.randn(t.size)
+...     outliers = rnd.randint(0, t.size, n_outliers)
+...     error[outliers] *= 10
+...
+...     return y + error
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">a</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">0.5</span><br><span class='nsl'>...&nbsp;</span><span class="">b</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mf">2.0</span><br><span class='nsl'>...&nbsp;</span><span class="">c</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="o">-</span><span class="mi">1</span><br><span class='nsl'>...&nbsp;</span><span class="">t_min</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">0</span><br><span class='nsl'>...&nbsp;</span><span class="">t_max</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">10</span><br><span class='nsl'>...&nbsp;</span><span class="">n_points</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="mi">15</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">t_train</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">linspace</span><span class="">(</span><span class="">t_min</span><span class="">,</span><span class=""> </span><span class="">t_max</span><span class="">,</span><span class=""> </span><span class="">n_points</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y_train</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">gen_data</span><span class="">(</span><span class="">t_train</span><span class="">,</span><span class=""> </span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">,</span><span class=""> </span><span class="">c</span><span class="">,</span><span class=""> </span><span class="">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="">,</span><span class=""> </span><span class="">n_outliers</span><span class="o">=</span><span class="mi">3</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Define function for computing residuals and initial estimate of parameters.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">fun</span><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">t</span><span class="">,</span><span class=""> </span><span class="">y</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">exp</span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">t</span><span class="">)</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">y</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x0</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">array</span><span class="">(</span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">0.0</span><span class="">]</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Compute a standard least-squares solution:</p>
+
+    
+            
+            
+         
+                <span class='warning'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_lsq</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><span class="">fun</span><span class="">,</span><span class=""> </span><span class="">x0</span><span class="">,</span><span class=""> </span><span class="">args</span><span class="o">=</span><span class="">(</span><span class="">t_train</span><span class="">,</span><span class=""> </span><span class="">y_train</span><span class="">)</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Now compute two solutions with two different robust loss functions. The parameter <code><a link href="#f_scale" class='local'>f_scale</a></code> is set to 0.1, meaning that inlier residuals should not significantly exceed 0.1 (the noise level used).</p>
+
+    
+            
+            
+         
+                <span class='warning'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="">res_soft_l1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">fun</span><span class="">,</span><span class=""> </span><span class="">x0</span><span class="">,</span><span class=""> </span><span class="">loss</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">soft_l1</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">f_scale</span><span class="o">=</span><span class="mf">0.1</span><span class="">,</span><span class=""> </span><span class="">args</span><span class="o">=</span><span class="">(</span><span class="">t_train</span><span class="">,</span><span class=""> </span><span class="">y_train</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res_log</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><span class="">fun</span><span class="">,</span><span class=""> </span><span class="">x0</span><span class="">,</span><span class=""> </span><span class="">loss</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">cauchy</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">f_scale</span><span class="o">=</span><span class="mf">0.1</span><span class="">,</span><span class=""> </span><span class="">args</span><span class="o">=</span><span class="">(</span><span class="">t_train</span><span class="">,</span><span class=""> </span><span class="">y_train</span><span class="">)</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>And, finally, plot all the curves. We see that by selecting an appropriate <code><a link href="#loss" class='local'>loss</a></code>  we can get estimates close to optimal even in the presence of strong outliers. But keep in mind that generally it is recommended to try &#39;soft_l1&#39; or &#39;huber&#39; losses first (if at all necessary) as the other two options may cause difficulties in optimization process.</p>
+
+    
+            
+            
+         
+                <span class='warning'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="">t_test</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">linspace</span><span class="">(</span><span class="">t_min</span><span class="">,</span><span class=""> </span><span class="">t_max</span><span class="">,</span><span class=""> </span><span class="">n_points</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y_true</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">gen_data</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">,</span><span class=""> </span><span class="">c</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y_lsq</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">gen_data</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="o">*</span><span class="">res_lsq</span><span class="o">.</span><span class="">x</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y_soft_l1</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">gen_data</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="o">*</span><span class="">res_soft_l1</span><span class="o">.</span><span class="">x</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">y_log</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">gen_data</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="o">*</span><span class="">res_log</span><span class="o">.</span><span class="">x</span><span class="">)</span>
+...</pre>
+            
+            
+         
+                <span class='warning'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">import</span><span class=""> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class=""> </span><span class="k">as</span><span class=""> </span><span class="nn">plt</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">plot</span><span class="">(</span><span class="">t_train</span><span class="">,</span><span class=""> </span><span class="">y_train</span><span class="">,</span><span class=""> </span><span class="s2">&#34;</span><span class="s2">o</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">plot</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="">y_true</span><span class="">,</span><span class=""> </span><span class="s2">&#34;</span><span class="s2">k</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">true</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">plot</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="">y_lsq</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">linear loss</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">plot</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="">y_soft_l1</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">soft_l1 loss</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">plot</span><span class="">(</span><span class="">t_test</span><span class="">,</span><span class=""> </span><span class="">y_log</span><span class="">,</span><span class=""> </span><span class="">label</span><span class="o">=</span><span class="s2">&#34;</span><span class="s2">cauchy loss</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">xlabel</span><span class="">(</span><span class="s2">&#34;</span><span class="s2">t</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">ylabel</span><span class="">(</span><span class="s2">&#34;</span><span class="s2">y</span><span class="s2">&#34;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">legend</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">plt</span><span class="o">.</span><span class="">show</span><span class="">(</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <div><img src="/p/scipy/1.5.0/img/fig-scipy.optimize._lsq.least_squares.least_squares-1.png"/></div>
+            
+            
+         
+                
+        <p>In the next example, we show how complex-valued residual functions of complex variables can be optimized with 
+        <code class='verbatim'>least_squares()</code>
+    . Consider the following function:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">f</span><span class="">(</span><span class="">z</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">z</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">(</span><span class="mf">0.5</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">0.5</span><span class="">j</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>We wrap it into a function of real variables that returns real residuals by simply handling the real and imaginary parts as independent variables:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">f_wrap</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">fx</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">f</span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">j</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">np</span><span class="o">.</span><span class="">array</span><span class="">(</span><span class="">[</span><span class="">fx</span><span class="o">.</span><span class="">real</span><span class="">,</span><span class=""> </span><span class="">fx</span><span class="o">.</span><span class="">imag</span><span class="">]</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>Thus, instead of the original m-D complex function of n complex variables we optimize a 2m-D real function of 2n real variables:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">optimize</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">least_squares</span><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><span class="">res_wrapped</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">least_squares</span><span class="">(</span><span class="">f_wrap</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mf">0.1</span><span class="">,</span><span class=""> </span><span class="mf">0.1</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="o">=</span><span class="">(</span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">1</span><span class="">]</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">z</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">res_wrapped</span><span class="o">.</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">res_wrapped</span><span class="o">.</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="mi">1</span><span class="">j</span><br><span class='nsl'>...&nbsp;</span><span class="">z</span>
+(0.49999999999925893+0.49999999999925893j)</pre>
+            
+            
+         
          See :
          
              <code><a link href="curve_fit.html" class='exists'>curve_fit</a></code>
