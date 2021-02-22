@@ -31,6 +31,7 @@ body{
     margin-left:0;
 
 }
+          svg,canvas{border: 1px gray solid;}
           .foo:hover{text-decoration:underline}
           .foo{font-weight:bold; color:#4e4e4e}
           .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
@@ -192,9 +193,9 @@ body{
 
 
 pre { line-height: 125%; }
-td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
-span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
-td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 .highlight .hll { background-color: #ffffcc }
 .highlight { background: #ffffff; }
@@ -481,18 +482,6 @@ user-select: none;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     <code class='signature'>TaskState(key: str, run_spec: object)</code>
 
 
@@ -518,7 +507,7 @@ user-select: none;
         
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; key: str&#39;]</div>
     
         <p>The key is the unique identifier of a task, generally formed from the name of the function, followed by a hash of the function and arguments, like 
@@ -528,10 +517,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; prefix: TaskPrefix&#39;]</div>
     
         <p>The broad class of tasks to which this task belongs like &#34;inc&#34; or &#34;read_csv&#34; </p>
@@ -539,24 +528,24 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; run_spec: object&#39;]</div>
     
         <p>A specification of how to run the task.  The type and meaning of this value is opaque to the scheduler, as it is only interpreted by the worker to which the task is sent for executing.  As a special case, this attribute may also be 
         <code class='verbatim'>None</code>
-    , in which case the task is &#34;pure data&#34; (such as, for example, a piece of data loaded in the scheduler using <code><a link href="distributed.client.Client.scatter.html" class='exists'>Client.scatter</a></code>
+    , in which case the task is &#34;pure data&#34; (such as, for example, a piece of data loaded in the scheduler using <code><a link href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.Client.scatter.html" class='exists'>Client.scatter</a></code>
         ).  A &#34;pure data&#34; task cannot be computed again if its value is lost. </p>
 
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; priority: tuple&#39;]</div>
     
         <p>The priority provides each task with a relative ranking which is used to break ties when many tasks are being considered for execution.  This ranking is generally a 2-item tuple.  The first (and dominant) item corresponds to when it was submitted.  Generally, earlier tasks take precedence.  The second item is determined by the client, and is a way to prioritize tasks within a large graph that may be important, such as if they are on the critical path, or good to run in order to release many dependencies.  This is explained further in <code>:None:doc:`Scheduling Policy &lt;scheduling-policies&gt;`</code>. </p>
@@ -564,10 +553,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; state: str&#39;]</div>
     
         <p>This task&#39;s current state.  Valid states include 
@@ -593,10 +582,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; dependencies: {TaskState}&#39;]</div>
     
         <p>The set of tasks this task depends on for proper execution.  Only tasks still alive are listed in this set.  If, for whatever reason, this task also depends on a forgotten task, the <code>:None:attr:`has_lost_dependencies`</code> flag is set.  A task can only be executed once all its dependencies have already been successfully executed and have their result stored on at least one worker.  This is tracked by progressively draining the <code>:None:attr:`waiting_on`</code> set. </p>
@@ -604,10 +593,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; dependents: {TaskState}&#39;]</div>
     
         <p>The set of tasks which depend on this task.  Only tasks still alive are listed in this set.  This is the reverse mapping of <code>:None:attr:`dependencies`</code>. </p>
@@ -615,10 +604,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; has_lost_dependencies: bool&#39;]</div>
     
         <p>Whether any of the dependencies of this task has been forgotten. For memory consumption reasons, forgotten tasks are not kept in memory even though they may have dependent tasks.  When a task is forgotten, therefore, each of its dependents has their <code>:None:attr:`has_lost_dependencies`</code> attribute set to 
@@ -628,10 +617,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; waiting_on: {TaskState}&#39;]</div>
     
         <p>The set of tasks this task is waiting on *before* it can be executed. This is always a subset of <code>:None:attr:`dependencies`</code>.  Each time one of the dependencies has finished processing, it is removed from the <code>:None:attr:`waiting_on`</code> set.  Once <code>:None:attr:`waiting_on`</code> becomes empty, this task can move from the &#34;waiting&#34; state to the &#34;processing&#34; state (unless one of the dependencies errored out, in which case this task is instead marked &#34;erred&#34;). </p>
@@ -639,10 +628,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; waiters: {TaskState}&#39;]</div>
     
         <p>The set of tasks which need this task to remain alive.  This is always a subset of <code>:None:attr:`dependents`</code>.  Each time one of the dependents has finished processing, it is removed from the <code>:None:attr:`waiters`</code> set.  Once both <code>:None:attr:`waiters`</code> and <code>:None:attr:`who_wants`</code> become empty, this task can be released (if it has a non-empty <code>:None:attr:`run_spec`</code>) or forgotten (otherwise) by the scheduler, and by any workers in <code>:None:attr:`who_has`</code>.  .. note:: Counter-intuitively, <code>:None:attr:`waiting_on`</code> and    <code>:None:attr:`waiters`</code> are not reverse mappings of each other. </p>
@@ -650,10 +639,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; who_wants: {ClientState}&#39;]</div>
     
         <p>The set of clients who want this task&#39;s result to remain alive. This is the reverse mapping of <code>:None:attr:`ClientState.wants_what`</code>.  When a client submits a graph to the scheduler it also specifies which output tasks it desires, such that their results are not released from memory.  Once a task has finished executing (i.e. moves into the &#34;memory&#34; or &#34;erred&#34; state), the clients in <code>:None:attr:`who_wants`</code> are notified.  Once both <code>:None:attr:`waiters`</code> and <code>:None:attr:`who_wants`</code> become empty, this task can be released (if it has a non-empty <code>:None:attr:`run_spec`</code>) or forgotten (otherwise) by the scheduler, and by any workers in <code>:None:attr:`who_has`</code>. </p>
@@ -661,23 +650,23 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; who_has: {WorkerState}&#39;]</div>
     
-        <p>The set of workers who have this task&#39;s result in memory. It is non-empty iff the task is in the &#34;memory&#34; state.  There can be more than one worker in this set if, for example, <code><a link href="distributed.client.Client.scatter.html" class='exists'>Client.scatter</a></code>
-         or <code><a link href="distributed.client.Client.replicate.html" class='exists'>Client.replicate</a></code>
+        <p>The set of workers who have this task&#39;s result in memory. It is non-empty iff the task is in the &#34;memory&#34; state.  There can be more than one worker in this set if, for example, <code><a link href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.Client.scatter.html" class='exists'>Client.scatter</a></code>
+         or <code><a link href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.Client.replicate.html" class='exists'>Client.replicate</a></code>
          was used.  This is the reverse mapping of <code>:None:attr:`WorkerState.has_what`</code>. </p>
 
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; processing_on: WorkerState (or None)&#39;]</div>
     
         <p>If this task is in the &#34;processing&#34; state, which worker is currently processing it.  Otherwise this is 
@@ -687,10 +676,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; retries: int&#39;]</div>
     
         <p>The number of times this task can automatically be retried in case of failure.  If a task fails executing (the worker returns with an error), its <code>:None:attr:`retries`</code> attribute is checked.  If it is equal to 0, the task is marked &#34;erred&#34;.  If it is greater than 0, the <code>:None:attr:`retries`</code> attribute is decremented and execution is attempted again. </p>
@@ -698,10 +687,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; nbytes: int (or None)&#39;]</div>
     
         <p>The number of bytes, as determined by 
@@ -711,10 +700,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; type: str&#39;]</div>
     
         <p>The type of the object as a string.  Only present for tasks that have been computed. </p>
@@ -722,10 +711,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; exception: object&#39;]</div>
     
         <p>If this task failed executing, the exception object is stored here. Otherwise this is 
@@ -735,10 +724,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; traceback: object&#39;]</div>
     
         <p>If this task failed executing, the traceback object is stored here. Otherwise this is 
@@ -748,10 +737,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; exception_blame: TaskState (or None)&#39;]</div>
     
         <p>If this task or one of its dependencies failed executing, the failed task is stored here (possibly itself).  Otherwise this is 
@@ -761,10 +750,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; suspicious: int&#39;]</div>
     
         <p>The number of times this task has been involved in a worker death.  Some tasks may cause workers to die (such as calling 
@@ -776,10 +765,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; host_restrictions: {hostnames}&#39;]</div>
     
         <p>A set of hostnames where this task can be run (or 
@@ -789,10 +778,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; worker_restrictions: {worker addresses}&#39;]</div>
     
         <p>A set of complete worker addresses where this can be run (or 
@@ -802,10 +791,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; resource_restrictions: {resource: quantity}&#39;]</div>
     
         <p>Resources required by this task, such as 
@@ -819,10 +808,10 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
-            <div class='block_directive'>
+           <div class='block_directive'>
     <div class='head'>.. attribute:: [&#39; loose_restrictions: bool&#39;]</div>
     
         <p>If 
@@ -834,7 +823,7 @@ user-select: none;
     
 </div>
 
-       
+        
            
                
         <p>.. attribute: metadata: dict</p>
@@ -975,7 +964,24 @@ user-select: none;
         
          See :
          
+             <code><a link href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.Client.scatter.html" class='exists'>distributed.client.Client.scatter</a></code>
+        
+         
+             <code><a link href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.client.Client.replicate.html" class='exists'>distributed.client.Client.replicate</a></code>
+        
+         
      
+    
+     <h3>Local connectivity graph</h3>
+     <p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+     <p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+     or text (beyond on hover) </p> 
+     <canvas width="800" height="500"></canvas>
+     <p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+     <svg width="800" height="500"></svg>
+     <p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted (or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library they belong to, and scaled with the number of references pointing them</p>
 
 
 
@@ -990,6 +996,299 @@ Commit: </br>
 Tag: </br>
 Link to the right github gitalab repository, file and line (maybe range?)</br>
 </div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
 
 
 </div>
