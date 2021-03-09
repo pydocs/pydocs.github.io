@@ -901,6 +901,279 @@ user-select: none;
    
 
 
+    
+        <h1>Discrete Fourier Transform (:mod:`numpy.fft`)</h1>
+    
+
+
+           
+               
+        <p>The SciPy module <code><a link href="/p/scipy/1.5.0/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
+         is a more comprehensive superset of 
+        <code class='verbatim'>numpy.fft</code>
+     , which includes only a basic set of routines. </p>
+
+    
+           
+       
+
+    
+        <h1>Standard FFTs</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Real FFTs</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Hermitian FFTs</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Helper routines</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Background information</h1>
+    
+
+
+           
+               
+        <p>Fourier analysis is fundamentally a method for expressing a function as a sum of periodic components, and for recovering the function from those components. When both the function and its Fourier transform are replaced with discretized counterparts, it is called the discrete Fourier transform (DFT). The DFT has become a mainstay of numerical computing in part because of a very fast algorithm for computing it, called the Fast Fourier Transform (FFT), which was known to Gauss (1805) and was brought to light in its current form by Cooley and Tukey . Press et al. provide an accessible introduction to Fourier analysis and its applications. </p>
+
+    
+           
+               
+        <p>Because the discrete Fourier transform separates its input into components that contribute at discrete frequencies, it has a great number of applications in digital signal processing, e.g., for filtering, and in this context the discretized input to the transform is customarily referred to as a , which exists in the . The output is called a or and exists in the . </p>
+
+    
+           
+       
+
+    
+        <h1>Implementation details</h1>
+    
+
+
+           
+               
+        <p>There are many ways to define the DFT, varying in the sign of the exponent, normalization, etc. In this implementation, the DFT is defined as </p>
+
+    
+           
+               
+        <p>The DFT is in general defined for complex inputs and outputs, and a single - frequency component at linear frequency <code>:None:None:`math:`f`</code> is represented by a complex exponential <code>:None:None:`math:`a_m = \exp\{2\pi i\,f m\Delta t\}`</code> , where <code>:None:None:`math:`\Delta t`</code> is the sampling interval. </p>
+
+    
+           
+               
+        <p>The values in the result follow so - called &#34;standard&#34; order : If 
+        <code class='verbatim'>A =
+fft(a, n)</code>
+     , then 
+        <code class='verbatim'>A[0]</code>
+     contains the zero - frequency term (the sum of the signal), which is always purely real for real inputs. Then 
+        <code class='verbatim'>A[1:n/2]</code>
+     contains the positive - frequency terms, and 
+        <code class='verbatim'>A[n/2+1:]</code>
+     contains the negative - frequency terms, in order of decreasingly negative frequency. For an even number of input points, 
+        <code class='verbatim'>A[n/2]</code>
+     represents both positive and negative Nyquist frequency, and is also purely real for real input. For an odd number of input points, 
+        <code class='verbatim'>A[(n-1)/2]</code>
+     contains the largest positive frequency, while 
+        <code class='verbatim'>A[(n+1)/2]</code>
+     contains the largest negative frequency. The routine 
+        <code class='verbatim'>np.fft.fftfreq(n)</code>
+     returns an array giving the frequencies of corresponding elements in the output. The routine 
+        <code class='verbatim'>np.fft.fftshift(A)</code>
+     shifts transforms and their frequencies to put the zero - frequency components in the middle, and 
+        <code class='verbatim'>np.fft.ifftshift(A)</code>
+     undoes that shift. </p>
+
+    
+           
+               
+        <p>When the input <code>:None:None:`a`</code> is a time - domain signal and 
+        <code class='verbatim'>A = fft(a)</code>
+     , 
+        <code class='verbatim'>np.abs(A)</code>
+     is its amplitude spectrum and 
+        <code class='verbatim'>np.abs(A)**2</code>
+     is its power spectrum. The phase spectrum is obtained by 
+        <code class='verbatim'>np.angle(A)</code>
+     . </p>
+
+    
+           
+               
+        <p>The inverse DFT is defined as </p>
+
+    
+           
+               
+        <p>It differs from the forward transform by the sign of the exponential argument and the default normalization by <code>:None:None:`math:`1/n`</code> . </p>
+
+    
+           
+       
+
+    
+        <h1>Type Promotion</h1>
+    
+
+
+           
+               
+        <p><code><a link href="/p/numpy/1.20.0/api/numpy.fft.html" class='exists'>numpy.fft</a></code>
+         promotes 
+        <code class='verbatim'>float32</code>
+     and 
+        <code class='verbatim'>complex64</code>
+     arrays to 
+        <code class='verbatim'>float64</code>
+     and 
+        <code class='verbatim'>complex128</code>
+     arrays respectively. For an FFT implementation that does not promote input arrays, see <code>:None:None:`scipy.fftpack`</code> . </p>
+
+    
+           
+       
+
+    
+        <h1>Normalization</h1>
+    
+
+
+           
+               
+        <p>The argument 
+        <code class='verbatim'>norm</code>
+     indicates which direction of the pair of direct/ inverse transforms is scaled and with what normalization factor. The default normalization (``&#34; backward&#34; 
+        <code class='verbatim'>) has the direct (forward) transforms
+unscaled and the inverse (backward) transforms scaled by :math:`1/n`. It is
+possible to obtain unitary transforms by setting the keyword argument ``norm</code>
+     to 
+        <code class='verbatim'>&#34;ortho&#34;</code>
+     so that both direct and inverse transforms are scaled by <code>:None:None:`math:`1/\sqrt{n}`</code> . Finally, setting the keyword argument 
+        <code class='verbatim'>norm</code>
+     to 
+        <code class='verbatim'>&#34;forward&#34;</code>
+     has the direct transforms scaled by <code>:None:None:`math:`1/n`</code> and the inverse transforms unscaled (i.e. exactly opposite to the default 
+        <code class='verbatim'>&#34;backward&#34;</code>
+     ). <code>:None:None:`None`</code> is an alias of the default option 
+        <code class='verbatim'>&#34;backward&#34;</code>
+     for backward compatibility. </p>
+
+    
+           
+       
+
+    
+        <h1>Real and Hermitian transforms</h1>
+    
+
+
+           
+               
+        <p>When the input is purely real, its transform is Hermitian, i.e., the component at frequency <code>:None:None:`math:`f_k`</code> is the complex conjugate of the component at frequency <code>:None:None:`math:`-f_k`</code> , which means that for real inputs there is no information in the negative frequency components that is not already available from the positive frequency components. The family of <code>:None:None:`rfft`</code> functions is designed to operate on real inputs, and exploits this symmetry by computing only the positive frequency components, up to and including the Nyquist frequency. Thus, 
+        <code class='verbatim'>n</code>
+     input points produce 
+        <code class='verbatim'>n/2+1</code>
+     complex output points. The inverses of this family assumes the same symmetry of its input, and for an output of 
+        <code class='verbatim'>n</code>
+     points uses 
+        <code class='verbatim'>n/2+1</code>
+     input points. </p>
+
+    
+           
+               
+        <p>Correspondingly, when the spectrum is purely real, the signal is Hermitian. The <code>:None:None:`hfft`</code> family of functions exploits this symmetry by using 
+        <code class='verbatim'>n/2+1</code>
+     complex points in the input (time) domain for 
+        <code class='verbatim'>n</code>
+     real points in the frequency domain. </p>
+
+    
+           
+               
+        <p>In higher dimensions, FFTs are used, e.g., for image analysis and filtering. The computational efficiency of the FFT means that it can also be a faster way to compute large convolutions, using the property that a convolution in the time domain is equivalent to a point - by - point multiplication in the frequency domain. </p>
+
+    
+           
+       
+
+    
+        <h1>Higher dimensions</h1>
+    
+
+
+           
+               
+        <p>In two dimensions, the DFT is defined as </p>
+
+    
+           
+               
+        <p>which extends in the obvious way to higher dimensions, and the inverses in higher dimensions also extend in the same way. </p>
+
+    
+           
+       
+
+    
+        <h1>References</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Examples</h1>
+    
+
+
+           
+               
+        <p>For examples, see the various functions. </p>
+
+    
+           
+       
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.fft.html" class='exists'>numpy.fft</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.0/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
+        
+         
+     
+    
+
+
     <h3 id='section-backrefs'>Back References</h3>
     <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
 
@@ -973,287 +1246,20 @@ user-select: none;
     
 
 
-    <h3 id="section-Examples">Examples</h3>
-        
-         See :
-         
-             <code><a link href="/p/scipy/1.5.0/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.20.0/api/numpy.fft.html" class='exists'>numpy.fft</a></code>
-        
-         
-     
-    
-     <h3>Local connectivity graph</h3>
-     <p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
 
-     <p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
-     or text (beyond on hover) </p> 
-     <canvas width="800" height="500"></canvas>
-     <p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
 
-     <svg width="800" height="500"></svg>
-     <p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted (or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library they belong to, and scaled with the number of references pointing them</p>
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
 
+<svg width="800" height="500"></svg>
 
-    
-        <h1>Discrete Fourier Transform (:mod:`numpy.fft`)</h1>
-    
-
-    
-           
-               
-        <p>The SciPy module <code><a link href="/p/scipy/1.5.0/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
-         is a more comprehensive superset of 
-        <code class='verbatim'>numpy.fft</code>
-     , which includes only a basic set of routines. </p>
-
-    
-           
-       
-
-    
-        <h1>Standard FFTs</h1>
-    
-
-    
-           
-       
-
-    
-        <h1>Real FFTs</h1>
-    
-
-    
-           
-       
-
-    
-        <h1>Hermitian FFTs</h1>
-    
-
-    
-           
-       
-
-    
-        <h1>Helper routines</h1>
-    
-
-    
-           
-       
-
-    
-        <h1>Background information</h1>
-    
-
-    
-           
-               
-        <p>Fourier analysis is fundamentally a method for expressing a function as a sum of periodic components, and for recovering the function from those components. When both the function and its Fourier transform are replaced with discretized counterparts, it is called the discrete Fourier transform (DFT). The DFT has become a mainstay of numerical computing in part because of a very fast algorithm for computing it, called the Fast Fourier Transform (FFT), which was known to Gauss (1805) and was brought to light in its current form by Cooley and Tukey . Press et al. provide an accessible introduction to Fourier analysis and its applications. </p>
-
-    
-           
-               
-        <p>Because the discrete Fourier transform separates its input into components that contribute at discrete frequencies, it has a great number of applications in digital signal processing, e.g., for filtering, and in this context the discretized input to the transform is customarily referred to as a , which exists in the . The output is called a or and exists in the . </p>
-
-    
-           
-       
-
-    
-        <h1>Implementation details</h1>
-    
-
-    
-           
-               
-        <p>There are many ways to define the DFT, varying in the sign of the exponent, normalization, etc. In this implementation, the DFT is defined as </p>
-
-    
-           
-               
-        <p>The DFT is in general defined for complex inputs and outputs, and a single - frequency component at linear frequency <code>:None:None:`math:`f`</code> is represented by a complex exponential <code>:None:None:`math:`a_m = \exp\{2\pi i\,f m\Delta t\}`</code> , where <code>:None:None:`math:`\Delta t`</code> is the sampling interval. </p>
-
-    
-           
-               
-        <p>The values in the result follow so - called &#34;standard&#34; order : If 
-        <code class='verbatim'>A =
-fft(a, n)</code>
-     , then 
-        <code class='verbatim'>A[0]</code>
-     contains the zero - frequency term (the sum of the signal), which is always purely real for real inputs. Then 
-        <code class='verbatim'>A[1:n/2]</code>
-     contains the positive - frequency terms, and 
-        <code class='verbatim'>A[n/2+1:]</code>
-     contains the negative - frequency terms, in order of decreasingly negative frequency. For an even number of input points, 
-        <code class='verbatim'>A[n/2]</code>
-     represents both positive and negative Nyquist frequency, and is also purely real for real input. For an odd number of input points, 
-        <code class='verbatim'>A[(n-1)/2]</code>
-     contains the largest positive frequency, while 
-        <code class='verbatim'>A[(n+1)/2]</code>
-     contains the largest negative frequency. The routine 
-        <code class='verbatim'>np.fft.fftfreq(n)</code>
-     returns an array giving the frequencies of corresponding elements in the output. The routine 
-        <code class='verbatim'>np.fft.fftshift(A)</code>
-     shifts transforms and their frequencies to put the zero - frequency components in the middle, and 
-        <code class='verbatim'>np.fft.ifftshift(A)</code>
-     undoes that shift. </p>
-
-    
-           
-               
-        <p>When the input <code>:None:None:`a`</code> is a time - domain signal and 
-        <code class='verbatim'>A = fft(a)</code>
-     , 
-        <code class='verbatim'>np.abs(A)</code>
-     is its amplitude spectrum and 
-        <code class='verbatim'>np.abs(A)**2</code>
-     is its power spectrum. The phase spectrum is obtained by 
-        <code class='verbatim'>np.angle(A)</code>
-     . </p>
-
-    
-           
-               
-        <p>The inverse DFT is defined as </p>
-
-    
-           
-               
-        <p>It differs from the forward transform by the sign of the exponential argument and the default normalization by <code>:None:None:`math:`1/n`</code> . </p>
-
-    
-           
-       
-
-    
-        <h1>Type Promotion</h1>
-    
-
-    
-           
-               
-        <p><code><a link href="/p/numpy/1.20.0/api/numpy.fft.html" class='exists'>numpy.fft</a></code>
-         promotes 
-        <code class='verbatim'>float32</code>
-     and 
-        <code class='verbatim'>complex64</code>
-     arrays to 
-        <code class='verbatim'>float64</code>
-     and 
-        <code class='verbatim'>complex128</code>
-     arrays respectively. For an FFT implementation that does not promote input arrays, see <code>:None:None:`scipy.fftpack`</code> . </p>
-
-    
-           
-       
-
-    
-        <h1>Normalization</h1>
-    
-
-    
-           
-               
-        <p>The argument 
-        <code class='verbatim'>norm</code>
-     indicates which direction of the pair of direct/ inverse transforms is scaled and with what normalization factor. The default normalization (``&#34; backward&#34; 
-        <code class='verbatim'>) has the direct (forward) transforms
-unscaled and the inverse (backward) transforms scaled by :math:`1/n`. It is
-possible to obtain unitary transforms by setting the keyword argument ``norm</code>
-     to 
-        <code class='verbatim'>&#34;ortho&#34;</code>
-     so that both direct and inverse transforms are scaled by <code>:None:None:`math:`1/\sqrt{n}`</code> . Finally, setting the keyword argument 
-        <code class='verbatim'>norm</code>
-     to 
-        <code class='verbatim'>&#34;forward&#34;</code>
-     has the direct transforms scaled by <code>:None:None:`math:`1/n`</code> and the inverse transforms unscaled (i.e. exactly opposite to the default 
-        <code class='verbatim'>&#34;backward&#34;</code>
-     ). <code>:None:None:`None`</code> is an alias of the default option 
-        <code class='verbatim'>&#34;backward&#34;</code>
-     for backward compatibility. </p>
-
-    
-           
-       
-
-    
-        <h1>Real and Hermitian transforms</h1>
-    
-
-    
-           
-               
-        <p>When the input is purely real, its transform is Hermitian, i.e., the component at frequency <code>:None:None:`math:`f_k`</code> is the complex conjugate of the component at frequency <code>:None:None:`math:`-f_k`</code> , which means that for real inputs there is no information in the negative frequency components that is not already available from the positive frequency components. The family of <code>:None:None:`rfft`</code> functions is designed to operate on real inputs, and exploits this symmetry by computing only the positive frequency components, up to and including the Nyquist frequency. Thus, 
-        <code class='verbatim'>n</code>
-     input points produce 
-        <code class='verbatim'>n/2+1</code>
-     complex output points. The inverses of this family assumes the same symmetry of its input, and for an output of 
-        <code class='verbatim'>n</code>
-     points uses 
-        <code class='verbatim'>n/2+1</code>
-     input points. </p>
-
-    
-           
-               
-        <p>Correspondingly, when the spectrum is purely real, the signal is Hermitian. The <code>:None:None:`hfft`</code> family of functions exploits this symmetry by using 
-        <code class='verbatim'>n/2+1</code>
-     complex points in the input (time) domain for 
-        <code class='verbatim'>n</code>
-     real points in the frequency domain. </p>
-
-    
-           
-               
-        <p>In higher dimensions, FFTs are used, e.g., for image analysis and filtering. The computational efficiency of the FFT means that it can also be a faster way to compute large convolutions, using the property that a convolution in the time domain is equivalent to a point - by - point multiplication in the frequency domain. </p>
-
-    
-           
-       
-
-    
-        <h1>Higher dimensions</h1>
-    
-
-    
-           
-               
-        <p>In two dimensions, the DFT is defined as </p>
-
-    
-           
-               
-        <p>which extends in the obvious way to higher dimensions, and the inverses in higher dimensions also extend in the same way. </p>
-
-    
-           
-       
-
-    
-        <h1>References</h1>
-    
-
-    
-           
-       
-
-    
-        <h1>Examples</h1>
-    
-
-    
-           
-               
-        <p>For examples, see the various functions. </p>
-
-    
-           
-       
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
 
 
 <hr>
@@ -1297,7 +1303,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "numpy.fft.rfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft"}, {"id": 2, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_uniform", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_uniform"}, {"id": 3, "val": 8.0, "label": "scipy.signal._max_len_seq.max_len_seq", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.signal._max_len_seq.max_len_seq"}, {"id": 4, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_ellipsoid", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_ellipsoid"}, {"id": 5, "val": 9.414213562373096, "label": "numpy.fft.ihfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ihfft"}, {"id": 6, "val": 9.732050807568877, "label": "numpy.fft.rfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfftn"}, {"id": 7, "val": 9.0, "label": "numpy.fft.hfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.hfft"}, {"id": 8, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_shift", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_shift"}, {"id": 9, "val": 9.732050807568877, "label": "numpy.fft.ifftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifftn"}, {"id": 10, "val": 9.414213562373096, "label": "numpy.fft.fft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft"}, {"id": 12, "val": 9.414213562373096, "label": "numpy.fft.fft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft2"}, {"id": 13, "val": 10.0, "label": "numpy.fft.irfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft"}, {"id": 14, "val": 10.0, "label": "numpy.fft.fftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fftn"}, {"id": 15, "val": 9.0, "label": "numpy.fft.rfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft2"}, {"id": 16, "val": 9.0, "label": "numpy.fft.ifft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft2"}, {"id": 17, "val": 10.23606797749979, "label": "numpy.fft.ifft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft"}, {"id": 18, "val": 12.898979485566356, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.fft"}, {"id": 19, "val": 9.414213562373096, "label": "numpy.fft.irfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfftn"}, {"id": 20, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_gaussian", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_gaussian"}, {"id": 21, "val": 9.0, "label": "numpy.fft.irfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft2"}, {"id": 22, "val": 8.0, "label": "scipy.special._basic.diric", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.special._basic.diric"}], "links": [{"source": 10, "target": 3, "id": 21}, {"source": 10, "target": 22, "id": 22}, {"source": 12, "target": 16, "id": 24}, {"source": 14, "target": 12, "id": 25}, {"source": 14, "target": 9, "id": 27}, {"source": 14, "target": 6, "id": 28}, {"source": 17, "target": 16, "id": 31}, {"source": 17, "target": 9, "id": 32}, {"source": 17, "target": 13, "id": 33}, {"source": 17, "target": 3, "id": 34}, {"source": 9, "target": 16, "id": 36}, {"source": 9, "target": 19, "id": 38}, {"source": 5, "target": 7, "id": 39}, {"source": 13, "target": 7, "id": 41}, {"source": 13, "target": 5, "id": 42}, {"source": 13, "target": 19, "id": 44}, {"source": 19, "target": 21, "id": 46}, {"source": 1, "target": 7, "id": 48}, {"source": 1, "target": 5, "id": 49}, {"source": 1, "target": 13, "id": 50}, {"source": 1, "target": 19, "id": 51}, {"source": 1, "target": 6, "id": 53}, {"source": 15, "target": 21, "id": 55}, {"source": 6, "target": 19, "id": 56}, {"source": 6, "target": 15, "id": 57}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "numpy.fft.rfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft"}, {"id": 2, "val": 9.414213562373096, "label": "numpy.fft.fft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft"}, {"id": 3, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_ellipsoid", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_ellipsoid"}, {"id": 4, "val": 9.414213562373096, "label": "numpy.fft.irfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfftn"}, {"id": 5, "val": 9.732050807568877, "label": "numpy.fft.ifftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifftn"}, {"id": 6, "val": 10.23606797749979, "label": "numpy.fft.ifft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft"}, {"id": 7, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_shift", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_shift"}, {"id": 8, "val": 12.898979485566356, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.fft"}, {"id": 9, "val": 9.0, "label": "numpy.fft.rfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft2"}, {"id": 10, "val": 9.732050807568877, "label": "numpy.fft.rfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfftn"}, {"id": 11, "val": 10.0, "label": "numpy.fft.irfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft"}, {"id": 12, "val": 8.0, "label": "scipy.signal._max_len_seq.max_len_seq", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.signal._max_len_seq.max_len_seq"}, {"id": 13, "val": 10.0, "label": "numpy.fft.fftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fftn"}, {"id": 14, "val": 9.414213562373096, "label": "numpy.fft.ihfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ihfft"}, {"id": 15, "val": 9.0, "label": "numpy.fft.ifft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft2"}, {"id": 16, "val": 8.0, "label": "scipy.special._basic.diric", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.special._basic.diric"}, {"id": 17, "val": 9.414213562373096, "label": "numpy.fft.fft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft2"}, {"id": 19, "val": 9.0, "label": "numpy.fft.irfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft2"}, {"id": 20, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_uniform", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_uniform"}, {"id": 21, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_gaussian", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_gaussian"}, {"id": 22, "val": 9.0, "label": "numpy.fft.hfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.hfft"}], "links": [{"source": 2, "target": 12, "id": 21}, {"source": 2, "target": 16, "id": 22}, {"source": 17, "target": 15, "id": 24}, {"source": 13, "target": 17, "id": 25}, {"source": 13, "target": 5, "id": 27}, {"source": 13, "target": 10, "id": 28}, {"source": 6, "target": 15, "id": 31}, {"source": 6, "target": 5, "id": 32}, {"source": 6, "target": 11, "id": 33}, {"source": 6, "target": 12, "id": 34}, {"source": 5, "target": 15, "id": 36}, {"source": 5, "target": 4, "id": 38}, {"source": 14, "target": 22, "id": 39}, {"source": 11, "target": 22, "id": 41}, {"source": 11, "target": 14, "id": 42}, {"source": 11, "target": 4, "id": 44}, {"source": 4, "target": 19, "id": 46}, {"source": 1, "target": 22, "id": 48}, {"source": 1, "target": 14, "id": 49}, {"source": 1, "target": 11, "id": 50}, {"source": 1, "target": 4, "id": 51}, {"source": 1, "target": 10, "id": 53}, {"source": 9, "target": 19, "id": 55}, {"source": 10, "target": 4, "id": 56}, {"source": 10, "target": 9, "id": 57}]};
 
 (function() {
 
@@ -1425,7 +1431,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "numpy.fft.rfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft"}, {"id": 2, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_uniform", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_uniform"}, {"id": 3, "val": 8.0, "label": "scipy.signal._max_len_seq.max_len_seq", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.signal._max_len_seq.max_len_seq"}, {"id": 4, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_ellipsoid", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_ellipsoid"}, {"id": 5, "val": 9.414213562373096, "label": "numpy.fft.ihfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ihfft"}, {"id": 6, "val": 9.732050807568877, "label": "numpy.fft.rfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfftn"}, {"id": 7, "val": 9.0, "label": "numpy.fft.hfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.hfft"}, {"id": 8, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_shift", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_shift"}, {"id": 9, "val": 9.732050807568877, "label": "numpy.fft.ifftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifftn"}, {"id": 10, "val": 9.414213562373096, "label": "numpy.fft.fft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft"}, {"id": 12, "val": 9.414213562373096, "label": "numpy.fft.fft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft2"}, {"id": 13, "val": 10.0, "label": "numpy.fft.irfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft"}, {"id": 14, "val": 10.0, "label": "numpy.fft.fftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fftn"}, {"id": 15, "val": 9.0, "label": "numpy.fft.rfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft2"}, {"id": 16, "val": 9.0, "label": "numpy.fft.ifft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft2"}, {"id": 17, "val": 10.23606797749979, "label": "numpy.fft.ifft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft"}, {"id": 18, "val": 12.898979485566356, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.fft"}, {"id": 19, "val": 9.414213562373096, "label": "numpy.fft.irfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfftn"}, {"id": 20, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_gaussian", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_gaussian"}, {"id": 21, "val": 9.0, "label": "numpy.fft.irfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft2"}, {"id": 22, "val": 8.0, "label": "scipy.special._basic.diric", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.special._basic.diric"}], "links": [{"source": 10, "target": 3, "id": 21}, {"source": 10, "target": 22, "id": 22}, {"source": 12, "target": 16, "id": 24}, {"source": 14, "target": 12, "id": 25}, {"source": 14, "target": 9, "id": 27}, {"source": 14, "target": 6, "id": 28}, {"source": 17, "target": 16, "id": 31}, {"source": 17, "target": 9, "id": 32}, {"source": 17, "target": 13, "id": 33}, {"source": 17, "target": 3, "id": 34}, {"source": 9, "target": 16, "id": 36}, {"source": 9, "target": 19, "id": 38}, {"source": 5, "target": 7, "id": 39}, {"source": 13, "target": 7, "id": 41}, {"source": 13, "target": 5, "id": 42}, {"source": 13, "target": 19, "id": 44}, {"source": 19, "target": 21, "id": 46}, {"source": 1, "target": 7, "id": 48}, {"source": 1, "target": 5, "id": 49}, {"source": 1, "target": 13, "id": 50}, {"source": 1, "target": 19, "id": 51}, {"source": 1, "target": 6, "id": 53}, {"source": 15, "target": 21, "id": 55}, {"source": 6, "target": 19, "id": 56}, {"source": 6, "target": 15, "id": 57}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "numpy.fft.rfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft"}, {"id": 2, "val": 9.414213562373096, "label": "numpy.fft.fft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft"}, {"id": 3, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_ellipsoid", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_ellipsoid"}, {"id": 4, "val": 9.414213562373096, "label": "numpy.fft.irfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfftn"}, {"id": 5, "val": 9.732050807568877, "label": "numpy.fft.ifftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifftn"}, {"id": 6, "val": 10.23606797749979, "label": "numpy.fft.ifft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft"}, {"id": 7, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_shift", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_shift"}, {"id": 8, "val": 12.898979485566356, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.fft"}, {"id": 9, "val": 9.0, "label": "numpy.fft.rfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfft2"}, {"id": 10, "val": 9.732050807568877, "label": "numpy.fft.rfftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.rfftn"}, {"id": 11, "val": 10.0, "label": "numpy.fft.irfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft"}, {"id": 12, "val": 8.0, "label": "scipy.signal._max_len_seq.max_len_seq", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.signal._max_len_seq.max_len_seq"}, {"id": 13, "val": 10.0, "label": "numpy.fft.fftn", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fftn"}, {"id": 14, "val": 9.414213562373096, "label": "numpy.fft.ihfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ihfft"}, {"id": 15, "val": 9.0, "label": "numpy.fft.ifft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.ifft2"}, {"id": 16, "val": 8.0, "label": "scipy.special._basic.diric", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.special._basic.diric"}, {"id": 17, "val": 9.414213562373096, "label": "numpy.fft.fft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.fft2"}, {"id": 19, "val": 9.0, "label": "numpy.fft.irfft2", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.irfft2"}, {"id": 20, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_uniform", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_uniform"}, {"id": 21, "val": 8.0, "label": "scipy.ndimage.fourier.fourier_gaussian", "mod": "scipy", "url": "/p/scipy/1.5.0/api/scipy.ndimage.fourier.fourier_gaussian"}, {"id": 22, "val": 9.0, "label": "numpy.fft.hfft", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.fft.hfft"}], "links": [{"source": 2, "target": 12, "id": 21}, {"source": 2, "target": 16, "id": 22}, {"source": 17, "target": 15, "id": 24}, {"source": 13, "target": 17, "id": 25}, {"source": 13, "target": 5, "id": 27}, {"source": 13, "target": 10, "id": 28}, {"source": 6, "target": 15, "id": 31}, {"source": 6, "target": 5, "id": 32}, {"source": 6, "target": 11, "id": 33}, {"source": 6, "target": 12, "id": 34}, {"source": 5, "target": 15, "id": 36}, {"source": 5, "target": 4, "id": 38}, {"source": 14, "target": 22, "id": 39}, {"source": 11, "target": 22, "id": 41}, {"source": 11, "target": 14, "id": 42}, {"source": 11, "target": 4, "id": 44}, {"source": 4, "target": 19, "id": 46}, {"source": 1, "target": 22, "id": 48}, {"source": 1, "target": 14, "id": 49}, {"source": 1, "target": 11, "id": 50}, {"source": 1, "target": 4, "id": 51}, {"source": 1, "target": 10, "id": 53}, {"source": 9, "target": 19, "id": 55}, {"source": 10, "target": 4, "id": 56}, {"source": 10, "target": 9, "id": 57}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
