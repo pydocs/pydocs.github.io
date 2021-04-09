@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/javascript">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          svg,canvas{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+         }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=xarray>xarray</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.01.1+8.g34f990a81/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.7/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.0/api/scipy.html">scipy</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.html">xarray</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/xarray/0.17.0/api/xarray.html'>0.17.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/xarray/0.17.0/api/xarray.html">0.17.0</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/xarray/0.17.0/api/xarray.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/xarray/0.17.0/api/xarray.html">API</a>
+                        <a href="/p/xarray/0.17.0/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='xarray.html'>xarray</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='xarray.core.html'>core</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/xarray/0.17.0/api/xarray.backends.html">backends</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.coding.html">coding</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.conventions.html">conventions</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.html">core</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.plot.html">plot</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.testing.html">testing</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.tutorial.html">tutorial</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.ufuncs.html">ufuncs</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.util.html">util</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='xarray.core.computation.html'>computation</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/xarray/0.17.0/api/xarray.core.accessor_dt.html">accessor_dt</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.accessor_str.html">accessor_str</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.alignment.html">alignment</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.arithmetic.html">arithmetic</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.combine.html">combine</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.common.html">common</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.html">computation</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.concat.html">concat</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.coordinates.html">coordinates</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.dask_array_compat.html">dask_array_compat</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.dask_array_ops.html">dask_array_ops</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.dataarray.html">dataarray</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.dataset.html">dataset</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.dtypes.html">dtypes</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.duck_array_ops.html">duck_array_ops</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.extensions.html">extensions</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.formatting.html">formatting</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.formatting_html.html">formatting_html</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.groupby.html">groupby</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.indexes.html">indexes</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.indexing.html">indexing</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.merge.html">merge</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.missing.html">missing</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.nanops.html">nanops</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.npcompat.html">npcompat</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.nputils.html">nputils</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.ops.html">ops</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.options.html">options</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.parallel.html">parallel</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.pdcompat.html">pdcompat</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.pycompat.html">pycompat</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.resample.html">resample</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.rolling.html">rolling</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.rolling_exp.html">rolling_exp</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.utils.html">utils</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.variable.html">variable</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.weighted.html">weighted</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='xarray.core.computation.apply_ufunc.html'>apply_ufunc</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._UFuncSignature.html">_UFuncSignature</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._calc_idxminmax.html">_calc_idxminmax</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._cov_corr.html">_cov_corr</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._fast_dataset.html">_fast_dataset</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._first_of_type.html">_first_of_type</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation._iter_over_selections.html">_iter_over_selections</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_array_ufunc.html">apply_array_ufunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_dataarray_vfunc.html">apply_dataarray_vfunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_dataset_vfunc.html">apply_dataset_vfunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_dict_of_variables_vfunc.html">apply_dict_of_variables_vfunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_groupby_func.html">apply_groupby_func</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_ufunc.html">apply_ufunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.apply_variable_ufunc.html">apply_variable_ufunc</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.build_output_coords.html">build_output_coords</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.corr.html">corr</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.cov.html">cov</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.dot.html">dot</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.polyval.html">polyval</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.core.computation.where.html">where</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/xarray/0.17.0/img/logo.png"/>
+    
+    <a href="#">Library: xarray</a>
+    <a href="#">Version: 0.17.0</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>apply_ufunc(func: Callable, *args: Any, input_core_dims: Sequence[Sequence] = None, output_core_dims: Union[Sequence[Sequence], NoneType] = ((),), exclude_dims: AbstractSet = frozenset(), vectorize: bool = False, join: str = &#39;exact&#39;, dataset_join: str = &#39;exact&#39;, dataset_fill_value: object = &lt;no-fill-value&gt;, keep_attrs: bool = False, kwargs: Mapping = None, dask: str = &#39;forbidden&#39;, output_dtypes: Sequence = None, output_sizes: Mapping[Any, int] = None, meta: Any = None, dask_gufunc_kwargs: Dict[str, Any] = None) -&gt; Any</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Apply a vectorized function for unlabeled arrays on xarray objects.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>The function will be mapped over the data variable(s) of the input arguments using xarray&#39;s standard rules for labeled computation, including alignment, broadcasting, looping over GroupBy/Dataset variables, and merging of coordinates.</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="func">func</a> : callable</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Function to call like 
+        <code class='verbatim'>func(*args, **kwargs)</code>
+     on unlabeled arrays (
+        <code class='verbatim'>.data</code>
+    ) that returns an array or tuple of arrays. If multiple arguments with non-matching dimensions are supplied, this function is expected to vectorize (broadcast) over axes of positional arguments in the style of NumPy universal functions [1]_ (if this is not the case, set 
+        <code class='verbatim'>vectorize=True</code>
+    ). If this function returns multiple outputs, you must set 
+        <code class='verbatim'>output_core_dims</code>
+     as well.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="*args">*args</a> : Dataset, DataArray, GroupBy, Variable, numpy.ndarray, dask.array.Array or scalar</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Mix of labeled and/or unlabeled arrays to which to apply the function.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="input_core_dims">input_core_dims</a> : sequence of sequence, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>List of the same length as 
+        <code class='verbatim'>args</code>
+     giving the list of core dimensions on each input argument that should not be broadcast. By default, we assume there are no core dimensions on any input arguments.</p>
+
+    
+            
+                
+        <p>For example, 
+        <code class='verbatim'>input_core_dims=[[], [&#39;time&#39;]]</code>
+     indicates that all dimensions on the first argument and all dimensions other than &#39;time&#39; on the second argument should be broadcast.</p>
+
+    
+            
+                
+        <p>Core dimensions are automatically moved to the last axes of input variables before applying 
+        <code class='verbatim'>func</code>
+    , which facilitates using NumPy style generalized ufuncs [2]_.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="output_core_dims">output_core_dims</a> : list of tuple, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>List of the same length as the number of output arguments from 
+        <code class='verbatim'>func</code>
+    , giving the list of core dimensions on each output that were not broadcast on the inputs. By default, we assume that 
+        <code class='verbatim'>func</code>
+     outputs exactly one array, with axes corresponding to each broadcast dimension.</p>
+
+    
+            
+                
+        <p>Core dimensions are assumed to appear as the last dimensions of each output in the provided order.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="exclude_dims">exclude_dims</a> : set, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Core dimensions on the inputs to exclude from alignment and broadcasting entirely. Any input coordinates along these dimensions will be dropped. Each excluded dimension must also appear in 
+        <code class='verbatim'>input_core_dims</code>
+     for at least one argument. Only dimensions listed here are allowed to change size between input and output objects.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="vectorize">vectorize</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True, then assume 
+        <code class='verbatim'>func</code>
+     only takes arrays defined over core dimensions as input and vectorize it automatically with <code><a link href="/p/numpy/1.20.0/api/numpy.vectorize.html" class='exists'>numpy.vectorize</a></code>
+        . This option exists for convenience, but is almost always slower than supplying a pre-vectorized function. Using this option requires NumPy version 1.12 or newer.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="join">join</a> : {&#34;outer&#34;, &#34;inner&#34;, &#34;left&#34;, &#34;right&#34;, &#34;exact&#34;}, default: &#34;exact&#34;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Method for joining the indexes of the passed objects along each dimension, and the variables of Dataset objects with mismatched data variables:</p>
+
+    
+            
+                
+        <p>- &#39;outer&#39;: use the union of object indexes - &#39;inner&#39;: use the intersection of object indexes - &#39;left&#39;: use indexes from the first object with each dimension - &#39;right&#39;: use indexes from the last object with each dimension - &#39;exact&#39;: raise <code>:None:None:`ValueError`</code> instead of aligning when indexes to be</p>
+
+    
+            
+                
+        <p>  aligned are not equal</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dataset_join">dataset_join</a> : {&#34;outer&#34;, &#34;inner&#34;, &#34;left&#34;, &#34;right&#34;, &#34;exact&#34;}, default: &#34;exact&#34;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Method for joining variables of Dataset objects with mismatched data variables.</p>
+
+    
+            
+                
+        <p>- &#39;outer&#39;: take variables from both Dataset objects - &#39;inner&#39;: take only overlapped variables - &#39;left&#39;: take only variables from the first object - &#39;right&#39;: take only variables from the last object - &#39;exact&#39;: data variables on all Dataset objects must match exactly</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dataset_fill_value">dataset_fill_value</a> : optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Value used in place of missing variables on Dataset inputs when the datasets do not share the exact same 
+        <code class='verbatim'>data_vars</code>
+    . Required if 
+        <code class='verbatim'>dataset_join not in {&#39;inner&#39;, &#39;exact&#39;}</code>
+    , otherwise ignored.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="keep_attrs">keep_attrs</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Whether to copy attributes from the first argument to the output.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="kwargs">kwargs</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Optional keyword arguments passed directly on to call 
+        <code class='verbatim'>func</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dask">dask</a> : {&#34;forbidden&#34;, &#34;allowed&#34;, &#34;parallelized&#34;}, default: &#34;forbidden&#34;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>How to handle applying to objects containing lazy data in the form of dask arrays:</p>
+
+    
+            
+                
+        <p>- &#39;forbidden&#39; (default): raise an error if a dask array is encountered. - &#39;allowed&#39;: pass dask arrays directly on to 
+        <code class='verbatim'>func</code>
+    . Prefer this option if</p>
+
+    
+            
+                
+        <p>  
+        <code class='verbatim'>func</code>
+     natively supports dask arrays.</p>
+
+    
+            
+                
+        <p>- &#39;parallelized&#39;: automatically parallelize 
+        <code class='verbatim'>func</code>
+     if any of the</p>
+
+    
+            
+                
+        <p>  inputs are a dask array by using <code>:None:None:`dask.array.apply_gufunc`</code>. Multiple output   arguments are supported. Only use this option if 
+        <code class='verbatim'>func</code>
+     does not natively   support dask arrays (e.g. converts them to numpy arrays).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dask_gufunc_kwargs">dask_gufunc_kwargs</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Optional keyword arguments passed to 
+        <code class='verbatim'>dask.array.apply_gufunc</code>
+     if dask=&#39;parallelized&#39;. Possible keywords are 
+        <code class='verbatim'>output_sizes</code>
+    , 
+        <code class='verbatim'>allow_rechunk</code>
+     and 
+        <code class='verbatim'>meta</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="output_dtypes">output_dtypes</a> : list of dtype, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Optional list of output dtypes. Only used if 
+        <code class='verbatim'>dask=&#39;parallelized&#39;</code>
+     or vectorize=True.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="output_sizes">output_sizes</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Optional mapping from dimension names to sizes for outputs. Only used if dask=&#39;parallelized&#39; and new dimensions (not found on inputs) appear on outputs. 
+        <code class='verbatim'>output_sizes</code>
+     should be given in the 
+        <code class='verbatim'>dask_gufunc_kwargs</code>
+     parameter. It will be removed as direct parameter in a future version.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="meta">meta</a> : optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Size-0 object representing the type of array wrapped by dask array. Passed on to 
+        <code class='verbatim'>dask.array.apply_gufunc</code>
+    . 
+        <code class='verbatim'>meta</code>
+     should be given in the 
+        <code class='verbatim'>dask_gufunc_kwargs</code>
+     parameter . It will be removed as direct parameter a future version.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>Single value or tuple of Dataset, DataArray, Variable, dask.array.Array or</dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+            
+                <dt>numpy.ndarray, the first type on that list to appear on an input.</dt>
+            
+        </dl>
+
+        <dd>
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                
+        <p>Calculate the vector magnitude of two arguments:</p>
+
+    
+            
+            
+         
+                <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">magnitude</span><span class="">(</span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">func</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="k">lambda</span><span class=""> </span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">y</span><span class="">:</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ufunc.html">sqrt</a><span class="">(</span><span class="">x</span><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">2</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">y</span><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">xr</span><span class="o">.</span><span class="">apply_ufunc</span><span class="">(</span><span class="">func</span><span class="">,</span><span class=""> </span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">b</span><span class="">)</span>
+...</pre>
+            
+            
+         
+                
+        <p>You can now apply 
+        <code class='verbatim'>magnitude()</code>
+     to 
+        <code class='verbatim'>xr.DataArray</code>
+     and 
+        <code class='verbatim'>xr.Dataset</code>
+     objects, with automatically preserved dimensions and coordinates, e.g.,</p>
+
+    
+            
+            
+         
+                <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="">array</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">xr</span><span class="o">.</span><span class="">DataArray</span><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">coords</span><span class="o">=</span><span class="">[</span><span class="">(</span><span class="s2">&#34;</span><span class="s2">x</span><span class="s2">&#34;</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">0.1</span><span class="">,</span><span class=""> </span><span class="mf">0.2</span><span class="">,</span><span class=""> </span><span class="mf">0.3</span><span class="">]</span><span class="">)</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">magnitude</span><span class="">(</span><span class="">array</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="">array</span><span class="">)</span>
+&lt;xarray.DataArray (x: 3)&gt;
+array([1.41421356, 2.82842712, 4.24264069])
+Coordinates:
+  * x        (x) float64 0.1 0.2 0.3</pre>
+            
+            
+         
+                
+        <p>Plain scalars, numpy arrays and a mix of these with xarray objects is also supported:</p>
+
+    
+            
+            
+         
+                <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="">magnitude</span><span class="">(</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">)</span>
+5.0</pre>
+            
+            
+         
+                <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="">magnitude</span><span class="">(</span><span class="mi">3</span><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">]</span><span class="">)</span><span class="">)</span>
+array([3., 5.])</pre>
+            
+            
+         
+                <span class='note'>This example is valid syntax, but we were not able to check execution</span><pre class='highlight compiled'><span class='nsl'>&gt;&gt;&gt; </span><span class="">magnitude</span><span class="">(</span><span class="">array</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">)</span>
+&lt;xarray.DataArray (x: 3)&gt;
+array([1., 2., 3.])
+Coordinates:
+  * x        (x) float64 0.1 0.2 0.3</pre>
+            
+            
+         
+                
+        <p>Other examples of how you could use 
+        <code class='verbatim'>apply_ufunc</code>
+     to write functions to (very nearly) replicate existing xarray functionality:</p>
+
+    
+            
+            
+         
+                
+        <p>Compute the mean (
+        <code class='verbatim'>.mean</code>
+    ) over one dimension::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>def mean(obj, dim):     # note: apply always moves core dimensions to the end     return apply_ufunc(np.mean, obj,                        input_core_dims=[[dim]],                        kwargs={&#39;axis&#39;: -1})</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+        <p>Inner product over a specific dimension (like 
+        <code class='verbatim'>xr.dot</code>
+    )::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>def _inner(x, y):     result = np.matmul(x[..., np.newaxis, :], y[..., :, np.newaxis])     return result[..., 0, 0]</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>def inner_product(a, b, dim):     return apply_ufunc(_inner, a, b, input_core_dims=[[dim], [dim]])</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+        <p>Stack objects along a new dimension (like 
+        <code class='verbatim'>xr.concat</code>
+    )::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>def stack(objects, dim, new_coord):     # note: this version does not stack coordinates     func = lambda *x: np.stack(x, axis=-1)     result = apply_ufunc(func, *objects,                          output_core_dims=[[dim]],                          join=&#39;outer&#39;,                          dataset_fill_value=np.nan)     result[dim] = new_coord     return result</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+        <p>If your function is not vectorized but can be applied only to core dimensions, you can use 
+        <code class='verbatim'>vectorize=True</code>
+     to turn into a vectorized function. This wraps <code><a link href="/p/numpy/1.20.0/api/numpy.vectorize.html" class='exists'>numpy.vectorize</a></code>
+        , so the operation isn&#39;t terribly fast. Here we&#39;ll use it to calculate the distance between empirical samples from two probability distributions, using a scipy function that needs to be applied to vectors::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>import scipy.stats</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>def earth_mover_distance(first_samples,                          second_samples,                          dim=&#39;ensemble&#39;):     return apply_ufunc(scipy.stats.wasserstein_distance,                        first_samples, second_samples,                        input_core_dims=[[dim], [dim]],                        vectorize=True)</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+        <p>Most of NumPy&#39;s builtin functions already broadcast their inputs appropriately for use in <code>:None:None:`apply`</code>. You may find helper functions such as numpy.broadcast_arrays helpful in writing your function. <code><a link href="/p/xarray/0.17.0/api/xarray.core.computation.apply_ufunc.html" class='exists'>apply_ufunc</a></code>
+         also works well with numba&#39;s vectorize and guvectorize. Further explanation with examples are provided in the xarray documentation [3]_.</p>
+
+    
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.vectorize.html" class='exists'>numpy.vectorize</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/xarray/0.17.0/api/xarray.core.computation.apply_ufunc.html" class='exists'>xarray.core.computation.apply_ufunc</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
+     
+    
+
+
+    <h3 id='section-backrefs'>Back References</h3>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+
+    
+    
+        <code><a link href="/p/xarray/0.17.0/api/xarray.core.computation.apply_ufunc.html" class='exists'>xarray.core.computation.apply_ufunc</a></code>
+        
+    
+    
+    
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg width="800" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/core/computation.py </br>
+Line: 794 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 33.377155080899044, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy"}, {"id": 2, "val": 9.414213562373096, "label": "numpy.vectorize", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.vectorize"}, {"id": 3, "val": 22.62873883832779, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.array"}, {"id": 5, "val": 22.106735979665885, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.ufunc"}], "links": []};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 33.377155080899044, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy"}, {"id": 2, "val": 9.414213562373096, "label": "numpy.vectorize", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.vectorize"}, {"id": 3, "val": 22.62873883832779, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.array"}, {"id": 5, "val": 22.106735979665885, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.ufunc"}], "links": []};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>
