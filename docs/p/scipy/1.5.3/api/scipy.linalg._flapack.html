@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/javascript">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          svg,canvas{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+         }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.01.1+8.g34f990a81/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.19.0.dev0/api/skimage.html">skimage</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.html">xarray</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.3/api/scipy.html'>1.5.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.html">1.5.3</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/scipy/1.5.3/api/scipy.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.3/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.3/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.linalg.html'>linalg</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.3/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.3/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.linalg._flapack.html'>_flapack</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._decomp_cossin.html">_decomp_cossin</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._decomp_ldl.html">_decomp_ldl</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._decomp_polar.html">_decomp_polar</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._decomp_qz.html">_decomp_qz</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._decomp_update.html">_decomp_update</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._expm_frechet.html">_expm_frechet</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._fblas.html">_fblas</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._flapack.html">_flapack</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._flinalg.html">_flinalg</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._matfuncs_sqrtm.html">_matfuncs_sqrtm</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._procrustes.html">_procrustes</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._sketches.html">_sketches</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._solve_toeplitz.html">_solve_toeplitz</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg._solvers.html">_solvers</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.basic.html">basic</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.blas.html">blas</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.cython_blas.html">cython_blas</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.cython_lapack.html">cython_lapack</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp.html">decomp</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp_cholesky.html">decomp_cholesky</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp_lu.html">decomp_lu</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp_qr.html">decomp_qr</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp_schur.html">decomp_schur</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.decomp_svd.html">decomp_svd</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.flinalg.html">flinalg</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.lapack.html">lapack</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.matfuncs.html">matfuncs</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.special_matrices.html">special_matrices</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.3/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.3</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>This module &#39;_flapack&#39; is auto-generated with f2py (version:2). Functions:</p>
+
+    
+           
+               
+        <p>  ba,lo,hi,pivscale,info = sgebal(a,scale=0,permute=0,overwrite_a=0)   ba,lo,hi,pivscale,info = dgebal(a,scale=0,permute=0,overwrite_a=0)   ba,lo,hi,pivscale,info = cgebal(a,scale=0,permute=0,overwrite_a=0)   ba,lo,hi,pivscale,info = zgebal(a,scale=0,permute=0,overwrite_a=0)   ht,tau,info = sgehrd(a,lo=0,hi=n-1,lwork=MAX(n,1),overwrite_a=0)   ht,tau,info = dgehrd(a,lo=0,hi=n-1,lwork=MAX(n,1),overwrite_a=0)   ht,tau,info = cgehrd(a,lo=0,hi=n-1,lwork=MAX(n,1),overwrite_a=0)   ht,tau,info = zgehrd(a,lo=0,hi=n-1,lwork=MAX(n,1),overwrite_a=0)   work,info = sgehrd_lwork(n,lo=0,hi=n-1)   work,info = dgehrd_lwork(n,lo=0,hi=n-1)   work,info = cgehrd_lwork(n,lo=0,hi=n-1)   work,info = zgehrd_lwork(n,lo=0,hi=n-1)   lu,piv,x,info = sgesv(a,b,overwrite_a=0,overwrite_b=0)   lu,piv,x,info = dgesv(a,b,overwrite_a=0,overwrite_b=0)   lu,piv,x,info = cgesv(a,b,overwrite_a=0,overwrite_b=0)   lu,piv,x,info = zgesv(a,b,overwrite_a=0,overwrite_b=0)   as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = sgesvx(a,b,fact=&#39;E&#39;,trans=&#39;N&#39;,af=,ipiv=,equed=&#39;B&#39;,r=,c=,overwrite_a=0,overwrite_b=0)   as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = dgesvx(a,b,fact=&#39;E&#39;,trans=&#39;N&#39;,af=,ipiv=,equed=&#39;B&#39;,r=,c=,overwrite_a=0,overwrite_b=0)   as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = cgesvx(a,b,fact=&#39;E&#39;,trans=&#39;N&#39;,af=,ipiv=,equed=&#39;B&#39;,r=,c=,overwrite_a=0,overwrite_b=0)   as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = zgesvx(a,b,fact=&#39;E&#39;,trans=&#39;N&#39;,af=,ipiv=,equed=&#39;B&#39;,r=,c=,overwrite_a=0,overwrite_b=0)   rcond,info = sgecon(a,anorm,norm=&#39;1&#39;)   rcond,info = dgecon(a,anorm,norm=&#39;1&#39;)   rcond,info = cgecon(a,anorm,norm=&#39;1&#39;)   rcond,info = zgecon(a,anorm,norm=&#39;1&#39;)   lu,piv,info = sgetrf(a,overwrite_a=0)   lu,piv,info = dgetrf(a,overwrite_a=0)   lu,piv,info = cgetrf(a,overwrite_a=0)   lu,piv,info = zgetrf(a,overwrite_a=0)   x,info = sgetrs(lu,piv,b,trans=0,overwrite_b=0)   x,info = dgetrs(lu,piv,b,trans=0,overwrite_b=0)   x,info = cgetrs(lu,piv,b,trans=0,overwrite_b=0)   x,info = zgetrs(lu,piv,b,trans=0,overwrite_b=0)   lu,ipiv,jpiv,info = sgetc2(a,overwrite_a=0)   lu,ipiv,jpiv,info = dgetc2(a,overwrite_a=0)   lu,ipiv,jpiv,info = cgetc2(a,overwrite_a=0)   lu,ipiv,jpiv,info = zgetc2(a,overwrite_a=0)   x,scale = sgesc2(lu,rhs,ipiv,jpiv,overwrite_rhs=0)   x,scale = dgesc2(lu,rhs,ipiv,jpiv,overwrite_rhs=0)   x,scale = cgesc2(lu,rhs,ipiv,jpiv,overwrite_rhs=0)   x,scale = zgesc2(lu,rhs,ipiv,jpiv,overwrite_rhs=0)   inv_a,info = sgetri(lu,piv,lwork=max(3*n,1),overwrite_lu=0)   inv_a,info = dgetri(lu,piv,lwork=max(3*n,1),overwrite_lu=0)   inv_a,info = cgetri(lu,piv,lwork=max(3*n,1),overwrite_lu=0)   inv_a,info = zgetri(lu,piv,lwork=max(3*n,1),overwrite_lu=0)   work,info = sgetri_lwork(n)   work,info = dgetri_lwork(n)   work,info = cgetri_lwork(n)   work,info = zgetri_lwork(n)   u,s,vt,info = sgesdd(a,compute_uv=1,full_matrices=1,lwork=max((compute_uv?4*minmn*minmn+MAX(m,n)+9*minmn:MAX(14*minmn+4,10*minmn+2+25*(25+8))+MAX(m,n)),1),overwrite_a=0)   u,s,vt,info = dgesdd(a,compute_uv=1,full_matrices=1,lwork=max((compute_uv?4*minmn*minmn+MAX(m,n)+9*minmn:MAX(14*minmn+4,10*minmn+2+25*(25+8))+MAX(m,n)),1),overwrite_a=0)   work,info = sgesdd_lwork(m,n,compute_uv=1,full_matrices=1)   work,info = dgesdd_lwork(m,n,compute_uv=1,full_matrices=1)   u,s,vt,info = cgesdd(a,compute_uv=1,full_matrices=1,lwork=max((compute_uv?2*minmn*minmn+MAX(m,n)+2*minmn:2*minmn+MAX(m,n)),1),overwrite_a=0)   u,s,vt,info = zgesdd(a,compute_uv=1,full_matrices=1,lwork=max((compute_uv?2*minmn*minmn+MAX(m,n)+2*minmn:2*minmn+MAX(m,n)),1),overwrite_a=0)   work,info = cgesdd_lwork(m,n,compute_uv=1,full_matrices=1)   work,info = zgesdd_lwork(m,n,compute_uv=1,full_matrices=1)   u,s,vt,info = sgesvd(a,compute_uv=1,full_matrices=1,lwork=max(MAX(3*minmn+MAX(m,n),5*minmn),1),overwrite_a=0)   u,s,vt,info = dgesvd(a,compute_uv=1,full_matrices=1,lwork=max(MAX(3*minmn+MAX(m,n),5*minmn),1),overwrite_a=0)   work,info = sgesvd_lwork(m,n,compute_uv=1,full_matrices=1)   work,info = dgesvd_lwork(m,n,compute_uv=1,full_matrices=1)   u,s,vt,info = cgesvd(a,compute_uv=1,full_matrices=1,lwork=MAX(2*minmn+MAX(m,n),1),overwrite_a=0)   u,s,vt,info = zgesvd(a,compute_uv=1,full_matrices=1,lwork=MAX(2*minmn+MAX(m,n),1),overwrite_a=0)   work,info = cgesvd_lwork(m,n,compute_uv=1,full_matrices=1)   work,info = zgesvd_lwork(m,n,compute_uv=1,full_matrices=1)   lqr,x,info = sgels(a,b,trans=&#39;N&#39;,lwork=MAX(MIN(m,n)+MAX(MIN(m,n),nrhs),1),overwrite_a=0,overwrite_b=0)   lqr,x,info = dgels(a,b,trans=&#39;N&#39;,lwork=MAX(MIN(m,n)+MAX(MIN(m,n),nrhs),1),overwrite_a=0,overwrite_b=0)   lqr,x,info = cgels(a,b,trans=&#39;N&#39;,lwork=MAX(MIN(m,n)+MAX(MIN(m,n),nrhs),1),overwrite_a=0,overwrite_b=0)   lqr,x,info = zgels(a,b,trans=&#39;N&#39;,lwork=MAX(MIN(m,n)+MAX(MIN(m,n),nrhs),1),overwrite_a=0,overwrite_b=0)   work,info = sgels_lwork(m,n,nrhs,trans=&#39;N&#39;)   work,info = dgels_lwork(m,n,nrhs,trans=&#39;N&#39;)   work,info = cgels_lwork(m,n,nrhs,trans=&#39;N&#39;)   work,info = zgels_lwork(m,n,nrhs,trans=&#39;N&#39;)   v,x,s,rank,work,info = sgelss(a,b,cond=-1.0,lwork=max(3*minmn+MAX(2*minmn,MAX(maxmn,nrhs)),1),overwrite_a=0,overwrite_b=0)   v,x,s,rank,work,info = dgelss(a,b,cond=-1.0,lwork=max(3*minmn+MAX(2*minmn,MAX(maxmn,nrhs)),1),overwrite_a=0,overwrite_b=0)   work,info = sgelss_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   work,info = dgelss_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   v,x,s,rank,work,info = cgelss(a,b,cond=-1.0,lwork=max(2*minmn+MAX(maxmn,nrhs),1),overwrite_a=0,overwrite_b=0)   v,x,s,rank,work,info = zgelss(a,b,cond=-1.0,lwork=max(2*minmn+MAX(maxmn,nrhs),1),overwrite_a=0,overwrite_b=0)   work,info = cgelss_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   work,info = zgelss_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   v,x,j,rank,info = sgelsy(a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0)   v,x,j,rank,info = dgelsy(a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0)   work,info = sgelsy_lwork(m,n,nrhs,cond,lwork=-1)   work,info = dgelsy_lwork(m,n,nrhs,cond,lwork=-1)   v,x,j,rank,info = cgelsy(a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0)   v,x,j,rank,info = zgelsy(a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0)   work,info = cgelsy_lwork(m,n,nrhs,cond,lwork=-1)   work,info = zgelsy_lwork(m,n,nrhs,cond,lwork=-1)   x,s,rank,info = sgelsd(a,b,lwork,size_iwork,cond=-1.0,overwrite_a=0,overwrite_b=0)   x,s,rank,info = dgelsd(a,b,lwork,size_iwork,cond=-1.0,overwrite_a=0,overwrite_b=0)   work,iwork,info = sgelsd_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   work,iwork,info = dgelsd_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   x,s,rank,info = cgelsd(a,b,lwork,size_rwork,size_iwork,cond=-1.0,overwrite_a=0,overwrite_b=0)   x,s,rank,info = zgelsd(a,b,lwork,size_rwork,size_iwork,cond=-1.0,overwrite_a=0,overwrite_b=0)   work,rwork,iwork,info = cgelsd_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   work,rwork,iwork,info = zgelsd_lwork(m,n,nrhs,cond=-1.0,lwork=-1)   qr,jpvt,tau,work,info = sgeqp3(a,lwork=max(3*(n+1),1),overwrite_a=0)   qr,jpvt,tau,work,info = dgeqp3(a,lwork=max(3*(n+1),1),overwrite_a=0)   qr,jpvt,tau,work,info = cgeqp3(a,lwork=max(3*(n+1),1),overwrite_a=0)   qr,jpvt,tau,work,info = zgeqp3(a,lwork=max(3*(n+1),1),overwrite_a=0)   qr,tau,work,info = sgeqrf(a,lwork=max(3*n,1),overwrite_a=0)   qr,tau,work,info = dgeqrf(a,lwork=max(3*n,1),overwrite_a=0)   qr,tau,work,info = cgeqrf(a,lwork=max(3*n,1),overwrite_a=0)   qr,tau,work,info = zgeqrf(a,lwork=max(3*n,1),overwrite_a=0)   work,info = sgeqrf_lwork(m,n)   work,info = dgeqrf_lwork(m,n)   work,info = cgeqrf_lwork(m,n)   work,info = zgeqrf_lwork(m,n)   qr,tau,info = sgeqrfp(a,lwork=MAX(1, n),overwrite_a=0)   qr,tau,info = dgeqrfp(a,lwork=MAX(1, n),overwrite_a=0)   qr,tau,info = cgeqrfp(a,lwork=MAX(1, n),overwrite_a=0)   qr,tau,info = zgeqrfp(a,lwork=MAX(1, n),overwrite_a=0)   work,info = sgeqrfp_lwork(m,n)   work,info = dgeqrfp_lwork(m,n)   work,info = cgeqrfp_lwork(m,n)   work,info = zgeqrfp_lwork(m,n)   qr,tau,work,info = sgerqf(a,lwork=max(3*m,1),overwrite_a=0)   qr,tau,work,info = dgerqf(a,lwork=max(3*m,1),overwrite_a=0)   qr,tau,work,info = cgerqf(a,lwork=max(3*m,1),overwrite_a=0)   qr,tau,work,info = zgerqf(a,lwork=max(3*m,1),overwrite_a=0)   wr,wi,vl,vr,info = sgeev(a,compute_vl=1,compute_vr=1,lwork=max(4*n,1),overwrite_a=0)   wr,wi,vl,vr,info = dgeev(a,compute_vl=1,compute_vr=1,lwork=max(4*n,1),overwrite_a=0)   work,info = sgeev_lwork(n,compute_vl=1,compute_vr=1)   work,info = dgeev_lwork(n,compute_vl=1,compute_vr=1)   w,vl,vr,info = cgeev(a,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0)   w,vl,vr,info = zgeev(a,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0)   work,info = cgeev_lwork(n,compute_vl=1,compute_vr=1)   work,info = zgeev_lwork(n,compute_vl=1,compute_vr=1)   alphar,alphai,beta,vl,vr,info = sgegv(a,b,compute_vl=1,compute_vr=1,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   alphar,alphai,beta,vl,vr,info = dgegv(a,b,compute_vl=1,compute_vr=1,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   alpha,beta,vl,vr,info = cgegv(a,b,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   alpha,beta,vl,vr,info = zgegv(a,b,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   t,sdim,w,vs,work,info = cgees(cselect,a,compute_v=1,sort_t=0,lwork=max(3*n,1),cselect_extra_args=(),overwrite_a=0)   t,sdim,w,vs,work,info = zgees(zselect,a,compute_v=1,sort_t=0,lwork=max(3*n,1),zselect_extra_args=(),overwrite_a=0)   t,sdim,wr,wi,vs,work,info = sgees(sselect,a,compute_v=1,sort_t=0,lwork=max(3*n,1),sselect_extra_args=(),overwrite_a=0)   t,sdim,wr,wi,vs,work,info = dgees(dselect,a,compute_v=1,sort_t=0,lwork=max(3*n,1),dselect_extra_args=(),overwrite_a=0)   a,b,sdim,alphar,alphai,beta,vsl,vsr,work,info = sgges(sselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl=((jobvsl==1)?n:1),ldvsr=((jobvsr==1)?n:1),lwork=max(8*n+16,1),sselect_extra_args=(),overwrite_a=0,overwrite_b=0)   a,b,sdim,alphar,alphai,beta,vsl,vsr,work,info = dgges(dselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl=((jobvsl==1)?n:1),ldvsr=((jobvsr==1)?n:1),lwork=max(8*n+16,1),dselect_extra_args=(),overwrite_a=0,overwrite_b=0)   a,b,sdim,alpha,beta,vsl,vsr,work,info = cgges(cselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl=((jobvsl==1)?n:1),ldvsr=((jobvsr==1)?n:1),lwork=max(2*n,1),cselect_extra_args=(),overwrite_a=0,overwrite_b=0)   a,b,sdim,alpha,beta,vsl,vsr,work,info = zgges(zselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl=((jobvsl==1)?n:1),ldvsr=((jobvsr==1)?n:1),lwork=max(2*n,1),zselect_extra_args=(),overwrite_a=0,overwrite_b=0)   alphar,alphai,beta,vl,vr,work,info = sggev(a,b,compute_vl=1,compute_vr=1,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   alphar,alphai,beta,vl,vr,work,info = dggev(a,b,compute_vl=1,compute_vr=1,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   alpha,beta,vl,vr,work,info = cggev(a,b,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   alpha,beta,vl,vr,work,info = zggev(a,b,compute_vl=1,compute_vr=1,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   r,c,rowcnd,colcnd,amax,info = sgeequ(a)   r,c,rowcnd,colcnd,amax,info = dgeequ(a)   r,c,rowcnd,colcnd,amax,info = cgeequ(a)   r,c,rowcnd,colcnd,amax,info = zgeequ(a)   r,c,rowcnd,colcnd,amax,info = sgeequb(a)   r,c,rowcnd,colcnd,amax,info = dgeequb(a)   r,c,rowcnd,colcnd,amax,info = cgeequb(a)   r,c,rowcnd,colcnd,amax,info = zgeequb(a)   lub,piv,x,info = sgbsv(kl,ku,ab,b,overwrite_ab=0,overwrite_b=0)   lub,piv,x,info = dgbsv(kl,ku,ab,b,overwrite_ab=0,overwrite_b=0)   lub,piv,x,info = cgbsv(kl,ku,ab,b,overwrite_ab=0,overwrite_b=0)   lub,piv,x,info = zgbsv(kl,ku,ab,b,overwrite_ab=0,overwrite_b=0)   lu,ipiv,info = sgbtrf(ab,kl,ku,m=shape(ab,1),n=shape(ab,1),ldab=max(shape(ab,0),1),overwrite_ab=0)   lu,ipiv,info = dgbtrf(ab,kl,ku,m=shape(ab,1),n=shape(ab,1),ldab=max(shape(ab,0),1),overwrite_ab=0)   lu,ipiv,info = cgbtrf(ab,kl,ku,m=shape(ab,1),n=shape(ab,1),ldab=max(shape(ab,0),1),overwrite_ab=0)   lu,ipiv,info = zgbtrf(ab,kl,ku,m=shape(ab,1),n=shape(ab,1),ldab=max(shape(ab,0),1),overwrite_ab=0)   x,info = sgbtrs(ab,kl,ku,b,ipiv,trans=0,n=shape(ab,1),ldab=shape(ab,0),ldb=shape(b,0),overwrite_b=0)   x,info = dgbtrs(ab,kl,ku,b,ipiv,trans=0,n=shape(ab,1),ldab=shape(ab,0),ldb=shape(b,0),overwrite_b=0)   x,info = cgbtrs(ab,kl,ku,b,ipiv,trans=0,n=shape(ab,1),ldab=shape(ab,0),ldb=shape(b,0),overwrite_b=0)   x,info = zgbtrs(ab,kl,ku,b,ipiv,trans=0,n=shape(ab,1),ldab=shape(ab,0),ldb=shape(b,0),overwrite_b=0)   du2,d,du,x,info = sgtsv(dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0)   du2,d,du,x,info = dgtsv(dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0)   du2,d,du,x,info = cgtsv(dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0)   du2,d,du,x,info = zgtsv(dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0)   dl,d,du,du2,ipiv,info = sgttrf(dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0)   dl,d,du,du2,ipiv,info = dgttrf(dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0)   dl,d,du,du2,ipiv,info = cgttrf(dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0)   dl,d,du,du2,ipiv,info = zgttrf(dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0)   x,info = sgttrs(dl,d,du,du2,ipiv,b,trans=&#39;N&#39;,overwrite_b=0)   x,info = dgttrs(dl,d,du,du2,ipiv,b,trans=&#39;N&#39;,overwrite_b=0)   x,info = cgttrs(dl,d,du,du2,ipiv,b,trans=&#39;N&#39;,overwrite_b=0)   x,info = zgttrs(dl,d,du,du2,ipiv,b,trans=&#39;N&#39;,overwrite_b=0)   dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = sgtsvx(dl,d,du,b,fact=&#39;N&#39;,trans=&#39;N&#39;,dlf=,df=,duf=,du2=,ipiv=)   dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = dgtsvx(dl,d,du,b,fact=&#39;N&#39;,trans=&#39;N&#39;,dlf=,df=,duf=,du2=,ipiv=)   dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = cgtsvx(dl,d,du,b,fact=&#39;N&#39;,trans=&#39;N&#39;,dlf=,df=,duf=,du2=,ipiv=)   dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = zgtsvx(dl,d,du,b,fact=&#39;N&#39;,trans=&#39;N&#39;,dlf=,df=,duf=,du2=,ipiv=)   w,v,info = ssyev(a,compute_v=1,lower=0,lwork=max(3*n-1,1),overwrite_a=0)   w,v,info = dsyev(a,compute_v=1,lower=0,lwork=max(3*n-1,1),overwrite_a=0)   work,info = ssyev_lwork(n,lower=0)   work,info = dsyev_lwork(n,lower=0)   w,v,info = cheev(a,compute_v=1,lower=0,lwork=max(2*n-1,1),overwrite_a=0)   w,v,info = zheev(a,compute_v=1,lower=0,lwork=max(2*n-1,1),overwrite_a=0)   work,info = cheev_lwork(n,lower=0)   work,info = zheev_lwork(n,lower=0)   w,v,info = ssyevd(a,compute_v=1,lower=0,lwork=max((compute_v?1+6*n+2*n*n:2*n+1),1),liwork=(compute_v?3+5*n:1),overwrite_a=0)   w,v,info = dsyevd(a,compute_v=1,lower=0,lwork=max((compute_v?1+6*n+2*n*n:2*n+1),1),liwork=(compute_v?3+5*n:1),overwrite_a=0)   work,iwork,info = ssyevd_lwork(n,compute_v=1,lower=0)   work,iwork,info = dsyevd_lwork(n,compute_v=1,lower=0)   w,v,info = cheevd(a,compute_v=1,lower=0,lwork=max((compute_v?2*n+n*n:n+1),1),liwork=(compute_v?3+5*n:1),lrwork=(compute_v?1+5*n+2*n*n:n),overwrite_a=0)   w,v,info = zheevd(a,compute_v=1,lower=0,lwork=max((compute_v?2*n+n*n:n+1),1),liwork=(compute_v?3+5*n:1),lrwork=(compute_v?1+5*n+2*n*n:n),overwrite_a=0)   work,iwork,rwork,info = cheevd_lwork(n,compute_v=1,lower=0)   work,iwork,rwork,info = zheevd_lwork(n,compute_v=1,lower=0)   ldu,ipiv,info = ssytf2(a,lower=0,overwrite_a=0)   ldu,ipiv,info = dsytf2(a,lower=0,overwrite_a=0)   ldu,ipiv,info = csytf2(a,lower=0,overwrite_a=0)   ldu,ipiv,info = zsytf2(a,lower=0,overwrite_a=0)   c,info = ssygst(a,b,itype=1,lower=0,overwrite_a=0)   c,info = dsygst(a,b,itype=1,lower=0,overwrite_a=0)   ldu,ipiv,info = ssytrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   ldu,ipiv,info = dsytrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   ldu,ipiv,info = csytrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   ldu,ipiv,info = zsytrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   work,info = ssytrf_lwork(n,lower=0)   work,info = dsytrf_lwork(n,lower=0)   work,info = csytrf_lwork(n,lower=0)   work,info = zsytrf_lwork(n,lower=0)   udut,ipiv,x,info = ssysv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   udut,ipiv,x,info = dsysv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   udut,ipiv,x,info = csysv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   udut,ipiv,x,info = zsysv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   work,info = ssysv_lwork(n,lower=0)   work,info = dsysv_lwork(n,lower=0)   work,info = csysv_lwork(n,lower=0)   work,info = zsysv_lwork(n,lower=0)   a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = ssysvx(a,b,af=,ipiv=,lwork=max(3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = dsysvx(a,b,af=,ipiv=,lwork=max(3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = csysvx(a,b,af=,ipiv=,lwork=max(3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = zsysvx(a,b,af=,ipiv=,lwork=max(3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   work,info = ssysvx_lwork(n,lower=0)   work,info = dsysvx_lwork(n,lower=0)   work,info = csysvx_lwork(n,lower=0)   work,info = zsysvx_lwork(n,lower=0)   rcond,info = ssycon(a,ipiv,anorm,lower=0)   rcond,info = dsycon(a,ipiv,anorm,lower=0)   rcond,info = csycon(a,ipiv,anorm,lower=0)   rcond,info = zsycon(a,ipiv,anorm,lower=0)   rcond,info = checon(a,ipiv,anorm,lower=0)   rcond,info = zhecon(a,ipiv,anorm,lower=0)   a,e,info = ssyconv(a,ipiv,lower=0,way=0,overwrite_a=0)   a,e,info = dsyconv(a,ipiv,lower=0,way=0,overwrite_a=0)   a,e,info = csyconv(a,ipiv,lower=0,way=0,overwrite_a=0)   a,e,info = zsyconv(a,ipiv,lower=0,way=0,overwrite_a=0)   c,info = chegst(a,b,itype=1,lower=0,overwrite_a=0)   c,info = zhegst(a,b,itype=1,lower=0,overwrite_a=0)   ldu,ipiv,info = chetrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   ldu,ipiv,info = zhetrf(a,lower=0,lwork=max(n,1),overwrite_a=0)   work,info = chetrf_lwork(n,lower=0)   work,info = zhetrf_lwork(n,lower=0)   uduh,ipiv,x,info = chesv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   uduh,ipiv,x,info = zhesv(a,b,lwork=max(n,1),lower=0,overwrite_a=0,overwrite_b=0)   work,info = chesv_lwork(n,lower=0)   work,info = zhesv_lwork(n,lower=0)   uduh,ipiv,x,rcond,ferr,berr,info = chesvx(a,b,af=,ipiv=,lwork=max(2*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   uduh,ipiv,x,rcond,ferr,berr,info = zhesvx(a,b,af=,ipiv=,lwork=max(2*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0)   work,info = chesvx_lwork(n,lower=0)   work,info = zhesvx_lwork(n,lower=0)   c,d,e,tau,info = ssytrd(a,lower=0,lwork=MAX(n,1),overwrite_a=0)   c,d,e,tau,info = dsytrd(a,lower=0,lwork=MAX(n,1),overwrite_a=0)   work,info = ssytrd_lwork(n,lower=0)   work,info = dsytrd_lwork(n,lower=0)   c,d,e,tau,info = chetrd(a,lower=0,lwork=MAX(n,1),overwrite_a=0)   c,d,e,tau,info = zhetrd(a,lower=0,lwork=MAX(n,1),overwrite_a=0)   work,info = chetrd_lwork(n,lower=0)   work,info = zhetrd_lwork(n,lower=0)   w,z,m,isuppz,info = ssyevr(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(26*n,1),liwork=max(1,10*n),overwrite_a=0)   w,z,m,isuppz,info = dsyevr(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(26*n,1),liwork=max(1,10*n),overwrite_a=0)   work,iwork,info = ssyevr_lwork(n,lower=0)   work,iwork,info = dsyevr_lwork(n,lower=0)   w,z,m,isuppz,info = cheevr(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),lrwork=max(24*n,1),liwork=max(1,10*n),overwrite_a=0)   w,z,m,isuppz,info = zheevr(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),lrwork=max(24*n,1),liwork=max(1,10*n),overwrite_a=0)   work,rwork,iwork,info = cheevr_lwork(n,lower=0)   work,rwork,iwork,info = zheevr_lwork(n,lower=0)   w,z,m,ifail,info = ssyevx(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(8*n,1),overwrite_a=0)   w,z,m,ifail,info = dsyevx(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(8*n,1),overwrite_a=0)   work,info = ssyevx_lwork(n,lower=0)   work,info = dsyevx_lwork(n,lower=0)   m,w,z,ifail,info = cheevx(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),overwrite_a=0)   m,w,z,ifail,info = zheevx(a,compute_v=1,range=&#39;A&#39;,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),overwrite_a=0)   work,info = cheevx_lwork(n,lower=0)   work,info = zheevx_lwork(n,lower=0)   w,v,info = ssygv(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=max(3*n-1,1),overwrite_a=0,overwrite_b=0)   w,v,info = dsygv(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=max(3*n-1,1),overwrite_a=0,overwrite_b=0)   work,info = ssygv_lwork(n,uplo=&#39;L&#39;)   work,info = dsygv_lwork(n,uplo=&#39;L&#39;)   w,v,info = chegv(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=max(2*n-1,1),overwrite_a=0,overwrite_b=0)   w,v,info = zhegv(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=max(2*n-1,1),overwrite_a=0,overwrite_b=0)   work,info = chegv_lwork(n,uplo=&#39;L&#39;)   work,info = zhegv_lwork(n,uplo=&#39;L&#39;)   w,v,info = ssygvd(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=(*jobz==&#39;N&#39;?2*n+1:1+6*n+2*n*n),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0)   w,v,info = dsygvd(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=(*jobz==&#39;N&#39;?2*n+1:1+6*n+2*n*n),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0)   w,v,info = chegvd(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=(*jobz==&#39;N&#39;?n+1:n*(n+2)),lrwork=max((*jobz==&#39;N&#39;?n:2*n*n+5*n+1),1),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0)   w,v,info = zhegvd(a,b,itype=1,jobz=&#39;V&#39;,uplo=&#39;L&#39;,lwork=(*jobz==&#39;N&#39;?n+1:n*(n+2)),lrwork=max((*jobz==&#39;N&#39;?n:2*n*n+5*n+1),1),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0)   w,z,m,ifail,info = ssygvx(a,b,itype=1,jobz=&#39;V&#39;,range=&#39;A&#39;,uplo=&#39;L&#39;,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   w,z,m,ifail,info = dsygvx(a,b,itype=1,jobz=&#39;V&#39;,range=&#39;A&#39;,uplo=&#39;L&#39;,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(8*n,1),overwrite_a=0,overwrite_b=0)   work,info = ssygvx_lwork(n,uplo=&#39;L&#39;)   work,info = dsygvx_lwork(n,uplo=&#39;L&#39;)   w,z,m,ifail,info = chegvx(a,b,itype=1,jobz=&#39;V&#39;,range=&#39;A&#39;,uplo=&#39;L&#39;,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   w,z,m,ifail,info = zhegvx(a,b,itype=1,jobz=&#39;V&#39;,range=&#39;A&#39;,uplo=&#39;L&#39;,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max(2*n,1),overwrite_a=0,overwrite_b=0)   work,info = chegvx_lwork(n,uplo=&#39;L&#39;)   work,info = zhegvx_lwork(n,uplo=&#39;L&#39;)   s,scond,amax,info = ssyequb(a,lower=0)   s,scond,amax,info = dsyequb(a,lower=0)   s,scond,amax,info = csyequb(a,lower=0)   s,scond,amax,info = zsyequb(a,lower=0)   s,scond,amax,info = cheequb(a,lower=0)   s,scond,amax,info = zheequb(a,lower=0)   c,piv,rank_c,info = spstrf(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = dpstrf(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = cpstrf(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = zpstrf(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = spstf2(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = dpstf2(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = cpstf2(a,tol=-1.0,lower=0,overwrite_a=0)   c,piv,rank_c,info = zpstf2(a,tol=-1.0,lower=0,overwrite_a=0)   c,x,info = sposv(a,b,lower=0,overwrite_a=0,overwrite_b=0)   c,x,info = dposv(a,b,lower=0,overwrite_a=0,overwrite_b=0)   c,x,info = cposv(a,b,lower=0,overwrite_a=0,overwrite_b=0)   c,x,info = zposv(a,b,lower=0,overwrite_a=0,overwrite_b=0)   a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = sposvx(a,b,fact=&#39;E&#39;,af=,equed=&#39;Y&#39;,s=,lower=0,overwrite_a=0,overwrite_b=0)   a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = dposvx(a,b,fact=&#39;E&#39;,af=,equed=&#39;Y&#39;,s=,lower=0,overwrite_a=0,overwrite_b=0)   a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = cposvx(a,b,fact=&#39;E&#39;,af=,equed=&#39;Y&#39;,s=,lower=0,overwrite_a=0,overwrite_b=0)   a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = zposvx(a,b,fact=&#39;E&#39;,af=,equed=&#39;Y&#39;,s=,lower=0,overwrite_a=0,overwrite_b=0)   rcond,info = spocon(a,anorm,uplo=&#39;U&#39;)   rcond,info = dpocon(a,anorm,uplo=&#39;U&#39;)   rcond,info = cpocon(a,anorm,uplo=&#39;U&#39;)   rcond,info = zpocon(a,anorm,uplo=&#39;U&#39;)   c,info = spotrf(a,lower=0,clean=1,overwrite_a=0)   c,info = dpotrf(a,lower=0,clean=1,overwrite_a=0)   c,info = cpotrf(a,lower=0,clean=1,overwrite_a=0)   c,info = zpotrf(a,lower=0,clean=1,overwrite_a=0)   x,info = spotrs(c,b,lower=0,overwrite_b=0)   x,info = dpotrs(c,b,lower=0,overwrite_b=0)   x,info = cpotrs(c,b,lower=0,overwrite_b=0)   x,info = zpotrs(c,b,lower=0,overwrite_b=0)   inv_a,info = spotri(c,lower=0,overwrite_c=0)   inv_a,info = dpotri(c,lower=0,overwrite_c=0)   inv_a,info = cpotri(c,lower=0,overwrite_c=0)   inv_a,info = zpotri(c,lower=0,overwrite_c=0)   d,du,x,info = sptsv(d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0)   d,du,x,info = dptsv(d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0)   d,du,x,info = cptsv(d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0)   d,du,x,info = zptsv(d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0)   d,e,info = spttrf(d,e,overwrite_d=0,overwrite_e=0)   d,e,info = dpttrf(d,e,overwrite_d=0,overwrite_e=0)   d,e,info = cpttrf(d,e,overwrite_d=0,overwrite_e=0)   d,e,info = zpttrf(d,e,overwrite_d=0,overwrite_e=0)   x,info = spttrs(d,e,b,overwrite_b=0)   x,info = dpttrs(d,e,b,overwrite_b=0)   x,info = cpttrs(d,e,b,lower=0,overwrite_b=0)   x,info = zpttrs(d,e,b,lower=0,overwrite_b=0)   d,e,z,info = spteqr(d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0)   d,e,z,info = dpteqr(d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0)   d,e,z,info = cpteqr(d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0)   d,e,z,info = zpteqr(d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0)   df,ef,x,rcond,ferr,berr,info = sptsvx(d,e,b,fact=&#39;N&#39;,df=,ef=)   df,ef,x,rcond,ferr,berr,info = dptsvx(d,e,b,fact=&#39;N&#39;,df=,ef=)   df,ef,x,rcond,ferr,berr,info = cptsvx(d,e,b,fact=&#39;N&#39;,df=,ef=)   df,ef,x,rcond,ferr,berr,info = zptsvx(d,e,b,fact=&#39;N&#39;,df=,ef=)   sva,u,v,workout,iworkout,info = sgejsv(a,joba=4,jobu=0,jobv=0,jobr=1,jobt=0,jobp=1,lwork=max(6*n+2*n*n, max(2*m+n, max(4*n+n*n, max(2*n+n*n+6, 7)))))   sva,u,v,workout,iworkout,info = dgejsv(a,joba=4,jobu=0,jobv=0,jobr=1,jobt=0,jobp=1,lwork=max(6*n+2*n*n, max(2*m+n, max(4*n+n*n, max(2*n+n*n+6, 7)))))   a,b,alphar,alphai,beta,q,z,m,pl,pr,dif,work,iwork,info = stgsen(select,a,b,q,z,lwork=max(MAX(4*n+16,2*m*(n-m)),1),liwork=n+6,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0)   a,b,alphar,alphai,beta,q,z,m,pl,pr,dif,work,iwork,info = dtgsen(select,a,b,q,z,lwork=max(MAX(4*n+16,2*m*(n-m)),1),liwork=n+6,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0)   a,b,alpha,beta,q,z,m,pl,pr,dif,work,iwork,info = ctgsen(select,a,b,q,z,lwork=max(2*m*(n-m),1),liwork=n+2,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0)   a,b,alpha,beta,q,z,m,pl,pr,dif,work,iwork,info = ztgsen(select,a,b,q,z,lwork=max(2*m*(n-m),1),liwork=n+2,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0)   c,info = spbtrf(ab,lower=0,ldab=shape(ab,0),overwrite_ab=0)   c,info = dpbtrf(ab,lower=0,ldab=shape(ab,0),overwrite_ab=0)   c,info = cpbtrf(ab,lower=0,ldab=shape(ab,0),overwrite_ab=0)   c,info = zpbtrf(ab,lower=0,ldab=shape(ab,0),overwrite_ab=0)   x,info = spbtrs(ab,b,lower=0,ldab=shape(ab,0),overwrite_b=0)   x,info = dpbtrs(ab,b,lower=0,ldab=shape(ab,0),overwrite_b=0)   x,info = cpbtrs(ab,b,lower=0,ldab=shape(ab,0),overwrite_b=0)   x,info = zpbtrs(ab,b,lower=0,ldab=shape(ab,0),overwrite_b=0)   x,info = strtrs(a,b,lower=0,trans=0,unitdiag=0,lda=shape(a,0),overwrite_b=0)   x,info = dtrtrs(a,b,lower=0,trans=0,unitdiag=0,lda=shape(a,0),overwrite_b=0)   x,info = ctrtrs(a,b,lower=0,trans=0,unitdiag=0,lda=shape(a,0),overwrite_b=0)   x,info = ztrtrs(a,b,lower=0,trans=0,unitdiag=0,lda=shape(a,0),overwrite_b=0)   x,info = stbtrs(ab,b,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x,info = dtbtrs(ab,b,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x,info = ctbtrs(ab,b,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x,info = ztbtrs(ab,b,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   c,x,info = spbsv(ab,b,lower=0,ldab=shape(ab,0),overwrite_ab=0,overwrite_b=0)   c,x,info = dpbsv(ab,b,lower=0,ldab=shape(ab,0),overwrite_ab=0,overwrite_b=0)   c,x,info = cpbsv(ab,b,lower=0,ldab=shape(ab,0),overwrite_ab=0,overwrite_b=0)   c,x,info = zpbsv(ab,b,lower=0,ldab=shape(ab,0),overwrite_ab=0,overwrite_b=0)   cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = sorcsd(x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2+2*m+5*MAX(1,q-1)+4*MAX(1,q)+8*q,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0)   cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = dorcsd(x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2+2*m+5*MAX(1,q-1)+4*MAX(1,q)+8*q,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0)   work,info = sorcsd_lwork(m,p,q)   work,info = dorcsd_lwork(m,p,q)   cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = cuncsd(x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2*m+MAX(1,MAX(mmp,mmq))+1,lrwork=5*MAX(1,q-1)+4*MAX(1,q)+8*q+1,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0)   cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = zuncsd(x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2*m+MAX(1,MAX(mmp,mmq))+1,lrwork=5*MAX(1,q-1)+4*MAX(1,q)+8*q+1,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0)   work,rwork,info = cuncsd_lwork(m,p,q)   work,rwork,info = zuncsd_lwork(m,p,q)   ht,info = sorghr(a,tau,lo=0,hi=n-1,lwork=max(hi-lo,1),overwrite_a=0)   ht,info = dorghr(a,tau,lo=0,hi=n-1,lwork=max(hi-lo,1),overwrite_a=0)   work,info = sorghr_lwork(n,lo=0,hi=n-1)   work,info = dorghr_lwork(n,lo=0,hi=n-1)   ht,info = cunghr(a,tau,lo=0,hi=n-1,lwork=max(hi-lo,1),overwrite_a=0)   ht,info = zunghr(a,tau,lo=0,hi=n-1,lwork=max(hi-lo,1),overwrite_a=0)   work,info = cunghr_lwork(n,lo=0,hi=n-1)   work,info = zunghr_lwork(n,lo=0,hi=n-1)   q,work,info = sorgqr(a,tau,lwork=max(3*n,1),overwrite_a=0)   q,work,info = dorgqr(a,tau,lwork=max(3*n,1),overwrite_a=0)   q,work,info = cungqr(a,tau,lwork=max(3*n,1),overwrite_a=0)   q,work,info = zungqr(a,tau,lwork=max(3*n,1),overwrite_a=0)   cq,work,info = sormqr(side,trans,a,tau,c,lwork,overwrite_c=0)   cq,work,info = dormqr(side,trans,a,tau,c,lwork,overwrite_c=0)   cq,work,info = cunmqr(side,trans,a,tau,c,lwork,overwrite_c=0)   cq,work,info = zunmqr(side,trans,a,tau,c,lwork,overwrite_c=0)   a,t,info = sgeqrt(nb,a,overwrite_a=0)   a,t,info = dgeqrt(nb,a,overwrite_a=0)   a,t,info = cgeqrt(nb,a,overwrite_a=0)   a,t,info = zgeqrt(nb,a,overwrite_a=0)   c,info = sgemqrt(v,t,c,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_c=0)   c,info = dgemqrt(v,t,c,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_c=0)   c,info = cgemqrt(v,t,c,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_c=0)   c,info = zgemqrt(v,t,c,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_c=0)   a,b,t,info = stpqrt(l,nb,a,b,overwrite_a=0,overwrite_b=0)   a,b,t,info = dtpqrt(l,nb,a,b,overwrite_a=0,overwrite_b=0)   a,b,t,info = ctpqrt(l,nb,a,b,overwrite_a=0,overwrite_b=0)   a,b,t,info = ztpqrt(l,nb,a,b,overwrite_a=0,overwrite_b=0)   a,b,info = stpmqrt(l,v,t,a,b,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_a=0,overwrite_b=0)   a,b,info = dtpmqrt(l,v,t,a,b,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_a=0,overwrite_b=0)   a,b,info = ctpmqrt(l,v,t,a,b,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_a=0,overwrite_b=0)   a,b,info = ztpmqrt(l,v,t,a,b,side=&#39;L&#39;,trans=&#39;N&#39;,overwrite_a=0,overwrite_b=0)   cq,info = sormrz(a,tau,c,side=&#39;L&#39;,trans=&#39;N&#39;,lwork=MAX((side[0]==&#39;L&#39;?n:m),1),overwrite_c=0)   cq,info = dormrz(a,tau,c,side=&#39;L&#39;,trans=&#39;N&#39;,lwork=MAX((side[0]==&#39;L&#39;?n:m),1),overwrite_c=0)   cq,info = cunmrz(a,tau,c,side=&#39;L&#39;,trans=&#39;N&#39;,lwork=MAX((side[0]==&#39;L&#39;?n:m),1),overwrite_c=0)   cq,info = zunmrz(a,tau,c,side=&#39;L&#39;,trans=&#39;N&#39;,lwork=MAX((side[0]==&#39;L&#39;?n:m),1),overwrite_c=0)   work,info = sormrz_lwork(m,n,side=&#39;L&#39;,trans=&#39;N&#39;)   work,info = dormrz_lwork(m,n,side=&#39;L&#39;,trans=&#39;N&#39;)   work,info = cunmrz_lwork(m,n,side=&#39;L&#39;,trans=&#39;N&#39;)   work,info = zunmrz_lwork(m,n,side=&#39;L&#39;,trans=&#39;N&#39;)   q,work,info = sorgrq(a,tau,lwork=max(3*m,1),overwrite_a=0)   q,work,info = dorgrq(a,tau,lwork=max(3*m,1),overwrite_a=0)   q,work,info = cungrq(a,tau,lwork=max(3*m,1),overwrite_a=0)   q,work,info = zungrq(a,tau,lwork=max(3*m,1),overwrite_a=0)   inv_c,info = strtri(c,lower=0,unitdiag=0,overwrite_c=0)   inv_c,info = dtrtri(c,lower=0,unitdiag=0,overwrite_c=0)   inv_c,info = ctrtri(c,lower=0,unitdiag=0,overwrite_c=0)   inv_c,info = ztrtri(c,lower=0,unitdiag=0,overwrite_c=0)   x,scale,info = strsyl(a,b,c,trana=&#39;N&#39;,tranb=&#39;N&#39;,isgn=1,overwrite_c=0)   x,scale,info = dtrsyl(a,b,c,trana=&#39;N&#39;,tranb=&#39;N&#39;,isgn=1,overwrite_c=0)   x,scale,info = ctrsyl(a,b,c,trana=&#39;N&#39;,tranb=&#39;N&#39;,isgn=1,overwrite_c=0)   x,scale,info = ztrsyl(a,b,c,trana=&#39;N&#39;,tranb=&#39;N&#39;,isgn=1,overwrite_c=0)   w,z,info = chbevd(ab,compute_v=1,lower=0,ldab=shape(ab,0),lrwork=(compute_v?1+5*n+2*n*n:n),liwork=(compute_v?3+5*n:1),overwrite_ab=1)   w,z,info = zhbevd(ab,compute_v=1,lower=0,ldab=shape(ab,0),lrwork=(compute_v?1+5*n+2*n*n:n),liwork=(compute_v?3+5*n:1),overwrite_ab=1)   w,z,m,ifail,info = chbevx(ab,vl,vu,il,iu,ldab=shape(ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax=(compute_v?(range==2?(iu-il+1):n):1),overwrite_ab=1)   w,z,m,ifail,info = zhbevx(ab,vl,vu,il,iu,ldab=shape(ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax=(compute_v?(range==2?(iu-il+1):n):1),overwrite_ab=1)   t,r,res,x,info = sgglse(a,b,c,d,lwork=max(m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0)   t,r,res,x,info = dgglse(a,b,c,d,lwork=max(m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0)   t,r,res,x,info = cgglse(a,b,c,d,lwork=max(m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0)   t,r,res,x,info = zgglse(a,b,c,d,lwork=max(m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0)   work,info = sgglse_lwork(m,n,p)   work,info = dgglse_lwork(m,n,p)   work,info = cgglse_lwork(m,n,p)   work,info = zgglse_lwork(m,n,p)   w,z,info = ssbev(ab,compute_v=1,lower=0,ldab=shape(ab,0),overwrite_ab=1)   w,z,info = dsbev(ab,compute_v=1,lower=0,ldab=shape(ab,0),overwrite_ab=1)   w,z,info = ssbevd(ab,compute_v=1,lower=0,ldab=shape(ab,0),liwork=(compute_v?3+5*n:1),overwrite_ab=1)   w,z,info = dsbevd(ab,compute_v=1,lower=0,ldab=shape(ab,0),liwork=(compute_v?3+5*n:1),overwrite_ab=1)   w,z,m,ifail,info = ssbevx(ab,vl,vu,il,iu,ldab=shape(ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax=(compute_v?(range==2?(iu-il+1):n):1),overwrite_ab=1)   w,z,m,ifail,info = dsbevx(ab,vl,vu,il,iu,ldab=shape(ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax=(compute_v?(range==2?(iu-il+1):n):1),overwrite_ab=1)   m,w,iblock,isplit,info = sstebz(d,e,range,vl,vu,il,iu,tol,order)   m,w,iblock,isplit,info = dstebz(d,e,range,vl,vu,il,iu,tol,order)   vals,info = ssterf(d,e,overwrite_d=0,overwrite_e=0)   vals,info = dsterf(d,e,overwrite_d=0,overwrite_e=0)   z,info = sstein(d,e,w,iblock,isplit)   z,info = dstein(d,e,w,iblock,isplit)   m,w,z,info = sstemr(d,e,range,vl,vu,il,iu,compute_v=1,lwork=max((compute_v?18*n:12*n),1),liwork=(compute_v?10*n:8*n),overwrite_d=0)   m,w,z,info = dstemr(d,e,range,vl,vu,il,iu,compute_v=1,lwork=max((compute_v?18*n:12*n),1),liwork=(compute_v?10*n:8*n),overwrite_d=0)   work,iwork,info = sstemr_lwork(d,e,range,vl,vu,il,iu,compute_v=1,overwrite_d=0,overwrite_e=0)   work,iwork,info = dstemr_lwork(d,e,range,vl,vu,il,iu,compute_v=1,overwrite_d=0,overwrite_e=0)   vals,z,info = sstev(d,e,compute_v=1,overwrite_d=0,overwrite_e=0)   vals,z,info = dstev(d,e,compute_v=1,overwrite_d=0,overwrite_e=0)   cout = ssfrk(n,k,alpha,a,beta,c,transr=&#39;N&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,overwrite_c=0)   cout = dsfrk(n,k,alpha,a,beta,c,transr=&#39;N&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,overwrite_c=0)   cout = chfrk(n,k,alpha,a,beta,c,transr=&#39;N&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,overwrite_c=0)   cout = zhfrk(n,k,alpha,a,beta,c,transr=&#39;N&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,overwrite_c=0)   arf,info = stpttf(n,ap,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = dtpttf(n,ap,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = ctpttf(n,ap,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = ztpttf(n,ap,transr=&#39;N&#39;,uplo=&#39;U&#39;)   a,info = stpttr(n,ap,uplo=&#39;U&#39;)   a,info = dtpttr(n,ap,uplo=&#39;U&#39;)   a,info = ctpttr(n,ap,uplo=&#39;U&#39;)   a,info = ztpttr(n,ap,uplo=&#39;U&#39;)   ap,info = stfttp(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   ap,info = dtfttp(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   ap,info = ctfttp(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   ap,info = ztfttp(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   a,info = stfttr(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   a,info = dtfttr(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   a,info = ctfttr(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   a,info = ztfttr(n,arf,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = strttf(a,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = dtrttf(a,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = ctrttf(a,transr=&#39;N&#39;,uplo=&#39;U&#39;)   arf,info = ztrttf(a,transr=&#39;N&#39;,uplo=&#39;U&#39;)   ap,info = strttp(a,uplo=&#39;U&#39;)   ap,info = dtrttp(a,uplo=&#39;U&#39;)   ap,info = ctrttp(a,uplo=&#39;U&#39;)   ap,info = ztrttp(a,uplo=&#39;U&#39;)   x = stfsm(alpha,a,b,transr=&#39;N&#39;,side=&#39;L&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x = dtfsm(alpha,a,b,transr=&#39;N&#39;,side=&#39;L&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x = ctfsm(alpha,a,b,transr=&#39;N&#39;,side=&#39;L&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   x = ztfsm(alpha,a,b,transr=&#39;N&#39;,side=&#39;L&#39;,uplo=&#39;U&#39;,trans=&#39;N&#39;,diag=&#39;N&#39;,overwrite_b=0)   achol,info = spftrf(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   achol,info = dpftrf(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   achol,info = cpftrf(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   achol,info = zpftrf(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   ainv,info = spftri(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   ainv,info = dpftri(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   ainv,info = cpftri(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   ainv,info = zpftri(n,a,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_a=0)   x,info = spftrs(n,a,b,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_b=0)   x,info = dpftrs(n,a,b,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_b=0)   x,info = cpftrs(n,a,b,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_b=0)   x,info = zpftrs(n,a,b,transr=&#39;N&#39;,uplo=&#39;U&#39;,overwrite_b=0)   rz,tau,info = stzrzf(a,lwork=MAX(m,1),overwrite_a=0)   rz,tau,info = dtzrzf(a,lwork=MAX(m,1),overwrite_a=0)   rz,tau,info = ctzrzf(a,lwork=MAX(m,1),overwrite_a=0)   rz,tau,info = ztzrzf(a,lwork=MAX(m,1),overwrite_a=0)   work,info = stzrzf_lwork(m,n)   work,info = dtzrzf_lwork(m,n)   work,info = ctzrzf_lwork(m,n)   work,info = ztzrzf_lwork(m,n)   delta,sigma,work,info = slasd4(i,d,z,rho=1.0)   delta,sigma,work,info = dlasd4(i,d,z,rho=1.0)   a,info = slauum(c,lower=0,overwrite_c=0)   a,info = dlauum(c,lower=0,overwrite_c=0)   a,info = clauum(c,lower=0,overwrite_c=0)   a,info = zlauum(c,lower=0,overwrite_c=0)   a = slaswp(a,piv,k1=0,k2=npiv-1,off=0,inc=1,overwrite_a=0)   a = dlaswp(a,piv,k1=0,k2=npiv-1,off=0,inc=1,overwrite_a=0)   a = claswp(a,piv,k1=0,k2=npiv-1,off=0,inc=1,overwrite_a=0)   a = zlaswp(a,piv,k1=0,k2=npiv-1,off=0,inc=1,overwrite_a=0)   dlamch = dlamch(cmach)   slamch = slamch(cmach)   n2 = slange(norm,a)   n2 = dlange(norm,a)   n2 = clange(norm,a)   n2 = zlange(norm,a)   alpha,x,tau = slarfg(n,alpha,x,incx=1,overwrite_x=0)   alpha,x,tau = dlarfg(n,alpha,x,incx=1,overwrite_x=0)   alpha,x,tau = clarfg(n,alpha,x,incx=1,overwrite_x=0)   alpha,x,tau = zlarfg(n,alpha,x,incx=1,overwrite_x=0)   c = slarf(v,tau,c,work,side=&#39;L&#39;,incv=1,overwrite_c=0)   c = dlarf(v,tau,c,work,side=&#39;L&#39;,incv=1,overwrite_c=0)   c = clarf(v,tau,c,work,side=&#39;L&#39;,incv=1,overwrite_c=0)   c = zlarf(v,tau,c,work,side=&#39;L&#39;,incv=1,overwrite_c=0)   cs,sn,r = slartg(f,g)   cs,sn,r = dlartg(f,g)   cs,sn,r = clartg(f,g)   cs,sn,r = zlartg(f,g)   x,y = crot(x,y,c,s,n=(lx-1-offx)/abs(incx)+1,offx=0,incx=1,offy=0,incy=1,overwrite_x=0,overwrite_y=0)   x,y = zrot(x,y,c,s,n=(lx-1-offx)/abs(incx)+1,offx=0,incx=1,offy=0,incy=1,overwrite_x=0,overwrite_y=0)   major,minor,patch = ilaver()</p>
+
+    
+           
+               
+        <p>.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+
+
+           
+               
+        <p>This module &#39; _flapack &#39; is auto - generated with f2py ( version :2). Functions : ba,lo,hi,pivscale,info = sgebal ( a,scale=0,permute=0,overwrite_a=0) ba,lo,hi,pivscale,info = dgebal ( a,scale=0,permute=0,overwrite_a=0) ba,lo,hi,pivscale,info = cgebal ( a,scale=0,permute=0,overwrite_a=0) ba,lo,hi,pivscale,info = zgebal ( a,scale=0,permute=0,overwrite_a=0) ht,tau,info = sgehrd ( a,lo=0,hi=n - 1,lwork=MAX ( n,1),overwrite_a=0) ht,tau,info = dgehrd ( a,lo=0,hi=n - 1,lwork=MAX ( n,1),overwrite_a=0) ht,tau,info = cgehrd ( a,lo=0,hi=n - 1,lwork=MAX ( n,1),overwrite_a=0) ht,tau,info = zgehrd ( a,lo=0,hi=n - 1,lwork=MAX ( n,1),overwrite_a=0) work,info = sgehrd_lwork ( n,lo=0,hi=n - 1) work,info = dgehrd_lwork ( n,lo=0,hi=n - 1) work,info = cgehrd_lwork ( n,lo=0,hi=n - 1) work,info = zgehrd_lwork ( n,lo=0,hi=n - 1) lu,piv,x,info = sgesv ( a,b,overwrite_a=0,overwrite_b=0) lu,piv,x,info = dgesv ( a,b,overwrite_a=0,overwrite_b=0) lu,piv,x,info = cgesv ( a,b,overwrite_a=0,overwrite_b=0) lu,piv,x,info = zgesv ( a,b,overwrite_a=0,overwrite_b=0) as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = sgesvx ( a,b,fact= &#39; E&#39; ,trans= &#39; N&#39; ,af=,ipiv=,equed= &#39; B&#39; ,r=,c=,overwrite_a=0,overwrite_b=0) as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = dgesvx ( a,b,fact= &#39; E&#39; ,trans= &#39; N&#39; ,af=,ipiv=,equed= &#39; B&#39; ,r=,c=,overwrite_a=0,overwrite_b=0) as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = cgesvx ( a,b,fact= &#39; E&#39; ,trans= &#39; N&#39; ,af=,ipiv=,equed= &#39; B&#39; ,r=,c=,overwrite_a=0,overwrite_b=0) as,lu,ipiv,equed,rs,cs,bs,x,rcond,ferr,berr,info = zgesvx ( a,b,fact= &#39; E&#39; ,trans= &#39; N&#39; ,af=,ipiv=,equed= &#39; B&#39; ,r=,c=,overwrite_a=0,overwrite_b=0) rcond,info = sgecon ( a,anorm,norm= &#39; 1&#39; ) rcond,info = dgecon ( a,anorm,norm= &#39; 1&#39; ) rcond,info = cgecon ( a,anorm,norm= &#39; 1&#39; ) rcond,info = zgecon ( a,anorm,norm= &#39; 1&#39; ) lu,piv,info = sgetrf ( a,overwrite_a=0) lu,piv,info = dgetrf ( a,overwrite_a=0) lu,piv,info = cgetrf ( a,overwrite_a=0) lu,piv,info = zgetrf ( a,overwrite_a=0) x,info = sgetrs ( lu,piv,b,trans=0,overwrite_b=0) x,info = dgetrs ( lu,piv,b,trans=0,overwrite_b=0) x,info = cgetrs ( lu,piv,b,trans=0,overwrite_b=0) x,info = zgetrs ( lu,piv,b,trans=0,overwrite_b=0) lu,ipiv,jpiv,info = sgetc2 ( a,overwrite_a=0) lu,ipiv,jpiv,info = dgetc2 ( a,overwrite_a=0) lu,ipiv,jpiv,info = cgetc2 ( a,overwrite_a=0) lu,ipiv,jpiv,info = zgetc2 ( a,overwrite_a=0) x,scale = sgesc2 ( lu,rhs,ipiv,jpiv,overwrite_rhs=0) x,scale = dgesc2 ( lu,rhs,ipiv,jpiv,overwrite_rhs=0) x,scale = cgesc2 ( lu,rhs,ipiv,jpiv,overwrite_rhs=0) x,scale = zgesc2 ( lu,rhs,ipiv,jpiv,overwrite_rhs=0) inv_a,info = sgetri ( lu,piv,lwork=max ( 3*n,1),overwrite_lu=0) inv_a,info = dgetri ( lu,piv,lwork=max ( 3*n,1),overwrite_lu=0) inv_a,info = cgetri ( lu,piv,lwork=max ( 3*n,1),overwrite_lu=0) inv_a,info = zgetri ( lu,piv,lwork=max ( 3*n,1),overwrite_lu=0) work,info = sgetri_lwork ( n) work,info = dgetri_lwork ( n) work,info = cgetri_lwork ( n) work,info = zgetri_lwork ( n) u,s,vt,info = sgesdd ( a,compute_uv=1,full_matrices=1,lwork=max ( ( compute_uv?4*minmn*minmn+MAX ( m,n)+9*minmn :MAX(14*minmn+4,10*minmn+2+25*(25+8))+MAX(m,n)),1),overwrite_a=0) u,s,vt,info = dgesdd ( a,compute_uv=1,full_matrices=1,lwork=max ( ( compute_uv?4*minmn*minmn+MAX ( m,n)+9*minmn :MAX(14*minmn+4,10*minmn+2+25*(25+8))+MAX(m,n)),1),overwrite_a=0) work,info = sgesdd_lwork ( m,n,compute_uv=1,full_matrices=1) work,info = dgesdd_lwork ( m,n,compute_uv=1,full_matrices=1) u,s,vt,info = cgesdd ( a,compute_uv=1,full_matrices=1,lwork=max ( ( compute_uv?2*minmn*minmn+MAX ( m,n)+2*minmn :2*minmn+MAX(m,n)),1),overwrite_a=0) u,s,vt,info = zgesdd ( a,compute_uv=1,full_matrices=1,lwork=max ( ( compute_uv?2*minmn*minmn+MAX ( m,n)+2*minmn :2*minmn+MAX(m,n)),1),overwrite_a=0) work,info = cgesdd_lwork ( m,n,compute_uv=1,full_matrices=1) work,info = zgesdd_lwork ( m,n,compute_uv=1,full_matrices=1) u,s,vt,info = sgesvd ( a,compute_uv=1,full_matrices=1,lwork=max ( MAX ( 3*minmn+MAX ( m,n),5*minmn),1),overwrite_a=0) u,s,vt,info = dgesvd ( a,compute_uv=1,full_matrices=1,lwork=max ( MAX ( 3*minmn+MAX ( m,n),5*minmn),1),overwrite_a=0) work,info = sgesvd_lwork ( m,n,compute_uv=1,full_matrices=1) work,info = dgesvd_lwork ( m,n,compute_uv=1,full_matrices=1) u,s,vt,info = cgesvd ( a,compute_uv=1,full_matrices=1,lwork=MAX ( 2*minmn+MAX ( m,n),1),overwrite_a=0) u,s,vt,info = zgesvd ( a,compute_uv=1,full_matrices=1,lwork=MAX ( 2*minmn+MAX ( m,n),1),overwrite_a=0) work,info = cgesvd_lwork ( m,n,compute_uv=1,full_matrices=1) work,info = zgesvd_lwork ( m,n,compute_uv=1,full_matrices=1) lqr,x,info = sgels ( a,b,trans= &#39; N&#39; ,lwork=MAX ( MIN ( m,n)+MAX ( MIN ( m,n),nrhs),1),overwrite_a=0,overwrite_b=0) lqr,x,info = dgels ( a,b,trans= &#39; N&#39; ,lwork=MAX ( MIN ( m,n)+MAX ( MIN ( m,n),nrhs),1),overwrite_a=0,overwrite_b=0) lqr,x,info = cgels ( a,b,trans= &#39; N&#39; ,lwork=MAX ( MIN ( m,n)+MAX ( MIN ( m,n),nrhs),1),overwrite_a=0,overwrite_b=0) lqr,x,info = zgels ( a,b,trans= &#39; N&#39; ,lwork=MAX ( MIN ( m,n)+MAX ( MIN ( m,n),nrhs),1),overwrite_a=0,overwrite_b=0) work,info = sgels_lwork ( m,n,nrhs,trans= &#39; N&#39; ) work,info = dgels_lwork ( m,n,nrhs,trans= &#39; N&#39; ) work,info = cgels_lwork ( m,n,nrhs,trans= &#39; N&#39; ) work,info = zgels_lwork ( m,n,nrhs,trans= &#39; N&#39; ) v,x,s,rank,work,info = sgelss ( a,b,cond= - 1.0,lwork=max ( 3*minmn+MAX ( 2*minmn,MAX ( maxmn,nrhs)),1),overwrite_a=0,overwrite_b=0) v,x,s,rank,work,info = dgelss ( a,b,cond= - 1.0,lwork=max ( 3*minmn+MAX ( 2*minmn,MAX ( maxmn,nrhs)),1),overwrite_a=0,overwrite_b=0) work,info = sgelss_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) work,info = dgelss_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) v,x,s,rank,work,info = cgelss ( a,b,cond= - 1.0,lwork=max ( 2*minmn+MAX ( maxmn,nrhs),1),overwrite_a=0,overwrite_b=0) v,x,s,rank,work,info = zgelss ( a,b,cond= - 1.0,lwork=max ( 2*minmn+MAX ( maxmn,nrhs),1),overwrite_a=0,overwrite_b=0) work,info = cgelss_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) work,info = zgelss_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) v,x,j,rank,info = sgelsy ( a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0) v,x,j,rank,info = dgelsy ( a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0) work,info = sgelsy_lwork ( m,n,nrhs,cond,lwork= - 1) work,info = dgelsy_lwork ( m,n,nrhs,cond,lwork= - 1) v,x,j,rank,info = cgelsy ( a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0) v,x,j,rank,info = zgelsy ( a,b,jptv,cond,lwork,overwrite_a=0,overwrite_b=0) work,info = cgelsy_lwork ( m,n,nrhs,cond,lwork= - 1) work,info = zgelsy_lwork ( m,n,nrhs,cond,lwork= - 1) x,s,rank,info = sgelsd ( a,b,lwork,size_iwork,cond= - 1.0,overwrite_a=0,overwrite_b=0) x,s,rank,info = dgelsd ( a,b,lwork,size_iwork,cond= - 1.0,overwrite_a=0,overwrite_b=0) work,iwork,info = sgelsd_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) work,iwork,info = dgelsd_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) x,s,rank,info = cgelsd ( a,b,lwork,size_rwork,size_iwork,cond= - 1.0,overwrite_a=0,overwrite_b=0) x,s,rank,info = zgelsd ( a,b,lwork,size_rwork,size_iwork,cond= - 1.0,overwrite_a=0,overwrite_b=0) work,rwork,iwork,info = cgelsd_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) work,rwork,iwork,info = zgelsd_lwork ( m,n,nrhs,cond= - 1.0,lwork= - 1) qr,jpvt,tau,work,info = sgeqp3 ( a,lwork=max ( 3* ( n+1),1),overwrite_a=0) qr,jpvt,tau,work,info = dgeqp3 ( a,lwork=max ( 3* ( n+1),1),overwrite_a=0) qr,jpvt,tau,work,info = cgeqp3 ( a,lwork=max ( 3* ( n+1),1),overwrite_a=0) qr,jpvt,tau,work,info = zgeqp3 ( a,lwork=max ( 3* ( n+1),1),overwrite_a=0) qr,tau,work,info = sgeqrf ( a,lwork=max ( 3*n,1),overwrite_a=0) qr,tau,work,info = dgeqrf ( a,lwork=max ( 3*n,1),overwrite_a=0) qr,tau,work,info = cgeqrf ( a,lwork=max ( 3*n,1),overwrite_a=0) qr,tau,work,info = zgeqrf ( a,lwork=max ( 3*n,1),overwrite_a=0) work,info = sgeqrf_lwork ( m,n) work,info = dgeqrf_lwork ( m,n) work,info = cgeqrf_lwork ( m,n) work,info = zgeqrf_lwork ( m,n) qr,tau,info = sgeqrfp ( a,lwork=MAX ( 1, n),overwrite_a=0) qr,tau,info = dgeqrfp ( a,lwork=MAX ( 1, n),overwrite_a=0) qr,tau,info = cgeqrfp ( a,lwork=MAX ( 1, n),overwrite_a=0) qr,tau,info = zgeqrfp ( a,lwork=MAX ( 1, n),overwrite_a=0) work,info = sgeqrfp_lwork ( m,n) work,info = dgeqrfp_lwork ( m,n) work,info = cgeqrfp_lwork ( m,n) work,info = zgeqrfp_lwork ( m,n) qr,tau,work,info = sgerqf ( a,lwork=max ( 3*m,1),overwrite_a=0) qr,tau,work,info = dgerqf ( a,lwork=max ( 3*m,1),overwrite_a=0) qr,tau,work,info = cgerqf ( a,lwork=max ( 3*m,1),overwrite_a=0) qr,tau,work,info = zgerqf ( a,lwork=max ( 3*m,1),overwrite_a=0) wr,wi,vl,vr,info = sgeev ( a,compute_vl=1,compute_vr=1,lwork=max ( 4*n,1),overwrite_a=0) wr,wi,vl,vr,info = dgeev ( a,compute_vl=1,compute_vr=1,lwork=max ( 4*n,1),overwrite_a=0) work,info = sgeev_lwork ( n,compute_vl=1,compute_vr=1) work,info = dgeev_lwork ( n,compute_vl=1,compute_vr=1) w,vl,vr,info = cgeev ( a,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0) w,vl,vr,info = zgeev ( a,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0) work,info = cgeev_lwork ( n,compute_vl=1,compute_vr=1) work,info = zgeev_lwork ( n,compute_vl=1,compute_vr=1) alphar,alphai,beta,vl,vr,info = sgegv ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) alphar,alphai,beta,vl,vr,info = dgegv ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) alpha,beta,vl,vr,info = cgegv ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) alpha,beta,vl,vr,info = zgegv ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) t,sdim,w,vs,work,info = cgees ( cselect,a,compute_v=1,sort_t=0,lwork=max ( 3*n,1),cselect_extra_args= ( ),overwrite_a=0) t,sdim,w,vs,work,info = zgees ( zselect,a,compute_v=1,sort_t=0,lwork=max ( 3*n,1),zselect_extra_args= ( ),overwrite_a=0) t,sdim,wr,wi,vs,work,info = sgees ( sselect,a,compute_v=1,sort_t=0,lwork=max ( 3*n,1),sselect_extra_args= ( ),overwrite_a=0) t,sdim,wr,wi,vs,work,info = dgees ( dselect,a,compute_v=1,sort_t=0,lwork=max ( 3*n,1),dselect_extra_args= ( ),overwrite_a=0) a,b,sdim,alphar,alphai,beta,vsl,vsr,work,info = sgges ( sselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl= ( ( jobvsl==1)?n :1),ldvsr=((jobvsr==1)?n:1),lwork=max(8*n+16,1),sselect_extra_args=(),overwrite_a=0,overwrite_b=0) a,b,sdim,alphar,alphai,beta,vsl,vsr,work,info = dgges ( dselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl= ( ( jobvsl==1)?n :1),ldvsr=((jobvsr==1)?n:1),lwork=max(8*n+16,1),dselect_extra_args=(),overwrite_a=0,overwrite_b=0) a,b,sdim,alpha,beta,vsl,vsr,work,info = cgges ( cselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl= ( ( jobvsl==1)?n :1),ldvsr=((jobvsr==1)?n:1),lwork=max(2*n,1),cselect_extra_args=(),overwrite_a=0,overwrite_b=0) a,b,sdim,alpha,beta,vsl,vsr,work,info = zgges ( zselect,a,b,jobvsl=1,jobvsr=1,sort_t=0,ldvsl= ( ( jobvsl==1)?n :1),ldvsr=((jobvsr==1)?n:1),lwork=max(2*n,1),zselect_extra_args=(),overwrite_a=0,overwrite_b=0) alphar,alphai,beta,vl,vr,work,info = sggev ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) alphar,alphai,beta,vl,vr,work,info = dggev ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) alpha,beta,vl,vr,work,info = cggev ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) alpha,beta,vl,vr,work,info = zggev ( a,b,compute_vl=1,compute_vr=1,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) r,c,rowcnd,colcnd,amax,info = sgeequ ( a) r,c,rowcnd,colcnd,amax,info = dgeequ ( a) r,c,rowcnd,colcnd,amax,info = cgeequ ( a) r,c,rowcnd,colcnd,amax,info = zgeequ ( a) r,c,rowcnd,colcnd,amax,info = sgeequb ( a) r,c,rowcnd,colcnd,amax,info = dgeequb ( a) r,c,rowcnd,colcnd,amax,info = cgeequb ( a) r,c,rowcnd,colcnd,amax,info = zgeequb ( a) lub,piv,x,info = sgbsv ( kl,ku,ab,b,overwrite_ab=0,overwrite_b=0) lub,piv,x,info = dgbsv ( kl,ku,ab,b,overwrite_ab=0,overwrite_b=0) lub,piv,x,info = cgbsv ( kl,ku,ab,b,overwrite_ab=0,overwrite_b=0) lub,piv,x,info = zgbsv ( kl,ku,ab,b,overwrite_ab=0,overwrite_b=0) lu,ipiv,info = sgbtrf ( ab,kl,ku,m=shape ( ab,1),n=shape ( ab,1),ldab=max ( shape ( ab,0),1),overwrite_ab=0) lu,ipiv,info = dgbtrf ( ab,kl,ku,m=shape ( ab,1),n=shape ( ab,1),ldab=max ( shape ( ab,0),1),overwrite_ab=0) lu,ipiv,info = cgbtrf ( ab,kl,ku,m=shape ( ab,1),n=shape ( ab,1),ldab=max ( shape ( ab,0),1),overwrite_ab=0) lu,ipiv,info = zgbtrf ( ab,kl,ku,m=shape ( ab,1),n=shape ( ab,1),ldab=max ( shape ( ab,0),1),overwrite_ab=0) x,info = sgbtrs ( ab,kl,ku,b,ipiv,trans=0,n=shape ( ab,1),ldab=shape ( ab,0),ldb=shape ( b,0),overwrite_b=0) x,info = dgbtrs ( ab,kl,ku,b,ipiv,trans=0,n=shape ( ab,1),ldab=shape ( ab,0),ldb=shape ( b,0),overwrite_b=0) x,info = cgbtrs ( ab,kl,ku,b,ipiv,trans=0,n=shape ( ab,1),ldab=shape ( ab,0),ldb=shape ( b,0),overwrite_b=0) x,info = zgbtrs ( ab,kl,ku,b,ipiv,trans=0,n=shape ( ab,1),ldab=shape ( ab,0),ldb=shape ( b,0),overwrite_b=0) du2,d,du,x,info = sgtsv ( dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0) du2,d,du,x,info = dgtsv ( dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0) du2,d,du,x,info = cgtsv ( dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0) du2,d,du,x,info = zgtsv ( dl,d,du,b,overwrite_dl=0,overwrite_d=0,overwrite_du=0,overwrite_b=0) dl,d,du,du2,ipiv,info = sgttrf ( dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0) dl,d,du,du2,ipiv,info = dgttrf ( dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0) dl,d,du,du2,ipiv,info = cgttrf ( dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0) dl,d,du,du2,ipiv,info = zgttrf ( dl,d,du,overwrite_dl=0,overwrite_d=0,overwrite_du=0) x,info = sgttrs ( dl,d,du,du2,ipiv,b,trans= &#39; N&#39; ,overwrite_b=0) x,info = dgttrs ( dl,d,du,du2,ipiv,b,trans= &#39; N&#39; ,overwrite_b=0) x,info = cgttrs ( dl,d,du,du2,ipiv,b,trans= &#39; N&#39; ,overwrite_b=0) x,info = zgttrs ( dl,d,du,du2,ipiv,b,trans= &#39; N&#39; ,overwrite_b=0) dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = sgtsvx ( dl,d,du,b,fact= &#39; N&#39; ,trans= &#39; N&#39; ,dlf=,df=,duf=,du2=,ipiv=) dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = dgtsvx ( dl,d,du,b,fact= &#39; N&#39; ,trans= &#39; N&#39; ,dlf=,df=,duf=,du2=,ipiv=) dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = cgtsvx ( dl,d,du,b,fact= &#39; N&#39; ,trans= &#39; N&#39; ,dlf=,df=,duf=,du2=,ipiv=) dlf,df,duf,du2,ipiv,x,rcond,ferr,berr,info = zgtsvx ( dl,d,du,b,fact= &#39; N&#39; ,trans= &#39; N&#39; ,dlf=,df=,duf=,du2=,ipiv=) w,v,info = ssyev ( a,compute_v=1,lower=0,lwork=max ( 3*n - 1,1),overwrite_a=0) w,v,info = dsyev ( a,compute_v=1,lower=0,lwork=max ( 3*n - 1,1),overwrite_a=0) work,info = ssyev_lwork ( n,lower=0) work,info = dsyev_lwork ( n,lower=0) w,v,info = cheev ( a,compute_v=1,lower=0,lwork=max ( 2*n - 1,1),overwrite_a=0) w,v,info = zheev ( a,compute_v=1,lower=0,lwork=max ( 2*n - 1,1),overwrite_a=0) work,info = cheev_lwork ( n,lower=0) work,info = zheev_lwork ( n,lower=0) w,v,info = ssyevd ( a,compute_v=1,lower=0,lwork=max ( ( compute_v?1+6*n+2*n*n :2*n+1),1),liwork=(compute_v?3+5*n:1),overwrite_a=0) w,v,info = dsyevd ( a,compute_v=1,lower=0,lwork=max ( ( compute_v?1+6*n+2*n*n :2*n+1),1),liwork=(compute_v?3+5*n:1),overwrite_a=0) work,iwork,info = ssyevd_lwork ( n,compute_v=1,lower=0) work,iwork,info = dsyevd_lwork ( n,compute_v=1,lower=0) w,v,info = cheevd ( a,compute_v=1,lower=0,lwork=max ( ( compute_v?2*n+n*n :n+1),1),liwork=(compute_v?3+5*n:1),lrwork=(compute_v?1+5*n+2*n*n:n),overwrite_a=0) w,v,info = zheevd ( a,compute_v=1,lower=0,lwork=max ( ( compute_v?2*n+n*n :n+1),1),liwork=(compute_v?3+5*n:1),lrwork=(compute_v?1+5*n+2*n*n:n),overwrite_a=0) work,iwork,rwork,info = cheevd_lwork ( n,compute_v=1,lower=0) work,iwork,rwork,info = zheevd_lwork ( n,compute_v=1,lower=0) ldu,ipiv,info = ssytf2 ( a,lower=0,overwrite_a=0) ldu,ipiv,info = dsytf2 ( a,lower=0,overwrite_a=0) ldu,ipiv,info = csytf2 ( a,lower=0,overwrite_a=0) ldu,ipiv,info = zsytf2 ( a,lower=0,overwrite_a=0) c,info = ssygst ( a,b,itype=1,lower=0,overwrite_a=0) c,info = dsygst ( a,b,itype=1,lower=0,overwrite_a=0) ldu,ipiv,info = ssytrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) ldu,ipiv,info = dsytrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) ldu,ipiv,info = csytrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) ldu,ipiv,info = zsytrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) work,info = ssytrf_lwork ( n,lower=0) work,info = dsytrf_lwork ( n,lower=0) work,info = csytrf_lwork ( n,lower=0) work,info = zsytrf_lwork ( n,lower=0) udut,ipiv,x,info = ssysv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) udut,ipiv,x,info = dsysv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) udut,ipiv,x,info = csysv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) udut,ipiv,x,info = zsysv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) work,info = ssysv_lwork ( n,lower=0) work,info = dsysv_lwork ( n,lower=0) work,info = csysv_lwork ( n,lower=0) work,info = zsysv_lwork ( n,lower=0) a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = ssysvx ( a,b,af=,ipiv=,lwork=max ( 3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = dsysvx ( a,b,af=,ipiv=,lwork=max ( 3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = csysvx ( a,b,af=,ipiv=,lwork=max ( 3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) a_s,udut,ipiv,b_s,x,rcond,ferr,berr,info = zsysvx ( a,b,af=,ipiv=,lwork=max ( 3*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) work,info = ssysvx_lwork ( n,lower=0) work,info = dsysvx_lwork ( n,lower=0) work,info = csysvx_lwork ( n,lower=0) work,info = zsysvx_lwork ( n,lower=0) rcond,info = ssycon ( a,ipiv,anorm,lower=0) rcond,info = dsycon ( a,ipiv,anorm,lower=0) rcond,info = csycon ( a,ipiv,anorm,lower=0) rcond,info = zsycon ( a,ipiv,anorm,lower=0) rcond,info = checon ( a,ipiv,anorm,lower=0) rcond,info = zhecon ( a,ipiv,anorm,lower=0) a,e,info = ssyconv ( a,ipiv,lower=0,way=0,overwrite_a=0) a,e,info = dsyconv ( a,ipiv,lower=0,way=0,overwrite_a=0) a,e,info = csyconv ( a,ipiv,lower=0,way=0,overwrite_a=0) a,e,info = zsyconv ( a,ipiv,lower=0,way=0,overwrite_a=0) c,info = chegst ( a,b,itype=1,lower=0,overwrite_a=0) c,info = zhegst ( a,b,itype=1,lower=0,overwrite_a=0) ldu,ipiv,info = chetrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) ldu,ipiv,info = zhetrf ( a,lower=0,lwork=max ( n,1),overwrite_a=0) work,info = chetrf_lwork ( n,lower=0) work,info = zhetrf_lwork ( n,lower=0) uduh,ipiv,x,info = chesv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) uduh,ipiv,x,info = zhesv ( a,b,lwork=max ( n,1),lower=0,overwrite_a=0,overwrite_b=0) work,info = chesv_lwork ( n,lower=0) work,info = zhesv_lwork ( n,lower=0) uduh,ipiv,x,rcond,ferr,berr,info = chesvx ( a,b,af=,ipiv=,lwork=max ( 2*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) uduh,ipiv,x,rcond,ferr,berr,info = zhesvx ( a,b,af=,ipiv=,lwork=max ( 2*n,1),factored=0,lower=0,overwrite_a=0,overwrite_b=0) work,info = chesvx_lwork ( n,lower=0) work,info = zhesvx_lwork ( n,lower=0) c,d,e,tau,info = ssytrd ( a,lower=0,lwork=MAX ( n,1),overwrite_a=0) c,d,e,tau,info = dsytrd ( a,lower=0,lwork=MAX ( n,1),overwrite_a=0) work,info = ssytrd_lwork ( n,lower=0) work,info = dsytrd_lwork ( n,lower=0) c,d,e,tau,info = chetrd ( a,lower=0,lwork=MAX ( n,1),overwrite_a=0) c,d,e,tau,info = zhetrd ( a,lower=0,lwork=MAX ( n,1),overwrite_a=0) work,info = chetrd_lwork ( n,lower=0) work,info = zhetrd_lwork ( n,lower=0) w,z,m,isuppz,info = ssyevr ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 26*n,1),liwork=max ( 1,10*n),overwrite_a=0) w,z,m,isuppz,info = dsyevr ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 26*n,1),liwork=max ( 1,10*n),overwrite_a=0) work,iwork,info = ssyevr_lwork ( n,lower=0) work,iwork,info = dsyevr_lwork ( n,lower=0) w,z,m,isuppz,info = cheevr ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),lrwork=max ( 24*n,1),liwork=max ( 1,10*n),overwrite_a=0) w,z,m,isuppz,info = zheevr ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),lrwork=max ( 24*n,1),liwork=max ( 1,10*n),overwrite_a=0) work,rwork,iwork,info = cheevr_lwork ( n,lower=0) work,rwork,iwork,info = zheevr_lwork ( n,lower=0) w,z,m,ifail,info = ssyevx ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 8*n,1),overwrite_a=0) w,z,m,ifail,info = dsyevx ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 8*n,1),overwrite_a=0) work,info = ssyevx_lwork ( n,lower=0) work,info = dsyevx_lwork ( n,lower=0) m,w,z,ifail,info = cheevx ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),overwrite_a=0) m,w,z,ifail,info = zheevx ( a,compute_v=1,range= &#39; A&#39; ,lower=0,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),overwrite_a=0) work,info = cheevx_lwork ( n,lower=0) work,info = zheevx_lwork ( n,lower=0) w,v,info = ssygv ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork=max ( 3*n - 1,1),overwrite_a=0,overwrite_b=0) w,v,info = dsygv ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork=max ( 3*n - 1,1),overwrite_a=0,overwrite_b=0) work,info = ssygv_lwork ( n,uplo= &#39; L&#39; ) work,info = dsygv_lwork ( n,uplo= &#39; L&#39; ) w,v,info = chegv ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork=max ( 2*n - 1,1),overwrite_a=0,overwrite_b=0) w,v,info = zhegv ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork=max ( 2*n - 1,1),overwrite_a=0,overwrite_b=0) work,info = chegv_lwork ( n,uplo= &#39; L&#39; ) work,info = zhegv_lwork ( n,uplo= &#39; L&#39; ) w,v,info = ssygvd ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork= ( *jobz== &#39; N&#39; ?2*n+1 :1+6*n+2*n*n),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0) w,v,info = dsygvd ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork= ( *jobz== &#39; N&#39; ?2*n+1 :1+6*n+2*n*n),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0) w,v,info = chegvd ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork= ( *jobz== &#39; N&#39; ?n+1 :n*(n+2)),lrwork=max((*jobz==&#39;N&#39;?n:2*n*n+5*n+1),1),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0) w,v,info = zhegvd ( a,b,itype=1,jobz= &#39; V&#39; ,uplo= &#39; L&#39; ,lwork= ( *jobz== &#39; N&#39; ?n+1 :n*(n+2)),lrwork=max((*jobz==&#39;N&#39;?n:2*n*n+5*n+1),1),liwork=(*jobz==&#39;N&#39;?1:5*n+3),overwrite_a=0,overwrite_b=0) w,z,m,ifail,info = ssygvx ( a,b,itype=1,jobz= &#39; V&#39; ,range= &#39; A&#39; ,uplo= &#39; L&#39; ,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) w,z,m,ifail,info = dsygvx ( a,b,itype=1,jobz= &#39; V&#39; ,range= &#39; A&#39; ,uplo= &#39; L&#39; ,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 8*n,1),overwrite_a=0,overwrite_b=0) work,info = ssygvx_lwork ( n,uplo= &#39; L&#39; ) work,info = dsygvx_lwork ( n,uplo= &#39; L&#39; ) w,z,m,ifail,info = chegvx ( a,b,itype=1,jobz= &#39; V&#39; ,range= &#39; A&#39; ,uplo= &#39; L&#39; ,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) w,z,m,ifail,info = zhegvx ( a,b,itype=1,jobz= &#39; V&#39; ,range= &#39; A&#39; ,uplo= &#39; L&#39; ,vl=0.0,vu=1.0,il=1,iu=n,abstol=0.0,lwork=max ( 2*n,1),overwrite_a=0,overwrite_b=0) work,info = chegvx_lwork ( n,uplo= &#39; L&#39; ) work,info = zhegvx_lwork ( n,uplo= &#39; L&#39; ) s,scond,amax,info = ssyequb ( a,lower=0) s,scond,amax,info = dsyequb ( a,lower=0) s,scond,amax,info = csyequb ( a,lower=0) s,scond,amax,info = zsyequb ( a,lower=0) s,scond,amax,info = cheequb ( a,lower=0) s,scond,amax,info = zheequb ( a,lower=0) c,piv,rank_c,info = spstrf ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = dpstrf ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = cpstrf ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = zpstrf ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = spstf2 ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = dpstf2 ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = cpstf2 ( a,tol= - 1.0,lower=0,overwrite_a=0) c,piv,rank_c,info = zpstf2 ( a,tol= - 1.0,lower=0,overwrite_a=0) c,x,info = sposv ( a,b,lower=0,overwrite_a=0,overwrite_b=0) c,x,info = dposv ( a,b,lower=0,overwrite_a=0,overwrite_b=0) c,x,info = cposv ( a,b,lower=0,overwrite_a=0,overwrite_b=0) c,x,info = zposv ( a,b,lower=0,overwrite_a=0,overwrite_b=0) a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = sposvx ( a,b,fact= &#39; E&#39; ,af=,equed= &#39; Y&#39; ,s=,lower=0,overwrite_a=0,overwrite_b=0) a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = dposvx ( a,b,fact= &#39; E&#39; ,af=,equed= &#39; Y&#39; ,s=,lower=0,overwrite_a=0,overwrite_b=0) a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = cposvx ( a,b,fact= &#39; E&#39; ,af=,equed= &#39; Y&#39; ,s=,lower=0,overwrite_a=0,overwrite_b=0) a_s,lu,equed,s,b_s,x,rcond,ferr,berr,info = zposvx ( a,b,fact= &#39; E&#39; ,af=,equed= &#39; Y&#39; ,s=,lower=0,overwrite_a=0,overwrite_b=0) rcond,info = spocon ( a,anorm,uplo= &#39; U&#39; ) rcond,info = dpocon ( a,anorm,uplo= &#39; U&#39; ) rcond,info = cpocon ( a,anorm,uplo= &#39; U&#39; ) rcond,info = zpocon ( a,anorm,uplo= &#39; U&#39; ) c,info = spotrf ( a,lower=0,clean=1,overwrite_a=0) c,info = dpotrf ( a,lower=0,clean=1,overwrite_a=0) c,info = cpotrf ( a,lower=0,clean=1,overwrite_a=0) c,info = zpotrf ( a,lower=0,clean=1,overwrite_a=0) x,info = spotrs ( c,b,lower=0,overwrite_b=0) x,info = dpotrs ( c,b,lower=0,overwrite_b=0) x,info = cpotrs ( c,b,lower=0,overwrite_b=0) x,info = zpotrs ( c,b,lower=0,overwrite_b=0) inv_a,info = spotri ( c,lower=0,overwrite_c=0) inv_a,info = dpotri ( c,lower=0,overwrite_c=0) inv_a,info = cpotri ( c,lower=0,overwrite_c=0) inv_a,info = zpotri ( c,lower=0,overwrite_c=0) d,du,x,info = sptsv ( d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0) d,du,x,info = dptsv ( d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0) d,du,x,info = cptsv ( d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0) d,du,x,info = zptsv ( d,e,b,overwrite_d=0,overwrite_e=0,overwrite_b=0) d,e,info = spttrf ( d,e,overwrite_d=0,overwrite_e=0) d,e,info = dpttrf ( d,e,overwrite_d=0,overwrite_e=0) d,e,info = cpttrf ( d,e,overwrite_d=0,overwrite_e=0) d,e,info = zpttrf ( d,e,overwrite_d=0,overwrite_e=0) x,info = spttrs ( d,e,b,overwrite_b=0) x,info = dpttrs ( d,e,b,overwrite_b=0) x,info = cpttrs ( d,e,b,lower=0,overwrite_b=0) x,info = zpttrs ( d,e,b,lower=0,overwrite_b=0) d,e,z,info = spteqr ( d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0) d,e,z,info = dpteqr ( d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0) d,e,z,info = cpteqr ( d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0) d,e,z,info = zpteqr ( d,e,z,compute_z=0,overwrite_d=0,overwrite_e=0,overwrite_z=0) df,ef,x,rcond,ferr,berr,info = sptsvx ( d,e,b,fact= &#39; N&#39; ,df=,ef=) df,ef,x,rcond,ferr,berr,info = dptsvx ( d,e,b,fact= &#39; N&#39; ,df=,ef=) df,ef,x,rcond,ferr,berr,info = cptsvx ( d,e,b,fact= &#39; N&#39; ,df=,ef=) df,ef,x,rcond,ferr,berr,info = zptsvx ( d,e,b,fact= &#39; N&#39; ,df=,ef=) sva,u,v,workout,iworkout,info = sgejsv ( a,joba=4,jobu=0,jobv=0,jobr=1,jobt=0,jobp=1,lwork=max ( 6*n+2*n*n, max ( 2*m+n, max ( 4*n+n*n, max ( 2*n+n*n+6, 7))))) sva,u,v,workout,iworkout,info = dgejsv ( a,joba=4,jobu=0,jobv=0,jobr=1,jobt=0,jobp=1,lwork=max ( 6*n+2*n*n, max ( 2*m+n, max ( 4*n+n*n, max ( 2*n+n*n+6, 7))))) a,b,alphar,alphai,beta,q,z,m,pl,pr,dif,work,iwork,info = stgsen ( select,a,b,q,z,lwork=max ( MAX ( 4*n+16,2*m* ( n - m)),1),liwork=n+6,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0) a,b,alphar,alphai,beta,q,z,m,pl,pr,dif,work,iwork,info = dtgsen ( select,a,b,q,z,lwork=max ( MAX ( 4*n+16,2*m* ( n - m)),1),liwork=n+6,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0) a,b,alpha,beta,q,z,m,pl,pr,dif,work,iwork,info = ctgsen ( select,a,b,q,z,lwork=max ( 2*m* ( n - m),1),liwork=n+2,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0) a,b,alpha,beta,q,z,m,pl,pr,dif,work,iwork,info = ztgsen ( select,a,b,q,z,lwork=max ( 2*m* ( n - m),1),liwork=n+2,overwrite_a=0,overwrite_b=0,overwrite_q=0,overwrite_z=0) c,info = spbtrf ( ab,lower=0,ldab=shape ( ab,0),overwrite_ab=0) c,info = dpbtrf ( ab,lower=0,ldab=shape ( ab,0),overwrite_ab=0) c,info = cpbtrf ( ab,lower=0,ldab=shape ( ab,0),overwrite_ab=0) c,info = zpbtrf ( ab,lower=0,ldab=shape ( ab,0),overwrite_ab=0) x,info = spbtrs ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_b=0) x,info = dpbtrs ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_b=0) x,info = cpbtrs ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_b=0) x,info = zpbtrs ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_b=0) x,info = strtrs ( a,b,lower=0,trans=0,unitdiag=0,lda=shape ( a,0),overwrite_b=0) x,info = dtrtrs ( a,b,lower=0,trans=0,unitdiag=0,lda=shape ( a,0),overwrite_b=0) x,info = ctrtrs ( a,b,lower=0,trans=0,unitdiag=0,lda=shape ( a,0),overwrite_b=0) x,info = ztrtrs ( a,b,lower=0,trans=0,unitdiag=0,lda=shape ( a,0),overwrite_b=0) x,info = stbtrs ( ab,b,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x,info = dtbtrs ( ab,b,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x,info = ctbtrs ( ab,b,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x,info = ztbtrs ( ab,b,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) c,x,info = spbsv ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_ab=0,overwrite_b=0) c,x,info = dpbsv ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_ab=0,overwrite_b=0) c,x,info = cpbsv ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_ab=0,overwrite_b=0) c,x,info = zpbsv ( ab,b,lower=0,ldab=shape ( ab,0),overwrite_ab=0,overwrite_b=0) cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = sorcsd ( x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2+2*m+5*MAX ( 1,q - 1)+4*MAX ( 1,q)+8*q,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0) cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = dorcsd ( x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2+2*m+5*MAX ( 1,q - 1)+4*MAX ( 1,q)+8*q,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0) work,info = sorcsd_lwork ( m,p,q) work,info = dorcsd_lwork ( m,p,q) cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = cuncsd ( x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2*m+MAX ( 1,MAX ( mmp,mmq))+1,lrwork=5*MAX ( 1,q - 1)+4*MAX ( 1,q)+8*q+1,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0) cs11,cs12,cs21,cs22,theta,u1,u2,v1t,v2t,info = zuncsd ( x11,x12,x21,x22,compute_u1=1,compute_u2=1,compute_v1t=1,compute_v2t=1,trans=0,signs=0,lwork=2*m+MAX ( 1,MAX ( mmp,mmq))+1,lrwork=5*MAX ( 1,q - 1)+4*MAX ( 1,q)+8*q+1,overwrite_x11=0,overwrite_x12=0,overwrite_x21=0,overwrite_x22=0) work,rwork,info = cuncsd_lwork ( m,p,q) work,rwork,info = zuncsd_lwork ( m,p,q) ht,info = sorghr ( a,tau,lo=0,hi=n - 1,lwork=max ( hi - lo,1),overwrite_a=0) ht,info = dorghr ( a,tau,lo=0,hi=n - 1,lwork=max ( hi - lo,1),overwrite_a=0) work,info = sorghr_lwork ( n,lo=0,hi=n - 1) work,info = dorghr_lwork ( n,lo=0,hi=n - 1) ht,info = cunghr ( a,tau,lo=0,hi=n - 1,lwork=max ( hi - lo,1),overwrite_a=0) ht,info = zunghr ( a,tau,lo=0,hi=n - 1,lwork=max ( hi - lo,1),overwrite_a=0) work,info = cunghr_lwork ( n,lo=0,hi=n - 1) work,info = zunghr_lwork ( n,lo=0,hi=n - 1) q,work,info = sorgqr ( a,tau,lwork=max ( 3*n,1),overwrite_a=0) q,work,info = dorgqr ( a,tau,lwork=max ( 3*n,1),overwrite_a=0) q,work,info = cungqr ( a,tau,lwork=max ( 3*n,1),overwrite_a=0) q,work,info = zungqr ( a,tau,lwork=max ( 3*n,1),overwrite_a=0) cq,work,info = sormqr ( side,trans,a,tau,c,lwork,overwrite_c=0) cq,work,info = dormqr ( side,trans,a,tau,c,lwork,overwrite_c=0) cq,work,info = cunmqr ( side,trans,a,tau,c,lwork,overwrite_c=0) cq,work,info = zunmqr ( side,trans,a,tau,c,lwork,overwrite_c=0) a,t,info = sgeqrt ( nb,a,overwrite_a=0) a,t,info = dgeqrt ( nb,a,overwrite_a=0) a,t,info = cgeqrt ( nb,a,overwrite_a=0) a,t,info = zgeqrt ( nb,a,overwrite_a=0) c,info = sgemqrt ( v,t,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_c=0) c,info = dgemqrt ( v,t,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_c=0) c,info = cgemqrt ( v,t,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_c=0) c,info = zgemqrt ( v,t,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_c=0) a,b,t,info = stpqrt ( l,nb,a,b,overwrite_a=0,overwrite_b=0) a,b,t,info = dtpqrt ( l,nb,a,b,overwrite_a=0,overwrite_b=0) a,b,t,info = ctpqrt ( l,nb,a,b,overwrite_a=0,overwrite_b=0) a,b,t,info = ztpqrt ( l,nb,a,b,overwrite_a=0,overwrite_b=0) a,b,info = stpmqrt ( l,v,t,a,b,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_a=0,overwrite_b=0) a,b,info = dtpmqrt ( l,v,t,a,b,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_a=0,overwrite_b=0) a,b,info = ctpmqrt ( l,v,t,a,b,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_a=0,overwrite_b=0) a,b,info = ztpmqrt ( l,v,t,a,b,side= &#39; L&#39; ,trans= &#39; N&#39; ,overwrite_a=0,overwrite_b=0) cq,info = sormrz ( a,tau,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,lwork=MAX ( ( side [0]== &#39; L&#39; ?n :m),1),overwrite_c=0) cq,info = dormrz ( a,tau,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,lwork=MAX ( ( side [0]== &#39; L&#39; ?n :m),1),overwrite_c=0) cq,info = cunmrz ( a,tau,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,lwork=MAX ( ( side [0]== &#39; L&#39; ?n :m),1),overwrite_c=0) cq,info = zunmrz ( a,tau,c,side= &#39; L&#39; ,trans= &#39; N&#39; ,lwork=MAX ( ( side [0]== &#39; L&#39; ?n :m),1),overwrite_c=0) work,info = sormrz_lwork ( m,n,side= &#39; L&#39; ,trans= &#39; N&#39; ) work,info = dormrz_lwork ( m,n,side= &#39; L&#39; ,trans= &#39; N&#39; ) work,info = cunmrz_lwork ( m,n,side= &#39; L&#39; ,trans= &#39; N&#39; ) work,info = zunmrz_lwork ( m,n,side= &#39; L&#39; ,trans= &#39; N&#39; ) q,work,info = sorgrq ( a,tau,lwork=max ( 3*m,1),overwrite_a=0) q,work,info = dorgrq ( a,tau,lwork=max ( 3*m,1),overwrite_a=0) q,work,info = cungrq ( a,tau,lwork=max ( 3*m,1),overwrite_a=0) q,work,info = zungrq ( a,tau,lwork=max ( 3*m,1),overwrite_a=0) inv_c,info = strtri ( c,lower=0,unitdiag=0,overwrite_c=0) inv_c,info = dtrtri ( c,lower=0,unitdiag=0,overwrite_c=0) inv_c,info = ctrtri ( c,lower=0,unitdiag=0,overwrite_c=0) inv_c,info = ztrtri ( c,lower=0,unitdiag=0,overwrite_c=0) x,scale,info = strsyl ( a,b,c,trana= &#39; N&#39; ,tranb= &#39; N&#39; ,isgn=1,overwrite_c=0) x,scale,info = dtrsyl ( a,b,c,trana= &#39; N&#39; ,tranb= &#39; N&#39; ,isgn=1,overwrite_c=0) x,scale,info = ctrsyl ( a,b,c,trana= &#39; N&#39; ,tranb= &#39; N&#39; ,isgn=1,overwrite_c=0) x,scale,info = ztrsyl ( a,b,c,trana= &#39; N&#39; ,tranb= &#39; N&#39; ,isgn=1,overwrite_c=0) w,z,info = chbevd ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),lrwork= ( compute_v?1+5*n+2*n*n :n),liwork=(compute_v?3+5*n:1),overwrite_ab=1) w,z,info = zhbevd ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),lrwork= ( compute_v?1+5*n+2*n*n :n),liwork=(compute_v?3+5*n:1),overwrite_ab=1) w,z,m,ifail,info = chbevx ( ab,vl,vu,il,iu,ldab=shape ( ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax= ( compute_v? ( range==2? ( iu - il+1) :n):1),overwrite_ab=1) w,z,m,ifail,info = zhbevx ( ab,vl,vu,il,iu,ldab=shape ( ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax= ( compute_v? ( range==2? ( iu - il+1) :n):1),overwrite_ab=1) t,r,res,x,info = sgglse ( a,b,c,d,lwork=max ( m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0) t,r,res,x,info = dgglse ( a,b,c,d,lwork=max ( m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0) t,r,res,x,info = cgglse ( a,b,c,d,lwork=max ( m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0) t,r,res,x,info = zgglse ( a,b,c,d,lwork=max ( m+n+p,1),overwrite_a=0,overwrite_b=0,overwrite_c=0,overwrite_d=0) work,info = sgglse_lwork ( m,n,p) work,info = dgglse_lwork ( m,n,p) work,info = cgglse_lwork ( m,n,p) work,info = zgglse_lwork ( m,n,p) w,z,info = ssbev ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),overwrite_ab=1) w,z,info = dsbev ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),overwrite_ab=1) w,z,info = ssbevd ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),liwork= ( compute_v?3+5*n :1),overwrite_ab=1) w,z,info = dsbevd ( ab,compute_v=1,lower=0,ldab=shape ( ab,0),liwork= ( compute_v?3+5*n :1),overwrite_ab=1) w,z,m,ifail,info = ssbevx ( ab,vl,vu,il,iu,ldab=shape ( ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax= ( compute_v? ( range==2? ( iu - il+1) :n):1),overwrite_ab=1) w,z,m,ifail,info = dsbevx ( ab,vl,vu,il,iu,ldab=shape ( ab,0),compute_v=1,range=0,lower=0,abstol=0.0,mmax= ( compute_v? ( range==2? ( iu - il+1) :n):1),overwrite_ab=1) m,w,iblock,isplit,info = sstebz ( d,e,range,vl,vu,il,iu,tol,order) m,w,iblock,isplit,info = dstebz ( d,e,range,vl,vu,il,iu,tol,order) vals,info = ssterf ( d,e,overwrite_d=0,overwrite_e=0) vals,info = dsterf ( d,e,overwrite_d=0,overwrite_e=0) z,info = sstein ( d,e,w,iblock,isplit) z,info = dstein ( d,e,w,iblock,isplit) m,w,z,info = sstemr ( d,e,range,vl,vu,il,iu,compute_v=1,lwork=max ( ( compute_v?18*n :12*n),1),liwork=(compute_v?10*n:8*n),overwrite_d=0) m,w,z,info = dstemr ( d,e,range,vl,vu,il,iu,compute_v=1,lwork=max ( ( compute_v?18*n :12*n),1),liwork=(compute_v?10*n:8*n),overwrite_d=0) work,iwork,info = sstemr_lwork ( d,e,range,vl,vu,il,iu,compute_v=1,overwrite_d=0,overwrite_e=0) work,iwork,info = dstemr_lwork ( d,e,range,vl,vu,il,iu,compute_v=1,overwrite_d=0,overwrite_e=0) vals,z,info = sstev ( d,e,compute_v=1,overwrite_d=0,overwrite_e=0) vals,z,info = dstev ( d,e,compute_v=1,overwrite_d=0,overwrite_e=0) cout = ssfrk ( n,k,alpha,a,beta,c,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,overwrite_c=0) cout = dsfrk ( n,k,alpha,a,beta,c,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,overwrite_c=0) cout = chfrk ( n,k,alpha,a,beta,c,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,overwrite_c=0) cout = zhfrk ( n,k,alpha,a,beta,c,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,overwrite_c=0) arf,info = stpttf ( n,ap,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = dtpttf ( n,ap,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = ctpttf ( n,ap,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = ztpttf ( n,ap,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) a,info = stpttr ( n,ap,uplo= &#39; U&#39; ) a,info = dtpttr ( n,ap,uplo= &#39; U&#39; ) a,info = ctpttr ( n,ap,uplo= &#39; U&#39; ) a,info = ztpttr ( n,ap,uplo= &#39; U&#39; ) ap,info = stfttp ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) ap,info = dtfttp ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) ap,info = ctfttp ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) ap,info = ztfttp ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) a,info = stfttr ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) a,info = dtfttr ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) a,info = ctfttr ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) a,info = ztfttr ( n,arf,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = strttf ( a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = dtrttf ( a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = ctrttf ( a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) arf,info = ztrttf ( a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ) ap,info = strttp ( a,uplo= &#39; U&#39; ) ap,info = dtrttp ( a,uplo= &#39; U&#39; ) ap,info = ctrttp ( a,uplo= &#39; U&#39; ) ap,info = ztrttp ( a,uplo= &#39; U&#39; ) x = stfsm ( alpha,a,b,transr= &#39; N&#39; ,side= &#39; L&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x = dtfsm ( alpha,a,b,transr= &#39; N&#39; ,side= &#39; L&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x = ctfsm ( alpha,a,b,transr= &#39; N&#39; ,side= &#39; L&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) x = ztfsm ( alpha,a,b,transr= &#39; N&#39; ,side= &#39; L&#39; ,uplo= &#39; U&#39; ,trans= &#39; N&#39; ,diag= &#39; N&#39; ,overwrite_b=0) achol,info = spftrf ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) achol,info = dpftrf ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) achol,info = cpftrf ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) achol,info = zpftrf ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) ainv,info = spftri ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) ainv,info = dpftri ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) ainv,info = cpftri ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) ainv,info = zpftri ( n,a,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_a=0) x,info = spftrs ( n,a,b,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_b=0) x,info = dpftrs ( n,a,b,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_b=0) x,info = cpftrs ( n,a,b,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_b=0) x,info = zpftrs ( n,a,b,transr= &#39; N&#39; ,uplo= &#39; U&#39; ,overwrite_b=0) rz,tau,info = stzrzf ( a,lwork=MAX ( m,1),overwrite_a=0) rz,tau,info = dtzrzf ( a,lwork=MAX ( m,1),overwrite_a=0) rz,tau,info = ctzrzf ( a,lwork=MAX ( m,1),overwrite_a=0) rz,tau,info = ztzrzf ( a,lwork=MAX ( m,1),overwrite_a=0) work,info = stzrzf_lwork ( m,n) work,info = dtzrzf_lwork ( m,n) work,info = ctzrzf_lwork ( m,n) work,info = ztzrzf_lwork ( m,n) delta,sigma,work,info = slasd4 ( i,d,z,rho=1.0) delta,sigma,work,info = dlasd4 ( i,d,z,rho=1.0) a,info = slauum ( c,lower=0,overwrite_c=0) a,info = dlauum ( c,lower=0,overwrite_c=0) a,info = clauum ( c,lower=0,overwrite_c=0) a,info = zlauum ( c,lower=0,overwrite_c=0) a = slaswp ( a,piv,k1=0,k2=npiv - 1,off=0,inc=1,overwrite_a=0) a = dlaswp ( a,piv,k1=0,k2=npiv - 1,off=0,inc=1,overwrite_a=0) a = claswp ( a,piv,k1=0,k2=npiv - 1,off=0,inc=1,overwrite_a=0) a = zlaswp ( a,piv,k1=0,k2=npiv - 1,off=0,inc=1,overwrite_a=0) dlamch = dlamch ( cmach) slamch = slamch ( cmach) n2 = slange ( norm,a) n2 = dlange ( norm,a) n2 = clange ( norm,a) n2 = zlange ( norm,a) alpha,x,tau = slarfg ( n,alpha,x,incx=1,overwrite_x=0) alpha,x,tau = dlarfg ( n,alpha,x,incx=1,overwrite_x=0) alpha,x,tau = clarfg ( n,alpha,x,incx=1,overwrite_x=0) alpha,x,tau = zlarfg ( n,alpha,x,incx=1,overwrite_x=0) c = slarf ( v,tau,c,work,side= &#39; L&#39; ,incv=1,overwrite_c=0) c = dlarf ( v,tau,c,work,side= &#39; L&#39; ,incv=1,overwrite_c=0) c = clarf ( v,tau,c,work,side= &#39; L&#39; ,incv=1,overwrite_c=0) c = zlarf ( v,tau,c,work,side= &#39; L&#39; ,incv=1,overwrite_c=0) cs,sn,r = slartg ( f,g) cs,sn,r = dlartg ( f,g) cs,sn,r = clartg ( f,g) cs,sn,r = zlartg ( f,g) x,y = crot ( x,y,c,s,n= ( lx - 1 - offx) / abs ( incx)+1,offx=0,incx=1,offy=0,incy=1,overwrite_x=0,overwrite_y=0) x,y = zrot ( x,y,c,s,n= ( lx - 1 - offx) / abs ( incx)+1,offx=0,incx=1,offy=0,incy=1,overwrite_x=0,overwrite_y=0) major,minor,patch = ilaver ( ) . </p>
+
+    
+           
+       
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+         See :
+         
+     
+    
+
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg width="800" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/linalg/_flapack.cpython-38-darwin.so </br>
+Line: None </br>
+type: None </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [], "links": []};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [], "links": []};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>

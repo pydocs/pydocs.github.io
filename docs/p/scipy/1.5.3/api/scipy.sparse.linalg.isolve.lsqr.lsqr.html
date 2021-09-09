@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/javascript">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          svg,canvas{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline;
+          padding-left: 1rem;
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+         }
+          .note {color: #7d77d2}
+          .warning {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+        <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> <a href='/' >/ p</a>  / 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.01.1+8.g34f990a81/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.3.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.20.0/api/numpy.html">numpy</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.19.0.dev0/api/skimage.html">skimage</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.html">xarray</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/scipy/1.5.3/api/scipy.html'>1.5.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.html">1.5.3</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/scipy/1.5.3/api/scipy.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.5.3/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.5.3/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.sparse.html'>sparse</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.__config__.html">__config__</a>
+                            <a href="/p/scipy/1.5.3/api/scipy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/scipy/1.5.3/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.constants.html">constants</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.misc.html">misc</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.special.html">special</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.stats.html">stats</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.version.html">version</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.sparse.linalg.html'>linalg</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse._csparsetools.html">_csparsetools</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse._index.html">_index</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse._matrix_io.html">_matrix_io</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse._sparsetools.html">_sparsetools</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.base.html">base</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.bsr.html">bsr</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.compressed.html">compressed</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.construct.html">construct</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.coo.html">coo</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.csc.html">csc</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.csgraph.html">csgraph</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.csr.html">csr</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.data.html">data</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.dia.html">dia</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.dok.html">dok</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.extract.html">extract</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.lil.html">lil</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.sputils.html">sputils</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.sparse.linalg.isolve.html'>isolve</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg._expm_multiply.html">_expm_multiply</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg._norm.html">_norm</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg._onenormest.html">_onenormest</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.dsolve.html">dsolve</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.eigen.html">eigen</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.interface.html">interface</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.html">isolve</a>
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.matfuncs.html">matfuncs</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.sparse.linalg.isolve.lsqr.html'>lsqr</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html">lsqr</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.5.3/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.5.3</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>lsqr(A, b, damp=0.0, atol=1e-08, btol=1e-08, conlim=100000000.0, iter_lim=None, show=False, calc_var=False, x0=None)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Find the least-squares solution to a large, sparse, linear system of equations.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>The function solves 
+        <code class='verbatim'>Ax = b</code>
+      or  
+        <code class='verbatim'>min ||Ax - b||^2</code>
+     or 
+        <code class='verbatim'>min ||Ax - b||^2 + d^2 ||x||^2</code>
+    .</p>
+
+    
+           
+               
+        <p>The matrix A may be square or rectangular (over-determined or under-determined), and may have any rank.</p>
+
+    
+           
+               
+        <p>::</p>
+
+    
+           
+               
+            <pre>1. Unsymmetric equations --    solve  A*x = b
+
+2. Linear least squares  --    solve  A*x = b
+                               in the least-squares sense
+
+3. Damped least squares  --    solve  (   A    )*x = ( b )
+                                      ( damp*I )     ( 0 )
+                               in the least-squares sense</pre>
+       
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="A">A</a> : {sparse matrix, ndarray, LinearOperator}</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Representation of an m-by-n matrix. Alternatively, 
+        <code class='verbatim'>A</code>
+     can be a linear operator which can produce 
+        <code class='verbatim'>Ax</code>
+     and 
+        <code class='verbatim'>A^T x</code>
+     using, e.g., 
+        <code class='verbatim'>scipy.sparse.linalg.LinearOperator</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="b">b</a> : array_like, shape (m,)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Right-hand side vector 
+        <code class='verbatim'>b</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="damp">damp</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Damping coefficient.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="atol, btol">atol, btol</a> : float, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Stopping tolerances. If both are 1.0e-9 (say), the final residual norm should be accurate to about 9 digits.  (The final x will usually have fewer correct digits, depending on cond(A) and the size of damp.)</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="conlim">conlim</a> : float, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Another stopping tolerance.  lsqr terminates if an estimate of 
+        <code class='verbatim'>cond(A)</code>
+     exceeds <code><a link href="#conlim" class='local'>conlim</a></code>.  For compatible systems 
+        <code class='verbatim'>Ax = b</code>
+    , <code><a link href="#conlim" class='local'>conlim</a></code> could be as large as 1.0e+12 (say).  For least-squares problems, conlim should be less than 1.0e+8. Maximum precision can be obtained by setting 
+        <code class='verbatim'>atol = btol = conlim = zero</code>
+    , but the number of iterations may then be excessive.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="iter_lim">iter_lim</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Explicit limitation on number of iterations (for safety).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="show">show</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Display an iteration log.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="calc_var">calc_var</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Whether to estimate diagonals of 
+        <code class='verbatim'>(A&#39;A + damp^2*I)^{-1}</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="x0">x0</a> : array_like, shape (n,), optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Initial guess of x, if None zeros are used.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="x">x</a> : ndarray of float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The final solution.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="istop">istop</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Gives the reason for termination. 1 means x is an approximate solution to Ax = b. 2 means x approximately solves the least-squares problem.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="itn">itn</a> : int</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Iteration number upon termination.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="r1norm">r1norm</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>
+        <code class='verbatim'>norm(r)</code>
+    , where 
+        <code class='verbatim'>r = b - Ax</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="r2norm">r2norm</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>
+        <code class='verbatim'>sqrt( norm(r)^2  +  damp^2 * norm(x)^2 )</code>
+    .  Equal to <code><a link href="#r1norm" class='local'>r1norm</a></code> if 
+        <code class='verbatim'>damp == 0</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="anorm">anorm</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Estimate of Frobenius norm of 
+        <code class='verbatim'>Abar = [[A]; [damp*I]]</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="acond">acond</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Estimate of 
+        <code class='verbatim'>cond(Abar)</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="arnorm">arnorm</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Estimate of 
+        <code class='verbatim'>norm(A&#39;*r - damp^2*x)</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="xnorm">xnorm</a> : float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>
+        <code class='verbatim'>norm(x)</code>
+    </p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="var">var</a> : ndarray of float</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If 
+        <code class='verbatim'>calc_var</code>
+     is True, estimates all diagonals of 
+        <code class='verbatim'>(A&#39;A)^{-1}</code>
+     (if 
+        <code class='verbatim'>damp == 0</code>
+    ) or more generally 
+        <code class='verbatim'>(A&#39;A + damp^2*I)^{-1}</code>
+    .  This is well defined if A has full column rank or 
+        <code class='verbatim'>damp &gt; 0</code>
+    .  (Not sure what var means if 
+        <code class='verbatim'>rank(A) &lt; n</code>
+     and 
+        <code class='verbatim'>damp = 0.</code>
+    )</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>LSQR uses an iterative method to approximate the solution.  The number of iterations required to reach a certain accuracy depends strongly on the scaling of the problem.  Poor scaling of the rows or columns of A should therefore be avoided where possible.</p>
+
+    
+           
+               
+        <p>For example, in problem 1 the solution is unaltered by row-scaling.  If a row of A is very small or large compared to the other rows of A, the corresponding row of ( A  b ) should be scaled up or down.</p>
+
+    
+           
+               
+        <p>In problems 1 and 2, the solution x is easily recovered following column-scaling.  Unless better information is known, the nonzero columns of A should be scaled so that they all have the same Euclidean norm (e.g., 1.0).</p>
+
+    
+           
+               
+        <p>In problem 3, there is no freedom to re-scale if damp is nonzero.  However, the value of damp should be assigned only after attention has been paid to the scaling of A.</p>
+
+    
+           
+               
+        <p>The parameter damp is intended to help regularize ill-conditioned systems, by preventing the true solution from being very large.  Another aid to regularization is provided by the parameter acond, which may be used to terminate iterations before the computed solution becomes very large.</p>
+
+    
+           
+               
+        <p>If some initial estimate 
+        <code class='verbatim'>x0</code>
+     is known and if 
+        <code class='verbatim'>damp == 0</code>
+    , one could proceed as follows:</p>
+
+    
+           
+               
+        <p>  1. Compute a residual vector 
+        <code class='verbatim'>r0 = b - A*x0</code>
+    .   2. Use LSQR to solve the system  
+        <code class='verbatim'>A*dx = r0</code>
+    .   3. Add the correction dx to obtain a final solution 
+        <code class='verbatim'>x = x0 + dx</code>
+    .</p>
+
+    
+           
+               
+        <p>This requires that 
+        <code class='verbatim'>x0</code>
+     be available before and after the call to LSQR.  To judge the benefits, suppose LSQR takes k1 iterations to solve A*x = b and k2 iterations to solve A*dx = r0. If x0 is &#34;good&#34;, norm(r0) will be smaller than norm(b). If the same stopping tolerances atol and btol are used for each system, k1 and k2 will be similar, but the final solution x0 + dx should be more accurate.  The only way to reduce the total work is to use a larger stopping tolerance for the second system. If some value btol is suitable for A*x = b, the larger value btol*norm(b)/norm(r0)  should be suitable for A*dx = r0.</p>
+
+    
+           
+               
+        <p>Preconditioning is another way to reduce the number of iterations. If it is possible to solve a related system 
+        <code class='verbatim'>M*x = b</code>
+     efficiently, where M approximates A in some helpful way (e.g. M - A has low rank or its elements are small relative to those of A), LSQR may converge more rapidly on the system 
+        <code class='verbatim'>A*M(inverse)*z = b</code>
+    , after which x can be recovered by solving M*x = z.</p>
+
+    
+           
+               
+        <p>If A is symmetric, LSQR should not be used!</p>
+
+    
+           
+               
+        <p>Alternatives are the symmetric conjugate-gradient method (cg) and/or SYMMLQ.  SYMMLQ is an implementation of symmetric cg that applies to any symmetric A and will converge more rapidly than LSQR.  If A is positive definite, there are other implementations of symmetric cg that require slightly less work per iteration than SYMMLQ (but will take the same number of iterations).</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn", href="/p/scipy/1.5.3/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn", href="/p/scipy/1.5.3/api/scipy.sparse.html">sparse</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">csc_matrix</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><a class="foo nn", href="/p/scipy/1.5.3/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn", href="/p/scipy/1.5.3/api/scipy.sparse.html">sparse</a><span class="nn">.</span><a class="foo nn", href="/p/scipy/1.5.3/api/scipy.sparse.linalg.html">linalg</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html">lsqr</a><br><span class='nsl'>...&nbsp;</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">A</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">csc_matrix</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">0.0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">1.0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">0.0</span><span class="">,</span><span class=""> </span><span class="mf">1.0</span><span class="">]</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span>
+</pre>
+            
+            
+         
+                
+        <p>The first example has the trivial solution <code>:None:None:`[0, 0]`</code></p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">0.0</span><span class="">,</span><span class=""> </span><span class="mf">0.0</span><span class="">,</span><span class=""> </span><span class="mf">0.0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">normr</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span>
+The exact solution is  x = 0</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">istop</span>
+0</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+array([ 0.,  0.])</pre>
+            
+            
+         
+                
+        <p>The stopping code <code>:None:None:`istop=0`</code> returned indicates that a vector of zeros was found as a solution. The returned solution <code><a link href="#x" class='local'>x</a></code> indeed contains <code>:None:None:`[0., 0.]`</code>. The next example has a non-trivial solution:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">0.0</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">istop</span>
+1</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+array([ 1., -1.])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">itn</span>
+1</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">r1norm</span>
+4.440892098500627e-16</pre>
+            
+            
+         
+                
+        <p>As indicated by <code>:None:None:`istop=1`</code>, <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html" class='exists'>lsqr</a></code>
+         found a solution obeying the tolerance limits. The given solution <code>:None:None:`[1., -1.]`</code> obviously solves the equation. The remaining return values include information about the number of iterations (<code>:None:None:`itn=1`</code>) and the remaining difference of left and right side of the solved equation. The final example demonstrates the behavior in the case where there is no solution for the equation:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.0</span><span class="">,</span><span class=""> </span><span class="mf">0.01</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.0</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">istop</span>
+2</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+array([ 1.00333333, -0.99666667])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html">A</a><span class="o">.</span><a class="foo ", href="/p/scipy/1.5.3/api/scipy.sparse.base.spmatrix.dot.html">dot</a><span class="">(</span><span class="">x</span><span class="">)</span><span class=""> </span><span class="o">-</span><span class=""> </span><a class="foo ", href="/p/numpy/1.20.0/api/numpy.ndarray.html">b</a>
+array([ 0.00333333, -0.00333333,  0.00333333])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">r1norm</span>
+0.005773502691896255</pre>
+            
+            
+         
+                
+        <p><code><a link href="#istop" class='local'>istop</a></code> indicates that the system is inconsistent and thus <code><a link href="#x" class='local'>x</a></code> is rather an approximate solution to the corresponding least-squares problem. <code><a link href="#r1norm" class='local'>r1norm</a></code> contains the norm of the minimal residual that was found.</p>
+
+    
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html" class='exists'>scipy.sparse.linalg.isolve.lsqr.lsqr</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.base.spmatrix.dot.html" class='exists'>scipy.sparse.base.spmatrix.dot</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix.html" class='exists'>scipy.sparse.csc.csc_matrix</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.20.0/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
+     
+    
+
+
+    <h3 id='section-backrefs'>Back References</h3>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+
+    
+    
+        <code><a link href="/p/scipy/1.5.3/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html" class='exists'>scipy.sparse.linalg.isolve.lsqr.lsqr</a></code>
+        
+    
+    
+    
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg width="800" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/scipy/sparse/linalg/isolve/lsqr.py </br>
+Line: 96 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 33.98076211353316, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.ndarray"}, {"id": 2, "val": 36.84441020371192, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy"}, {"id": 4, "val": 17.273618495495704, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse"}, {"id": 5, "val": 24.0, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.array"}, {"id": 6, "val": 11.60555127546399, "label": "scipy.sparse.base.spmatrix.dot", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.base.spmatrix.dot"}, {"id": 7, "val": 12.47213595499958, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix"}, {"id": 8, "val": 13.0, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.linalg"}, {"id": 9, "val": 35.658633371878665, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy"}], "links": [{"source": 9, "target": 6, "id": 464}, {"source": 9, "target": 7, "id": 486}, {"source": 5, "target": 1, "id": 807}, {"source": 5, "target": 6, "id": 930}, {"source": 5, "target": 7, "id": 937}, {"source": 4, "target": 6, "id": 1086}, {"source": 4, "target": 7, "id": 1108}, {"source": 2, "target": 1, "id": 1169}, {"source": 2, "target": 6, "id": 1521}, {"source": 2, "target": 7, "id": 1530}, {"source": 1, "target": 6, "id": 2372}, {"source": 1, "target": 7, "id": 2379}]};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 33.98076211353316, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.ndarray"}, {"id": 2, "val": 36.84441020371192, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy"}, {"id": 4, "val": 17.273618495495704, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse"}, {"id": 5, "val": 24.0, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.20.0/api/numpy.array"}, {"id": 6, "val": 11.60555127546399, "label": "scipy.sparse.base.spmatrix.dot", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.base.spmatrix.dot"}, {"id": 7, "val": 12.47213595499958, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.csc.csc_matrix"}, {"id": 8, "val": 13.0, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy.sparse.linalg"}, {"id": 9, "val": 35.658633371878665, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.5.3/api/scipy"}], "links": [{"source": 9, "target": 6, "id": 464}, {"source": 9, "target": 7, "id": 486}, {"source": 5, "target": 1, "id": 807}, {"source": 5, "target": 6, "id": 930}, {"source": 5, "target": 7, "id": 937}, {"source": 4, "target": 6, "id": 1086}, {"source": 4, "target": 7, "id": 1108}, {"source": 2, "target": 1, "id": 1169}, {"source": 2, "target": 6, "id": 1521}, {"source": 2, "target": 7, "id": 1530}, {"source": 1, "target": 6, "id": 2372}, {"source": 1, "target": 7, "id": 2379}]};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>
