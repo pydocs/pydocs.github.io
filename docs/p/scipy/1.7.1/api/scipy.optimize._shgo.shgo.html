@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/javascript">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" id="MathJax-script" defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <!--<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>-->
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .graph{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              height: 42px;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+              
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline-block;
+              padding: 10px;
+              padding-left: 1rem;
+
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+          }
+          .admonition > div {
+            background-color: rgba(0, 123, 255, 0.1);
+            position: relative;
+            margin: 0 -1rem;
+            padding: 0.4rem 0.1rem 0.4rem 1.5rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+          .note {color: #7d77d2}
+          .warning {color: #af7b1a}
+          .error {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+nav  a {
+    color: #606c76;
+    text-decoration: none;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+            <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=scipy>scipy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.4.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.html">numpy</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.html">pandas</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.18.3/api/skimage.html">skimage</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.html">xarray</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/scipy/1.7.1/api/scipy.html'>1.7.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/scipy/1.7.1/api/scipy.html">1.7.1</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/scipy/1.7.1/api/scipy.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/scipy/1.7.1/api/scipy.html">API</a>
+                        <a href="/p/scipy/1.7.1/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.html'>scipy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize.html'>optimize</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/?/?/api/scipy._lib.html">_lib</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.sparse.html">sparse</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.spatial.html">spatial</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.special.html">special</a>
+                            <a href="/p/?/?/api/scipy.stats.html">stats</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize._shgo.html'>_shgo</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.__nnls.html">__nnls</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._basinhopping.html">_basinhopping</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._bglu_dense.html">_bglu_dense</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._cobyla.html">_cobyla</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._constraints.html">_constraints</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._differentiable_functions.html">_differentiable_functions</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._differentialevolution.html">_differentialevolution</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._dual_annealing.html">_dual_annealing</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._group_columns.html">_group_columns</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.html">_hessian_update_strategy</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._highs.html">_highs</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._lbfgsb.html">_lbfgsb</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog.html">_linprog</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_doc.html">_linprog_doc</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_highs.html">_linprog_highs</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_ip.html">_linprog_ip</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_rs.html">_linprog_rs</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_simplex.html">_linprog_simplex</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._linprog_util.html">_linprog_util</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._lsap.html">_lsap</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._lsap_module.html">_lsap_module</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._lsq.html">_lsq</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._minimize.html">_minimize</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._minpack.html">_minpack</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._nnls.html">_nnls</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._numdiff.html">_numdiff</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._qap.html">_qap</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._remove_redundancy.html">_remove_redundancy</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._root.html">_root</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._root_scalar.html">_root_scalar</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._shgo.html">_shgo</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._shgo_lib.html">_shgo_lib</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._slsqp.html">_slsqp</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._spectral.html">_spectral</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trlib.html">_trlib</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion.html">_trustregion</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.html">_trustregion_constr</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_dogleg.html">_trustregion_dogleg</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_exact.html">_trustregion_exact</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_krylov.html">_trustregion_krylov</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_ncg.html">_trustregion_ncg</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._zeros.html">_zeros</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.cobyla.html">cobyla</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.lbfgsb.html">lbfgsb</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.linesearch.html">linesearch</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.minpack.html">minpack</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.minpack2.html">minpack2</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.moduleTNC.html">moduleTNC</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.nonlin.html">nonlin</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.html">optimize</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.slsqp.html">slsqp</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.tnc.html">tnc</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize.zeros.html">zeros</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='scipy.optimize._shgo.shgo.html'>shgo</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/?/?/api/scipy.optimize._shgo.LMapCache.html">LMapCache</a>
+                            <a href="/p/?/?/api/scipy.optimize._shgo.SHGO.html">SHGO</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html">shgo</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/scipy/1.7.1/img/logo.png"/>
+    
+    <a href="#">Library: scipy</a>
+    <a href="#">Version: 1.7.1</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>shgo(func, bounds, args=(), constraints=None, n=None, iters=1, callback=None, minimizer_kwargs=None, options=None, sampling_method=&#39;simplicial&#39;)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Finds the global minimum of a function using SHG optimization.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>SHGO stands for &#34; simplicial homology global optimization&#34; .</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="func">func</a> : callable</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The objective function to be minimized.  Must be in the form 
+        <code class='verbatim'>f(x, *args)</code>
+    , where 
+        <code class='verbatim'>x</code>
+     is the argument in the form of a 1-D array and 
+        <code class='verbatim'>args</code>
+     is a tuple of any additional fixed parameters needed to completely specify the function.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="bounds">bounds</a> : sequence</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Bounds for variables.  
+        <code class='verbatim'>(min, max)</code>
+     pairs for each element in 
+        <code class='verbatim'>x</code>
+    , defining the lower and upper bounds for the optimizing argument of <code><a link href="#func" class='local'>func</a></code>. It is required to have 
+        <code class='verbatim'>len(bounds) == len(x)</code>
+    . 
+        <code class='verbatim'>len(bounds)</code>
+     is used to determine the number of parameters in 
+        <code class='verbatim'>x</code>
+    . Use 
+        <code class='verbatim'>None</code>
+     for one of min or max when there is no bound in that direction. By default bounds are 
+        <code class='verbatim'>(None, None)</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="args">args</a> : tuple, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Any additional fixed parameters needed to completely specify the objective function.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="constraints">constraints</a> : dict or sequence of dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Constraints definition. Function(s) 
+        <code class='verbatim'>R**n</code>
+     in the form::</p>
+
+    
+            
+                
+            <pre>g(x) &gt;= 0 applied as g : R^n -&gt; R^m
+h(x) == 0 applied as h : R^n -&gt; R^p
+</pre>
+       
+            
+                
+        <p>Each constraint is defined in a dictionary with fields:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>type : str</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Constraint type: &#39;eq&#39; for equality, &#39;ineq&#39; for inequality.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>fun : callable</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The function defining the constraint.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>jac : callable, optional</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The Jacobian of <code>:None:None:`fun`</code> (only for SLSQP).</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>args : sequence, optional</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Extra arguments to be passed to the function and Jacobian. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>Equality constraint means that the constraint function result is to be zero whereas inequality means that it is to be non-negative. Note that COBYLA only supports inequality constraints.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>note</div>
+    
+        
+        <p>Only the COBYLA and SLSQP local minimize methods currently support constraint arguments. If the 
+        <code class='verbatim'>constraints</code>
+     sequence used in the local optimization problem is not defined in 
+        <code class='verbatim'>minimizer_kwargs</code>
+     and a constrained method is used then the global 
+        <code class='verbatim'>constraints</code>
+     will be used. (Defining a 
+        <code class='verbatim'>constraints</code>
+     sequence in 
+        <code class='verbatim'>minimizer_kwargs</code>
+     means that 
+        <code class='verbatim'>constraints</code>
+     will not be added so if equality constraints and so forth need to be added then the inequality functions in 
+        <code class='verbatim'>constraints</code>
+     need to be added to 
+        <code class='verbatim'>minimizer_kwargs</code>
+     too).</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="n">n</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of sampling points used in the construction of the simplicial complex. Note that this argument is only used for 
+        <code class='verbatim'>sobol</code>
+     and other arbitrary <code>:None:None:`sampling_methods`</code>. In case of 
+        <code class='verbatim'>sobol</code>
+    , it must be a power of 2: 
+        <code class='verbatim'>n=2**m</code>
+    , and the argument will automatically be converted to the next higher power of 2. Default is 100 for 
+        <code class='verbatim'>sampling_method=&#39;simplicial&#39;</code>
+     and 128 for 
+        <code class='verbatim'>sampling_method=&#39;sobol&#39;</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="iters">iters</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of iterations used in the construction of the simplicial complex. Default is 1.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="callback">callback</a> : callable, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Called after each iteration, as 
+        <code class='verbatim'>callback(xk)</code>
+    , where 
+        <code class='verbatim'>xk</code>
+     is the current parameter vector.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="minimizer_kwargs">minimizer_kwargs</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Extra keyword arguments to be passed to the minimizer 
+        <code class='verbatim'>scipy.optimize.minimize</code>
+     Some important options could be:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* method : str</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The minimization method, the default is 
+        <code class='verbatim'>SLSQP</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* args : tuple</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Extra arguments passed to the objective function (
+        <code class='verbatim'>func</code>
+    ) and its derivatives (Jacobian, Hessian).</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* options : dict, optional</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Note that by default the tolerance is specified as 
+        <code class='verbatim'>{ftol: 1e-12}</code>
+    </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+        </dd>
+       
+            
+                <dt><a id="options">options</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A dictionary of solver options. Many of the options specified for the global routine are also passed to the scipy.optimize.minimize routine. The options that are also passed to the local routine are marked with &#34;(L)&#34;.</p>
+
+    
+            
+                
+        <p>Stopping criteria, the algorithm will terminate if any of the specified criteria are met. However, the default algorithm does not require any to be specified:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* maxfev : int (L)</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Maximum number of function evaluations in the feasible domain. (Note only methods that support this option will terminate the routine at precisely exact specified value. Otherwise the criterion will only terminate during a global iteration)</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* f_min</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Specify the minimum objective function value, if it is known.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* f_tol : float</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Precision goal for the value of f in the stopping criterion. Note that the global routine will also terminate if a sampling point in the global routine is within this tolerance.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* maxiter : int</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Maximum number of iterations to perform.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* maxev : int</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Maximum number of sampling evaluations to perform (includes searching in infeasible points).</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* maxtime : float</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Maximum processing runtime allowed</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* minhgrd : int</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Minimum homology group rank differential. The homology group of the objective function is calculated (approximately) during every iteration. The rank of this group has a one-to-one correspondence with the number of locally convex subdomains in the objective function (after adequate sampling points each of these subdomains contain a unique global minimum). If the difference in the hgr is 0 between iterations for 
+        <code class='verbatim'>maxhgrd</code>
+     specified iterations the algorithm will terminate. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>Objective function knowledge:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* symmetry : bool</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Specify True if the objective function contains symmetric variables. The search space (and therefore performance) is decreased by O(n!). </p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* jac : bool or callable, optional</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Jacobian (gradient) of objective function. Only for CG, BFGS, Newton-CG, L-BFGS-B, TNC, SLSQP, dogleg, trust-ncg. If 
+        <code class='verbatim'>jac</code>
+     is a boolean and is True, 
+        <code class='verbatim'>fun</code>
+     is assumed to return the gradient along with the objective function. If False, the gradient will be estimated numerically. 
+        <code class='verbatim'>jac</code>
+     can also be a callable returning the gradient of the objective. In this case, it must accept the same arguments as 
+        <code class='verbatim'>fun</code>
+    . (Passed to <code>:None:None:`scipy.optimize.minmize`</code> automatically) </p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* hess, hessp : callable, optional</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Hessian (matrix of second-order derivatives) of objective function or Hessian of objective function times an arbitrary vector p. Only for Newton-CG, dogleg, trust-ncg. Only one of 
+        <code class='verbatim'>hessp</code>
+     or 
+        <code class='verbatim'>hess</code>
+     needs to be given. If 
+        <code class='verbatim'>hess</code>
+     is provided, then 
+        <code class='verbatim'>hessp</code>
+     will be ignored. If neither 
+        <code class='verbatim'>hess</code>
+     nor 
+        <code class='verbatim'>hessp</code>
+     is provided, then the Hessian product will be approximated using finite differences on 
+        <code class='verbatim'>jac</code>
+    . 
+        <code class='verbatim'>hessp</code>
+     must compute the Hessian times an arbitrary vector. (Passed to <code>:None:None:`scipy.optimize.minmize`</code> automatically) </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>Algorithm settings:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* minimize_every_iter : bool</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>If True then promising global sampling points will be passed to a local minimization routine every iteration. If False then only the final minimizer pool will be run. Defaults to False.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* local_iter : int</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Only evaluate a few of the best minimizer pool candidates every iteration. If False all potential points are passed to the local minimization routine.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* infty_constraints: bool</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>If True then any sampling points generated which are outside will the feasible domain will be saved and given an objective function value of 
+        <code class='verbatim'>inf</code>
+    . If False then these points will be discarded. Using this functionality could lead to higher performance with respect to function evaluations before the global minimum is found, specifying False will use less memory at the cost of a slight decrease in performance. Defaults to True. </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>Feedback:</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* disp : bool (L)</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>Set to True to print convergence messages.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+        </dd>
+       
+            
+                <dt><a id="sampling_method">sampling_method</a> : str or function, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Current built in sampling method options are 
+        <code class='verbatim'>halton</code>
+    , 
+        <code class='verbatim'>sobol</code>
+     and 
+        <code class='verbatim'>simplicial</code>
+    . The default 
+        <code class='verbatim'>simplicial</code>
+     provides the theoretical guarantee of convergence to the global minimum in finite time. 
+        <code class='verbatim'>halton</code>
+     and 
+        <code class='verbatim'>sobol</code>
+     method are faster in terms of sampling point generation at the cost of the loss of guaranteed convergence. It is more appropriate for most &#34;easier&#34; problems where the convergence is relatively fast. User defined sampling functions must accept two arguments of 
+        <code class='verbatim'>n</code>
+     sampling points of dimension 
+        <code class='verbatim'>dim</code>
+     per call and output an array of sampling points with shape <code>:None:None:`n x dim`</code>.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="res">res</a> : OptimizeResult</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The optimization result represented as a <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>OptimizeResult</a></code>
+         object. Important attributes are: 
+        <code class='verbatim'>x</code>
+     the solution array corresponding to the global minimum, 
+        <code class='verbatim'>fun</code>
+     the function output at the global solution, 
+        <code class='verbatim'>xl</code>
+     an ordered list of local minima solutions, 
+        <code class='verbatim'>funl</code>
+     the function output at the corresponding local solutions, 
+        <code class='verbatim'>success</code>
+     a Boolean flag indicating if the optimizer exited successfully, 
+        <code class='verbatim'>message</code>
+     which describes the cause of the termination, 
+        <code class='verbatim'>nfev</code>
+     the total number of objective function evaluations including the sampling calls, 
+        <code class='verbatim'>nlfev</code>
+     the total number of objective function evaluations culminating from all local search optimizations, 
+        <code class='verbatim'>nit</code>
+     number of iterations performed by the global routine.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Global optimization using simplicial homology global optimization . Appropriate for solving general purpose NLP and blackbox optimization problems to global optimality ( low - dimensional problems).</p>
+
+    
+           
+               
+        <p>In general, the optimization problems are of the form::</p>
+
+    
+           
+               
+            <pre>minimize f(x) subject to
+
+g_i(x) &gt;= 0,  i = 1,...,m
+h_j(x)  = 0,  j = 1,...,p</pre>
+       
+           
+               
+        <p>where x is a vector of one or more variables. 
+        <code class='verbatim'>f(x)</code>
+     is the objective function 
+        <code class='verbatim'>R^n -&gt; R</code>
+     , 
+        <code class='verbatim'>g_i(x)</code>
+     are the inequality constraints, and 
+        <code class='verbatim'>h_j(x)</code>
+     are the equality constraints.</p>
+
+    
+           
+               
+        <p>Optionally, the lower and upper bounds for each element in x can also be specified using the <code><a link href="#bounds" class='local'>bounds</a></code> argument.</p>
+
+    
+           
+               
+        <p>While most of the theoretical advantages of SHGO are only proven for when 
+        <code class='verbatim'>f(x)</code>
+     is a Lipschitz smooth function, the algorithm is also proven to converge to the global optimum for the more general case where 
+        <code class='verbatim'>f(x)</code>
+     is non - continuous, non - convex and non - smooth, if the default sampling method is used .</p>
+
+    
+           
+               
+        <p>The local search method may be specified using the 
+        <code class='verbatim'>minimizer_kwargs</code>
+     parameter which is passed on to 
+        <code class='verbatim'>scipy.optimize.minimize</code>
+     . By default, the 
+        <code class='verbatim'>SLSQP</code>
+     method is used. In general, it is recommended to use the 
+        <code class='verbatim'>SLSQP</code>
+     or 
+        <code class='verbatim'>COBYLA</code>
+     local minimization if inequality constraints are defined for the problem since the other methods do not use constraints.</p>
+
+    
+           
+               
+        <p>The 
+        <code class='verbatim'>halton</code>
+     and 
+        <code class='verbatim'>sobol</code>
+     method points are generated using <code>:None:None:`scipy.stats.qmc`</code> . Any other QMC method could be used.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                
+        <p>First consider the problem of minimizing the Rosenbrock function, <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>rosen</a></code>
+        :</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">optimize</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">rosen</span><span class="">,</span><span class=""> </span><span class="">shgo</span><br><span class='nsl'>...&nbsp;</span><span class="">bounds</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">[</span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">result</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">shgo</span><span class="">(</span><span class="">rosen</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">result</span><span class="o">.</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">result</span><span class="o">.</span><span class="">fun</span>
+(array([1., 1., 1., 1., 1.]), 2.920392374190081e-18)</pre>
+            
+            
+         
+                
+        <p>Note that bounds determine the dimensionality of the objective function and is therefore a required input, however you can specify empty bounds using 
+        <code class='verbatim'>None</code>
+     or objects like 
+        <code class='verbatim'>np.inf</code>
+     which will be converted to large float numbers.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">bounds</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">[</span><span class="">(</span><span class="kc">None</span><span class="">,</span><span class=""> </span><span class="kc">None</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">]</span><span class="o">*</span><span class="mi">4</span><br><span class='nsl'>...&nbsp;</span><span class="">result</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">shgo</span><span class="">(</span><span class="">rosen</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">result</span><span class="o">.</span><span class="">x</span>
+array([0.99999851, 0.99999704, 0.99999411, 0.9999882 ])</pre>
+            
+            
+         
+                
+        <p>Next, we consider the Eggholder function, a problem with several local minima and one global minimum. We will demonstrate the use of arguments and the capabilities of <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>shgo</a></code>
+        . (https://en.wikipedia.org/wiki/Test_functions_for_optimization)</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">eggholder</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">(</span><span class="o">-</span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">47.0</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="o">*</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">sin</a><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">sqrt</a><span class="">(</span><span class="nb">abs</span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="o">/</span><span class="mf">2.0</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">47.0</span><span class="">)</span><span class="">)</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">sin</a><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">sqrt</a><span class="">(</span><span class="nb">abs</span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">47.0</span><span class="">)</span><span class="">)</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="">)</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">bounds</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">[</span><span class="">(</span><span class="o">-</span><span class="mi">512</span><span class="">,</span><span class=""> </span><span class="mi">512</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="o">-</span><span class="mi">512</span><span class="">,</span><span class=""> </span><span class="mi">512</span><span class="">)</span><span class="">]</span>
+</pre>
+            
+            
+         
+                
+        <p><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>shgo</a></code>
+         has built-in low discrepancy sampling sequences. First, we will input 64 initial sampling points of the *Sobol&#39;* sequence:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">result</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">shgo</span><span class="">(</span><span class="">eggholder</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="">,</span><span class=""> </span><span class="">n</span><span class="o">=</span><span class="mi">64</span><span class="">,</span><span class=""> </span><span class="">sampling_method</span><span class="o">=</span><span class="s1">&#39;</span><span class="s1">sobol</span><span class="s1">&#39;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">result</span><span class="o">.</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">result</span><span class="o">.</span><span class="">fun</span>
+(array([512.        , 404.23180824]), -959.6406627208397)</pre>
+            
+            
+         
+                
+        <p><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>shgo</a></code>
+         also has a return for any other local minima that was found, these can be called using:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">result</span><span class="o">.</span><span class="">xl</span>
+array([[ 512.        ,  404.23180824],
+       [ 283.0759062 , -487.12565635],
+       [-294.66820039, -462.01964031],
+       [-105.87688911,  423.15323845],
+       [-242.97926   ,  274.38030925],
+       [-506.25823477,    6.3131022 ],
+       [-408.71980731, -156.10116949],
+       [ 150.23207937,  301.31376595],
+       [  91.00920901, -391.283763  ],
+       [ 202.89662724, -269.38043241],
+       [ 361.66623976, -106.96493868],
+       [-219.40612786, -244.06020508]])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">result</span><span class="o">.</span><span class="">funl</span>
+array([-959.64066272, -718.16745962, -704.80659592, -565.99778097,
+       -559.78685655, -557.36868733, -507.87385942, -493.9605115 ,
+       -426.48799655, -421.15571437, -419.31194957, -410.98477763])</pre>
+            
+            
+         
+                
+        <p>These results are useful in applications where there are many global minima and the values of other global minima are desired or where the local minima can provide insight into the system (for example morphologies in physical chemistry [4]_).</p>
+
+    
+            
+            
+         
+                
+        <p>If we want to find a larger number of local minima, we can increase the number of sampling points or the number of iterations. We&#39;ll increase the number of sampling points to 64 and the number of iterations from the default of 1 to 3. Using 
+        <code class='verbatim'>simplicial</code>
+     this would have given us 64 x 3 = 192 initial sampling points.</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">result_2</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">shgo</span><span class="">(</span><span class="">eggholder</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="">,</span><span class=""> </span><span class="">n</span><span class="o">=</span><span class="mi">64</span><span class="">,</span><span class=""> </span><span class="">iters</span><span class="o">=</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="">sampling_method</span><span class="o">=</span><span class="s1">&#39;</span><span class="s1">sobol</span><span class="s1">&#39;</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="nb">len</span><span class="">(</span><span class="">result</span><span class="o">.</span><span class="">xl</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="nb">len</span><span class="">(</span><span class="">result_2</span><span class="o">.</span><span class="">xl</span><span class="">)</span>
+(12, 20)</pre>
+            
+            
+         
+                
+        <p>Note the difference between, e.g., 
+        <code class='verbatim'>n=192, iters=1</code>
+     and 
+        <code class='verbatim'>n=64, iters=3</code>
+    . In the first case the promising points contained in the minimiser pool are processed only once. In the latter case it is processed every 64 sampling points for a total of 3 times.</p>
+
+    
+            
+            
+         
+                
+        <p>To demonstrate solving problems with non-linear constraints consider the following example from Hock and Schittkowski problem 73 (cattle-feed) [3]_::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>minimize: f = 24.55 * x_1 + 26.75 * x_2 + 39 * x_3 + 40.50 * x_4</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>subject to: 2.3 * x_1 + 5.6 * x_2 + 11.1 * x_3 + 1.3 * x_4 - 5     &gt;= 0,</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>12 * x_1 + 11.9 * x_2 + 41.8 * x_3 + 52.1 * x_4 - 21     -1.645 * sqrt(0.28 * x_1**2 + 0.19 * x_2**2 +                   20.5 * x_3**2 + 0.62 * x_4**2)       &gt;= 0,</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>x_1 + x_2 + x_3 + x_4 - 1                              == 0,</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>1 &gt;= x_i &gt;= 0 for all i</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                
+        <p>The approximate answer given in [3]_ is::</p>
+
+    
+            
+            
+         
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>:: workaround numpyoc summary/ext summary bug in take2::Line.__init__</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>f([0.6355216, -0.12e-11, 0.3127019, 0.05177655]) = 29.894378</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">f</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><span class="">  </span><span class="c1"># (cattle-feed)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="mf">24.55</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">26.75</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">39</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">40.50</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">3</span><span class="">]</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">g1</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="mf">2.3</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">5.6</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">11.1</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">1.3</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">3</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mi">5</span><span class="">  </span><span class="c1"># &gt;=0</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">g2</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">(</span><span class="mi">12</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">11.9</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class="mf">41.8</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">52.1</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">3</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mi">21</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="o">-</span><span class=""> </span><span class="mf">1.645</span><span class=""> </span><span class="o">*</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">sqrt</a><span class="">(</span><span class="mf">0.28</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">0.19</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><br><span class='nsl'>...&nbsp;</span><span class="">                            </span><span class="o">+</span><span class=""> </span><span class="mf">20.5</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">0.62</span><span class="o">*</span><span class="">x</span><span class="">[</span><span class="mi">3</span><span class="">]</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="">)</span><span class=""> </span><span class="c1"># &gt;=0</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">h1</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">2</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">3</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mi">1</span><span class="">  </span><span class="c1"># == 0</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">cons</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">(</span><span class="">{</span><span class="s1">&#39;</span><span class="s1">type</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">ineq</span><span class="s1">&#39;</span><span class="">,</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">fun</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="">g1</span><span class="">}</span><span class="">,</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="">{</span><span class="s1">&#39;</span><span class="s1">type</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">ineq</span><span class="s1">&#39;</span><span class="">,</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">fun</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="">g2</span><span class="">}</span><span class="">,</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="">{</span><span class="s1">&#39;</span><span class="s1">type</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">eq</span><span class="s1">&#39;</span><span class="">,</span><span class=""> </span><span class="s1">&#39;</span><span class="s1">fun</span><span class="s1">&#39;</span><span class="">:</span><span class=""> </span><span class="">h1</span><span class="">}</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">bounds</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">[</span><span class="">(</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mf">1.0</span><span class="">)</span><span class="">,</span><span class="">]</span><span class="o">*</span><span class="mi">4</span><br><span class='nsl'>...&nbsp;</span><span class="">res</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">shgo</span><span class="">(</span><span class="">f</span><span class="">,</span><span class=""> </span><span class="">bounds</span><span class="">,</span><span class=""> </span><span class="">iters</span><span class="o">=</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="">constraints</span><span class="o">=</span><span class="">cons</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">res</span>
+     fun: 29.894378159142136
+    funl: array([29.89437816])
+ message: &#39;Optimization terminated successfully.&#39;
+    nfev: 114
+     nit: 3
+   nlfev: 35
+   nlhev: 0
+   nljev: 5
+ success: True
+       x: array([6.35521569e-01, 1.13700270e-13, 3.12701881e-01, 5.17765506e-02])
+      xl: array([[6.35521569e-01, 1.13700270e-13, 3.12701881e-01, 5.17765506e-02]])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">g1</span><span class="">(</span><span class="">res</span><span class="o">.</span><span class="">x</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">g2</span><span class="">(</span><span class="">res</span><span class="o">.</span><span class="">x</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">h1</span><span class="">(</span><span class="">res</span><span class="o">.</span><span class="">x</span><span class="">)</span>
+(-5.062616992290714e-14, -2.9594104944408173e-12, 0.0)</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>scipy.optimize._shgo.shgo</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>scipy.optimize.optimize.rosen</a></code>
+        
+         
+     
+    
+
+
+    <h3 id='section-backrefs'>Back References</h3>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+
+    
+    
+        <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>scipy.optimize._shgo.shgo</a></code>
+        
+    
+    
+    
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/scipy/optimize/_shgo.py </br>
+Line: 17 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 11.16227766016838, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 3, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 4, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}], "links": [{"source": 4, "target": 5, "id": 379}]};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 11.16227766016838, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 3, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 4, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}], "links": [{"source": 4, "target": 5, "id": 379}]};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>

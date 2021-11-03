@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/javascript">
+        // only process math in math tags (faster and less false positive with `...`)
+        MathJax = {
+          options: {
+            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
+            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
+          }
+        };
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" id="MathJax-script" defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <!--<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>-->
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .graph{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              height: 42px;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+              
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline-block;
+              padding: 10px;
+              padding-left: 1rem;
+
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+          }
+          .admonition > div {
+            background-color: rgba(0, 123, 255, 0.1);
+            position: relative;
+            margin: 0 -1rem;
+            padding: 0.4rem 0.1rem 0.4rem 1.5rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+          .note {color: #7d77d2}
+          .warning {color: #af7b1a}
+          .error {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+nav  a {
+    color: #606c76;
+    text-decoration: none;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+            <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=pandas>pandas</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.4.3/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.html">numpy</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.html">pandas</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.18.3/api/skimage.html">skimage</a>
+                            <a href="/p/xarray/0.17.0/api/xarray.html">xarray</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/pandas/1.3.4/api/pandas.html'>1.3.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/pandas/1.3.4/api/pandas.html">1.3.4</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/pandas/1.3.4/api/pandas.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/pandas/1.3.4/api/pandas.html">API</a>
+                        <a href="/p/pandas/1.3.4/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='pandas.html'>pandas</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='pandas.io.html'>io</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/pandas/1.3.4/api/pandas._config.html">_config</a>
+                            <a href="/p/pandas/1.3.4/api/pandas._libs.html">_libs</a>
+                            <a href="/p/pandas/1.3.4/api/pandas._testing.html">_testing</a>
+                            <a href="/p/pandas/1.3.4/api/pandas._typing.html">_typing</a>
+                            <a href="/p/pandas/1.3.4/api/pandas._version.html">_version</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.api.html">api</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.arrays.html">arrays</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.compat.html">compat</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.core.html">core</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.errors.html">errors</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.html">io</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.plotting.html">plotting</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.testing.html">testing</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.tseries.html">tseries</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.util.html">util</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='pandas.io.parsers.html'>parsers</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/pandas/1.3.4/api/pandas.io.api.html">api</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.clipboards.html">clipboards</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.common.html">common</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.date_converters.html">date_converters</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.excel.html">excel</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.feather_format.html">feather_format</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.formats.html">formats</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.gbq.html">gbq</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.html.html">html</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.json.html">json</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.orc.html">orc</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parquet.html">parquet</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.html">parsers</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.pickle.html">pickle</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.pytables.html">pytables</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.sas.html">sas</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.spss.html">spss</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.sql.html">sql</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.stata.html">stata</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.xml.html">xml</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='pandas.io.parsers.readers.html'>readers</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.base_parser.html">base_parser</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.c_parser_wrapper.html">c_parser_wrapper</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.python_parser.html">python_parser</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.html">readers</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='pandas.io.parsers.readers.read_table.html'>read_table</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.TextFileReader.html">TextFileReader</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.TextParser.html">TextParser</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._extract_dialect.html">_extract_dialect</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._merge_with_dialect_properties.html">_merge_with_dialect_properties</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._read.html">_read</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._refine_defaults_read.html">_refine_defaults_read</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._stringify_na_values.html">_stringify_na_values</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._validate_dialect.html">_validate_dialect</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._validate_names.html">_validate_names</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers._validate_skipfooter.html">_validate_skipfooter</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.read_csv.html">read_csv</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.read_fwf.html">read_fwf</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.read_table.html">read_table</a>
+                            <a href="/p/pandas/1.3.4/api/pandas.io.parsers.readers.validate_integer.html">validate_integer</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/pandas/1.3.4/img/logo.png"/>
+    
+    <a href="#">Library: pandas</a>
+    <a href="#">Version: 1.3.4</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>read_table(filepath_or_buffer: &#39;FilePathOrBuffer&#39;, sep=&lt;no_default&gt;, delimiter=None, header=&#39;infer&#39;, names=&lt;no_default&gt;, index_col=None, usecols=None, squeeze=False, prefix=&lt;no_default&gt;, mangle_dupe_cols=True, dtype: &#39;DtypeArg | None&#39; = None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False, skip_blank_lines=True, parse_dates=False, infer_datetime_format=False, keep_date_col=False, date_parser=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression=&#39;infer&#39;, thousands=None, decimal: &#39;str&#39; = &#39;.&#39;, lineterminator=None, quotechar=&#39;&#34;&#39;, quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, dialect=None, error_bad_lines=None, warn_bad_lines=None, on_bad_lines=None, encoding_errors: &#39;str | None&#39; = &#39;strict&#39;, delim_whitespace=False, low_memory=True, memory_map=False, float_precision=None)</code>
+
+
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Read general delimited file into DataFrame.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>Also supports optionally iterating or breaking of the file into chunks.</p>
+
+    
+           
+               
+        <p>Additional help can be found in the online docs for <code>:None:None:``IO Tools &lt;https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html&gt;``</code> .</p>
+
+    
+           
+       
+    
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="filepath_or_buffer">filepath_or_buffer</a> : str, path object or file-like object</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Any valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.</p>
+
+    
+            
+                
+        <p>If you want to pass in a path object, pandas accepts any 
+        <code class='verbatim'>os.PathLike</code>
+    .</p>
+
+    
+            
+                
+        <p>By file-like object, we refer to objects with a 
+        <code class='verbatim'>read()</code>
+     method, such as a file handle (e.g. via builtin 
+        <code class='verbatim'>open</code>
+     function) or 
+        <code class='verbatim'>StringIO</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="sep">sep</a> : str, default &#39;\\t&#39; (tab-stop)</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Delimiter to use. If sep is None, the C engine cannot automatically detect the separator, but the Python parsing engine can, meaning the latter will be used and automatically detect the separator by Python&#39;s builtin sniffer tool, 
+        <code class='verbatim'>csv.Sniffer</code>
+    . In addition, separators longer than 1 character and different from 
+        <code class='verbatim'>&#39;\s+&#39;</code>
+     will be interpreted as regular expressions and will also force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: 
+        <code class='verbatim'>&#39;\r\t&#39;</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="delimiter">delimiter</a> : str, default ``None``</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Alias for sep.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="header">header</a> : int, list of int, default &#39;infer&#39;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Row number(s) to use as the column names, and the start of the data.  Default behavior is to infer the column names: if no names are passed the behavior is identical to 
+        <code class='verbatim'>header=0</code>
+     and column names are inferred from the first line of the file, if column names are passed explicitly then the behavior is identical to 
+        <code class='verbatim'>header=None</code>
+    . Explicitly pass 
+        <code class='verbatim'>header=0</code>
+     to be able to replace existing names. The header can be a list of integers that specify row locations for a multi-index on the columns e.g. [0,1,3]. Intervening rows that are not specified will be skipped (e.g. 2 in this example is skipped). Note that this parameter ignores commented lines and empty lines if 
+        <code class='verbatim'>skip_blank_lines=True</code>
+    , so 
+        <code class='verbatim'>header=0</code>
+     denotes the first line of data rather than the first line of the file.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="names">names</a> : array-like, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>List of column names to use. If the file contains a header row, then you should explicitly pass 
+        <code class='verbatim'>header=0</code>
+     to override the column names. Duplicates in this list are not allowed.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="index_col">index_col</a> : int, str, sequence of int / str, or False, default ``None``</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Column(s) to use as the row labels of the 
+        <code class='verbatim'>DataFrame</code>
+    , either given as string name or column index. If a sequence of int / str is given, a MultiIndex is used.</p>
+
+    
+            
+                
+        <p>Note: 
+        <code class='verbatim'>index_col=False</code>
+     can be used to force pandas to *not* use the first column as the index, e.g. when you have a malformed file with delimiters at the end of each line.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="usecols">usecols</a> : list-like or callable, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Return a subset of the columns. If list-like, all elements must either be positional (i.e. integer indices into the document columns) or strings that correspond to column names provided either by the user in <code><a link href="#names" class='local'>names</a></code> or inferred from the document header row(s). For example, a valid list-like <code><a link href="#usecols" class='local'>usecols</a></code> parameter would be 
+        <code class='verbatim'>[0, 1, 2]</code>
+     or 
+        <code class='verbatim'>[&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;]</code>
+    . Element order is ignored, so 
+        <code class='verbatim'>usecols=[0, 1]</code>
+     is the same as 
+        <code class='verbatim'>[1, 0]</code>
+    . To instantiate a DataFrame from 
+        <code class='verbatim'>data</code>
+     with element order preserved use 
+        <code class='verbatim'>pd.read_csv(data, usecols=[&#39;foo&#39;, &#39;bar&#39;])[[&#39;foo&#39;, &#39;bar&#39;]]</code>
+     for columns in 
+        <code class='verbatim'>[&#39;foo&#39;, &#39;bar&#39;]</code>
+     order or 
+        <code class='verbatim'>pd.read_csv(data, usecols=[&#39;foo&#39;, &#39;bar&#39;])[[&#39;bar&#39;, &#39;foo&#39;]]</code>
+     for 
+        <code class='verbatim'>[&#39;bar&#39;, &#39;foo&#39;]</code>
+     order.</p>
+
+    
+            
+                
+        <p>If callable, the callable function will be evaluated against the column names, returning names where the callable function evaluates to True. An example of a valid callable argument would be 
+        <code class='verbatim'>lambda x: x.upper() in [&#39;AAA&#39;, &#39;BBB&#39;, &#39;DDD&#39;]</code>
+    . Using this parameter results in much faster parsing time and lower memory usage.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="squeeze">squeeze</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If the parsed data only contains one column then return a Series.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="prefix">prefix</a> : str, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Prefix to add to column numbers when no header, e.g. &#39;X&#39; for X0, X1, ...</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="mangle_dupe_cols">mangle_dupe_cols</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Duplicate columns will be specified as &#39;X&#39;, &#39;X.1&#39;, ...&#39;X.N&#39;, rather than &#39;X&#39;...&#39;X&#39;. Passing in False will cause data to be overwritten if there are duplicate names in the columns.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dtype">dtype</a> : Type name or dict of column -&gt; type, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Data type for data or columns. E.g. {&#39;a&#39;: np.float64, &#39;b&#39;: np.int32, &#39;c&#39;: &#39;Int64&#39;} Use <code>:None:None:`str`</code> or <code>:None:None:`object`</code> together with suitable <code><a link href="#na_values" class='local'>na_values</a></code> settings to preserve and not interpret dtype. If converters are specified, they will be applied INSTEAD of dtype conversion.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="engine">engine</a> : {&#39;c&#39;, &#39;python&#39;}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Parser engine to use. The C engine is faster while the python engine is currently more feature-complete.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="converters">converters</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Dict of functions for converting values in certain columns. Keys can either be integers or column labels.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="true_values">true_values</a> : list, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Values to consider as True.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="false_values">false_values</a> : list, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Values to consider as False.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="skipinitialspace">skipinitialspace</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Skip spaces after delimiter.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="skiprows">skiprows</a> : list-like, int or callable, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Line numbers to skip (0-indexed) or number of lines to skip (int) at the start of the file.</p>
+
+    
+            
+                
+        <p>If callable, the callable function will be evaluated against the row indices, returning True if the row should be skipped and False otherwise. An example of a valid callable argument would be 
+        <code class='verbatim'>lambda x: x in [0, 2]</code>
+    .</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="skipfooter">skipfooter</a> : int, default 0</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of lines at bottom of file to skip (Unsupported with engine=&#39;c&#39;).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="nrows">nrows</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Number of rows of file to read. Useful for reading pieces of large files.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="na_values">na_values</a> : scalar, str, list-like, or dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Additional strings to recognize as NA/NaN. If dict passed, specific per-column NA values.  By default the following values are interpreted as NaN: &#39;&#39;, &#39;#N/A&#39;, &#39;#N/A N/A&#39;, &#39;#NA&#39;, &#39;-1.#IND&#39;, &#39;-1.#QNAN&#39;, &#39;-NaN&#39;, &#39;-nan&#39;, &#39;1.#IND&#39;, &#39;1.#QNAN&#39;, &#39;&lt;NA&gt;&#39;, &#39;N/A&#39;, &#39;NA&#39;, &#39;NULL&#39;, &#39;NaN&#39;, &#39;n/a&#39;, &#39;nan&#39;, &#39;null&#39;.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="keep_default_na">keep_default_na</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Whether or not to include the default NaN values when parsing the data. Depending on whether <code><a link href="#na_values" class='local'>na_values</a></code> is passed in, the behavior is as follows:</p>
+
+    
+            
+                
+        <p>* If <code><a link href="#keep_default_na" class='local'>keep_default_na</a></code> is True, and <code><a link href="#na_values" class='local'>na_values</a></code> are specified, <code><a link href="#na_values" class='local'>na_values</a></code></p>
+
+    
+            
+                
+        <p>  is appended to the default NaN values used for parsing.</p>
+
+    
+            
+                
+        <p>* If <code><a link href="#keep_default_na" class='local'>keep_default_na</a></code> is True, and <code><a link href="#na_values" class='local'>na_values</a></code> are not specified, only</p>
+
+    
+            
+                
+        <p>  the default NaN values are used for parsing.</p>
+
+    
+            
+                
+        <p>* If <code><a link href="#keep_default_na" class='local'>keep_default_na</a></code> is False, and <code><a link href="#na_values" class='local'>na_values</a></code> are specified, only</p>
+
+    
+            
+                
+        <p>  the NaN values specified <code><a link href="#na_values" class='local'>na_values</a></code> are used for parsing.</p>
+
+    
+            
+                
+        <p>* If <code><a link href="#keep_default_na" class='local'>keep_default_na</a></code> is False, and <code><a link href="#na_values" class='local'>na_values</a></code> are not specified, no</p>
+
+    
+            
+                
+        <p>  strings will be parsed as NaN.</p>
+
+    
+            
+                
+        <p>Note that if <code><a link href="#na_filter" class='local'>na_filter</a></code> is passed in as False, the <code><a link href="#keep_default_na" class='local'>keep_default_na</a></code> and <code><a link href="#na_values" class='local'>na_values</a></code> parameters will be ignored.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="na_filter">na_filter</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Detect missing value markers (empty strings and the value of na_values). In data without any NAs, passing na_filter=False can improve the performance of reading a large file.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="verbose">verbose</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Indicate number of NA values placed in non-numeric columns.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="skip_blank_lines">skip_blank_lines</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True, skip over blank lines rather than interpreting as NaN values.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="parse_dates">parse_dates</a> : bool or list of int or names or list of lists or dict, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The behavior is as follows:</p>
+
+    
+            
+                
+        <p>* boolean. If True -&gt; try parsing the index. * list of int or names. e.g. If [1, 2, 3] -&gt; try parsing columns 1, 2, 3</p>
+
+    
+            
+                
+        <p>  each as a separate date column.</p>
+
+    
+            
+                
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>* list of lists. e.g.  If [[1, 3]] -&gt; combine columns 1 and 3 and parse as</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>a single date column.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>* dict, e.g. {&#39;foo&#39; : [1, 3]} -&gt; parse columns 1, 3 as date and call</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>result &#39;foo&#39; </p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+            
+                
+        <p>If a column or index cannot be represented as an array of datetimes, say because of an unparsable value or a mixture of timezones, the column or index will be returned unaltered as an object data type. For non-standard datetime parsing, use 
+        <code class='verbatim'>pd.to_datetime</code>
+     after 
+        <code class='verbatim'>pd.read_csv</code>
+    . To parse an index or column with a mixture of timezones, specify 
+        <code class='verbatim'>date_parser</code>
+     to be a partially-applied <code><a link href="/p/pandas/1.3.4/api/pandas.core.tools.datetimes.to_datetime.html" class='exists'>pandas.to_datetime</a></code>
+         with 
+        <code class='verbatim'>utc=True</code>
+    . See <code>:None:ref:`io.csv.mixed_timezones`</code> for more.</p>
+
+    
+            
+                
+        <p>Note: A fast-path exists for iso8601-formatted dates.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="infer_datetime_format">infer_datetime_format</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True and <code><a link href="#parse_dates" class='local'>parse_dates</a></code> is enabled, pandas will attempt to infer the format of the datetime strings in the columns, and if it can be inferred, switch to a faster method of parsing them. In some cases this can increase the parsing speed by 5-10x.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="keep_date_col">keep_date_col</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True and <code><a link href="#parse_dates" class='local'>parse_dates</a></code> specifies combining multiple columns then keep the original columns.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="date_parser">date_parser</a> : function, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Function to use for converting a sequence of string columns to an array of datetime instances. The default uses 
+        <code class='verbatim'>dateutil.parser.parser</code>
+     to do the conversion. Pandas will try to call <code><a link href="#date_parser" class='local'>date_parser</a></code> in three different ways, advancing to the next if an exception occurs: 1) Pass one or more arrays (as defined by <code><a link href="#parse_dates" class='local'>parse_dates</a></code>) as arguments; 2) concatenate (row-wise) the string values from the columns defined by <code><a link href="#parse_dates" class='local'>parse_dates</a></code> into a single array and pass that; and 3) call <code><a link href="#date_parser" class='local'>date_parser</a></code> once for each row using one or more strings (corresponding to the columns defined by <code><a link href="#parse_dates" class='local'>parse_dates</a></code>) as arguments.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dayfirst">dayfirst</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>DD/MM format dates, international and European format.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="cache_dates">cache_dates</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True, use a cache of unique, converted dates to apply the datetime conversion. May produce significant speed-up when parsing duplicate date strings, especially ones with timezone offsets.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="iterator">iterator</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Return TextFileReader object for iteration or getting chunks with 
+        <code class='verbatim'>get_chunk()</code>
+    .</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+        
+        <p>
+        <code class='verbatim'>TextFileReader</code>
+     is a context manager.</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="chunksize">chunksize</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Return TextFileReader object for iteration. See the <code>:None:None:`IO Tools docs &lt;https://pandas.pydata.org/pandas-docs/stable/io.html#io-chunking&gt;`</code>_ for more information on 
+        <code class='verbatim'>iterator</code>
+     and 
+        <code class='verbatim'>chunksize</code>
+    .</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+        
+        <p>
+        <code class='verbatim'>TextFileReader</code>
+     is a context manager.</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="compression">compression</a> : {&#39;infer&#39;, &#39;gzip&#39;, &#39;bz2&#39;, &#39;zip&#39;, &#39;xz&#39;, None}, default &#39;infer&#39;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>For on-the-fly decompression of on-disk data. If &#39;infer&#39; and <code><a link href="#filepath_or_buffer" class='local'>filepath_or_buffer</a></code> is path-like, then detect compression from the following extensions: &#39;.gz&#39;, &#39;.bz2&#39;, &#39;.zip&#39;, or &#39;.xz&#39; (otherwise no decompression). If using &#39;zip&#39;, the ZIP file must contain only one data file to be read in. Set to None for no decompression.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="thousands">thousands</a> : str, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Thousands separator.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="decimal">decimal</a> : str, default &#39;.&#39;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Character to recognize as decimal point (e.g. use &#39;,&#39; for European data).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="lineterminator">lineterminator</a> : str (length 1), optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Character to break file into lines. Only valid with C parser.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="quotechar">quotechar</a> : str (length 1), optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The character used to denote the start and end of a quoted item. Quoted items can include the delimiter and it will be ignored.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="quoting">quoting</a> : int or csv.QUOTE_* instance, default 0</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Control field quoting behavior per 
+        <code class='verbatim'>csv.QUOTE_*</code>
+     constants. Use one of QUOTE_MINIMAL (0), QUOTE_ALL (1), QUOTE_NONNUMERIC (2) or QUOTE_NONE (3).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="doublequote">doublequote</a> : bool, default ``True``</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>When quotechar is specified and quoting is not 
+        <code class='verbatim'>QUOTE_NONE</code>
+    , indicate whether or not to interpret two consecutive quotechar elements INSIDE a field as a single 
+        <code class='verbatim'>quotechar</code>
+     element.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="escapechar">escapechar</a> : str (length 1), optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>One-character string used to escape other characters.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="comment">comment</a> : str, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Indicates remainder of line should not be parsed. If found at the beginning of a line, the line will be ignored altogether. This parameter must be a single character. Like empty lines (as long as 
+        <code class='verbatim'>skip_blank_lines=True</code>
+    ), fully commented lines are ignored by the parameter <code><a link href="#header" class='local'>header</a></code> but not by <code><a link href="#skiprows" class='local'>skiprows</a></code>. For example, if 
+        <code class='verbatim'>comment=&#39;#&#39;</code>
+    , parsing 
+        <code class='verbatim'>#empty\na,b,c\n1,2,3</code>
+     with 
+        <code class='verbatim'>header=0</code>
+     will result in &#39;a,b,c&#39; being treated as the header.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="encoding">encoding</a> : str, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Encoding to use for UTF when reading/writing (ex. &#39;utf-8&#39;). <code>:None:None:`List of Python standard encodings &lt;https://docs.python.org/3/library/codecs.html#standard-encodings&gt;`</code>_ .</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+        
+        <p>When 
+        <code class='verbatim'>encoding</code>
+     is 
+        <code class='verbatim'>None</code>
+    , 
+        <code class='verbatim'>errors=&#34;replace&#34;</code>
+     is passed to 
+        <code class='verbatim'>open()</code>
+    . Otherwise, 
+        <code class='verbatim'>errors=&#34;strict&#34;</code>
+     is passed to 
+        <code class='verbatim'>open()</code>
+    . This behavior was previously only the case for 
+        <code class='verbatim'>engine=&#34;python&#34;</code>
+    . </p>
+
+    
+    
+</div>
+
+       
+            
+                
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+        
+        <p>
+        <code class='verbatim'>encoding_errors</code>
+     is a new argument. 
+        <code class='verbatim'>encoding</code>
+     has no longer an influence on how encoding errors are handled.</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="encoding_errors">encoding_errors</a> : str, optional, default &#34;strict&#34;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>How encoding errors are treated. <code>:None:None:`List of possible values &lt;https://docs.python.org/3/library/codecs.html#error-handlers&gt;`</code>_ .</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="dialect">dialect</a> : str or csv.Dialect, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If provided, this parameter will override values (default or not) for the following parameters: <code><a link href="#delimiter" class='local'>delimiter</a></code>, <code><a link href="#doublequote" class='local'>doublequote</a></code>, <code><a link href="#escapechar" class='local'>escapechar</a></code>, <code><a link href="#skipinitialspace" class='local'>skipinitialspace</a></code>, <code><a link href="#quotechar" class='local'>quotechar</a></code>, and <code><a link href="#quoting" class='local'>quoting</a></code>. If it is necessary to override values, a ParserWarning will be issued. See csv.Dialect documentation for more details.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="error_bad_lines">error_bad_lines</a> : bool, default ``None``</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Lines with too many fields (e.g. a csv line with too many commas) will by default cause an exception to be raised, and no DataFrame will be returned. If False, then these &#34;bad lines&#34; will be dropped from the DataFrame that is returned.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>deprecated</div>
+    
+        
+        <p>The 
+        <code class='verbatim'>on_bad_lines</code>
+     parameter should be used instead to specify behavior upon encountering a bad line instead.</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="warn_bad_lines">warn_bad_lines</a> : bool, default ``None``</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If error_bad_lines is False, and warn_bad_lines is True, a warning for each &#34;bad line&#34; will be output.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>deprecated</div>
+    
+        
+        <p>The 
+        <code class='verbatim'>on_bad_lines</code>
+     parameter should be used instead to specify behavior upon encountering a bad line instead.</p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="on_bad_lines">on_bad_lines</a> : {&#39;error&#39;, &#39;warn&#39;, &#39;skip&#39;}, default &#39;error&#39;</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Specifies what to do upon encountering a bad line (a line with too many fields). Allowed values are :</p>
+
+    
+            
+                
+        <p>    - &#39;error&#39;, raise an Exception when a bad line is encountered.     - &#39;warn&#39;, raise a warning when a bad line is encountered and skip that line.     - &#39;skip&#39;, skip bad lines without raising or warning when they are encountered.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="delim_whitespace">delim_whitespace</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Specifies whether or not whitespace (e.g. 
+        <code class='verbatim'>&#39; &#39;</code>
+     or 
+        <code class='verbatim'>&#39;	&#39;</code>
+    ) will be used as the sep. Equivalent to setting 
+        <code class='verbatim'>sep=&#39;\s+&#39;</code>
+    . If this option is set to True, nothing should be passed in for the 
+        <code class='verbatim'>delimiter</code>
+     parameter.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="low_memory">low_memory</a> : bool, default True</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Internally process the file in chunks, resulting in lower memory use while parsing, but possibly mixed type inference.  To ensure no mixed types either set False, or specify the type with the <code><a link href="#dtype" class='local'>dtype</a></code> parameter. Note that the entire file is read into a single DataFrame regardless, use the <code><a link href="#chunksize" class='local'>chunksize</a></code> or <code><a link href="#iterator" class='local'>iterator</a></code> parameter to return the data in chunks. (Only valid with C parser).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="memory_map">memory_map</a> : bool, default False</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If a filepath is provided for <code><a link href="#filepath_or_buffer" class='local'>filepath_or_buffer</a></code>, map the file object directly onto memory and access the data directly from there. Using this option can improve performance because there is no longer any I/O overhead.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="float_precision">float_precision</a> : str, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Specifies which converter the C engine should use for floating-point values. The options are 
+        <code class='verbatim'>None</code>
+     or &#39;high&#39; for the ordinary converter, &#39;legacy&#39; for the original lower precision pandas converter, and &#39;round_trip&#39; for the round-trip converter.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+            
+                <dt><a id="storage_options">storage_options</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Extra options that make sense for a particular storage connection, e.g. host, port, username, password, etc. For HTTP(S) URLs the key-value pairs are forwarded to 
+        <code class='verbatim'>urllib</code>
+     as header options. For other URLs (e.g. starting with &#34;s3://&#34;, and &#34;gcs://&#34;) the key-value pairs are forwarded to 
+        <code class='verbatim'>fsspec</code>
+    . Please see 
+        <code class='verbatim'>fsspec</code>
+     and 
+        <code class='verbatim'>urllib</code>
+     for more details.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+</div>
+
+       
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>DataFrame or TextParser</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A comma-separated values (csv) file is returned as two-dimensional data structure with labeled axes.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+        <!-- rendering Notes -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <span class='error'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="">pd</span><span class="o">.</span><span class="">read_table</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">data.csv</span><span class="s1">&#39;</span><span class="">)</span><span class="">  </span><span class="c1"># doctest: +SKIP</span>
+</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.tools.datetimes.to_datetime.html" class='exists'>pandas.core.tools.datetimes.to_datetime</a></code>
+        
+         
+     
+    
+
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/pandas/util/_decorators.py </br>
+Line: 589 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "pandas.core.tools.datetimes.to_datetime", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.tools.datetimes.to_datetime"}], "links": []};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "pandas.core.tools.datetimes.to_datetime", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.tools.datetimes.to_datetime"}], "links": []};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>
