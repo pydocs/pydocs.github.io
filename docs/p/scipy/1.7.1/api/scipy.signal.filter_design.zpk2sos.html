@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -582,7 +582,7 @@ user-select: none;
         
            
                
-        <p>Return second - order sections from zeros, poles, and gain of a system</p>
+        <p>Return second-order sections from zeros, poles, and gain of a system</p>
 
     
            
@@ -759,9 +759,116 @@ user-select: none;
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p>The algorithm used to convert ZPK to SOS format is designed to minimize errors due to numerical precision issues. The pairing algorithm attempts to minimize the peak gain of each biquadratic section. This is done by pairing poles with the nearest zeros, starting with the poles closest to the unit circle.</p>
 
     
+           
+               
+        <p><em>Algorithms</em></p>
+
+    
+           
+               
+        <p>The current algorithms are designed specifically for use with digital filters. (The output coefficients are not correct for analog filters.)</p>
+
+    
+           
+               
+        <p>The steps in the 
+        <code class='verbatim'>pairing=&#39;nearest&#39;</code>
+     and 
+        <code class='verbatim'>pairing=&#39;keep_odd&#39;</code>
+     algorithms are mostly shared. The 
+        <code class='verbatim'>nearest</code>
+     algorithm attempts to minimize the peak gain, while 
+        <code class='verbatim'>&#39;keep_odd&#39;</code>
+     minimizes peak gain under the constraint that odd-order systems should retain one section as first order. The algorithm steps and are as follows:</p>
+
+    
+           
+               
+        <p>As a pre-processing step, add poles or zeros to the origin as necessary to obtain the same number of poles and zeros for pairing. If 
+        <code class='verbatim'>pairing == &#39;nearest&#39;</code>
+     and there are an odd number of poles, add an additional pole and a zero at the origin.</p>
+
+    
+           
+               
+        <p>The following steps are then iterated over until no more poles or zeros remain:</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>Take the (next remaining) pole (complex or real) closest to the    unit circle to begin a new filter section.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+           <ol>
+               <li>
+        <p>If the pole is real and there are no other remaining real poles ,    add the closest real zero to the section and leave it as a first    order section. Note that after this step we are guaranteed to be    left with an even number of real poles, complex poles, real zeros,    and complex zeros for subsequent pairing iterations.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+           <ol>
+               <li>
+        <p>Else:</p>
+
+    </li>
+               
+               <li>
+            <pre>1. If the pole is complex and the zero is the only remaining real
+   zero*, then pair the pole with the *next* closest zero
+   (guaranteed to be complex). This is necessary to ensure that
+   there will be a real zero remaining to eventually create a
+   first-order section (thus keeping the odd order).
+
+2. Else pair the pole with the closest remaining zero (complex or
+   real).
+
+3. Proceed to complete the second-order section by adding another
+   pole and zero to the current pole and zero in the section:
+
+    1. If the current pole and zero are both complex, add their
+       conjugates.
+
+    2. Else if the pole is complex and the zero is real, add the
+       conjugate pole and the next closest real zero.
+
+    3. Else if the pole is real and the zero is complex, add the
+       conjugate zero and the real pole closest to those zeros.
+
+    4. Else (we must have a real pole and real zero) add the next
+       real pole closest to the unit circle, and then add the real
+       zero closest to that pole.
+</pre>
+
+       </li>
+               
+            </ol>
+       
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>0.16.0 </p>
+
+    
+    
+</div>
+
+       
            
        
     
@@ -905,19 +1012,19 @@ array([[ 1.  ,  1.  ,  0.  ,  1.  , -0.75,  0.  ],
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt.html" class='exists'>scipy.signal.signaltools.sosfilt</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.zpk2sos.html" class='exists'>scipy.signal.filter_design.zpk2sos</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt.html" class='exists'>scipy.signal.signaltools.sosfilt</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.zpk2sos.html" class='exists'>scipy.signal.filter_design.zpk2sos</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
         
          
      
@@ -928,9 +1035,6 @@ array([[ 1.  ,  1.  ,  0.  ,  1.  , -0.75,  0.  ],
     <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
 
     
-    
-        <code><a link href="/p/papyri/0.0.7/api/papyri.html" class='exists'>papyri</a></code>
-        
     
         <code><a link href="/p/papyri/0.0.8/api/papyri.html" class='exists'>papyri</a></code>
         
@@ -1002,7 +1106,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 10.82842712474619, "label": "scipy.signal.signaltools.sosfilt", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt"}, {"id": 2, "val": 8.0, "label": "scipy.signal.filter_design.tf2sos", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.tf2sos"}, {"id": 4, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 5, "val": 34.09597670139978, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 6, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 24.46207763315433, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 6, "target": 5, "id": 6}, {"source": 7, "target": 5, "id": 913}, {"source": 5, "target": 1, "id": 1501}, {"source": 1, "target": 2, "id": 1865}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.82842712474619, "label": "scipy.signal.signaltools.sosfilt", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt"}, {"id": 2, "val": 24.217274740226856, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 8.0, "label": "scipy.signal.filter_design.tf2sos", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.tf2sos"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 1, "target": 3, "id": 5}, {"source": 4, "target": 6, "id": 16}, {"source": 6, "target": 1, "id": 1252}, {"source": 2, "target": 6, "id": 1607}]};
 
 (function() {
 
@@ -1130,7 +1234,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 10.82842712474619, "label": "scipy.signal.signaltools.sosfilt", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt"}, {"id": 2, "val": 8.0, "label": "scipy.signal.filter_design.tf2sos", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.tf2sos"}, {"id": 4, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 5, "val": 34.09597670139978, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 6, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 24.46207763315433, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 6, "target": 5, "id": 6}, {"source": 7, "target": 5, "id": 913}, {"source": 5, "target": 1, "id": 1501}, {"source": 1, "target": 2, "id": 1865}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.82842712474619, "label": "scipy.signal.signaltools.sosfilt", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.sosfilt"}, {"id": 2, "val": 24.217274740226856, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 8.0, "label": "scipy.signal.filter_design.tf2sos", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.tf2sos"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 1, "target": 3, "id": 5}, {"source": 4, "target": 6, "id": 16}, {"source": 6, "target": 1, "id": 1252}, {"source": 2, "target": 6, "id": 1607}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

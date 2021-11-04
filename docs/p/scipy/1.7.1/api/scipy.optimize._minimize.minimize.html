@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -1083,9 +1083,146 @@ user-select: none;
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p>This section describes the available solvers that can be selected by the &#39;method&#39; parameter. The default method is <em>BFGS</em>.</p>
 
     
+           
+               
+        <p><b>Unconstrained minimization</b></p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`CG &lt;optimize.minimize-cg&gt;`</code> uses a nonlinear conjugate gradient algorithm by Polak and Ribiere, a variant of the Fletcher-Reeves method described in  pp.120-122. Only the first derivatives are used.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`BFGS &lt;optimize.minimize-bfgs&gt;`</code> uses the quasi-Newton method of Broyden, Fletcher, Goldfarb, and Shanno (BFGS)  pp. 136. It uses the first derivatives only. BFGS has proven good performance even for non-smooth optimizations. This method also returns an approximation of the Hessian inverse, stored as <code>:None:None:`hess_inv`</code> in the OptimizeResult object.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`Newton-CG &lt;optimize.minimize-newtoncg&gt;`</code> uses a Newton-CG algorithm  pp. 168 (also known as the truncated Newton method). It uses a CG method to the compute the search direction. See also <em>TNC</em> method for a box-constrained minimization with a similar algorithm. Suitable for large-scale problems.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`dogleg &lt;optimize.minimize-dogleg&gt;`</code> uses the dog-leg trust-region algorithm  for unconstrained minimization. This algorithm requires the gradient and Hessian; furthermore the Hessian is required to be positive definite.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`trust-ncg &lt;optimize.minimize-trustncg&gt;`</code> uses the Newton conjugate gradient trust-region algorithm  for unconstrained minimization. This algorithm requires the gradient and either the Hessian or a function that computes the product of the Hessian with a given vector. Suitable for large-scale problems.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`trust-krylov &lt;optimize.minimize-trustkrylov&gt;`</code> uses the Newton GLTR trust-region algorithm ,  for unconstrained minimization. This algorithm requires the gradient and either the Hessian or a function that computes the product of the Hessian with a given vector. Suitable for large-scale problems. On indefinite problems it requires usually less iterations than the <code>:None:None:`trust-ncg`</code> method and is recommended for medium and large-scale problems.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`trust-exact &lt;optimize.minimize-trustexact&gt;`</code> is a trust-region method for unconstrained minimization in which quadratic subproblems are solved almost exactly . This algorithm requires the gradient and the Hessian (which is <em>not</em> required to be positive definite). It is, in many situations, the Newton method to converge in fewer iteraction and the most recommended for small and medium-size problems.</p>
+
+    
+           
+               
+        <p><b>Bound-Constrained minimization</b></p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`Nelder-Mead &lt;optimize.minimize-neldermead&gt;`</code> uses the Simplex algorithm , . This algorithm is robust in many applications. However, if numerical computation of derivative can be trusted, other algorithms using the first and/or second derivatives information might be preferred for their better performance in general.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`L-BFGS-B &lt;optimize.minimize-lbfgsb&gt;`</code> uses the L-BFGS-B algorithm ,  for bound constrained minimization.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`Powell &lt;optimize.minimize-powell&gt;`</code> is a modification of Powell&#39;s method ,  which is a conjugate direction method. It performs sequential one-dimensional minimizations along each vector of the directions set (<code>:None:None:`direc`</code> field in <code><a link href="#options" class='local'>options</a></code> and <code>:None:None:`info`</code>), which is updated at each iteration of the main minimization loop. The function need not be differentiable, and no derivatives are taken. If bounds are not provided, then an unbounded line search will be used. If bounds are provided and the initial guess is within the bounds, then every function evaluation throughout the minimization procedure will be within the bounds. If bounds are provided, the initial guess is outside the bounds, and <code>:None:None:`direc`</code> is full rank (default has full rank), then some function evaluations during the first iteration may be outside the bounds, but every function evaluation after the first iteration will be within the bounds. If <code>:None:None:`direc`</code> is not full rank, then some parameters may not be optimized and the solution is not guaranteed to be within the bounds.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`TNC &lt;optimize.minimize-tnc&gt;`</code> uses a truncated Newton algorithm ,  to minimize a function with variables subject to bounds. This algorithm uses gradient information; it is also called Newton Conjugate-Gradient. It differs from the <em>Newton-CG</em> method described above as it wraps a C implementation and allows each variable to be given upper and lower bounds.</p>
+
+    
+           
+               
+        <p><b>Constrained Minimization</b></p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`COBYLA &lt;optimize.minimize-cobyla&gt;`</code> uses the Constrained Optimization BY Linear Approximation (COBYLA) method , , . The algorithm is based on linear approximations to the objective function and each constraint. The method wraps a FORTRAN implementation of the algorithm. The constraints functions &#39;fun&#39; may return either a single number or an array or list of numbers.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`SLSQP &lt;optimize.minimize-slsqp&gt;`</code> uses Sequential Least SQuares Programming to minimize a function of several variables with any combination of bounds, equality and inequality constraints. The method wraps the SLSQP Optimization subroutine originally implemented by Dieter Kraft . Note that the wrapper handles infinite values in bounds by converting them into large floating values.</p>
+
+    
+           
+               
+        <p>Method <code>:None:ref:`trust-constr &lt;optimize.minimize-trustconstr&gt;`</code> is a trust-region algorithm for constrained optimization. It swiches between two implementations depending on the problem definition. It is the most versatile constrained minimization algorithm implemented in SciPy and the most appropriate for large-scale problems. For equality constrained problems it is an implementation of Byrd-Omojokun Trust-Region SQP method described in  and in , p. 549. When inequality constraints  are imposed as well, it swiches to the trust-region interior point  method described in . This interior point algorithm, in turn, solves inequality constraints by introducing slack variables and solving a sequence of equality-constrained barrier problems for progressively smaller values of the barrier parameter. The previously described equality constrained SQP method is used to solve the subproblems with increasing levels of accuracy as the iterate gets closer to a solution.</p>
+
+    
+           
+               
+        <p><b>Finite-Difference Options</b></p>
+
+    
+           
+               
+        <p>For Method <code>:None:ref:`trust-constr &lt;optimize.minimize-trustconstr&gt;`</code> the gradient and the Hessian may be approximated using three finite-difference schemes: {&#39;2-point&#39;, &#39;3-point&#39;, &#39;cs&#39;}. The scheme &#39;cs&#39; is, potentially, the most accurate but it requires the function to correctly handles complex inputs and to be differentiable in the complex plane. The scheme &#39;3-point&#39; is more accurate than &#39;2-point&#39; but requires twice as many operations.</p>
+
+    
+           
+               
+        <p><b>Custom minimizers</b></p>
+
+    
+           
+               
+        <p>It may be useful to pass a custom minimization method, for example when using a frontend to this method such as <code>:None:None:`scipy.optimize.basinhopping`</code> or a different library.  You can simply pass a callable as the 
+        <code class='verbatim'>method</code>
+     parameter.</p>
+
+    
+           
+               
+        <p>The callable is called as 
+        <code class='verbatim'>method(fun, x0, args, **kwargs, **options)</code>
+     where 
+        <code class='verbatim'>kwargs</code>
+     corresponds to any other parameters passed to <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize.html" class='exists'>minimize</a></code>
+         (such as <code><a link href="#callback" class='local'>callback</a></code>, <code><a link href="#hess" class='local'>hess</a></code>, etc.), except the <code><a link href="#options" class='local'>options</a></code> dict, which has its contents also passed as <code><a link href="#method" class='local'>method</a></code> parameters pair by pair.  Also, if <code><a link href="#jac" class='local'>jac</a></code> has been passed as a bool type, <code><a link href="#jac" class='local'>jac</a></code> and <code><a link href="#fun" class='local'>fun</a></code> are mangled so that <code><a link href="#fun" class='local'>fun</a></code> returns just the function values and <code><a link href="#jac" class='local'>jac</a></code> is converted to a function returning the Jacobian.  The method shall return an <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>OptimizeResult</a></code>
+         object.</p>
+
+    
+           
+               
+        <p>The provided <code><a link href="#method" class='local'>method</a></code> callable must be able to accept (and possibly ignore) arbitrary parameters; the set of parameters accepted by <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize.html" class='exists'>minimize</a></code>
+         may expand in future versions and then these parameters will be passed to the method.  You can find an example in the scipy.optimize tutorial.</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>0.11.0 </p>
+
+    
+    
+</div>
+
+       
            
        
     
@@ -1220,13 +1357,19 @@ array([[ 0.00749589,  0.01255155,  0.02396251,  0.04750988,  0.09495377],  # may
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint.html" class='exists'>scipy.optimize._constraints.LinearConstraint</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize.html" class='exists'>scipy.optimize._minimize.minimize</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.SR1.html" class='exists'>scipy.optimize._hessian_update_strategy.SR1</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS.html" class='exists'>scipy.optimize._hessian_update_strategy.BFGS</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>scipy.optimize.optimize.rosen</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_der.html" class='exists'>scipy.optimize.optimize.rosen_der</a></code>
@@ -1235,22 +1378,19 @@ array([[ 0.00749589,  0.01255155,  0.02396251,  0.04750988,  0.09495377],  # may
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.HessianUpdateStrategy.html" class='exists'>scipy.optimize._hessian_update_strategy.HessianUpdateStrategy</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess.html" class='exists'>scipy.optimize.optimize.rosen_hess</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.html" class='exists'>scipy.optimize</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS.html" class='exists'>scipy.optimize._hessian_update_strategy.BFGS</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint.html" class='exists'>scipy.optimize._constraints.LinearConstraint</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint.html" class='exists'>scipy.optimize._constraints.NonlinearConstraint</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._constraints.Bounds.html" class='exists'>scipy.optimize._constraints.Bounds</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>scipy.optimize.optimize.rosen</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint.html" class='exists'>scipy.optimize._constraints.NonlinearConstraint</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess.html" class='exists'>scipy.optimize.optimize.rosen_hess</a></code>
         
          
      
@@ -1262,10 +1402,13 @@ array([[ 0.00749589,  0.01255155,  0.02396251,  0.04750988,  0.09495377],  # may
 
     
     
-        <code><a link href="/p/papyri/0.0.7/api/papyri.html" class='exists'>papyri</a></code>
+        <code><a link href="/p/papyri/0.0.8/api/papyri.html" class='exists'>papyri</a></code>
         
     
-        <code><a link href="/p/papyri/0.0.8/api/papyri.html" class='exists'>papyri</a></code>
+        <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize.html" class='exists'>scipy.optimize._minimize.minimize</a></code>
+        
+    
+        <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize_scalar.html" class='exists'>scipy.optimize._minimize.minimize_scalar</a></code>
         
     
     
@@ -1329,7 +1472,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 11.16227766016838, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.rosen_der", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_der"}, {"id": 3, "val": 9.0, "label": "scipy.optimize.optimize.rosen_hess", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess"}, {"id": 4, "val": 9.0, "label": "scipy.optimize._constraints.LinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 9.0, "label": "scipy.optimize._constraints.NonlinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint"}, {"id": 7, "val": 10.0, "label": "scipy.optimize._constraints.Bounds", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.Bounds"}, {"id": 8, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 9, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.BFGS", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS"}, {"id": 10, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.SR1", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.SR1"}, {"id": 11, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 12, "val": 9.732050807568877, "label": "scipy.optimize._hessian_update_strategy.HessianUpdateStrategy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.HessianUpdateStrategy"}], "links": [{"source": 10, "target": 6, "id": 1}, {"source": 12, "target": 6, "id": 14}, {"source": 9, "target": 6, "id": 21}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.SR1", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.SR1"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.rosen_der", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_der"}, {"id": 3, "val": 9.0, "label": "scipy.optimize.optimize.rosen_hess", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess"}, {"id": 4, "val": 9.0, "label": "scipy.optimize._constraints.LinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 8, "val": 10.0, "label": "scipy.optimize._hessian_update_strategy.HessianUpdateStrategy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.HessianUpdateStrategy"}, {"id": 9, "val": 10.0, "label": "scipy.optimize._constraints.Bounds", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.Bounds"}, {"id": 10, "val": 9.0, "label": "scipy.optimize._constraints.NonlinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint"}, {"id": 11, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 12, "val": 9.0, "label": "scipy.optimize._minimize.minimize_scalar", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize_scalar"}, {"id": 13, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 14, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.BFGS", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS"}], "links": [{"source": 12, "target": 13, "id": 3}, {"source": 11, "target": 12, "id": 12}, {"source": 1, "target": 10, "id": 18}, {"source": 14, "target": 10, "id": 20}, {"source": 8, "target": 13, "id": 26}, {"source": 8, "target": 10, "id": 27}]};
 
 (function() {
 
@@ -1457,7 +1600,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 11.16227766016838, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.rosen_der", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_der"}, {"id": 3, "val": 9.0, "label": "scipy.optimize.optimize.rosen_hess", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess"}, {"id": 4, "val": 9.0, "label": "scipy.optimize._constraints.LinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 9.0, "label": "scipy.optimize._constraints.NonlinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint"}, {"id": 7, "val": 10.0, "label": "scipy.optimize._constraints.Bounds", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.Bounds"}, {"id": 8, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 9, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.BFGS", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS"}, {"id": 10, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.SR1", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.SR1"}, {"id": 11, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 12, "val": 9.732050807568877, "label": "scipy.optimize._hessian_update_strategy.HessianUpdateStrategy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.HessianUpdateStrategy"}], "links": [{"source": 10, "target": 6, "id": 1}, {"source": 12, "target": 6, "id": 14}, {"source": 9, "target": 6, "id": 21}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.SR1", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.SR1"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.rosen_der", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_der"}, {"id": 3, "val": 9.0, "label": "scipy.optimize.optimize.rosen_hess", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen_hess"}, {"id": 4, "val": 9.0, "label": "scipy.optimize._constraints.LinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.LinearConstraint"}, {"id": 5, "val": 8.0, "label": "papyri", "mod": "papyri", "url": "/p/papyri/0.0.8/api/papyri"}, {"id": 6, "val": 9.732050807568877, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 8, "val": 10.0, "label": "scipy.optimize._hessian_update_strategy.HessianUpdateStrategy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.HessianUpdateStrategy"}, {"id": 9, "val": 10.0, "label": "scipy.optimize._constraints.Bounds", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.Bounds"}, {"id": 10, "val": 9.0, "label": "scipy.optimize._constraints.NonlinearConstraint", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._constraints.NonlinearConstraint"}, {"id": 11, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 12, "val": 9.0, "label": "scipy.optimize._minimize.minimize_scalar", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._minimize.minimize_scalar"}, {"id": 13, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 14, "val": 9.414213562373096, "label": "scipy.optimize._hessian_update_strategy.BFGS", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._hessian_update_strategy.BFGS"}], "links": [{"source": 12, "target": 13, "id": 3}, {"source": 11, "target": 12, "id": 12}, {"source": 1, "target": 10, "id": 18}, {"source": 14, "target": 10, "id": 20}, {"source": 8, "target": 13, "id": 26}, {"source": 8, "target": 10, "id": 27}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

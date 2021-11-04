@@ -527,7 +527,7 @@ user-select: none;
 
 
 
-    <code class='signature'>brute(func, ranges, args=(), Ns=20, full_output=0, finish=&lt;function fmin at 0x7ff21148ef70&gt;, disp=False, workers=1)</code>
+    <code class='signature'>brute(func, ranges, args=(), Ns=20, full_output=0, finish=&lt;function fmin at 0x7fac11634e50&gt;, disp=False, workers=1)</code>
 
 
 
@@ -552,7 +552,7 @@ user-select: none;
         
            
                
-        <p>Uses the &#34; brute force&#34; method, i.e., computes the function&#39; s value at each point of a multidimensional grid of points, to find the global minimum of the function.</p>
+        <p>Uses the &#34;brute force&#34; method, i.e., computes the function&#39;s value at each point of a multidimensional grid of points, to find the global minimum of the function.</p>
 
     
            
@@ -563,14 +563,14 @@ user-select: none;
         <code class='verbatim'>full_output=True</code>
      are affected in addition by the 
         <code class='verbatim'>finish</code>
-     argument ( see Notes).</p>
+     argument (see Notes).</p>
 
     
            
                
         <p>The brute force approach is inefficient because the number of grid points increases exponentially - the number of grid points to evaluate is 
         <code class='verbatim'>Ns ** len(x)</code>
-     . Consequently, even with coarse grid spacing, even moderately sized problems can take a long time to run, and/ or run into memory limitations.</p>
+    . Consequently, even with coarse grid spacing, even moderately sized problems can take a long time to run, and/or run into memory limitations.</p>
 
     
            
@@ -853,7 +853,43 @@ user-select: none;
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p><em>Note 1</em>: The program finds the gridpoint at which the lowest value of the objective function occurs. If <code><a link href="#finish" class='local'>finish</a></code> is None, that is the point returned. When the global minimum occurs within (or not very far outside) the grid&#39;s boundaries, and the grid is fine enough, that point will be in the neighborhood of the global minimum.</p>
+
+    
+           
+               
+        <p>However, users often employ some other optimization program to &#34;polish&#34; the gridpoint values, i.e., to seek a more precise (local) minimum near <code>:None:None:`brute&#39;s`</code> best gridpoint. The <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         function&#39;s <code><a link href="#finish" class='local'>finish</a></code> option provides a convenient way to do that. Any polishing program used must take <code>:None:None:`brute&#39;s`</code> output as its initial guess as a positional argument, and take <code>:None:None:`brute&#39;s`</code> input values for <code><a link href="#args" class='local'>args</a></code> as keyword arguments, otherwise an error will be raised. It may additionally take <code><a link href="#full_output" class='local'>full_output</a></code> and/or <code><a link href="#disp" class='local'>disp</a></code> as keyword arguments.</p>
+
+    
+           
+               
+        <p><code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         assumes that the <code><a link href="#finish" class='local'>finish</a></code> function returns either an <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>OptimizeResult</a></code>
+         object or a tuple in the form: 
+        <code class='verbatim'>(xmin, Jmin, ... , statuscode)</code>
+    , where 
+        <code class='verbatim'>xmin</code>
+     is the minimizing value of the argument, 
+        <code class='verbatim'>Jmin</code>
+     is the minimum value of the objective function, &#34;...&#34; may be some other returned values (which are not used by <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+        ), and 
+        <code class='verbatim'>statuscode</code>
+     is the status code of the <code><a link href="#finish" class='local'>finish</a></code> program.</p>
+
+    
+           
+               
+        <p>Note that when <code><a link href="#finish" class='local'>finish</a></code> is not None, the values returned are those of the <code><a link href="#finish" class='local'>finish</a></code> program, <em>not</em> the gridpoint ones. Consequently, while <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         confines its search to the input grid points, the <code><a link href="#finish" class='local'>finish</a></code> program&#39;s results usually will not coincide with any gridpoint, and may fall outside the grid&#39;s boundary. Thus, if a minimum only needs to be found over the provided grid points, make sure to pass in <code>:None:None:`finish=None`</code>.</p>
+
+    
+           
+               
+        <p><em>Note 2</em>: The grid of points is a <code>:None:None:`numpy.mgrid`</code> object. For <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         the <code><a link href="#ranges" class='local'>ranges</a></code> and <code><a link href="#Ns" class='local'>Ns</a></code> inputs have the following effect. Each component of the <code><a link href="#ranges" class='local'>ranges</a></code> tuple can be either a slice object or a two-tuple giving a range of values, such as (0, 5). If the component is a slice object, <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         uses it directly. If the component is a two-tuple range, <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>brute</a></code>
+         internally converts it to a slice object that interpolates <code><a link href="#Ns" class='local'>Ns</a></code> points from its low-value to its high-value, inclusive.</p>
 
     
            
@@ -933,13 +969,16 @@ array([-1.05665192,  1.80834843])</pre>
          
          See :
          
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>scipy.optimize.optimize.brute</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin.html" class='exists'>scipy.optimize.optimize.fmin</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>scipy.optimize.optimize.brute</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
@@ -955,9 +994,6 @@ array([-1.05665192,  1.80834843])</pre>
     
     
         <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>scipy.optimize.optimize.brute</a></code>
-        
-    
-        <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.zeros.brentq.html" class='exists'>scipy.optimize.zeros.brentq</a></code>
         
     
     
@@ -1021,7 +1057,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 9.414213562373096, "label": "scipy.optimize.zeros.brentq", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.zeros.brentq"}, {"id": 4, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}], "links": [{"source": 2, "target": 3, "id": 5}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}], "links": []};
 
 (function() {
 
@@ -1149,7 +1185,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 9.414213562373096, "label": "scipy.optimize.zeros.brentq", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.zeros.brentq"}, {"id": 4, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}], "links": [{"source": 2, "target": 3, "id": 5}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}], "links": []};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

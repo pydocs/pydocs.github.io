@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -512,7 +512,7 @@ user-select: none;
         
            
                
-        <p>Integrate func from <code><a link href="#a" class='local'>a</a></code> to <code><a link href="#b" class='local'>b</a></code> ( possibly infinite interval) using a technique from the Fortran library QUADPACK.</p>
+        <p>Integrate func from <code><a link href="#a" class='local'>a</a></code> to <code><a link href="#b" class='local'>b</a></code> (possibly infinite interval) using a technique from the Fortran library QUADPACK.</p>
 
     
            
@@ -923,9 +923,359 @@ double func(int n, double *xx, void *user_data)
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p><b>Extra information for quad() inputs and outputs</b></p>
 
     
+           
+               
+        <p>If full_output is non-zero, then the third output argument (infodict) is a dictionary with entries as tabulated below. For infinite limits, the range is transformed to (0,1) and the optional outputs are given with respect to this transformed range. Let M be the input argument limit and let K be infodict[&#39;last&#39;]. The entries are:</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>&#39;neval&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The number of function evaluations.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;last&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The number, K, of subintervals produced in the subdivision process.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;alist&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length M, the first K elements of which are the     left end points of the subintervals in the partition of the     integration range.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;blist&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length M, the first K elements of which are the     right end points of the subintervals.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;rlist&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length M, the first K elements of which are the     integral approximations on the subintervals.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;elist&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length M, the first K elements of which are the     moduli of the absolute error estimates on the subintervals.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;iord&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 integer array of length M, the first L elements of     which are pointers to the error estimates over the subintervals     with 
+        <code class='verbatim'>L=K</code>
+     if 
+        <code class='verbatim'>K&lt;=M/2+2</code>
+     or 
+        <code class='verbatim'>L=M+1-K</code>
+     otherwise. Let I be the     sequence 
+        <code class='verbatim'>infodict[&#39;iord&#39;]</code>
+     and let E be the sequence     
+        <code class='verbatim'>infodict[&#39;elist&#39;]</code>
+    .  Then 
+        <code class='verbatim'>E[I[1]], ..., E[I[L]]</code>
+     forms a     decreasing sequence.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+           
+               
+        <p>If the input argument points is provided (i.e., it is not None), the following additional outputs are placed in the output dictionary. Assume the points sequence is of length P.</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>&#39;pts&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length P+2 containing the integration limits     and the break points of the intervals in ascending order.     This is an array giving the subintervals over which integration     will occur.</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;level&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 integer array of length M (=limit), containing the     subdivision levels of the subintervals, i.e., if (aa,bb) is a     subinterval of 
+        <code class='verbatim'>(pts[1], pts[2])</code>
+     where 
+        <code class='verbatim'>pts[0]</code>
+     and 
+        <code class='verbatim'>pts[2]</code>
+         are adjacent elements of 
+        <code class='verbatim'>infodict[&#39;pts&#39;]</code>
+    , then (aa,bb) has level l     if 
+        <code class='verbatim'>|bb-aa| = |pts[2]-pts[1]| * 2**(-l)</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;ndin&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 integer array of length P+2. After the first integration     over the intervals (pts[1], pts[2]), the error estimates over some     of the intervals may have been increased artificially in order to     put their subdivision forward. This array has ones in slots     corresponding to the subintervals for which this happens.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+           
+               
+        <p><b>Weighting the integrand</b></p>
+
+    
+           
+               
+        <p>The input variables, <em>weight</em> and <em>wvar</em>, are used to weight the integrand by a select list of functions. Different integration methods are used to compute the integral with these weighting functions, and these do not support specifying break points. The possible values of weight and the corresponding weighting functions are.</p>
+
+    
+           
+               
+        <p>==========  ===================================   ===================== 
+        <code class='verbatim'>weight</code>
+      Weight function used                  
+        <code class='verbatim'>wvar</code>
+     ==========  ===================================   ===================== &#39;cos&#39;       cos(w*x)                              wvar = w &#39;sin&#39;       sin(w*x)                              wvar = w &#39;alg&#39;       g(x) = ((x-a)**alpha)*((b-x)**beta)   wvar = (alpha, beta) &#39;alg-loga&#39;  g(x)*log(x-a)                         wvar = (alpha, beta) &#39;alg-logb&#39;  g(x)*log(b-x)                         wvar = (alpha, beta) &#39;alg-log&#39;   g(x)*log(x-a)*log(b-x)                wvar = (alpha, beta) &#39;cauchy&#39;    1/(x-c)                               wvar = c ==========  ===================================   =====================</p>
+
+    
+           
+               
+        <p>wvar holds the parameter w, (alpha, beta), or c depending on the weight selected. In these expressions, a and b are the integration limits.</p>
+
+    
+           
+               
+        <p>For the &#39;cos&#39; and &#39;sin&#39; weighting, additional inputs and outputs are available.</p>
+
+    
+           
+               
+        <p>For finite integration limits, the integration is performed using a Clenshaw-Curtis method which uses Chebyshev moments. For repeated calculations, these moments are saved in the output dictionary:</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>&#39;momcom&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The maximum level of Chebyshev moments that have been computed,     i.e., if 
+        <code class='verbatim'>M_c</code>
+     is 
+        <code class='verbatim'>infodict[&#39;momcom&#39;]</code>
+     then the moments have been     computed for intervals of length 
+        <code class='verbatim'>|b-a| * 2**(-l)</code>
+    ,     
+        <code class='verbatim'>l=0,1,...,M_c</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;nnlog&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 integer array of length M(=limit), containing the     subdivision levels of the subintervals, i.e., an element of this     array is equal to l if the corresponding subinterval is     
+        <code class='verbatim'>|b-a|* 2**(-l)</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;chebmo&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-2 array of shape (25, maxp1) containing the computed     Chebyshev moments. These can be passed on to an integration     over the same interval by passing this array as the second     element of the sequence wopts and passing infodict[&#39;momcom&#39;] as     the first element.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
+           
+               
+        <p>If one of the integration limits is infinite, then a Fourier integral is computed (assuming w neq 0). If full_output is 1 and a numerical error is encountered, besides the error message attached to the output tuple, a dictionary is also appended to the output tuple which translates the error codes in the array 
+        <code class='verbatim'>info[&#39;ierlst&#39;]</code>
+     to English messages. The output information dictionary contains the following entries instead of &#39;last&#39;, &#39;alist&#39;, &#39;blist&#39;, &#39;rlist&#39;, and &#39;elist&#39;:</p>
+
+    
+           
+               
+          <!-- deflist -->
+           <dl>
+               
+               <dt>
+        <p>&#39;lst&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>The number of subintervals needed for the integration (call it 
+        <code class='verbatim'>K_f</code>
+    ).</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;rslst&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length M_f=limlst, whose first 
+        <code class='verbatim'>K_f</code>
+     elements     contain the integral contribution over the interval     
+        <code class='verbatim'>(a+(k-1)c, a+kc)</code>
+     where 
+        <code class='verbatim'>c = (2*floor(|w|) + 1) * pi / |w|</code>
+         and 
+        <code class='verbatim'>k=1,2,...,K_f</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;erlst&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 array of length 
+        <code class='verbatim'>M_f</code>
+     containing the error estimate     corresponding to the interval in the same position in     
+        <code class='verbatim'>infodict[&#39;rslist&#39;]</code>
+    .</p>
+
+    
+                  
+               <dd>
+               
+               <dt>
+        <p>&#39;ierlst&#39;</p>
+
+    <dt>
+               <dd>
+
+                       
+        <p>A rank-1 integer array of length 
+        <code class='verbatim'>M_f</code>
+     containing an error flag     corresponding to the interval in the same position in     
+        <code class='verbatim'>infodict[&#39;rslist&#39;]</code>
+    .  See the explanation dictionary (last entry     in the output tuple) for the meaning of the codes.</p>
+
+    
+                  
+               <dd>
+                 
+           </dl>
+       
            
        
     
@@ -1067,13 +1417,13 @@ double func(int n, double *xx, void *user_data)
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.integrate.quadpack.quad.html" class='exists'>scipy.integrate.quadpack.quad</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
      
@@ -1155,7 +1505,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.integrate.quadpack.nquad", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.nquad"}, {"id": 3, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 9.0, "label": "scipy.integrate.quadpack.quad_explain", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.quad_explain"}], "links": [{"source": 5, "target": 1, "id": 3}, {"source": 3, "target": 1, "id": 237}, {"source": 4, "target": 1, "id": 933}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.integrate.quadpack.nquad", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.nquad"}, {"id": 3, "val": 9.0, "label": "scipy.integrate.quadpack.quad_explain", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.quad_explain"}, {"id": 4, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 3, "target": 1, "id": 3}, {"source": 4, "target": 1, "id": 25}, {"source": 5, "target": 1, "id": 452}]};
 
 (function() {
 
@@ -1283,7 +1633,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.integrate.quadpack.nquad", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.nquad"}, {"id": 3, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 22.730919862656236, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 9.0, "label": "scipy.integrate.quadpack.quad_explain", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.quad_explain"}], "links": [{"source": 5, "target": 1, "id": 3}, {"source": 3, "target": 1, "id": 237}, {"source": 4, "target": 1, "id": 933}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.integrate.quadpack.nquad", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.nquad"}, {"id": 3, "val": 9.0, "label": "scipy.integrate.quadpack.quad_explain", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate.quadpack.quad_explain"}, {"id": 4, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 5, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 3, "target": 1, "id": 3}, {"source": 4, "target": 1, "id": 25}, {"source": 5, "target": 1, "id": 452}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

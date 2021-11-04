@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -449,17 +449,8 @@ user-select: none;
                         
                         
                             <div class="dropdown-content">
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.estimate_rank.html">estimate_rank</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.estimate_spectral_norm.html">estimate_spectral_norm</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.estimate_spectral_norm_diff.html">estimate_spectral_norm_diff</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.id_to_svd.html">id_to_svd</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.interp_decomp.html">interp_decomp</a>
                             <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.rand.html">rand</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.reconstruct_interp_matrix.html">reconstruct_interp_matrix</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.reconstruct_matrix_from_id.html">reconstruct_matrix_from_id</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.reconstruct_skel_matrix.html">reconstruct_skel_matrix</a>
                             <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.seed.html">seed</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.svd.html">svd</a>
                             
                             </div>
                         
@@ -484,6 +475,7 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-backrefs">BackRef</a>
     
 
     </div>
@@ -511,7 +503,7 @@ user-select: none;
         
            
                
-        <p>Was not able to parse docstring for scipy.linalg.interpolative</p>
+        <p>To remove in the future –– scipy.linalg.interpolative</p>
 
     
            
@@ -618,14 +610,768 @@ user-select: none;
    
 
 
+    
+        <h1>Interpolative matrix decomposition (:mod:`scipy.linalg.interpolative`)</h1>
+    
+
+
+           
+               
+           <div class='block_directive'>
+    <div class='head'>.. moduleauthor:: []</div>
+    
+        <p>Kenneth L. Ho &lt; klho@stanford.edu&gt; </p>
+
+    
+</div>
+
+        
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>0.13 </p>
+
+    
+    
+</div>
+
+       
+           
+               
+           <div class='block_directive'>
+    <div class='head'>.. currentmodule:: []</div>
+    
+        <p>scipy.linalg.interpolative </p>
+
+    
+</div>
+
+        
+           
+               
+        <p>An interpolative decomposition (ID) of a matrix 
+        <span class="tex2jax_process">$A \in
+\mathbb{C}^{m \times n}$</span>
+     of rank 
+        <span class="tex2jax_process">$k \leq \min \{ m, n \}$</span>
+     is a factorization</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$A \Pi = \begin { bmatrix} A \Pi_ { 1} &amp; A \Pi_ { 2} \end { bmatrix} = A \Pi_ { 1} \begin { bmatrix} I &amp; T \end { bmatrix}, $$</span>
+       
+           
+               
+        <p>where 
+        <span class="tex2jax_process">$\Pi = [\Pi_{1}, \Pi_{2}]$</span>
+     is a permutation matrix with 
+        <span class="tex2jax_process">$\Pi_{1} \in \{ 0, 1 \}^{n \times k}$</span>
+    , i.e., 
+        <span class="tex2jax_process">$A \Pi_{2} =
+A \Pi_{1} T$</span>
+    . This can equivalently be written as 
+        <span class="tex2jax_process">$A = BP$</span>
+    , where 
+        <span class="tex2jax_process">$B = A \Pi_{1}$</span>
+     and 
+        <span class="tex2jax_process">$P = [I, T] \Pi^{\mathsf{T}}$</span>
+     are the <em>skeleton</em> and <em>interpolation matrices</em>, respectively.</p>
+
+    
+           
+               
+        <p>If 
+        <span class="tex2jax_process">$A$</span>
+     does not have exact rank 
+        <span class="tex2jax_process">$k$</span>
+    , then there exists an approximation in the form of an ID such that 
+        <span class="tex2jax_process">$A = BP + E$</span>
+    , where 
+        <span class="tex2jax_process">$\| E \| \sim \sigma_{k + 1}$</span>
+     is on the order of the 
+        <span class="tex2jax_process">$(k +
+1)$</span>
+    -th largest singular value of 
+        <span class="tex2jax_process">$A$</span>
+    . Note that 
+        <span class="tex2jax_process">$\sigma_{k
++ 1}$</span>
+     is the best possible error for a rank-
+        <span class="tex2jax_process">$k$</span>
+     approximation and, in fact, is achieved by the singular value decomposition (SVD) 
+        <span class="tex2jax_process">$A \approx U S V^{*}$</span>
+    , where 
+        <span class="tex2jax_process">$U \in \mathbb{C}^{m \times
+k}$</span>
+     and 
+        <span class="tex2jax_process">$V \in \mathbb{C}^{n \times k}$</span>
+     have orthonormal columns and 
+        <span class="tex2jax_process">$S = \mathop{\mathrm{diag}} (\sigma_{i}) \in \mathbb{C}^{k
+\times k}$</span>
+     is diagonal with nonnegative entries. The principal advantages of using an ID over an SVD are that:</p>
+
+    
+           
+               
+           <ul>
+               <li>
+        <p>it is cheaper to construct;</p>
+
+    </li>
+               
+               <li>
+        <p>it preserves the structure of <code>:None:math:`A`</code>; and</p>
+
+    </li>
+               
+               <li>
+        <p>it is more efficient to compute with in light of the identity submatrix of <code>:None:math:`P`</code>.</p>
+
+    </li>
+               
+            </ul>
+       
+           
+       
+
+    
+        <h1>Routines</h1>
+    
+
+
+           
+               
+        <p>Main functionality:</p>
+
+    
+           
+               
+           <div class='block_directive'>
+    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]</div>
+    
+        <p>interp_decomp reconstruct_matrix_from_id reconstruct_interp_matrix reconstruct_skel_matrix id_to_svd svd estimate_spectral_norm estimate_spectral_norm_diff estimate_rank </p>
+
+    
+</div>
+
+        
+           
+               
+        <p>Support functions:</p>
+
+    
+           
+               
+           <div class='block_directive'>
+    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]</div>
+    
+        <p>seed rand </p>
+
+    
+</div>
+
+        
+           
+       
+
+    
+        <h1>References</h1>
+    
+
+
+           
+               
+        <p>This module uses the ID software package  by Martinsson, Rokhlin, Shkolnisky, and Tygert, which is a Fortran library for computing IDs using various algorithms, including the rank-revealing QR approach of  and the more recent randomized methods described in , , and . This module exposes its functionality in a way convenient for Python users. Note that this module does not add any functionality beyond that of organizing a simpler and more consistent interface.</p>
+
+    
+           
+               
+        <p>We advise the user to consult also the <code>:None:None:`documentation for the ID package
+&lt;http://tygert.com/id_doc.4.pdf&gt;`</code>.</p>
+
+    
+           
+       
+
+    
+        <h1>Tutorial</h1>
+    
+
+
+           
+       
+
+    
+        <h1>Initializing</h1>
+    
+
+
+           
+               
+        <p>The first step is to import <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.html" class='exists'>scipy.linalg.interpolative</a></code>
+         by issuing the command:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; import scipy.linalg.interpolative as sli</pre>
+       
+           
+               
+        <p>Now let&#39;s build a matrix. For this, we consider a Hilbert matrix, which is well know to have low rank:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; from scipy.linalg import hilbert
+&gt;&gt;&gt; n = 1000
+&gt;&gt;&gt; A = hilbert(n)</pre>
+       
+           
+               
+        <p>We can also do this explicitly via:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; n = 1000
+&gt;&gt;&gt; A = np.empty((n, n), order=&#39;F&#39;)
+&gt;&gt;&gt; for j in range(n):
+&gt;&gt;&gt;     for i in range(m):
+&gt;&gt;&gt;         A[i,j] = 1. / (i + j + 1)</pre>
+       
+           
+               
+        <p>Note the use of the flag 
+        <code class='verbatim'>order=&#39;F&#39;</code>
+     in <code><a link href="/p/numpy/1.21.3/api/numpy.empty.html" class='exists'>numpy.empty</a></code>
+        . This instantiates the matrix in Fortran-contiguous order and is important for avoiding data copying when passing to the backend.</p>
+
+    
+           
+               
+        <p>We then define multiplication routines for the matrix by regarding it as a <code>:None:class:`scipy.sparse.linalg.LinearOperator`</code>:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; from scipy.sparse.linalg import aslinearoperator
+&gt;&gt;&gt; L = aslinearoperator(A)</pre>
+       
+           
+               
+        <p>This automatically sets up methods describing the action of the matrix and its adjoint on a vector.</p>
+
+    
+           
+       
+
+    
+        <h1>Computing an ID</h1>
+    
+
+
+           
+               
+        <p>We have several choices of algorithm to compute an ID. These fall largely according to two dichotomies:</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>how the matrix is represented, i.e., via its entries or via its action on a    vector; and</p>
+
+    </li>
+               
+               <li>
+        <p>whether to approximate it to a fixed relative precision or to a fixed rank.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+        <p>We step through each choice in turn below.</p>
+
+    
+           
+               
+        <p>In all cases, the ID is represented by three parameters:</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>a rank 
+        <code class='verbatim'>k</code>
+    ;</p>
+
+    </li>
+               
+               <li>
+        <p>an index array 
+        <code class='verbatim'>idx</code>
+    ; and</p>
+
+    </li>
+               
+               <li>
+        <p>interpolation coefficients 
+        <code class='verbatim'>proj</code>
+    .</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+        <p>The ID is specified by the relation 
+        <code class='verbatim'>np.dot(A[:,idx[:k]], proj) == A[:,idx[k:]]</code>
+    .</p>
+
+    
+           
+       
+
+    
+        <h1>From matrix entries</h1>
+    
+
+
+           
+               
+        <p>We first consider a matrix given in terms of its entries.</p>
+
+    
+           
+               
+        <p>To compute an ID to a fixed precision, type:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; k, idx, proj = sli.interp_decomp(A, eps)</pre>
+       
+           
+               
+        <p>where 
+        <code class='verbatim'>eps &lt; 1</code>
+     is the desired precision.</p>
+
+    
+           
+               
+        <p>To compute an ID to a fixed rank, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; idx, proj = sli.interp_decomp(A, k)</pre>
+       
+           
+               
+        <p>where 
+        <code class='verbatim'>k &gt;= 1</code>
+     is the desired rank.</p>
+
+    
+           
+               
+        <p>Both algorithms use random sampling and are usually faster than the corresponding older, deterministic algorithms, which can be accessed via the commands:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; k, idx, proj = sli.interp_decomp(A, eps, rand=False)</pre>
+       
+           
+               
+        <p>and:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; idx, proj = sli.interp_decomp(A, k, rand=False)</pre>
+       
+           
+               
+        <p>respectively.</p>
+
+    
+           
+       
+
+    
+        <h1>From matrix action</h1>
+    
+
+
+           
+               
+        <p>Now consider a matrix given in terms of its action on a vector as a <code>:None:class:`scipy.sparse.linalg.LinearOperator`</code>.</p>
+
+    
+           
+               
+        <p>To compute an ID to a fixed precision, type:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; k, idx, proj = sli.interp_decomp(L, eps)</pre>
+       
+           
+               
+        <p>To compute an ID to a fixed rank, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; idx, proj = sli.interp_decomp(L, k)</pre>
+       
+           
+               
+        <p>These algorithms are randomized.</p>
+
+    
+           
+       
+
+    
+        <h1>Reconstructing an ID</h1>
+    
+
+
+           
+               
+        <p>The ID routines above do not output the skeleton and interpolation matrices explicitly but instead return the relevant information in a more compact (and sometimes more useful) form. To build these matrices, write:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; B = sli.reconstruct_skel_matrix(A, k, idx)</pre>
+       
+           
+               
+        <p>for the skeleton matrix and:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; P = sli.reconstruct_interp_matrix(idx, proj)</pre>
+       
+           
+               
+        <p>for the interpolation matrix. The ID approximation can then be computed as:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; C = np.dot(B, P)</pre>
+       
+           
+               
+        <p>This can also be constructed directly using:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; C = sli.reconstruct_matrix_from_id(B, idx, proj)</pre>
+       
+           
+               
+        <p>without having to first compute 
+        <code class='verbatim'>P</code>
+    .</p>
+
+    
+           
+               
+        <p>Alternatively, this can be done explicitly as well using:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; B = A[:,idx[:k]]
+&gt;&gt;&gt; P = np.hstack([np.eye(k), proj])[:,np.argsort(idx)]
+&gt;&gt;&gt; C = np.dot(B, P)</pre>
+       
+           
+       
+
+    
+        <h1>Computing an SVD</h1>
+    
+
+
+           
+               
+        <p>An ID can be converted to an SVD via the command:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; U, S, V = sli.id_to_svd(B, idx, proj)</pre>
+       
+           
+               
+        <p>The SVD approximation is then:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; C = np.dot(U, np.dot(np.diag(S), np.dot(V.conj().T)))</pre>
+       
+           
+               
+        <p>The SVD can also be computed &#34;fresh&#34; by combining both the ID and conversion steps into one command. Following the various ID algorithms above, there are correspondingly various SVD algorithms that one can employ.</p>
+
+    
+           
+       
+
+    
+        <h1>From matrix entries</h1>
+    
+
+
+           
+               
+        <p>We consider first SVD algorithms for a matrix given in terms of its entries.</p>
+
+    
+           
+               
+        <p>To compute an SVD to a fixed precision, type:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; U, S, V = sli.svd(A, eps)</pre>
+       
+           
+               
+        <p>To compute an SVD to a fixed rank, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; U, S, V = sli.svd(A, k)</pre>
+       
+           
+               
+        <p>Both algorithms use random sampling; for the determinstic versions, issue the keyword 
+        <code class='verbatim'>rand=False</code>
+     as above.</p>
+
+    
+           
+       
+
+    
+        <h1>From matrix action</h1>
+    
+
+
+           
+               
+        <p>Now consider a matrix given in terms of its action on a vector.</p>
+
+    
+           
+               
+        <p>To compute an SVD to a fixed precision, type:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; U, S, V = sli.svd(L, eps)</pre>
+       
+           
+               
+        <p>To compute an SVD to a fixed rank, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; U, S, V = sli.svd(L, k)</pre>
+       
+           
+       
+
+    
+        <h1>Utility routines</h1>
+    
+
+
+           
+               
+        <p>Several utility routines are also available.</p>
+
+    
+           
+               
+        <p>To estimate the spectral norm of a matrix, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; snorm = sli.estimate_spectral_norm(A)</pre>
+       
+           
+               
+        <p>This algorithm is based on the randomized power method and thus requires only matrix-vector products. The number of iterations to take can be set using the keyword 
+        <code class='verbatim'>its</code>
+     (default: 
+        <code class='verbatim'>its=20</code>
+    ). The matrix is interpreted as a <code>:None:class:`scipy.sparse.linalg.LinearOperator`</code>, but it is also valid to supply it as a <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        , in which case it is trivially converted using <code>:None:func:`scipy.sparse.linalg.aslinearoperator`</code>.</p>
+
+    
+           
+               
+        <p>The same algorithm can also estimate the spectral norm of the difference of two matrices 
+        <code class='verbatim'>A1</code>
+     and 
+        <code class='verbatim'>A2</code>
+     as follows:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; diff = sli.estimate_spectral_norm_diff(A1, A2)</pre>
+       
+           
+               
+        <p>This is often useful for checking the accuracy of a matrix approximation.</p>
+
+    
+           
+               
+        <p>Some routines in <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.html" class='exists'>scipy.linalg.interpolative</a></code>
+         require estimating the rank of a matrix as well. This can be done with either:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; k = sli.estimate_rank(A, eps)</pre>
+       
+           
+               
+        <p>or:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; k = sli.estimate_rank(L, eps)</pre>
+       
+           
+               
+        <p>depending on the representation. The parameter 
+        <code class='verbatim'>eps</code>
+     controls the definition of the numerical rank.</p>
+
+    
+           
+               
+        <p>Finally, the random number generation required for all randomized routines can be controlled via <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.seed.html" class='exists'>scipy.linalg.interpolative.seed</a></code>
+        . To reset the seed values to their original values, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; sli.seed(&#39;default&#39;)</pre>
+       
+           
+               
+        <p>To specify the seed values, use:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; sli.seed(s)</pre>
+       
+           
+               
+        <p>where 
+        <code class='verbatim'>s</code>
+     must be an integer or array of 55 floats. If an integer, the array of floats is obtained by using 
+        <code class='verbatim'>numpy.random.rand</code>
+     with the given integer seed.</p>
+
+    
+           
+               
+        <p>To simply generate some random numbers, type:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; sli.rand(n)</pre>
+       
+           
+               
+        <p>where 
+        <code class='verbatim'>n</code>
+     is the number of random numbers to generate.</p>
+
+    
+           
+       
+
+    
+        <h1>Remarks</h1>
+    
+
+
+           
+               
+        <p>The above functions all automatically detect the appropriate interface and work with both real and complex data types, passing input arguments to the proper backend routine.</p>
+
+    
+           
+       
+
 
     <h3 id="section-Examples">Examples</h3>
         
          See :
          
+             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.html" class='exists'>scipy.linalg.interpolative</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.empty.html" class='exists'>numpy.empty</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.seed.html" class='exists'>scipy.linalg.interpolative.seed</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
      
     
 
+
+    <h3 id='section-backrefs'>Back References</h3>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+
+    
+    
+        <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.interpolative.html" class='exists'>scipy.linalg.interpolative</a></code>
+        
+    
+    
+    
 
 
 
@@ -685,7 +1431,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [], "links": []};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "scipy.linalg.interpolative.seed", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.interpolative.seed"}, {"id": 3, "val": 10.0, "label": "numpy.empty", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.empty"}, {"id": 4, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 3, "target": 4, "id": 3}]};
 
 (function() {
 
@@ -813,7 +1559,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [], "links": []};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "scipy.linalg.interpolative.seed", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.interpolative.seed"}, {"id": 3, "val": 10.0, "label": "numpy.empty", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.empty"}, {"id": 4, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 3, "target": 4, "id": 3}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

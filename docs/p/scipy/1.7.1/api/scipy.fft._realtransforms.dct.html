@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -716,9 +716,194 @@ user-select: none;
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p>For a single dimension array 
+        <code class='verbatim'>x</code>
+    , 
+        <code class='verbatim'>dct(x, norm=&#39;ortho&#39;)</code>
+     is equal to MATLAB 
+        <code class='verbatim'>dct(x)</code>
+    .</p>
 
     
+           
+               
+        <p>For 
+        <code class='verbatim'>norm=&#34;backward&#34;</code>
+    , there is no scaling on <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>dct</a></code>
+         and the <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct.html" class='exists'>idct</a></code>
+         is scaled by 
+        <code class='verbatim'>1/N</code>
+     where 
+        <code class='verbatim'>N</code>
+     is the &#34;logical&#34; size of the DCT. For 
+        <code class='verbatim'>norm=&#34;forward&#34;</code>
+     the 
+        <code class='verbatim'>1/N</code>
+     normalization is applied to the forward <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>dct</a></code>
+         instead and the <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct.html" class='exists'>idct</a></code>
+         is unnormalized. For 
+        <code class='verbatim'>norm=&#39;ortho&#39;</code>
+     both directions are scaled by the same factor of 
+        <code class='verbatim'>1/sqrt(N)</code>
+    .</p>
+
+    
+           
+               
+        <p>There are, theoretically, 8 types of the DCT, only the first 4 types are implemented in SciPy.&#39;The&#39; DCT generally refers to DCT type 2, and &#39;the&#39; Inverse DCT generally refers to DCT type 3.</p>
+
+    
+           
+               
+        <p><b>Type I</b></p>
+
+    
+           
+               
+        <p>There are several definitions of the DCT-I; we use the following (for 
+        <code class='verbatim'>norm=&#34;backward&#34;</code>
+    )</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$y_k = x_0 + ( - 1)^k x_ { N - 1} + 2 \sum_ { n=1}^ { N - 2} x_n \cos\left ( \frac { \pi k n} { N - 1} \right) $$</span>
+       
+           
+               
+        <p>If 
+        <code class='verbatim'>norm=&#39;ortho&#39;</code>
+    , 
+        <code class='verbatim'>x[0]</code>
+     and 
+        <code class='verbatim'>x[N-1]</code>
+     are multiplied by a scaling factor of 
+        <span class="tex2jax_process">$\sqrt{2}$</span>
+    , and 
+        <code class='verbatim'>y[k]</code>
+     is multiplied by a scaling factor 
+        <code class='verbatim'>f</code>
+    </p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$f = \begin { cases} \frac { 1} { 2}\sqrt { \frac { 1} { N - 1}} &amp; \text { if }k=0\text { or }N - 1, \\ \frac { 1} { 2}\sqrt { \frac { 2} { N - 1}} &amp; \text { otherwise} \end { cases} $$</span>
+       
+           
+               
+            <div class='admonition'>
+    <div>note</div>
+    
+        
+        <p>The DCT - I is only supported for input size &gt; 1. </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p><b>Type II</b></p>
+
+    
+           
+               
+        <p>There are several definitions of the DCT-II; we use the following (for 
+        <code class='verbatim'>norm=&#34;backward&#34;</code>
+    )</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$y_k = 2 \sum_ { n=0}^ { N - 1} x_n \cos\left ( \frac { \pi k ( 2n+1)} { 2N} \right) $$</span>
+       
+           
+               
+        <p>If 
+        <code class='verbatim'>norm=&#34;ortho&#34;</code>
+    , 
+        <code class='verbatim'>y[k]</code>
+     is multiplied by a scaling factor 
+        <code class='verbatim'>f</code>
+    </p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$f = \begin { cases} \sqrt { \frac { 1} { 4N}} &amp; \text { if }k=0, \\ \sqrt { \frac { 1} { 2N}} &amp; \text { otherwise} \end { cases} $$</span>
+       
+           
+               
+        <p>which makes the corresponding matrix of coefficients orthonormal (
+        <code class='verbatim'>O @ O.T = np.eye(N)</code>
+    ).</p>
+
+    
+           
+               
+        <p><b>Type III</b></p>
+
+    
+           
+               
+        <p>There are several definitions, we use the following (for 
+        <code class='verbatim'>norm=&#34;backward&#34;</code>
+    )</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$y_k = x_0 + 2 \sum_ { n=1}^ { N - 1} x_n \cos\left ( \frac { \pi ( 2k+1)n} { 2N}\right) $$</span>
+       
+           
+               
+        <p>or, for 
+        <code class='verbatim'>norm=&#34;ortho&#34;</code>
+    </p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$y_k = \frac { x_0} { \sqrt { N}} + \sqrt { \frac { 2} { N}} \sum_ { n=1}^ { N - 1} x_n \cos\left ( \frac { \pi ( 2k+1)n} { 2N}\right) $$</span>
+       
+           
+               
+        <p>The (unnormalized) DCT-III is the inverse of the (unnormalized) DCT-II, up to a factor <code>:None:None:`2N`</code>. The orthonormalized DCT-III is exactly the inverse of the orthonormalized DCT-II.</p>
+
+    
+           
+               
+        <p><b>Type IV</b></p>
+
+    
+           
+               
+        <p>There are several definitions of the DCT-IV; we use the following (for 
+        <code class='verbatim'>norm=&#34;backward&#34;</code>
+    )</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$y_k = 2 \sum_ { n=0}^ { N - 1} x_n \cos\left ( \frac { \pi ( 2k+1) ( 2n+1)} { 4N} \right) $$</span>
+       
+           
+               
+        <p>If 
+        <code class='verbatim'>norm=&#34;ortho&#34;</code>
+    , 
+        <code class='verbatim'>y[k]</code>
+     is multiplied by a scaling factor 
+        <code class='verbatim'>f</code>
+    </p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$f = \frac { 1} { \sqrt { 2N}} $$</span>
+       
            
        
     
@@ -752,10 +937,16 @@ array([ 30.,  -8.,   6.,  -2.])</pre>
          
          See :
          
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>scipy.fft._realtransforms.dct</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct.html" class='exists'>scipy.fft._realtransforms.idct</a></code>
         
          
      
@@ -766,6 +957,9 @@ array([ 30.,  -8.,   6.,  -2.])</pre>
     <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
 
     
+    
+        <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>scipy.fft._realtransforms.dct</a></code>
+        
     
         <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dctn.html" class='exists'>scipy.fft._realtransforms.dctn</a></code>
         
@@ -795,7 +989,7 @@ they belong to, and scaled with the number of references pointing them</p>
 To Be Done: </br>
 
 File: None </br>
-Line: None </br>
+Line: 244 </br>
 type: None </br>
 Commit: </br>
 Tag: </br>
@@ -831,7 +1025,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 24.46207763315433, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 8.0, "label": "scipy.fft._realtransforms.dctn", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dctn"}], "links": [{"source": 1, "target": 3, "id": 217}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.fft._realtransforms.dctn", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dctn"}, {"id": 2, "val": 24.217274740226856, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.fft._realtransforms.idct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct"}], "links": [{"source": 4, "target": 1, "id": 221}, {"source": 4, "target": 5, "id": 223}, {"source": 2, "target": 5, "id": 951}]};
 
 (function() {
 
@@ -959,7 +1153,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 38.1164406927512, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 24.46207763315433, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 8.0, "label": "scipy.fft._realtransforms.dctn", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dctn"}], "links": [{"source": 1, "target": 3, "id": 217}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.fft._realtransforms.dctn", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dctn"}, {"id": 2, "val": 24.217274740226856, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.fft._realtransforms.idct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct"}], "links": [{"source": 4, "target": 1, "id": 221}, {"source": 4, "target": 5, "id": 223}, {"source": 2, "target": 5, "id": 951}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

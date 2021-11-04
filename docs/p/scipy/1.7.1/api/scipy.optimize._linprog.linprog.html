@@ -384,7 +384,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.fft.html">fft</a>
                             <a href="/p/scipy/1.7.1/api/scipy.integrate.html">integrate</a>
                             <a href="/p/scipy/1.7.1/api/scipy.interpolate.html">interpolate</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.linalg.html">linalg</a>
+                            <a href="/p/?/?/api/scipy.linalg.html">linalg</a>
                             <a href="/p/?/?/api/scipy.ndimage.html">ndimage</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.html">optimize</a>
                             <a href="/p/scipy/1.7.1/api/scipy.signal.html">signal</a>
@@ -532,7 +532,7 @@ user-select: none;
         
            
                
-        <p>Linear programming : minimize a linear objective function subject to linear equality and inequality constraints.</p>
+        <p>Linear programming: minimize a linear objective function subject to linear equality and inequality constraints.</p>
 
     
            
@@ -546,7 +546,7 @@ user-select: none;
         
            
                
-        <p>Linear programming solves problems of the following form :</p>
+        <p>Linear programming solves problems of the following form:</p>
 
     
            
@@ -555,17 +555,33 @@ user-select: none;
        
            
                
-        <p>where <code>:None:None:`math:`x`</code> is a vector of decision variables; <code>:None:None:`math:`c`</code> , <code>:None:None:`math:`b_{ub}`</code> , <code>:None:None:`math:`b_{eq}`</code> , <code>:None:None:`math:`l`</code> , and <code>:None:None:`math:`u`</code> are vectors; and <code>:None:None:`math:`A_{ub}`</code> and <code>:None:None:`math:`A_{eq}`</code> are matrices.</p>
+        <p>where 
+        <span class="tex2jax_process">$x$</span>
+     is a vector of decision variables; 
+        <span class="tex2jax_process">$c$</span>
+    , 
+        <span class="tex2jax_process">$b_{ub}$</span>
+    , 
+        <span class="tex2jax_process">$b_{eq}$</span>
+    , 
+        <span class="tex2jax_process">$l$</span>
+    , and 
+        <span class="tex2jax_process">$u$</span>
+     are vectors; and 
+        <span class="tex2jax_process">$A_{ub}$</span>
+     and 
+        <span class="tex2jax_process">$A_{eq}$</span>
+     are matrices.</p>
 
     
            
                
-        <p>Alternatively, that&#39; s :</p>
+        <p>Alternatively, that&#39;s:</p>
 
     
            
                
-        <p>minimize::</p>
+        <p>minimize::      </p>
 
     
            
@@ -574,7 +590,7 @@ user-select: none;
        
            
                
-        <p>such that::</p>
+        <p>such that::      </p>
 
     
            
@@ -591,7 +607,7 @@ lb &lt;= x &lt;= ub</pre>
         <code class='verbatim'>ub = None</code>
      unless specified with 
         <code class='verbatim'>bounds</code>
-     .</p>
+    .</p>
 
     
            
@@ -1250,7 +1266,159 @@ lb &lt;= x &lt;= ub</pre>
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p>This section describes the available solvers that can be selected by the &#39;method&#39; parameter.</p>
+
+    
+           
+               
+        <p><code>:None:None:`&#39;highs-ds&#39;`</code> and <code>:None:None:`&#39;highs-ipm&#39;`</code> are interfaces to the HiGHS simplex and interior-point method solvers , respectively. <code>:None:None:`&#39;highs&#39;`</code> chooses between the two automatically. These are the fastest linear programming solvers in SciPy, especially for large, sparse problems; which of these two is faster is problem-dependent. <code>:None:None:`&#39;interior-point&#39;`</code> is the default as it was the fastest and most robust method before the recent addition of the HiGHS solvers. <code>:None:None:`&#39;revised simplex&#39;`</code> is more accurate than interior-point for the problems it solves. <code>:None:None:`&#39;simplex&#39;`</code> is the legacy method and is included for backwards compatibility and educational purposes.</p>
+
+    
+           
+               
+        <p>Method <em>highs-ds</em> is a wrapper of the C++ high performance dual revised simplex implementation (HSOL) , . Method <em>highs-ipm</em> is a wrapper of a C++ implementation of an <b>i</b>\ nterior-\ <b>p</b>\ oint <b>m</b>\ ethod ; it features a crossover routine, so it is as accurate as a simplex solver. Method <em>highs</em> chooses between the two automatically. For new code involving <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._linprog.linprog.html" class='exists'>linprog</a></code>
+        , we recommend explicitly choosing one of these three method values.</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>1.6.0 </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Method <em>interior-point</em> uses the primal-dual path following algorithm as outlined in . This algorithm supports sparse constraint matrices and is typically faster than the simplex methods, especially for large, sparse problems. Note, however, that the solution returned may be slightly less accurate than those of the simplex methods and will not, in general, correspond with a vertex of the polytope defined by the constraints.</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>1.0.0 </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Method <em>revised simplex</em> uses the revised simplex method as described in , except that a factorization  of the basis matrix, rather than its inverse, is efficiently maintained and used to solve the linear systems at each iteration of the algorithm.</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>1.3.0 </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Method <em>simplex</em> uses a traditional, full-tableau implementation of Dantzig&#39;s simplex algorithm ,  (<em>not</em> the Nelder-Mead simplex). This algorithm is included for backwards compatibility and educational purposes.</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>0.15.0 </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Before applying <em>interior-point</em>, <em>revised simplex</em>, or <em>simplex</em>, a presolve procedure based on  attempts to identify trivial infeasibilities, trivial unboundedness, and potential problem simplifications. Specifically, it checks for:</p>
+
+    
+           
+               
+           <ul>
+               <li>
+        <p>rows of zeros in 
+        <code class='verbatim'>A_eq</code>
+     or 
+        <code class='verbatim'>A_ub</code>
+    , representing trivial constraints;</p>
+
+    </li>
+               
+               <li>
+        <p>columns of zeros in 
+        <code class='verbatim'>A_eq</code>
+     <code>:None:None:`and`</code> 
+        <code class='verbatim'>A_ub</code>
+    , representing unconstrained   variables;</p>
+
+    </li>
+               
+               <li>
+        <p>column singletons in 
+        <code class='verbatim'>A_eq</code>
+    , representing fixed variables; and</p>
+
+    </li>
+               
+               <li>
+        <p>column singletons in 
+        <code class='verbatim'>A_ub</code>
+    , representing simple bounds.</p>
+
+    </li>
+               
+            </ul>
+       
+           
+               
+        <p>If presolve reveals that the problem is unbounded (e.g. an unconstrained and unbounded variable has negative cost) or infeasible (e.g., a row of zeros in 
+        <code class='verbatim'>A_eq</code>
+     corresponds with a nonzero in 
+        <code class='verbatim'>b_eq</code>
+    ), the solver terminates with the appropriate status code. Note that presolve terminates as soon as any sign of unboundedness is detected; consequently, a problem may be reported as unbounded when in reality the problem is infeasible (but infeasibility has not been detected yet). Therefore, if it is important to know whether the problem is actually infeasible, solve the problem again with option 
+        <code class='verbatim'>presolve=False</code>
+    .</p>
+
+    
+           
+               
+        <p>If neither infeasibility nor unboundedness are detected in a single pass of the presolve, bounds are tightened where possible and fixed variables are removed from the problem. Then, linearly dependent rows of the 
+        <code class='verbatim'>A_eq</code>
+     matrix are removed, (unless they represent an infeasibility) to avoid numerical difficulties in the primary solve routine. Note that rows that are nearly linearly dependent (within a prescribed tolerance) may also be removed, which can change the optimal solution in rare cases. If this is a concern, eliminate redundancy from your problem formulation and run with option 
+        <code class='verbatim'>rr=False</code>
+     or 
+        <code class='verbatim'>presolve=False</code>
+    .</p>
+
+    
+           
+               
+        <p>Several potential improvements can be made here: additional presolve checks outlined in  should be implemented, the presolve routine should be run multiple times (until no further simplifications can be made), and more of the efficiency improvements from  should be implemented in the redundancy removal routines.</p>
+
+    
+           
+               
+        <p>After presolve, the problem is transformed to standard form by converting the (tightened) simple bounds to upper bound constraints, introducing non-negative slack variables for inequality constraints, and expressing unbounded variables as the difference between two non-negative variables. Optionally, the problem is automatically scaled via equilibration . The selected algorithm solves the standard form problem, and a postprocessing routine converts the result to a solution to the original problem.</p>
 
     
            
@@ -1379,6 +1547,9 @@ lb &lt;= x &lt;= ub</pre>
 
     
     
+        <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.html" class='exists'>scipy.optimize</a></code>
+        
+    
         <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._linprog.linprog.html" class='exists'>scipy.optimize._linprog.linprog</a></code>
         
     
@@ -1443,7 +1614,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.optimize.optimize.show_options", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.show_options"}], "links": []};
+var canvas_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "scipy.optimize.optimize.show_options", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.show_options"}, {"id": 3, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}], "links": []};
 
 (function() {
 
@@ -1571,7 +1742,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.optimize.optimize.show_options", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.show_options"}], "links": []};
+    var svg_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "scipy.optimize.optimize.show_options", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.show_options"}, {"id": 3, "val": 9.732050807568877, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}], "links": []};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
