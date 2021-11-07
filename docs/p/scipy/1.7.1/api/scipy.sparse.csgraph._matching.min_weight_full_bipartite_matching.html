@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -780,7 +778,7 @@ user-select: none;
             
          
                 
-        <p>That is, the first, second, and third rows are matched with the third, first, and second column respectively. Note that in this example, the 0 in the input matrix does *not* correspond to an edge with weight 0, but rather a pair of vertices not paired by an edge.</p>
+        <p>That is, the first, second, and third rows are matched with the third, first, and second column respectively. Note that in this example, the 0 in the input matrix does <em>not</em> correspond to an edge with weight 0, but rather a pair of vertices not paired by an edge.</p>
 
     
             
@@ -863,7 +861,7 @@ user-select: none;
             
             
          
-                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">import</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">numpy</a><span class=""> </span><span class="k">as</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">np</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">sparse</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">random</span><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">optimize</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">linear_sum_assignment</span><br><span class='nsl'>...&nbsp;</span><span class="">sparse</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">random</span><span class="">(</span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="">random_state</span><span class="o">=</span><span class="mi">42</span><span class="">,</span><span class=""> </span><span class="">density</span><span class="o">=</span><span class="mf">.5</span><span class="">,</span><span class=""> </span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="s1">coo</span><span class="s1">&#39;</span><span class="">)</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="mi">10</span><br><span class='nsl'>...&nbsp;</span><span class="">sparse</span><span class="o">.</span><span class="">data</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">ceil</a><span class="">(</span><span class="">sparse</span><span class="o">.</span><span class="">data</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">dense</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">sparse</span><span class="o">.</span><span class="">toarray</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">dense</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><span class="">full</span><span class="">(</span><span class="">sparse</span><span class="o">.</span><span class="">shape</span><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><span class="">inf</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">[</span><span class="">sparse</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">row</a><span class="">,</span><span class=""> </span><span class="">sparse</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">col</a><span class="">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">sparse</span><span class="o">.</span><span class="">data</span><br><span class='nsl'>...&nbsp;</span><span class="">sparse</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">sparse</span><span class="o">.</span><span class="">tocsr</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">row_ind</span><span class="">,</span><span class=""> </span><span class="">col_ind</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">linear_sum_assignment</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="nb">print</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">[</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">row_ind</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">col_ind</a><span class="">]</span><span class="o">.</span><span class="">sum</span><span class="">(</span><span class="">)</span><span class="">)</span>
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">import</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">numpy</a><span class=""> </span><span class="k">as</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">np</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">sparse</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">random</span><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><span class="nn">scipy</span><span class="nn">.</span><span class="nn">optimize</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">linear_sum_assignment</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">random</span><span class="">(</span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="">random_state</span><span class="o">=</span><span class="mi">42</span><span class="">,</span><span class=""> </span><span class="">density</span><span class="o">=</span><span class="mf">.5</span><span class="">,</span><span class=""> </span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="s1">coo</span><span class="s1">&#39;</span><span class="">)</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="mi">10</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">data</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ufunc.html">ceil</a><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">data</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">dense</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">toarray</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">dense</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><span class="">full</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">shape</span><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><span class="">inf</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">[</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">row</span><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">col</span><span class="">]</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">data</span><br><span class='nsl'>...&nbsp;</span><span class="">sparse</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">sparse</a><span class="o">.</span><span class="">tocsr</span><span class="">(</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">row_ind</span><span class="">,</span><span class=""> </span><span class="">col_ind</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">linear_sum_assignment</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="nb">print</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">dense</a><span class="">[</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">row_ind</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">col_ind</a><span class="">]</span><span class="o">.</span><span class="">sum</span><span class="">(</span><span class="">)</span><span class="">)</span>
 28.0</pre>
             
             
@@ -875,16 +873,16 @@ user-select: none;
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csgraph._matching.maximum_bipartite_matching.html" class='exists'>scipy.sparse.csgraph._matching.maximum_bipartite_matching</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
      
@@ -914,7 +912,7 @@ To Be Done: </br>
 
 File: None </br>
 Line: None </br>
-type: None </br>
+type: &lt;class &#39;builtin_function_or_method&#39;&gt; </br>
 Commit: </br>
 Tag: </br>
 Link to the right github gitalab repository, file and line (maybe range?)</br>
@@ -949,7 +947,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.sparse.csgraph._matching.maximum_bipartite_matching", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._matching.maximum_bipartite_matching"}, {"id": 2, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 2, "target": 1, "id": 404}, {"source": 4, "target": 2, "id": 706}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 22.52583904633395, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.414213562373096, "label": "scipy.sparse.csgraph._matching.maximum_bipartite_matching", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._matching.maximum_bipartite_matching"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 4, "target": 3, "id": 2}, {"source": 3, "target": 2, "id": 1495}]};
 
 (function() {
 
@@ -1077,7 +1075,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "scipy.sparse.csgraph._matching.maximum_bipartite_matching", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._matching.maximum_bipartite_matching"}, {"id": 2, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 4, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 2, "target": 1, "id": 404}, {"source": 4, "target": 2, "id": 706}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 22.52583904633395, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.414213562373096, "label": "scipy.sparse.csgraph._matching.maximum_bipartite_matching", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._matching.maximum_bipartite_matching"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 4, "target": 3, "id": 2}, {"source": 3, "target": 2, "id": 1495}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

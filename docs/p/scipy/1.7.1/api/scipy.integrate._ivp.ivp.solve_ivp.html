@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -611,92 +609,41 @@ y(t0) = y0</pre>
     
             
                 
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>* &#39;RK45&#39; (default): Explicit Runge-Kutta method of order 5(4) [1]_.</p>
+            <pre>* &#39;RK45&#39; (default): Explicit Runge-Kutta method of order 5(4) [1]_.
+  The error is controlled assuming accuracy of the fourth-order
+  method, but steps are taken using the fifth-order accurate
+  formula (local extrapolation is done). A quartic interpolation
+  polynomial is used for the dense output [2]_. Can be applied in
+  the complex domain.
+* &#39;RK23&#39;: Explicit Runge-Kutta method of order 3(2) [3]_. The error
+  is controlled assuming accuracy of the second-order method, but
+  steps are taken using the third-order accurate formula (local
+  extrapolation is done). A cubic Hermite polynomial is used for the
+  dense output. Can be applied in the complex domain.
+* &#39;DOP853&#39;: Explicit Runge-Kutta method of order 8 [13]_.
+  Python implementation of the &#34;DOP853&#34; algorithm originally
+  written in Fortran [14]_. A 7-th order interpolation polynomial
+  accurate to 7-th order is used for the dense output.
+  Can be applied in the complex domain.
+* &#39;Radau&#39;: Implicit Runge-Kutta method of the Radau IIA family of
+  order 5 [4]_. The error is controlled with a third-order accurate
+  embedded formula. A cubic polynomial which satisfies the
+  collocation conditions is used for the dense output.
+* &#39;BDF&#39;: Implicit multi-step variable-order (1 to 5) method based
+  on a backward differentiation formula for the derivative
+  approximation [5]_. The implementation follows the one described
+  in [6]_. A quasi-constant step scheme is used and accuracy is
+  enhanced using the NDF modification. Can be applied in the
+  complex domain.
+* &#39;LSODA&#39;: Adams/BDF method with automatic stiffness detection and
+  switching [7]_, [8]_. This is a wrapper of the Fortran solver
+  from ODEPACK.
+</pre>
 
-    <dt>
-               <dd>
-
-                       
-        <p>The error is controlled assuming accuracy of the fourth-order method, but steps are taken using the fifth-order accurate formula (local extrapolation is done). A quartic interpolation polynomial is used for the dense output [2]_. Can be applied in the complex domain.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* &#39;RK23&#39;: Explicit Runge-Kutta method of order 3(2) [3]_. The error</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>is controlled assuming accuracy of the second-order method, but steps are taken using the third-order accurate formula (local extrapolation is done). A cubic Hermite polynomial is used for the dense output. Can be applied in the complex domain.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* &#39;DOP853&#39;: Explicit Runge-Kutta method of order 8 [13]_.</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>Python implementation of the &#34;DOP853&#34; algorithm originally written in Fortran [14]_. A 7-th order interpolation polynomial accurate to 7-th order is used for the dense output. Can be applied in the complex domain.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* &#39;Radau&#39;: Implicit Runge-Kutta method of the Radau IIA family of</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>order 5 [4]_. The error is controlled with a third-order accurate embedded formula. A cubic polynomial which satisfies the collocation conditions is used for the dense output.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* &#39;BDF&#39;: Implicit multi-step variable-order (1 to 5) method based</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>on a backward differentiation formula for the derivative approximation [5]_. The implementation follows the one described in [6]_. A quasi-constant step scheme is used and accuracy is enhanced using the NDF modification. Can be applied in the complex domain.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* &#39;LSODA&#39;: Adams/BDF method with automatic stiffness detection and</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>switching [7]_, [8]_. This is a wrapper of the Fortran solver from ODEPACK. </p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
        
             
                 
-        <p>Explicit Runge-Kutta methods (&#39;RK23&#39;, &#39;RK45&#39;, &#39;DOP853&#39;) should be used for non-stiff problems and implicit methods (&#39;Radau&#39;, &#39;BDF&#39;) for stiff problems [9]_. Among Runge-Kutta methods, &#39;DOP853&#39; is recommended for solving with high precision (low values of <code><a link href="#rtol" class='local'>rtol</a></code> and <code><a link href="#atol" class='local'>atol</a></code>).</p>
+        <p>Explicit Runge-Kutta methods (&#39;RK23&#39;, &#39;RK45&#39;, &#39;DOP853&#39;) should be used for non-stiff problems and implicit methods (&#39;Radau&#39;, &#39;BDF&#39;) for stiff problems . Among Runge-Kutta methods, &#39;DOP853&#39; is recommended for solving with high precision (low values of <code><a link href="#rtol" class='local'>rtol</a></code> and <code><a link href="#atol" class='local'>atol</a></code>).</p>
 
     
             
@@ -758,36 +705,16 @@ y(t0) = y0</pre>
     
             
                 
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>terminal: bool, optional</p>
+            <pre>terminal: bool, optional
+    Whether to terminate integration if this event occurs.
+    Implicitly False if not assigned.
+direction: float, optional
+    Direction of a zero crossing. If `direction` is positive,
+    `event` will only trigger when going from negative to positive,
+    and vice versa if `direction` is negative. If 0, then either
+    direction will trigger event. Implicitly 0 if not assigned.
+</pre>
 
-    <dt>
-               <dd>
-
-                       
-        <p>Whether to terminate integration if this event occurs. Implicitly False if not assigned.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>direction: float, optional</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>Direction of a zero crossing. If <code>:None:None:`direction`</code> is positive, <code>:None:None:`event`</code> will only trigger when going from negative to positive, and vice versa if <code>:None:None:`direction`</code> is negative. If 0, then either direction will trigger event. Implicitly 0 if not assigned. </p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
        
             
                 
@@ -904,51 +831,16 @@ y(t0) = y0</pre>
     
             
                 
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>* If array_like or sparse_matrix, the Jacobian is assumed to</p>
+            <pre>* If array_like or sparse_matrix, the Jacobian is assumed to
+  be constant. Not supported by &#39;LSODA&#39;.
+* If callable, the Jacobian is assumed to depend on both
+  t and y; it will be called as ``jac(t, y)``, as necessary.
+  For &#39;Radau&#39; and &#39;BDF&#39; methods, the return value might be a
+  sparse matrix.
+* If None (default), the Jacobian will be approximated by
+  finite differences.
+</pre>
 
-    <dt>
-               <dd>
-
-                       
-        <p>be constant. Not supported by &#39;LSODA&#39;.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* If callable, the Jacobian is assumed to depend on both</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>t and y; it will be called as 
-        <code class='verbatim'>jac(t, y)</code>
-    , as necessary. For &#39;Radau&#39; and &#39;BDF&#39; methods, the return value might be a sparse matrix.</p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>* If None (default), the Jacobian will be approximated by</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>finite differences. </p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
        
             
                 
@@ -968,7 +860,7 @@ y(t0) = y0</pre>
                 
         <p>Defines a sparsity structure of the Jacobian matrix for a finite- difference approximation. Its shape must be (n, n). This argument is ignored if <code><a link href="#jac" class='local'>jac</a></code> is not 
         <code class='verbatim'>None</code>
-    . If the Jacobian has only few non-zero elements in *each* row, providing the sparsity structure will greatly speed up the computations [10]_. A zero entry means that a corresponding element in the Jacobian is always zero. If None (default), the Jacobian is assumed to be dense. Not supported by &#39;LSODA&#39;, see <code><a link href="#lband" class='local'>lband</a></code> and <code><a link href="#uband" class='local'>uband</a></code> instead.</p>
+    . If the Jacobian has only few non-zero elements in <em>each</em> row, providing the sparsity structure will greatly speed up the computations . A zero entry means that a corresponding element in the Jacobian is always zero. If None (default), the Jacobian is assumed to be dense. Not supported by &#39;LSODA&#39;, see <code><a link href="#lband" class='local'>lband</a></code> and <code><a link href="#uband" class='local'>uband</a></code> instead.</p>
 
     
             
@@ -1158,9 +1050,12 @@ y(t0) = y0</pre>
     
             
                 
-        <p>    * -1: Integration step failed.     *  0: The solver successfully reached the end of <code>:None:None:`tspan`</code>.     *  1: A termination event occurred.</p>
+            <pre>* -1: Integration step failed.
+*  0: The solver successfully reached the end of `tspan`.
+*  1: A termination event occurred.
+</pre>
 
-    
+       
             
         </dd>
        
@@ -1373,7 +1268,7 @@ y(t0) = y0</pre>
             
          
                 
-        <p>As an example of a system with additional parameters, we&#39;ll implement the Lotka-Volterra equations [12]_.</p>
+        <p>As an example of a system with additional parameters, we&#39;ll implement the Lotka-Volterra equations .</p>
 
     
             
@@ -1414,43 +1309,43 @@ y(t0) = y0</pre>
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.html" class='exists'>matplotlib</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.title.html" class='exists'>matplotlib.pyplot.title</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel.html" class='exists'>matplotlib.pyplot.xlabel</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/fig-scipy.integrate._ivp.ivp.solve_ivp-1.png.html" class='exists'>fig-scipy.integrate._ivp.ivp.solve_ivp-1.png</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
+             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution.html" class='exists'>scipy.integrate._ivp.common.OdeSolution</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver.html" class='exists'>scipy.integrate._ivp.base.OdeSolver</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel.html" class='exists'>matplotlib.pyplot.xlabel</a></code>
+        
+         
              <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.legend.html" class='exists'>matplotlib.pyplot.legend</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.title.html" class='exists'>matplotlib.pyplot.title</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.linspace.html" class='exists'>numpy.linspace</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution.html" class='exists'>scipy.integrate._ivp.common.OdeSolution</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver.html" class='exists'>scipy.integrate._ivp.base.OdeSolver</a></code>
+             <code><a link href="/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
         
          
      
@@ -1489,7 +1384,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/scipy/integrate/_ivp/ivp.py </br>
+File: /scipy/integrate/_ivp/ivp.py </br>
 Line: 156 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
@@ -1526,7 +1421,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "fig-scipy.integrate._ivp.ivp.solve_ivp-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.integrate._ivp.ivp.solve_ivp-1.png"}, {"id": 2, "val": 14.403124237432849, "label": "matplotlib.pyplot.legend", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.legend"}, {"id": 3, "val": 17.69535971483266, "label": "matplotlib.pyplot.xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel"}, {"id": 4, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot"}, {"id": 5, "val": 9.0, "label": "scipy.integrate._ivp.base.OdeSolver", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver"}, {"id": 6, "val": 9.0, "label": "scipy.integrate._ivp.common.OdeSolution", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution"}, {"id": 7, "val": 22.594519519326425, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib"}, {"id": 8, "val": 20.32882800593795, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.show"}, {"id": 9, "val": 8.0, "label": "scipy.integrate._ivp.ivp.find_active_events", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.ivp.find_active_events"}, {"id": 10, "val": 16.602325267042627, "label": "matplotlib.pyplot.title", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.title"}, {"id": 11, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 12, "val": 22.560219778561034, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot"}, {"id": 13, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 19.789826122551595, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}], "links": [{"source": 12, "target": 14, "id": 719}, {"source": 4, "target": 14, "id": 928}, {"source": 7, "target": 14, "id": 1074}, {"source": 8, "target": 14, "id": 1289}, {"source": 13, "target": 11, "id": 1596}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "scipy.integrate._ivp.common.OdeSolution", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution"}, {"id": 2, "val": 19.789826122551595, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 3, "val": 16.602325267042627, "label": "matplotlib.pyplot.title", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.title"}, {"id": 4, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 5, "val": 17.69535971483266, "label": "matplotlib.pyplot.xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel"}, {"id": 6, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot"}, {"id": 7, "val": 8.0, "label": "scipy.integrate._ivp.ivp.find_active_events", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.ivp.find_active_events"}, {"id": 8, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.show"}, {"id": 9, "val": 22.560219778561034, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib"}, {"id": 10, "val": 9.0, "label": "scipy.integrate._ivp.base.OdeSolver", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver"}, {"id": 11, "val": 14.403124237432849, "label": "matplotlib.pyplot.legend", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.legend"}, {"id": 12, "val": 22.52583904633395, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot"}, {"id": 13, "val": 9.0, "label": "fig-scipy.integrate._ivp.ivp.solve_ivp-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.integrate._ivp.ivp.solve_ivp-1.png"}, {"id": 14, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 14, "target": 4, "id": 3}, {"source": 8, "target": 2, "id": 898}, {"source": 9, "target": 2, "id": 1746}, {"source": 12, "target": 2, "id": 2169}, {"source": 6, "target": 2, "id": 2516}]};
 
 (function() {
 
@@ -1654,7 +1549,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "fig-scipy.integrate._ivp.ivp.solve_ivp-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.integrate._ivp.ivp.solve_ivp-1.png"}, {"id": 2, "val": 14.403124237432849, "label": "matplotlib.pyplot.legend", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.legend"}, {"id": 3, "val": 17.69535971483266, "label": "matplotlib.pyplot.xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel"}, {"id": 4, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot"}, {"id": 5, "val": 9.0, "label": "scipy.integrate._ivp.base.OdeSolver", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver"}, {"id": 6, "val": 9.0, "label": "scipy.integrate._ivp.common.OdeSolution", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution"}, {"id": 7, "val": 22.594519519326425, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib"}, {"id": 8, "val": 20.32882800593795, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.show"}, {"id": 9, "val": 8.0, "label": "scipy.integrate._ivp.ivp.find_active_events", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.ivp.find_active_events"}, {"id": 10, "val": 16.602325267042627, "label": "matplotlib.pyplot.title", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.title"}, {"id": 11, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 12, "val": 22.560219778561034, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot"}, {"id": 13, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 19.789826122551595, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}], "links": [{"source": 12, "target": 14, "id": 719}, {"source": 4, "target": 14, "id": 928}, {"source": 7, "target": 14, "id": 1074}, {"source": 8, "target": 14, "id": 1289}, {"source": 13, "target": 11, "id": 1596}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "scipy.integrate._ivp.common.OdeSolution", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.common.OdeSolution"}, {"id": 2, "val": 19.789826122551595, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 3, "val": 16.602325267042627, "label": "matplotlib.pyplot.title", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.title"}, {"id": 4, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 5, "val": 17.69535971483266, "label": "matplotlib.pyplot.xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.xlabel"}, {"id": 6, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.plot"}, {"id": 7, "val": 8.0, "label": "scipy.integrate._ivp.ivp.find_active_events", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.ivp.find_active_events"}, {"id": 8, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.show"}, {"id": 9, "val": 22.560219778561034, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib"}, {"id": 10, "val": 9.0, "label": "scipy.integrate._ivp.base.OdeSolver", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ivp.base.OdeSolver"}, {"id": 11, "val": 14.403124237432849, "label": "matplotlib.pyplot.legend", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot.legend"}, {"id": 12, "val": 22.52583904633395, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.4.3/api/matplotlib.pyplot"}, {"id": 13, "val": 9.0, "label": "fig-scipy.integrate._ivp.ivp.solve_ivp-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.integrate._ivp.ivp.solve_ivp-1.png"}, {"id": 14, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 14, "target": 4, "id": 3}, {"source": 8, "target": 2, "id": 898}, {"source": 9, "target": 2, "id": 1746}, {"source": 12, "target": 2, "id": 2169}, {"source": 6, "target": 2, "id": 2516}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

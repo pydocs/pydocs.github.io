@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -586,85 +584,32 @@ user-select: none;
     
             
                 
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>&#39;auto&#39; -- (default) select the best among &#39;FW&#39;, &#39;D&#39;, &#39;BF&#39;, or &#39;J&#39;</p>
+            <pre>&#39;auto&#39; -- (default) select the best among &#39;FW&#39;, &#39;D&#39;, &#39;BF&#39;, or &#39;J&#39;
+          based on the input data.
 
-    <dt>
-               <dd>
+&#39;FW&#39;   -- Floyd-Warshall algorithm.  Computational cost is
+          approximately ``O[N^3]``.  The input csgraph will be
+          converted to a dense representation.
 
-                       
-        <p>based on the input data. </p>
+&#39;D&#39;    -- Dijkstra&#39;s algorithm with Fibonacci heaps.  Computational
+          cost is approximately ``O[N(N*k + N*log(N))]``, where
+          ``k`` is the average number of connected edges per node.
+          The input csgraph will be converted to a csr
+          representation.
 
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>&#39;FW&#39;   -- Floyd-Warshall algorithm.  Computational cost is</p>
+&#39;BF&#39;   -- Bellman-Ford algorithm.  This algorithm can be used when
+          weights are negative.  If a negative cycle is encountered,
+          an error will be raised.  Computational cost is
+          approximately ``O[N(N^2 k)]``, where ``k`` is the average
+          number of connected edges per node. The input csgraph will
+          be converted to a csr representation.
 
-    <dt>
-               <dd>
+&#39;J&#39;    -- Johnson&#39;s algorithm.  Like the Bellman-Ford algorithm,
+          Johnson&#39;s algorithm is designed for use when the weights
+          are negative.  It combines the Bellman-Ford algorithm
+          with Dijkstra&#39;s algorithm for faster computation.
+</pre>
 
-                       
-        <p>approximately 
-        <code class='verbatim'>O[N^3]</code>
-    .  The input csgraph will be converted to a dense representation. </p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>&#39;D&#39;    -- Dijkstra&#39;s algorithm with Fibonacci heaps.  Computational</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>cost is approximately 
-        <code class='verbatim'>O[N(N*k + N*log(N))]</code>
-    , where 
-        <code class='verbatim'>k</code>
-     is the average number of connected edges per node. The input csgraph will be converted to a csr representation. </p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>&#39;BF&#39;   -- Bellman-Ford algorithm.  This algorithm can be used when</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>weights are negative.  If a negative cycle is encountered, an error will be raised.  Computational cost is approximately 
-        <code class='verbatim'>O[N(N^2 k)]</code>
-    , where 
-        <code class='verbatim'>k</code>
-     is the average number of connected edges per node. The input csgraph will be converted to a csr representation. </p>
-
-    
-                  
-               <dd>
-               
-               <dt>
-        <p>&#39;J&#39;    -- Johnson&#39;s algorithm.  Like the Bellman-Ford algorithm,</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>Johnson&#39;s algorithm is designed for use when the weights are negative.  It combines the Bellman-Ford algorithm with Dijkstra&#39;s algorithm for faster computation.</p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
        
             
         </dd>
@@ -951,7 +896,7 @@ To Be Done: </br>
 
 File: None </br>
 Line: None </br>
-type: None </br>
+type: &lt;class &#39;builtin_function_or_method&#39;&gt; </br>
 Commit: </br>
 Tag: </br>
 Link to the right github gitalab repository, file and line (maybe range?)</br>
@@ -986,7 +931,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 2, "val": 8.0, "label": "scipy.sparse.csgraph._shortest_path", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._shortest_path"}, {"id": 3, "val": 8.0, "label": "scipy.sparse.csgraph._tools.construct_dist_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.construct_dist_matrix"}], "links": [{"source": 1, "target": 3, "id": 411}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.sparse.csgraph._tools.construct_dist_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.construct_dist_matrix"}, {"id": 2, "val": 8.0, "label": "scipy.sparse.csgraph._shortest_path", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._shortest_path"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 3, "target": 1, "id": 409}]};
 
 (function() {
 
@@ -1114,7 +1059,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 2, "val": 8.0, "label": "scipy.sparse.csgraph._shortest_path", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._shortest_path"}, {"id": 3, "val": 8.0, "label": "scipy.sparse.csgraph._tools.construct_dist_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.construct_dist_matrix"}], "links": [{"source": 1, "target": 3, "id": 411}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "scipy.sparse.csgraph._tools.construct_dist_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.construct_dist_matrix"}, {"id": 2, "val": 8.0, "label": "scipy.sparse.csgraph._shortest_path", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csgraph._shortest_path"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 3, "target": 1, "id": 409}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

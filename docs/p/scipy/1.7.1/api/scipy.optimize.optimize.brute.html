@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -448,7 +446,6 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.MemoizeJac.html">MemoizeJac</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html">OptimizeResult</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._Brute_Wrapper.html">_Brute_Wrapper</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_for_search.html">_line_for_search</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12.html">_line_search_wolfe12</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._linesearch_powell.html">_linesearch_powell</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_bfgs.html">_minimize_bfgs</a>
@@ -456,7 +453,6 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_neldermead.html">_minimize_neldermead</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_newtoncg.html">_minimize_newtoncg</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_powell.html">_minimize_powell</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_scalar_bounded.html">_minimize_scalar_bounded</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_scalar_brent.html">_minimize_scalar_brent</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._minimize_scalar_golden.html">_minimize_scalar_golden</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize._prepare_scalar_function.html">_prepare_scalar_function</a>
@@ -465,12 +461,8 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brent.html">brent</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html">brute</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.check_grad.html">check_grad</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin.html">fmin</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin_bfgs.html">fmin_bfgs</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin_cg.html">fmin_cg</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin_ncg.html">fmin_ncg</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin_powell.html">fmin_powell</a>
-                            <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fminbound.html">fminbound</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.golden.html">golden</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.is_array_scalar.html">is_array_scalar</a>
                             <a href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html">rosen</a>
@@ -527,7 +519,7 @@ user-select: none;
 
 
 
-    <code class='signature'>brute(func, ranges, args=(), Ns=20, full_output=0, finish=&lt;function fmin at 0x7fac11634e50&gt;, disp=False, workers=1)</code>
+    <code class='signature'>brute(func, ranges, args=(), Ns=20, full_output=0, finish=&lt;function fmin at 0x1172a1550&gt;, disp=False, workers=1)</code>
 
 
 
@@ -707,6 +699,11 @@ user-select: none;
                 
             <div class='admonition'>
     <div>versionadded</div>
+    
+        
+        <p>1.3.0 </p>
+
+    
     
 </div>
 
@@ -943,8 +940,7 @@ user-select: none;
             
          
                 
-        <p>Thus, the objective function may have local minima near the minimum of each of the three functions of which it is composed. To use <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin.html" class='exists'>fmin</a></code>
-         to polish its gridpoint result, we may then continue as follows:</p>
+        <p>Thus, the objective function may have local minima near the minimum of each of the three functions of which it is composed. To use <code>:None:None:`fmin`</code> to polish its gridpoint result, we may then continue as follows:</p>
 
     
             
@@ -972,16 +968,13 @@ array([-1.05665192,  1.80834843])</pre>
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.brute.html" class='exists'>scipy.optimize.optimize.brute</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin.html" class='exists'>scipy.optimize.optimize.fmin</a></code>
         
          
      
@@ -1020,7 +1013,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/scipy/optimize/optimize.py </br>
+File: /scipy/optimize/optimize.py </br>
 Line: 3132 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
@@ -1057,7 +1050,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 5, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": []};
+var canvas_graph = {"nodes": [{"id": 1, "val": 22.52583904633395, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": []};
 
 (function() {
 
@@ -1185,7 +1178,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 22.594519519326425, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.0, "label": "scipy.optimize.optimize.fmin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.fmin"}, {"id": 3, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 5, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": []};
+    var svg_graph = {"nodes": [{"id": 1, "val": 22.52583904633395, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": []};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

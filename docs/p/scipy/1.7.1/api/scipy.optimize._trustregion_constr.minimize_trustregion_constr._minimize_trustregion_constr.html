@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -643,7 +641,7 @@ user-select: none;
                 
         <p>Initial trust radius. The trust radius gives the maximum distance between solution points in consecutive iterations. It reflects the trust the algorithm puts in the local approximation of the optimization problem. For an accurate local approximation the trust-region should be large and for an  approximation valid only close to the current point it should be a small one. The trust radius is automatically updated throughout the optimization process, with 
         <code class='verbatim'>initial_tr_radius</code>
-     being its initial value. Default is 1 (recommended in [1]_, p. 19).</p>
+     being its initial value. Default is 1 (recommended in , p. 19).</p>
 
     
             
@@ -665,7 +663,7 @@ user-select: none;
         <code class='verbatim'>constr_penalty</code>
      weights the two conflicting goals of reducing objective function and constraints. The penalty is automatically updated throughout the optimization  process, with 
         <code class='verbatim'>initial_constr_penalty</code>
-     being its  initial value. Default is 1 (recommended in [1]_, p 19).</p>
+     being its  initial value. Default is 1 (recommended in , p 19).</p>
 
     
             
@@ -693,7 +691,7 @@ user-select: none;
         <code class='verbatim'>initial_barrier_parameter</code>
      for the barrier parameter and 
         <code class='verbatim'>initial_barrier_tolerance</code>
-     for the barrier tolerance. Default is 0.1 for both values (recommended in [1]_ p. 19). Also note that 
+     for the barrier tolerance. Default is 0.1 for both values (recommended in  p. 19). Also note that 
         <code class='verbatim'>barrier_parameter</code>
      and 
         <code class='verbatim'>barrier_tolerance</code>
@@ -716,12 +714,16 @@ user-select: none;
     
             
                 
-        <p>    - &#39;NormalEquation&#39; (requires scikit-sparse)     - &#39;AugmentedSystem&#39;     - &#39;QRFactorization&#39;     - &#39;SVDFactorization&#39;</p>
+            <pre>- &#39;NormalEquation&#39; (requires scikit-sparse)
+- &#39;AugmentedSystem&#39;
+- &#39;QRFactorization&#39;
+- &#39;SVDFactorization&#39;
+</pre>
 
-    
+       
             
                 
-        <p>The methods &#39;NormalEquation&#39; and &#39;AugmentedSystem&#39; can be used only with sparse constraints. The projections required by the algorithm will be computed using, respectively, the the normal equation  and the augmented system approaches explained in [1]_. &#39;NormalEquation&#39; computes the Cholesky factorization of 
+        <p>The methods &#39;NormalEquation&#39; and &#39;AugmentedSystem&#39; can be used only with sparse constraints. The projections required by the algorithm will be computed using, respectively, the the normal equation  and the augmented system approaches explained in . &#39;NormalEquation&#39; computes the Cholesky factorization of 
         <code class='verbatim'>A A.T</code>
      and &#39;AugmentedSystem&#39; performs the LU factorization of an augmented system. They usually provide similar results. &#39;AugmentedSystem&#39; is used by default for sparse matrices.</p>
 
@@ -774,11 +776,6 @@ user-select: none;
 
     
             
-                
-        <p>    * 0 (default) : work silently.     * 1 : display a termination report.     * 2 : display progress during iterations.     * 3 : display progress during iterations (more complete report).</p>
-
-    
-            
         </dd>
        
             
@@ -814,36 +811,18 @@ user-select: none;
         <dd>
             
                 
-          <!-- deflist -->
-           <dl>
+           <ol>
+               <li>
+        <p>All values corresponding to the constraints are ordered as they    were passed to the solver. And values corresponding to <code>:None:None:`bounds`</code>    constraints are put <em>after</em> other constraints.</p>
+
+    </li>
                
-               <dt>
-        <p>1. All values corresponding to the constraints are ordered as they</p>
+               <li>
+        <p>All numbers of function, Jacobian or Hessian evaluations correspond    to numbers of actual Python function calls. It means, for example,    that if a Jacobian is estimated by finite differences, then the    number of Jacobian evaluations will be zero and the number of    function evaluations will be incremented by all calls during the    finite difference estimation.</p>
 
-    <dt>
-               <dd>
-
-                       
-        <p>were passed to the solver. And values corresponding to <code>:None:None:`bounds`</code> constraints are put *after* other constraints.</p>
-
-    
-                  
-               <dd>
+    </li>
                
-               <dt>
-        <p>2. All numbers of function, Jacobian or Hessian evaluations correspond</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>to numbers of actual Python function calls. It means, for example, that if a Jacobian is estimated by finite differences, then the number of Jacobian evaluations will be zero and the number of function evaluations will be incremented by all calls during the finite difference estimation.</p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
+            </ol>
        
             
         </dd>
@@ -1196,11 +1175,6 @@ user-select: none;
 
     
             
-                
-        <p>    * 0 : The maximum number of function evaluations is exceeded.     * 1 : <code><a link href="#gtol" class='local'>gtol</a></code> termination condition is satisfied.     * 2 : <code><a link href="#xtol" class='local'>xtol</a></code> termination condition is satisfied.     * 3 : <code>:None:None:`callback`</code> function requested termination.</p>
-
-    
-            
         </dd>
        
             
@@ -1212,11 +1186,6 @@ user-select: none;
             
                 
         <p>Reason for CG subproblem termination at the last iteration:</p>
-
-    
-            
-                
-        <p>    * 0 : CG subproblem not evaluated.     * 1 : Iteration limit was reached.     * 2 : Reached the trust-region boundary.     * 3 : Negative curvature detected.     * 4 : Tolerance was satisfied.</p>
 
     
             
@@ -1329,7 +1298,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/scipy/optimize/_trustregion_constr/minimize_trustregion_constr.py </br>
+File: /scipy/optimize/_trustregion_constr/minimize_trustregion_constr.py </br>
 Line: 114 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>

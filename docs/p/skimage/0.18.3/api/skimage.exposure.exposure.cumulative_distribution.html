@@ -8,24 +8,22 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-    <script type="text/javascript">
-        // only process math in math tags (faster and less false positive with `...`)
-        MathJax = {
-          options: {
-            ignoreHtmlClass: 'tex2jax_ignore',    //  class that marks tags not to search
-            processHtmlClass: 'tex2jax_process',  //  class that marks tags that should be searched
-          }
-        };
-    </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
     </script>
-    <script type="text/javascript" id="MathJax-script" defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
     </script>
-    <!--<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>-->
 <style>
 body{
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -635,20 +633,23 @@ user-select: none;
 
     <h3 id="section-Examples">Examples</h3>
         
-                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">skimage</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">data</span><span class="">,</span><span class=""> </span><span class="">exposure</span><span class="">,</span><span class=""> </span><span class="">img_as_float</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">img_as_float</span><span class="">(</span><span class="">data</span><span class="o">.</span><span class="">camera</span><span class="">(</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">hi</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">exposure</span><span class="o">.</span><span class="">histogram</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">cdf</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">exposure</span><span class="o">.</span><span class="">cumulative_distribution</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><span class="">alltrue</span><span class="">(</span><span class="">cdf</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.cumsum.html">cumsum</a><span class="">(</span><span class="">hi</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">)</span><span class="o">/</span><span class="nb">float</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="o">.</span><span class="">size</span><span class="">)</span><span class="">)</span>
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><span class="nn">skimage</span><span class=""> </span><span class="kn">import</span><span class=""> </span><span class="">data</span><span class="">,</span><span class=""> </span><span class="">exposure</span><span class="">,</span><span class=""> </span><span class="">img_as_float</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">img_as_float</span><span class="">(</span><span class="">data</span><span class="o">.</span><span class="">camera</span><span class="">(</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">hi</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">exposure</span><span class="o">.</span><span class="">histogram</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">cdf</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">exposure</span><span class="o">.</span><span class="">cumulative_distribution</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.alltrue.html">alltrue</a><span class="">(</span><span class="">cdf</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">==</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.html">np</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.cumsum.html">cumsum</a><span class="">(</span><span class="">hi</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">)</span><span class="o">/</span><span class="nb">float</span><span class="">(</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.ndarray.html">image</a><span class="o">.</span><span class="">size</span><span class="">)</span><span class="">)</span>
 True</pre>
             
             
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.alltrue.html" class='exists'>numpy.alltrue</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.cumsum.html" class='exists'>numpy.cumsum</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
      
@@ -713,7 +714,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 2, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 10.0, "label": "numpy.cumsum", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.cumsum"}], "links": [{"source": 2, "target": 1, "id": 706}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.0, "label": "numpy.cumsum", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.cumsum"}, {"id": 2, "val": 9.0, "label": "numpy.alltrue", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.alltrue"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 4, "target": 3, "id": 2}]};
 
 (function() {
 
@@ -841,7 +842,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 34.5329983228432, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 2, "val": 37.782545223670866, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 10.0, "label": "numpy.cumsum", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.cumsum"}], "links": [{"source": 2, "target": 1, "id": 706}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.0, "label": "numpy.cumsum", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.cumsum"}, {"id": 2, "val": 9.0, "label": "numpy.alltrue", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.alltrue"}, {"id": 3, "val": 34.438608132804575, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 37.66479394838265, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 4, "target": 3, "id": 2}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
