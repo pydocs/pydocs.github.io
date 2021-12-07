@@ -1,0 +1,389 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Decodes a variable which may hold CF encoded information."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This includes variables that have been masked and scaled, which hold CF style time variables (this is almost always the case if the dataset has been serialized) and which have strings encoded as character arrays."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "name",
+            "type_": "str",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Name of the variable. Used for better error messages."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "var",
+            "type_": "Variable",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A variable holding potentially CF encoded information."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "concat_characters",
+            "type_": "bool",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Should character arrays be concatenated to strings, for example: [\"h\", \"e\", \"l\", \"l\", \"o\"] -> \"hello\""
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mask_and_scale",
+            "type_": "bool",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Lazily scale (using scale_factor and add_offset) and mask (using _FillValue). If the _Unsigned attribute is present treat integer arrays as unsigned."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_times",
+            "type_": "bool",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Decode cf times (\"hours since 2000-01-01\") to np.datetime64."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_endianness",
+            "type_": "bool",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Decode arrays from non-native to native endianness."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "stack_char_dim",
+            "type_": "bool",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Whether to stack characters into bytes along the last dimension of this array. Passed as an argument because we need to look at the full dataset to figure out if this is appropriate."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "use_cftime",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Only relevant if encoded dates come from a standard calendar (e.g. \"gregorian\", \"proleptic_gregorian\", \"standard\", or not specified).  If None (default), attempt to decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects; if this is not possible, decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "cftime.datetime"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects. If True, always decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "cftime.datetime"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects, regardless of whether or not they can be represented using "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects.  If False, always decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects; if this is not possible raise an error."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "out",
+            "type_": "Variable",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A variable holding the decoded equivalent of var."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/conventions.py",
+  "item_line": 282,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "xarray.conventions.decode_cf_variable"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "0.17.0",
+  "signature": "decode_cf_variable(name, var, concat_characters=True, mask_and_scale=True, decode_times=True, decode_endianness=True, stack_char_dim=True, use_cftime=None, decode_timedelta=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "xarray.conventions.decode_cf_variable",
+  "arbitrary": []
+}

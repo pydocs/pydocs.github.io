@@ -1,0 +1,863 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Finds blobs in the given grayscale image."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Blobs are found using the Difference of Gaussian (DoG) method . For each blob found, the method returns its coordinates and the standard deviation of the Gaussian kernel that detected the blob."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "image",
+            "type_": "2D or 3D ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Input grayscale image, blobs are assumed to be light on dark background (white on black)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "min_sigma",
+            "type_": "scalar or sequence of scalars, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The minimum standard deviation for Gaussian kernel. Keep this low to detect smaller blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "max_sigma",
+            "type_": "scalar or sequence of scalars, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The maximum standard deviation for Gaussian kernel. Keep this high to detect larger blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "sigma_ratio",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The ratio between the standard deviation of Gaussian Kernels used for computing the Difference of Gaussians"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "threshold",
+            "type_": "float, optional.",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The absolute lower bound for scale space maxima. Local maxima smaller than thresh are ignored. Reduce this to detect blobs with less intensities."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "overlap",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A value between 0 and 1. If the area of two blobs overlaps by a fraction greater than "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "threshold",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "threshold"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", the smaller blob is eliminated."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "exclude_border",
+            "type_": "tuple of ints, int, or False, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If tuple of ints, the length of the tuple must match the input array's dimensionality.  Each element of the tuple will exclude peaks from within "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "exclude_border",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "exclude_border"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "-pixels of the border of the image along that dimension. If nonzero int, "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "exclude_border",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "exclude_border"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " excludes peaks from within "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "exclude_border",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "exclude_border"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "-pixels of the border of the image. If zero or False, peaks are identified regardless of their distance from the border."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "A",
+            "type_": "(n, image.ndim + sigma) ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A 2d array with each row representing 2 coordinate values for a 2D image, and 3 coordinate values for a 3D image, plus the sigma(s) used. When a single sigma is passed, outputs are: "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(r,",
+                          " ",
+                          "c,",
+                          " ",
+                          "sigma)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(p,",
+                          " ",
+                          "r,",
+                          " ",
+                          "c,",
+                          " ",
+                          "sigma)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " where "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(r,",
+                          " ",
+                          "c)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(p,",
+                          " ",
+                          "r,",
+                          " ",
+                          "c)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " are coordinates of the blob and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "sigma"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is the standard deviation of the Gaussian kernel which detected the blob. When an anisotropic gaussian is used (sigmas per dimension), the detected sigma is returned for each dimension."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The radius of each blob is approximately "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "\\sqrt{2}\\sigma"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " for a 2-D image and "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "\\sqrt{3}\\sigma"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " for a 3-D image."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.feature"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.feature.blob.blob_dog"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.filters.rank.generic.threshold"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data.coins"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "See Also",
+    "References",
+    "Examples",
+    "Notes"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/skimage/feature/blob.py",
+  "item_line": 217,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "skimage.feature.blob_dog"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "skimage",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "feature",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "feature",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "blob_dog",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature.blob.blob_dog"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "coins",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data.coins"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "threshold",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.filters.rank.generic.threshold"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": ".5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "max_sigma"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "40"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "array([[120.      , 272.      ,  16.777216],\n       [193.      , 213.      ,  16.777216],\n       [263.      , 245.      ,  16.777216],\n       [185.      , 347.      ,  16.777216],\n       [128.      , 154.      ,  10.48576 ],\n       [198.      , 155.      ,  10.48576 ],\n       [124.      , 337.      ,  10.48576 ],\n       [ 45.      , 336.      ,  16.777216],\n       [195.      , 102.      ,  16.777216],\n       [125.      ,  45.      ,  16.777216],\n       [261.      , 173.      ,  16.777216],\n       [194.      , 277.      ,  16.777216],\n       [127.      , 102.      ,  10.48576 ],\n       [125.      , 208.      ,  10.48576 ],\n       [267.      , 115.      ,  10.48576 ],\n       [263.      , 302.      ,  16.777216],\n       [196.      ,  43.      ,  10.48576 ],\n       [260.      ,  46.      ,  16.777216],\n       [267.      , 359.      ,  16.777216],\n       [ 54.      , 276.      ,  10.48576 ],\n       [ 58.      , 100.      ,  10.48576 ],\n       [ 52.      , 155.      ,  16.777216],\n       [ 52.      , 216.      ,  16.777216],\n       [ 54.      ,  42.      ,  16.777216]])",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "skimage.filters.difference_of_gaussians",
+        "ref": "skimage.filters._gaussian.difference_of_gaussians",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "0.18.3",
+  "signature": "blob_dog(image, min_sigma=1, max_sigma=50, sigma_ratio=1.6, threshold=2.0, overlap=0.5, *, exclude_border=False)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "skimage.feature.blob.blob_dog",
+  "arbitrary": []
+}

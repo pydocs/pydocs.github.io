@@ -1,0 +1,1314 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The steps of the algorithm are as follows:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Smooth the image using a Gaussian with "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "sigma"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " width."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Apply the horizontal and vertical Sobel operators to get the gradients   within the image. The edge strength is the norm of the gradient."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Thin potential edges to 1-pixel wide curves. First, find the normal   to the edge at each point. This is done by looking at the   signs and the relative magnitude of the X-Sobel and Y-Sobel   to sort the points into 4 categories: horizontal, vertical,   diagonal and antidiagonal. Then look in the normal and reverse   directions to see if the values in either of those directions are   greater than the point in question. Use interpolation to get a mix of   points instead of picking the one that's the closest to the normal."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Perform a hysteresis thresholding: first label all points above the   high threshold as edges. Then recursively label any point above the   low threshold that is 8-connected to a labeled point as an edge."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "image",
+            "type_": "2D array",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Grayscale input image to detect edges on; can be of any dtype."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "sigma",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Standard deviation of the Gaussian filter."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "low_threshold",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Lower bound for hysteresis thresholding (linking edges). If None, low_threshold is set to 10% of dtype's max."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "high_threshold",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Upper bound for hysteresis thresholding (linking edges). If None, high_threshold is set to 20% of dtype's max."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mask",
+            "type_": "array, dtype=bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Mask to limit the application of Canny to a certain area."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "use_quantiles",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True then treat low_threshold and high_threshold as quantiles of the edge magnitude image, rather than absolute edge magnitude values. If True then the thresholds must be in the range [0, 1]."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "output",
+            "type_": "2D array (image)",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The binary edge map."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Edge filter an image using the Canny algorithm."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.feature"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.ndarray"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.util.dtype.img_as_float64"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.util.shape"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.zeros"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.feature._canny.canny"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Returns",
+    "See Also",
+    "Notes",
+    "References",
+    "Examples"
+  ],
+  "item_file": "/skimage/feature/_canny.py",
+  "item_line": 53,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "skimage.feature.canny"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "skimage",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "feature",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# Generate noisy image of a square"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "im",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "zeros",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.zeros"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "256"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "256"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "im",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "64",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util.dtype.img_as_float64"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "64",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util.dtype.img_as_float64"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "64",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util.dtype.img_as_float64"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "64",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util.dtype.img_as_float64"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "im",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "random",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.random"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "rand"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "im",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "shape",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util.shape"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# First trial with the Canny filter, with the default smoothing"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "edges1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "feature",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "canny",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature._canny.canny"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "im",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# Increase the smoothing for better results"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "edges2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "feature",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "canny",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.feature._canny.canny"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "im"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "sigma"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "skimage.sobel",
+        "ref": null,
+        "exists": null
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "0.17.2",
+  "signature": "canny(image, sigma=1.0, low_threshold=None, high_threshold=None, mask=None, use_quantiles=False)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "skimage.feature._canny.canny",
+  "arbitrary": []
+}

@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -544,11 +545,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -576,16 +577,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Compute the frequency response of a digital filter.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -608,6 +604,88 @@ jw                 -jw              -jwN
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Using Matplotlib&#39;s <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
+         function as the callable for <code><a link href="#plot" class='local'>plot</a></code> produces unexpected results, as this plots the real part of the complex transfer function, not the magnitude. Try 
+        <code class='verbatim'>lambda w, h: plot(w, np.abs(h))</code>
+    .</p>
+
+    
+           
+               
+        <p>A direct computation via (R)FFT is used to compute the frequency response when the following conditions are met:</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>An integer value is given for <code><a link href="#worN" class='local'>worN</a></code>.</p>
+
+    </li>
+               
+               <li>
+        <p><code><a link href="#worN" class='local'>worN</a></code> is fast to compute via FFT (i.e.,    <code>:None:None:`next_fast_len(worN) &lt;scipy.fft.next_fast_len&gt;`</code> equals <code><a link href="#worN" class='local'>worN</a></code>).</p>
+
+    </li>
+               
+               <li>
+        <p>The denominator coefficients are a single value (
+        <code class='verbatim'>a.shape[0] == 1</code>
+    ).</p>
+
+    </li>
+               
+               <li>
+        <p><code><a link href="#worN" class='local'>worN</a></code> is at least as long as the numerator coefficients    (
+        <code class='verbatim'>worN &gt;= b.shape[0]</code>
+    ).</p>
+
+    </li>
+               
+               <li>
+        <p>If 
+        <code class='verbatim'>b.ndim &gt; 1</code>
+    , then 
+        <code class='verbatim'>b.shape[-1] == 1</code>
+    .</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+        <p>For long FIR filters, the FFT approach can have lower error and be much faster than the equivalent direct polynomial calculation.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -769,6 +847,21 @@ jw                 -jw              -jwN
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -809,121 +902,11 @@ jw                 -jw              -jwN
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Using Matplotlib&#39;s <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
-         function as the callable for <code><a link href="#plot" class='local'>plot</a></code> produces unexpected results, as this plots the real part of the complex transfer function, not the magnitude. Try 
-        <code class='verbatim'>lambda w, h: plot(w, np.abs(h))</code>
-    .</p>
-
-    
-           
-               
-        <p>A direct computation via (R)FFT is used to compute the frequency response when the following conditions are met:</p>
-
-    
-           
-               
-           <ol>
-               <li>
-        <p>An integer value is given for <code><a link href="#worN" class='local'>worN</a></code>.</p>
-
-    </li>
-               
-               <li>
-        <p><code><a link href="#worN" class='local'>worN</a></code> is fast to compute via FFT (i.e.,    <code>:None:None:`next_fast_len(worN) &lt;scipy.fft.next_fast_len&gt;`</code> equals <code><a link href="#worN" class='local'>worN</a></code>).</p>
-
-    </li>
-               
-               <li>
-        <p>The denominator coefficients are a single value (
-        <code class='verbatim'>a.shape[0] == 1</code>
-    ).</p>
-
-    </li>
-               
-               <li>
-        <p><code><a link href="#worN" class='local'>worN</a></code> is at least as long as the numerator coefficients    (
-        <code class='verbatim'>worN &gt;= b.shape[0]</code>
-    ).</p>
-
-    </li>
-               
-               <li>
-        <p>If 
-        <code class='verbatim'>b.ndim &gt; 1</code>
-    , then 
-        <code class='verbatim'>b.shape[-1] == 1</code>
-    .</p>
-
-    </li>
-               
-            </ol>
-       
-           
-               
-        <p>For long FIR filters, the FFT approach can have lower error and be much faster than the equivalent direct polynomial calculation.</p>
+        <p>Compute the frequency response of a digital filter.</p>
 
     
            
@@ -934,6 +917,24 @@ jw                 -jw              -jwN
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1049,70 +1050,37 @@ jw                 -jw              -jwN
          
          See :
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot.html" class='exists'>matplotlib.axes._axes.Axes.plot</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.subspace_angles.html" class='exists'>scipy.linalg.decomp_svd.subspace_angles</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis.html" class='exists'>matplotlib.axes._base._AxesBase.axis</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step.html" class='exists'>scipy.optimize._numdiff._compute_absolute_step</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.random.html" class='exists'>scipy.sparse.construct.random</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.angle.html" class='exists'>numpy.angle</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
         
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_ylabel</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.signal.kaiser.html" class='exists'>scipy.signal.kaiser</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png.html" class='exists'>fig-scipy.signal.filter_design.freqz-1.png</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots.html" class='exists'>matplotlib.pyplot.subplots</a></code>
         
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_ylabel</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.angle.html" class='exists'>numpy.angle</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin.html" class='exists'>scipy.signal.fir_filter_design.firwin</a></code>
         
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx.html" class='exists'>matplotlib.axes._base._AxesBase.twinx</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
         
          
              <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title.html" class='exists'>matplotlib.axes._axes.Axes.set_title</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid.html" class='exists'>matplotlib.axes._base._AxesBase.grid</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_xlabel</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots.html" class='exists'>matplotlib.pyplot.subplots</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.freqz.html" class='exists'>scipy.signal.filter_design.freqz</a></code>
@@ -1124,19 +1092,52 @@ jw                 -jw              -jwN
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.unwrap.html" class='exists'>numpy.unwrap</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid.html" class='exists'>matplotlib.axes._base._AxesBase.grid</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_xlabel</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step.html" class='exists'>scipy.optimize._numdiff._compute_absolute_step</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx.html" class='exists'>matplotlib.axes._base._AxesBase.twinx</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin.html" class='exists'>scipy.signal.fir_filter_design.firwin</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.unwrap.html" class='exists'>numpy.unwrap</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.random.html" class='exists'>scipy.sparse.construct.random</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png.html" class='exists'>fig-scipy.signal.filter_design.freqz-1.png</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis.html" class='exists'>matplotlib.axes._base._AxesBase.axis</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot.html" class='exists'>matplotlib.axes._axes.Axes.plot</a></code>
         
          
      
@@ -1254,7 +1255,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.twinx", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.signal.fir_filter_design.remez", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.remez"}, {"id": 3, "val": 9.0, "label": "scipy.signal.filter_design.iirpeak", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirpeak"}, {"id": 4, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 6, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 7, "val": 10.64575131106459, "label": "matplotlib.axes._base._AxesBase.set_ylabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel"}, {"id": 8, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 9, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 10, "val": 10.23606797749979, "label": "scipy.linalg.decomp_svd.subspace_angles", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.subspace_angles"}, {"id": 11, "val": 9.0, "label": "scipy.signal.filter_design.cheb2ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb2ord"}, {"id": 12, "val": 9.0, "label": "scipy.signal.fir_filter_design.minimum_phase", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.minimum_phase"}, {"id": 13, "val": 9.414213562373096, "label": "scipy.signal.filter_design.bilinear", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear"}, {"id": 14, "val": 11.872983346207416, "label": "numpy.angle", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.angle"}, {"id": 15, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 16, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 17, "val": 11.0, "label": "matplotlib.axes._base._AxesBase.grid", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid"}, {"id": 18, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 19, "val": 10.23606797749979, "label": "scipy.signal.fir_filter_design.firwin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin"}, {"id": 20, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 21, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 22, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 23, "val": 9.0, "label": "scipy.signal.fir_filter_design.kaiserord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.kaiserord"}, {"id": 24, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 25, "val": 9.414213562373096, "label": "scipy.signal.filter_design.iirdesign", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirdesign"}, {"id": 26, "val": 9.414213562373096, "label": "scipy.signal.filter_design.sosfreqz", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.sosfreqz"}, {"id": 27, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 28, "val": 9.0, "label": "scipy.signal.filter_design.gammatone", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.gammatone"}, {"id": 29, "val": 9.0, "label": "scipy.signal.fir_filter_design.firls", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firls"}, {"id": 30, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 31, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 32, "val": 10.449489742783179, "label": "scipy.signal.kaiser", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.kaiser"}, {"id": 33, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 34, "val": 10.82842712474619, "label": "matplotlib.axes._base._AxesBase.axis", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis"}, {"id": 35, "val": 10.82842712474619, "label": "numpy.unwrap", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.unwrap"}, {"id": 36, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 37, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 38, "val": 9.0, "label": "scipy.signal.filter_design.iircomb", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iircomb"}, {"id": 39, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 40, "val": 9.0, "label": "fig-scipy.signal.filter_design.freqz-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png"}, {"id": 41, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 42, "val": 9.414213562373096, "label": "scipy.signal.windows.windows.dpss", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.windows.windows.dpss"}, {"id": 43, "val": 9.0, "label": "scipy.signal.filter_design.iirnotch", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirnotch"}, {"id": 44, "val": 9.0, "label": "scipy.signal.filter_design.cheb1ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb1ord"}], "links": [{"source": 2, "target": 29, "id": 30}, {"source": 2, "target": 12, "id": 31}, {"source": 15, "target": 25, "id": 56}, {"source": 15, "target": 42, "id": 64}, {"source": 10, "target": 25, "id": 70}, {"source": 36, "target": 28, "id": 140}, {"source": 36, "target": 26, "id": 146}, {"source": 36, "target": 23, "id": 147}, {"source": 36, "target": 32, "id": 153}, {"source": 34, "target": 25, "id": 220}, {"source": 31, "target": 44, "id": 237}, {"source": 31, "target": 11, "id": 238}, {"source": 31, "target": 28, "id": 247}, {"source": 31, "target": 38, "id": 248}, {"source": 31, "target": 25, "id": 249}, {"source": 31, "target": 43, "id": 251}, {"source": 31, "target": 3, "id": 252}, {"source": 31, "target": 32, "id": 258}, {"source": 9, "target": 4, "id": 315}, {"source": 9, "target": 16, "id": 317}, {"source": 9, "target": 10, "id": 346}, {"source": 9, "target": 20, "id": 376}, {"source": 14, "target": 38, "id": 392}, {"source": 14, "target": 25, "id": 393}, {"source": 14, "target": 43, "id": 394}, {"source": 14, "target": 3, "id": 395}, {"source": 14, "target": 26, "id": 396}, {"source": 39, "target": 10, "id": 432}, {"source": 39, "target": 13, "id": 461}, {"source": 39, "target": 44, "id": 465}, {"source": 39, "target": 11, "id": 466}, {"source": 39, "target": 28, "id": 474}, {"source": 39, "target": 38, "id": 475}, {"source": 39, "target": 25, "id": 476}, {"source": 39, "target": 43, "id": 478}, {"source": 39, "target": 3, "id": 479}, {"source": 39, "target": 26, "id": 480}, {"source": 39, "target": 29, "id": 481}, {"source": 39, "target": 23, "id": 482}, {"source": 39, "target": 12, "id": 483}, {"source": 39, "target": 2, "id": 484}, {"source": 39, "target": 32, "id": 490}, {"source": 39, "target": 42, "id": 519}, {"source": 41, "target": 44, "id": 692}, {"source": 41, "target": 11, "id": 693}, {"source": 41, "target": 28, "id": 702}, {"source": 41, "target": 38, "id": 704}, {"source": 41, "target": 43, "id": 706}, {"source": 41, "target": 3, "id": 707}, {"source": 41, "target": 26, "id": 708}, {"source": 41, "target": 29, "id": 709}, {"source": 41, "target": 23, "id": 710}, {"source": 41, "target": 2, "id": 711}, {"source": 41, "target": 42, "id": 744}, {"source": 32, "target": 23, "id": 765}, {"source": 32, "target": 42, "id": 767}, {"source": 7, "target": 25, "id": 774}, {"source": 16, "target": 9, "id": 780}, {"source": 16, "target": 10, "id": 808}, {"source": 16, "target": 20, "id": 838}, {"source": 22, "target": 13, "id": 1390}, {"source": 22, "target": 44, "id": 1394}, {"source": 22, "target": 11, "id": 1395}, {"source": 22, "target": 28, "id": 1404}, {"source": 22, "target": 38, "id": 1406}, {"source": 22, "target": 25, "id": 1407}, {"source": 22, "target": 43, "id": 1409}, {"source": 22, "target": 3, "id": 1410}, {"source": 22, "target": 26, "id": 1415}, {"source": 22, "target": 29, "id": 1416}, {"source": 22, "target": 23, "id": 1417}, {"source": 22, "target": 12, "id": 1418}, {"source": 22, "target": 2, "id": 1419}, {"source": 22, "target": 32, "id": 1425}, {"source": 22, "target": 42, "id": 1485}, {"source": 4, "target": 9, "id": 1545}, {"source": 4, "target": 16, "id": 1546}, {"source": 4, "target": 10, "id": 1582}, {"source": 4, "target": 20, "id": 1612}, {"source": 1, "target": 25, "id": 1676}, {"source": 6, "target": 13, "id": 1732}, {"source": 6, "target": 44, "id": 1736}, {"source": 6, "target": 11, "id": 1737}, {"source": 6, "target": 28, "id": 1747}, {"source": 6, "target": 38, "id": 1749}, {"source": 6, "target": 25, "id": 1750}, {"source": 6, "target": 43, "id": 1752}, {"source": 6, "target": 3, "id": 1753}, {"source": 6, "target": 26, "id": 1758}, {"source": 6, "target": 29, "id": 1760}, {"source": 6, "target": 19, "id": 1761}, {"source": 6, "target": 23, "id": 1765}, {"source": 6, "target": 12, "id": 1766}, {"source": 6, "target": 2, "id": 1767}, {"source": 6, "target": 32, "id": 1773}, {"source": 6, "target": 42, "id": 1854}, {"source": 24, "target": 25, "id": 1879}, {"source": 17, "target": 25, "id": 1893}, {"source": 17, "target": 29, "id": 1895}, {"source": 17, "target": 12, "id": 1896}, {"source": 17, "target": 42, "id": 1897}, {"source": 8, "target": 25, "id": 1905}, {"source": 8, "target": 29, "id": 1907}, {"source": 27, "target": 22, "id": 1912}, {"source": 27, "target": 21, "id": 1913}, {"source": 27, "target": 38, "id": 1928}, {"source": 27, "target": 25, "id": 1929}, {"source": 27, "target": 43, "id": 1930}, {"source": 27, "target": 3, "id": 1931}, {"source": 27, "target": 29, "id": 1932}, {"source": 27, "target": 12, "id": 1933}, {"source": 27, "target": 42, "id": 1943}, {"source": 21, "target": 13, "id": 2047}, {"source": 21, "target": 44, "id": 2051}, {"source": 21, "target": 11, "id": 2052}, {"source": 21, "target": 28, "id": 2061}, {"source": 21, "target": 38, "id": 2063}, {"source": 21, "target": 25, "id": 2064}, {"source": 21, "target": 43, "id": 2066}, {"source": 21, "target": 3, "id": 2067}, {"source": 21, "target": 26, "id": 2072}, {"source": 21, "target": 29, "id": 2073}, {"source": 21, "target": 23, "id": 2074}, {"source": 21, "target": 12, "id": 2075}, {"source": 21, "target": 2, "id": 2076}, {"source": 21, "target": 32, "id": 2082}, {"source": 21, "target": 42, "id": 2142}, {"source": 18, "target": 30, "id": 2591}, {"source": 18, "target": 9, "id": 2680}, {"source": 18, "target": 16, "id": 2681}, {"source": 18, "target": 10, "id": 3007}, {"source": 18, "target": 13, "id": 3090}, {"source": 18, "target": 44, "id": 3094}, {"source": 18, "target": 11, "id": 3095}, {"source": 18, "target": 28, "id": 3104}, {"source": 18, "target": 38, "id": 3105}, {"source": 18, "target": 25, "id": 3106}, {"source": 18, "target": 43, "id": 3108}, {"source": 18, "target": 3, "id": 3109}, {"source": 18, "target": 26, "id": 3110}, {"source": 18, "target": 29, "id": 3112}, {"source": 18, "target": 23, "id": 3113}, {"source": 18, "target": 12, "id": 3114}, {"source": 18, "target": 2, "id": 3115}, {"source": 18, "target": 32, "id": 3121}, {"source": 18, "target": 42, "id": 3178}, {"source": 18, "target": 20, "id": 3199}, {"source": 35, "target": 38, "id": 3568}, {"source": 35, "target": 25, "id": 3569}, {"source": 35, "target": 43, "id": 3570}, {"source": 35, "target": 3, "id": 3571}, {"source": 30, "target": 10, "id": 3786}, {"source": 30, "target": 13, "id": 3857}, {"source": 30, "target": 44, "id": 3861}, {"source": 30, "target": 11, "id": 3862}, {"source": 30, "target": 28, "id": 3871}, {"source": 30, "target": 38, "id": 3872}, {"source": 30, "target": 25, "id": 3873}, {"source": 30, "target": 43, "id": 3875}, {"source": 30, "target": 3, "id": 3876}, {"source": 30, "target": 26, "id": 3877}, {"source": 30, "target": 29, "id": 3879}, {"source": 30, "target": 23, "id": 3880}, {"source": 30, "target": 12, "id": 3881}, {"source": 30, "target": 2, "id": 3882}, {"source": 30, "target": 32, "id": 3888}, {"source": 30, "target": 42, "id": 3952}, {"source": 30, "target": 20, "id": 3968}, {"source": 37, "target": 30, "id": 4517}, {"source": 37, "target": 13, "id": 4720}, {"source": 19, "target": 23, "id": 4831}, {"source": 33, "target": 10, "id": 4983}, {"source": 33, "target": 13, "id": 5095}, {"source": 33, "target": 44, "id": 5099}, {"source": 33, "target": 11, "id": 5100}, {"source": 33, "target": 28, "id": 5110}, {"source": 33, "target": 38, "id": 5112}, {"source": 33, "target": 25, "id": 5113}, {"source": 33, "target": 43, "id": 5115}, {"source": 33, "target": 3, "id": 5116}, {"source": 33, "target": 26, "id": 5121}, {"source": 33, "target": 29, "id": 5123}, {"source": 33, "target": 19, "id": 5124}, {"source": 33, "target": 23, "id": 5128}, {"source": 33, "target": 12, "id": 5129}, {"source": 33, "target": 2, "id": 5130}, {"source": 33, "target": 32, "id": 5136}, {"source": 33, "target": 42, "id": 5217}, {"source": 33, "target": 20, "id": 5251}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 2, "val": 9.0, "label": "scipy.signal.filter_design.gammatone", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.gammatone"}, {"id": 3, "val": 11.0, "label": "matplotlib.axes._base._AxesBase.grid", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid"}, {"id": 4, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 5, "val": 10.82842712474619, "label": "matplotlib.axes._base._AxesBase.axis", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis"}, {"id": 6, "val": 9.414213562373096, "label": "scipy.signal.filter_design.sosfreqz", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.sosfreqz"}, {"id": 7, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 8, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 9, "val": 9.414213562373096, "label": "scipy.signal.windows.windows.dpss", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.windows.windows.dpss"}, {"id": 10, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 11, "val": 9.414213562373096, "label": "scipy.signal.filter_design.iirdesign", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirdesign"}, {"id": 12, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 13, "val": 10.449489742783179, "label": "scipy.signal.kaiser", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.kaiser"}, {"id": 14, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 15, "val": 9.0, "label": "fig-scipy.signal.filter_design.freqz-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png"}, {"id": 16, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 17, "val": 10.64575131106459, "label": "matplotlib.axes._base._AxesBase.set_ylabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel"}, {"id": 18, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 19, "val": 10.82842712474619, "label": "numpy.unwrap", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.unwrap"}, {"id": 20, "val": 9.0, "label": "scipy.signal.filter_design.iirpeak", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirpeak"}, {"id": 21, "val": 12.0, "label": "numpy.angle", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.angle"}, {"id": 22, "val": 9.414213562373096, "label": "scipy.signal.filter_design.bilinear", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear"}, {"id": 23, "val": 9.0, "label": "scipy.signal.fir_filter_design.minimum_phase", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.minimum_phase"}, {"id": 24, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 25, "val": 9.0, "label": "scipy.signal.fir_filter_design.firls", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firls"}, {"id": 26, "val": 9.0, "label": "scipy.signal.fir_filter_design.kaiserord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.kaiserord"}, {"id": 28, "val": 9.0, "label": "scipy.signal.filter_design.iirnotch", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirnotch"}, {"id": 29, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 30, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 31, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 32, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 33, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.twinx", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx"}, {"id": 34, "val": 9.0, "label": "scipy.signal.filter_design.cheb2ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb2ord"}, {"id": 35, "val": 9.0, "label": "scipy.signal.filter_design.cheb1ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb1ord"}, {"id": 36, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 37, "val": 9.0, "label": "scipy.signal.filter_design.iircomb", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iircomb"}, {"id": 38, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 39, "val": 9.732050807568877, "label": "scipy.signal.fir_filter_design.remez", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.remez"}, {"id": 40, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 41, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 42, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 43, "val": 10.23606797749979, "label": "scipy.signal.fir_filter_design.firwin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin"}, {"id": 44, "val": 10.23606797749979, "label": "scipy.linalg.decomp_svd.subspace_angles", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.subspace_angles"}], "links": [{"source": 39, "target": 25, "id": 30}, {"source": 39, "target": 23, "id": 31}, {"source": 44, "target": 11, "id": 38}, {"source": 36, "target": 44, "id": 71}, {"source": 36, "target": 22, "id": 100}, {"source": 36, "target": 35, "id": 104}, {"source": 36, "target": 34, "id": 105}, {"source": 36, "target": 2, "id": 113}, {"source": 36, "target": 37, "id": 114}, {"source": 36, "target": 11, "id": 115}, {"source": 36, "target": 28, "id": 117}, {"source": 36, "target": 20, "id": 118}, {"source": 36, "target": 6, "id": 119}, {"source": 36, "target": 25, "id": 120}, {"source": 36, "target": 26, "id": 121}, {"source": 36, "target": 23, "id": 122}, {"source": 36, "target": 39, "id": 123}, {"source": 36, "target": 13, "id": 129}, {"source": 36, "target": 9, "id": 158}, {"source": 17, "target": 11, "id": 267}, {"source": 41, "target": 2, "id": 339}, {"source": 41, "target": 6, "id": 345}, {"source": 41, "target": 26, "id": 346}, {"source": 41, "target": 13, "id": 352}, {"source": 30, "target": 44, "id": 631}, {"source": 30, "target": 22, "id": 702}, {"source": 30, "target": 35, "id": 706}, {"source": 30, "target": 34, "id": 707}, {"source": 30, "target": 2, "id": 716}, {"source": 30, "target": 37, "id": 717}, {"source": 30, "target": 11, "id": 718}, {"source": 30, "target": 28, "id": 720}, {"source": 30, "target": 20, "id": 721}, {"source": 30, "target": 6, "id": 722}, {"source": 30, "target": 25, "id": 724}, {"source": 30, "target": 26, "id": 725}, {"source": 30, "target": 23, "id": 726}, {"source": 30, "target": 39, "id": 727}, {"source": 30, "target": 13, "id": 733}, {"source": 30, "target": 9, "id": 797}, {"source": 30, "target": 18, "id": 813}, {"source": 13, "target": 26, "id": 1330}, {"source": 13, "target": 9, "id": 1332}, {"source": 40, "target": 24, "id": 1335}, {"source": 40, "target": 31, "id": 1336}, {"source": 40, "target": 37, "id": 1351}, {"source": 40, "target": 11, "id": 1352}, {"source": 40, "target": 28, "id": 1353}, {"source": 40, "target": 20, "id": 1354}, {"source": 40, "target": 25, "id": 1355}, {"source": 40, "target": 23, "id": 1356}, {"source": 40, "target": 9, "id": 1366}, {"source": 21, "target": 37, "id": 1375}, {"source": 21, "target": 11, "id": 1376}, {"source": 21, "target": 28, "id": 1377}, {"source": 21, "target": 20, "id": 1378}, {"source": 21, "target": 6, "id": 1379}, {"source": 43, "target": 26, "id": 1387}, {"source": 14, "target": 35, "id": 1469}, {"source": 14, "target": 34, "id": 1470}, {"source": 14, "target": 2, "id": 1479}, {"source": 14, "target": 37, "id": 1481}, {"source": 14, "target": 28, "id": 1483}, {"source": 14, "target": 20, "id": 1484}, {"source": 14, "target": 6, "id": 1485}, {"source": 14, "target": 25, "id": 1486}, {"source": 14, "target": 26, "id": 1487}, {"source": 14, "target": 39, "id": 1488}, {"source": 14, "target": 9, "id": 1521}, {"source": 10, "target": 11, "id": 1549}, {"source": 31, "target": 22, "id": 1661}, {"source": 31, "target": 35, "id": 1665}, {"source": 31, "target": 34, "id": 1666}, {"source": 31, "target": 2, "id": 1675}, {"source": 31, "target": 37, "id": 1677}, {"source": 31, "target": 11, "id": 1678}, {"source": 31, "target": 28, "id": 1680}, {"source": 31, "target": 20, "id": 1681}, {"source": 31, "target": 6, "id": 1686}, {"source": 31, "target": 25, "id": 1687}, {"source": 31, "target": 26, "id": 1688}, {"source": 31, "target": 23, "id": 1689}, {"source": 31, "target": 39, "id": 1690}, {"source": 31, "target": 13, "id": 1696}, {"source": 31, "target": 9, "id": 1756}, {"source": 29, "target": 30, "id": 2214}, {"source": 29, "target": 8, "id": 2303}, {"source": 29, "target": 16, "id": 2304}, {"source": 29, "target": 44, "id": 2628}, {"source": 29, "target": 22, "id": 2711}, {"source": 29, "target": 35, "id": 2715}, {"source": 29, "target": 34, "id": 2716}, {"source": 29, "target": 2, "id": 2725}, {"source": 29, "target": 37, "id": 2726}, {"source": 29, "target": 11, "id": 2727}, {"source": 29, "target": 28, "id": 2729}, {"source": 29, "target": 20, "id": 2730}, {"source": 29, "target": 6, "id": 2731}, {"source": 29, "target": 25, "id": 2733}, {"source": 29, "target": 26, "id": 2734}, {"source": 29, "target": 23, "id": 2735}, {"source": 29, "target": 39, "id": 2736}, {"source": 29, "target": 13, "id": 2742}, {"source": 29, "target": 9, "id": 2799}, {"source": 29, "target": 18, "id": 2820}, {"source": 3, "target": 11, "id": 3348}, {"source": 3, "target": 25, "id": 3350}, {"source": 3, "target": 23, "id": 3351}, {"source": 3, "target": 9, "id": 3352}, {"source": 42, "target": 11, "id": 3360}, {"source": 42, "target": 25, "id": 3362}, {"source": 4, "target": 35, "id": 3381}, {"source": 4, "target": 34, "id": 3382}, {"source": 4, "target": 2, "id": 3391}, {"source": 4, "target": 37, "id": 3392}, {"source": 4, "target": 11, "id": 3393}, {"source": 4, "target": 28, "id": 3395}, {"source": 4, "target": 20, "id": 3396}, {"source": 4, "target": 13, "id": 3402}, {"source": 7, "target": 22, "id": 3486}, {"source": 7, "target": 35, "id": 3490}, {"source": 7, "target": 34, "id": 3491}, {"source": 7, "target": 2, "id": 3501}, {"source": 7, "target": 37, "id": 3503}, {"source": 7, "target": 11, "id": 3504}, {"source": 7, "target": 28, "id": 3506}, {"source": 7, "target": 20, "id": 3507}, {"source": 7, "target": 6, "id": 3512}, {"source": 7, "target": 25, "id": 3514}, {"source": 7, "target": 43, "id": 3515}, {"source": 7, "target": 26, "id": 3519}, {"source": 7, "target": 23, "id": 3520}, {"source": 7, "target": 39, "id": 3521}, {"source": 7, "target": 13, "id": 3527}, {"source": 7, "target": 9, "id": 3608}, {"source": 33, "target": 11, "id": 3632}, {"source": 32, "target": 30, "id": 3878}, {"source": 32, "target": 22, "id": 4080}, {"source": 19, "target": 37, "id": 4232}, {"source": 19, "target": 11, "id": 4233}, {"source": 19, "target": 28, "id": 4234}, {"source": 19, "target": 20, "id": 4235}, {"source": 1, "target": 8, "id": 4290}, {"source": 1, "target": 16, "id": 4291}, {"source": 1, "target": 44, "id": 4327}, {"source": 1, "target": 18, "id": 4357}, {"source": 12, "target": 44, "id": 4588}, {"source": 12, "target": 22, "id": 4700}, {"source": 12, "target": 35, "id": 4704}, {"source": 12, "target": 34, "id": 4705}, {"source": 12, "target": 2, "id": 4715}, {"source": 12, "target": 37, "id": 4717}, {"source": 12, "target": 11, "id": 4718}, {"source": 12, "target": 28, "id": 4720}, {"source": 12, "target": 20, "id": 4721}, {"source": 12, "target": 6, "id": 4726}, {"source": 12, "target": 25, "id": 4728}, {"source": 12, "target": 43, "id": 4729}, {"source": 12, "target": 26, "id": 4733}, {"source": 12, "target": 23, "id": 4734}, {"source": 12, "target": 39, "id": 4735}, {"source": 12, "target": 13, "id": 4741}, {"source": 12, "target": 9, "id": 4822}, {"source": 12, "target": 18, "id": 4856}, {"source": 8, "target": 16, "id": 4999}, {"source": 8, "target": 44, "id": 5028}, {"source": 8, "target": 18, "id": 5058}, {"source": 24, "target": 22, "id": 5611}, {"source": 24, "target": 35, "id": 5615}, {"source": 24, "target": 34, "id": 5616}, {"source": 24, "target": 2, "id": 5625}, {"source": 24, "target": 37, "id": 5627}, {"source": 24, "target": 11, "id": 5628}, {"source": 24, "target": 28, "id": 5630}, {"source": 24, "target": 20, "id": 5631}, {"source": 24, "target": 6, "id": 5636}, {"source": 24, "target": 25, "id": 5637}, {"source": 24, "target": 26, "id": 5638}, {"source": 24, "target": 23, "id": 5639}, {"source": 24, "target": 39, "id": 5640}, {"source": 24, "target": 13, "id": 5646}, {"source": 24, "target": 9, "id": 5706}, {"source": 16, "target": 8, "id": 5748}, {"source": 16, "target": 44, "id": 5776}, {"source": 16, "target": 18, "id": 5806}, {"source": 5, "target": 11, "id": 5821}, {"source": 38, "target": 11, "id": 5845}, {"source": 38, "target": 9, "id": 5853}]};
 
 (function() {
 
@@ -1382,7 +1383,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.twinx", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.signal.fir_filter_design.remez", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.remez"}, {"id": 3, "val": 9.0, "label": "scipy.signal.filter_design.iirpeak", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirpeak"}, {"id": 4, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 6, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 7, "val": 10.64575131106459, "label": "matplotlib.axes._base._AxesBase.set_ylabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel"}, {"id": 8, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 9, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 10, "val": 10.23606797749979, "label": "scipy.linalg.decomp_svd.subspace_angles", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.subspace_angles"}, {"id": 11, "val": 9.0, "label": "scipy.signal.filter_design.cheb2ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb2ord"}, {"id": 12, "val": 9.0, "label": "scipy.signal.fir_filter_design.minimum_phase", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.minimum_phase"}, {"id": 13, "val": 9.414213562373096, "label": "scipy.signal.filter_design.bilinear", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear"}, {"id": 14, "val": 11.872983346207416, "label": "numpy.angle", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.angle"}, {"id": 15, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 16, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 17, "val": 11.0, "label": "matplotlib.axes._base._AxesBase.grid", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid"}, {"id": 18, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 19, "val": 10.23606797749979, "label": "scipy.signal.fir_filter_design.firwin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin"}, {"id": 20, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 21, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 22, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 23, "val": 9.0, "label": "scipy.signal.fir_filter_design.kaiserord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.kaiserord"}, {"id": 24, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 25, "val": 9.414213562373096, "label": "scipy.signal.filter_design.iirdesign", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirdesign"}, {"id": 26, "val": 9.414213562373096, "label": "scipy.signal.filter_design.sosfreqz", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.sosfreqz"}, {"id": 27, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 28, "val": 9.0, "label": "scipy.signal.filter_design.gammatone", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.gammatone"}, {"id": 29, "val": 9.0, "label": "scipy.signal.fir_filter_design.firls", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firls"}, {"id": 30, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 31, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 32, "val": 10.449489742783179, "label": "scipy.signal.kaiser", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.kaiser"}, {"id": 33, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 34, "val": 10.82842712474619, "label": "matplotlib.axes._base._AxesBase.axis", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis"}, {"id": 35, "val": 10.82842712474619, "label": "numpy.unwrap", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.unwrap"}, {"id": 36, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 37, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 38, "val": 9.0, "label": "scipy.signal.filter_design.iircomb", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iircomb"}, {"id": 39, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 40, "val": 9.0, "label": "fig-scipy.signal.filter_design.freqz-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png"}, {"id": 41, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 42, "val": 9.414213562373096, "label": "scipy.signal.windows.windows.dpss", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.windows.windows.dpss"}, {"id": 43, "val": 9.0, "label": "scipy.signal.filter_design.iirnotch", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirnotch"}, {"id": 44, "val": 9.0, "label": "scipy.signal.filter_design.cheb1ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb1ord"}], "links": [{"source": 2, "target": 29, "id": 30}, {"source": 2, "target": 12, "id": 31}, {"source": 15, "target": 25, "id": 56}, {"source": 15, "target": 42, "id": 64}, {"source": 10, "target": 25, "id": 70}, {"source": 36, "target": 28, "id": 140}, {"source": 36, "target": 26, "id": 146}, {"source": 36, "target": 23, "id": 147}, {"source": 36, "target": 32, "id": 153}, {"source": 34, "target": 25, "id": 220}, {"source": 31, "target": 44, "id": 237}, {"source": 31, "target": 11, "id": 238}, {"source": 31, "target": 28, "id": 247}, {"source": 31, "target": 38, "id": 248}, {"source": 31, "target": 25, "id": 249}, {"source": 31, "target": 43, "id": 251}, {"source": 31, "target": 3, "id": 252}, {"source": 31, "target": 32, "id": 258}, {"source": 9, "target": 4, "id": 315}, {"source": 9, "target": 16, "id": 317}, {"source": 9, "target": 10, "id": 346}, {"source": 9, "target": 20, "id": 376}, {"source": 14, "target": 38, "id": 392}, {"source": 14, "target": 25, "id": 393}, {"source": 14, "target": 43, "id": 394}, {"source": 14, "target": 3, "id": 395}, {"source": 14, "target": 26, "id": 396}, {"source": 39, "target": 10, "id": 432}, {"source": 39, "target": 13, "id": 461}, {"source": 39, "target": 44, "id": 465}, {"source": 39, "target": 11, "id": 466}, {"source": 39, "target": 28, "id": 474}, {"source": 39, "target": 38, "id": 475}, {"source": 39, "target": 25, "id": 476}, {"source": 39, "target": 43, "id": 478}, {"source": 39, "target": 3, "id": 479}, {"source": 39, "target": 26, "id": 480}, {"source": 39, "target": 29, "id": 481}, {"source": 39, "target": 23, "id": 482}, {"source": 39, "target": 12, "id": 483}, {"source": 39, "target": 2, "id": 484}, {"source": 39, "target": 32, "id": 490}, {"source": 39, "target": 42, "id": 519}, {"source": 41, "target": 44, "id": 692}, {"source": 41, "target": 11, "id": 693}, {"source": 41, "target": 28, "id": 702}, {"source": 41, "target": 38, "id": 704}, {"source": 41, "target": 43, "id": 706}, {"source": 41, "target": 3, "id": 707}, {"source": 41, "target": 26, "id": 708}, {"source": 41, "target": 29, "id": 709}, {"source": 41, "target": 23, "id": 710}, {"source": 41, "target": 2, "id": 711}, {"source": 41, "target": 42, "id": 744}, {"source": 32, "target": 23, "id": 765}, {"source": 32, "target": 42, "id": 767}, {"source": 7, "target": 25, "id": 774}, {"source": 16, "target": 9, "id": 780}, {"source": 16, "target": 10, "id": 808}, {"source": 16, "target": 20, "id": 838}, {"source": 22, "target": 13, "id": 1390}, {"source": 22, "target": 44, "id": 1394}, {"source": 22, "target": 11, "id": 1395}, {"source": 22, "target": 28, "id": 1404}, {"source": 22, "target": 38, "id": 1406}, {"source": 22, "target": 25, "id": 1407}, {"source": 22, "target": 43, "id": 1409}, {"source": 22, "target": 3, "id": 1410}, {"source": 22, "target": 26, "id": 1415}, {"source": 22, "target": 29, "id": 1416}, {"source": 22, "target": 23, "id": 1417}, {"source": 22, "target": 12, "id": 1418}, {"source": 22, "target": 2, "id": 1419}, {"source": 22, "target": 32, "id": 1425}, {"source": 22, "target": 42, "id": 1485}, {"source": 4, "target": 9, "id": 1545}, {"source": 4, "target": 16, "id": 1546}, {"source": 4, "target": 10, "id": 1582}, {"source": 4, "target": 20, "id": 1612}, {"source": 1, "target": 25, "id": 1676}, {"source": 6, "target": 13, "id": 1732}, {"source": 6, "target": 44, "id": 1736}, {"source": 6, "target": 11, "id": 1737}, {"source": 6, "target": 28, "id": 1747}, {"source": 6, "target": 38, "id": 1749}, {"source": 6, "target": 25, "id": 1750}, {"source": 6, "target": 43, "id": 1752}, {"source": 6, "target": 3, "id": 1753}, {"source": 6, "target": 26, "id": 1758}, {"source": 6, "target": 29, "id": 1760}, {"source": 6, "target": 19, "id": 1761}, {"source": 6, "target": 23, "id": 1765}, {"source": 6, "target": 12, "id": 1766}, {"source": 6, "target": 2, "id": 1767}, {"source": 6, "target": 32, "id": 1773}, {"source": 6, "target": 42, "id": 1854}, {"source": 24, "target": 25, "id": 1879}, {"source": 17, "target": 25, "id": 1893}, {"source": 17, "target": 29, "id": 1895}, {"source": 17, "target": 12, "id": 1896}, {"source": 17, "target": 42, "id": 1897}, {"source": 8, "target": 25, "id": 1905}, {"source": 8, "target": 29, "id": 1907}, {"source": 27, "target": 22, "id": 1912}, {"source": 27, "target": 21, "id": 1913}, {"source": 27, "target": 38, "id": 1928}, {"source": 27, "target": 25, "id": 1929}, {"source": 27, "target": 43, "id": 1930}, {"source": 27, "target": 3, "id": 1931}, {"source": 27, "target": 29, "id": 1932}, {"source": 27, "target": 12, "id": 1933}, {"source": 27, "target": 42, "id": 1943}, {"source": 21, "target": 13, "id": 2047}, {"source": 21, "target": 44, "id": 2051}, {"source": 21, "target": 11, "id": 2052}, {"source": 21, "target": 28, "id": 2061}, {"source": 21, "target": 38, "id": 2063}, {"source": 21, "target": 25, "id": 2064}, {"source": 21, "target": 43, "id": 2066}, {"source": 21, "target": 3, "id": 2067}, {"source": 21, "target": 26, "id": 2072}, {"source": 21, "target": 29, "id": 2073}, {"source": 21, "target": 23, "id": 2074}, {"source": 21, "target": 12, "id": 2075}, {"source": 21, "target": 2, "id": 2076}, {"source": 21, "target": 32, "id": 2082}, {"source": 21, "target": 42, "id": 2142}, {"source": 18, "target": 30, "id": 2591}, {"source": 18, "target": 9, "id": 2680}, {"source": 18, "target": 16, "id": 2681}, {"source": 18, "target": 10, "id": 3007}, {"source": 18, "target": 13, "id": 3090}, {"source": 18, "target": 44, "id": 3094}, {"source": 18, "target": 11, "id": 3095}, {"source": 18, "target": 28, "id": 3104}, {"source": 18, "target": 38, "id": 3105}, {"source": 18, "target": 25, "id": 3106}, {"source": 18, "target": 43, "id": 3108}, {"source": 18, "target": 3, "id": 3109}, {"source": 18, "target": 26, "id": 3110}, {"source": 18, "target": 29, "id": 3112}, {"source": 18, "target": 23, "id": 3113}, {"source": 18, "target": 12, "id": 3114}, {"source": 18, "target": 2, "id": 3115}, {"source": 18, "target": 32, "id": 3121}, {"source": 18, "target": 42, "id": 3178}, {"source": 18, "target": 20, "id": 3199}, {"source": 35, "target": 38, "id": 3568}, {"source": 35, "target": 25, "id": 3569}, {"source": 35, "target": 43, "id": 3570}, {"source": 35, "target": 3, "id": 3571}, {"source": 30, "target": 10, "id": 3786}, {"source": 30, "target": 13, "id": 3857}, {"source": 30, "target": 44, "id": 3861}, {"source": 30, "target": 11, "id": 3862}, {"source": 30, "target": 28, "id": 3871}, {"source": 30, "target": 38, "id": 3872}, {"source": 30, "target": 25, "id": 3873}, {"source": 30, "target": 43, "id": 3875}, {"source": 30, "target": 3, "id": 3876}, {"source": 30, "target": 26, "id": 3877}, {"source": 30, "target": 29, "id": 3879}, {"source": 30, "target": 23, "id": 3880}, {"source": 30, "target": 12, "id": 3881}, {"source": 30, "target": 2, "id": 3882}, {"source": 30, "target": 32, "id": 3888}, {"source": 30, "target": 42, "id": 3952}, {"source": 30, "target": 20, "id": 3968}, {"source": 37, "target": 30, "id": 4517}, {"source": 37, "target": 13, "id": 4720}, {"source": 19, "target": 23, "id": 4831}, {"source": 33, "target": 10, "id": 4983}, {"source": 33, "target": 13, "id": 5095}, {"source": 33, "target": 44, "id": 5099}, {"source": 33, "target": 11, "id": 5100}, {"source": 33, "target": 28, "id": 5110}, {"source": 33, "target": 38, "id": 5112}, {"source": 33, "target": 25, "id": 5113}, {"source": 33, "target": 43, "id": 5115}, {"source": 33, "target": 3, "id": 5116}, {"source": 33, "target": 26, "id": 5121}, {"source": 33, "target": 29, "id": 5123}, {"source": 33, "target": 19, "id": 5124}, {"source": 33, "target": 23, "id": 5128}, {"source": 33, "target": 12, "id": 5129}, {"source": 33, "target": 2, "id": 5130}, {"source": 33, "target": 32, "id": 5136}, {"source": 33, "target": 42, "id": 5217}, {"source": 33, "target": 20, "id": 5251}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 2, "val": 9.0, "label": "scipy.signal.filter_design.gammatone", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.gammatone"}, {"id": 3, "val": 11.0, "label": "matplotlib.axes._base._AxesBase.grid", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.grid"}, {"id": 4, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 5, "val": 10.82842712474619, "label": "matplotlib.axes._base._AxesBase.axis", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.axis"}, {"id": 6, "val": 9.414213562373096, "label": "scipy.signal.filter_design.sosfreqz", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.sosfreqz"}, {"id": 7, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 8, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 9, "val": 9.414213562373096, "label": "scipy.signal.windows.windows.dpss", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.windows.windows.dpss"}, {"id": 10, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 11, "val": 9.414213562373096, "label": "scipy.signal.filter_design.iirdesign", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirdesign"}, {"id": 12, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 13, "val": 10.449489742783179, "label": "scipy.signal.kaiser", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.kaiser"}, {"id": 14, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 15, "val": 9.0, "label": "fig-scipy.signal.filter_design.freqz-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.filter_design.freqz-1.png"}, {"id": 16, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 17, "val": 10.64575131106459, "label": "matplotlib.axes._base._AxesBase.set_ylabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_ylabel"}, {"id": 18, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 19, "val": 10.82842712474619, "label": "numpy.unwrap", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.unwrap"}, {"id": 20, "val": 9.0, "label": "scipy.signal.filter_design.iirpeak", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirpeak"}, {"id": 21, "val": 12.0, "label": "numpy.angle", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.angle"}, {"id": 22, "val": 9.414213562373096, "label": "scipy.signal.filter_design.bilinear", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear"}, {"id": 23, "val": 9.0, "label": "scipy.signal.fir_filter_design.minimum_phase", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.minimum_phase"}, {"id": 24, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 25, "val": 9.0, "label": "scipy.signal.fir_filter_design.firls", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firls"}, {"id": 26, "val": 9.0, "label": "scipy.signal.fir_filter_design.kaiserord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.kaiserord"}, {"id": 28, "val": 9.0, "label": "scipy.signal.filter_design.iirnotch", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iirnotch"}, {"id": 29, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 30, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 31, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 32, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 33, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.twinx", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.twinx"}, {"id": 34, "val": 9.0, "label": "scipy.signal.filter_design.cheb2ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb2ord"}, {"id": 35, "val": 9.0, "label": "scipy.signal.filter_design.cheb1ord", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.cheb1ord"}, {"id": 36, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 37, "val": 9.0, "label": "scipy.signal.filter_design.iircomb", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.filter_design.iircomb"}, {"id": 38, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 39, "val": 9.732050807568877, "label": "scipy.signal.fir_filter_design.remez", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.remez"}, {"id": 40, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 41, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 42, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 43, "val": 10.23606797749979, "label": "scipy.signal.fir_filter_design.firwin", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.fir_filter_design.firwin"}, {"id": 44, "val": 10.23606797749979, "label": "scipy.linalg.decomp_svd.subspace_angles", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.subspace_angles"}], "links": [{"source": 39, "target": 25, "id": 30}, {"source": 39, "target": 23, "id": 31}, {"source": 44, "target": 11, "id": 38}, {"source": 36, "target": 44, "id": 71}, {"source": 36, "target": 22, "id": 100}, {"source": 36, "target": 35, "id": 104}, {"source": 36, "target": 34, "id": 105}, {"source": 36, "target": 2, "id": 113}, {"source": 36, "target": 37, "id": 114}, {"source": 36, "target": 11, "id": 115}, {"source": 36, "target": 28, "id": 117}, {"source": 36, "target": 20, "id": 118}, {"source": 36, "target": 6, "id": 119}, {"source": 36, "target": 25, "id": 120}, {"source": 36, "target": 26, "id": 121}, {"source": 36, "target": 23, "id": 122}, {"source": 36, "target": 39, "id": 123}, {"source": 36, "target": 13, "id": 129}, {"source": 36, "target": 9, "id": 158}, {"source": 17, "target": 11, "id": 267}, {"source": 41, "target": 2, "id": 339}, {"source": 41, "target": 6, "id": 345}, {"source": 41, "target": 26, "id": 346}, {"source": 41, "target": 13, "id": 352}, {"source": 30, "target": 44, "id": 631}, {"source": 30, "target": 22, "id": 702}, {"source": 30, "target": 35, "id": 706}, {"source": 30, "target": 34, "id": 707}, {"source": 30, "target": 2, "id": 716}, {"source": 30, "target": 37, "id": 717}, {"source": 30, "target": 11, "id": 718}, {"source": 30, "target": 28, "id": 720}, {"source": 30, "target": 20, "id": 721}, {"source": 30, "target": 6, "id": 722}, {"source": 30, "target": 25, "id": 724}, {"source": 30, "target": 26, "id": 725}, {"source": 30, "target": 23, "id": 726}, {"source": 30, "target": 39, "id": 727}, {"source": 30, "target": 13, "id": 733}, {"source": 30, "target": 9, "id": 797}, {"source": 30, "target": 18, "id": 813}, {"source": 13, "target": 26, "id": 1330}, {"source": 13, "target": 9, "id": 1332}, {"source": 40, "target": 24, "id": 1335}, {"source": 40, "target": 31, "id": 1336}, {"source": 40, "target": 37, "id": 1351}, {"source": 40, "target": 11, "id": 1352}, {"source": 40, "target": 28, "id": 1353}, {"source": 40, "target": 20, "id": 1354}, {"source": 40, "target": 25, "id": 1355}, {"source": 40, "target": 23, "id": 1356}, {"source": 40, "target": 9, "id": 1366}, {"source": 21, "target": 37, "id": 1375}, {"source": 21, "target": 11, "id": 1376}, {"source": 21, "target": 28, "id": 1377}, {"source": 21, "target": 20, "id": 1378}, {"source": 21, "target": 6, "id": 1379}, {"source": 43, "target": 26, "id": 1387}, {"source": 14, "target": 35, "id": 1469}, {"source": 14, "target": 34, "id": 1470}, {"source": 14, "target": 2, "id": 1479}, {"source": 14, "target": 37, "id": 1481}, {"source": 14, "target": 28, "id": 1483}, {"source": 14, "target": 20, "id": 1484}, {"source": 14, "target": 6, "id": 1485}, {"source": 14, "target": 25, "id": 1486}, {"source": 14, "target": 26, "id": 1487}, {"source": 14, "target": 39, "id": 1488}, {"source": 14, "target": 9, "id": 1521}, {"source": 10, "target": 11, "id": 1549}, {"source": 31, "target": 22, "id": 1661}, {"source": 31, "target": 35, "id": 1665}, {"source": 31, "target": 34, "id": 1666}, {"source": 31, "target": 2, "id": 1675}, {"source": 31, "target": 37, "id": 1677}, {"source": 31, "target": 11, "id": 1678}, {"source": 31, "target": 28, "id": 1680}, {"source": 31, "target": 20, "id": 1681}, {"source": 31, "target": 6, "id": 1686}, {"source": 31, "target": 25, "id": 1687}, {"source": 31, "target": 26, "id": 1688}, {"source": 31, "target": 23, "id": 1689}, {"source": 31, "target": 39, "id": 1690}, {"source": 31, "target": 13, "id": 1696}, {"source": 31, "target": 9, "id": 1756}, {"source": 29, "target": 30, "id": 2214}, {"source": 29, "target": 8, "id": 2303}, {"source": 29, "target": 16, "id": 2304}, {"source": 29, "target": 44, "id": 2628}, {"source": 29, "target": 22, "id": 2711}, {"source": 29, "target": 35, "id": 2715}, {"source": 29, "target": 34, "id": 2716}, {"source": 29, "target": 2, "id": 2725}, {"source": 29, "target": 37, "id": 2726}, {"source": 29, "target": 11, "id": 2727}, {"source": 29, "target": 28, "id": 2729}, {"source": 29, "target": 20, "id": 2730}, {"source": 29, "target": 6, "id": 2731}, {"source": 29, "target": 25, "id": 2733}, {"source": 29, "target": 26, "id": 2734}, {"source": 29, "target": 23, "id": 2735}, {"source": 29, "target": 39, "id": 2736}, {"source": 29, "target": 13, "id": 2742}, {"source": 29, "target": 9, "id": 2799}, {"source": 29, "target": 18, "id": 2820}, {"source": 3, "target": 11, "id": 3348}, {"source": 3, "target": 25, "id": 3350}, {"source": 3, "target": 23, "id": 3351}, {"source": 3, "target": 9, "id": 3352}, {"source": 42, "target": 11, "id": 3360}, {"source": 42, "target": 25, "id": 3362}, {"source": 4, "target": 35, "id": 3381}, {"source": 4, "target": 34, "id": 3382}, {"source": 4, "target": 2, "id": 3391}, {"source": 4, "target": 37, "id": 3392}, {"source": 4, "target": 11, "id": 3393}, {"source": 4, "target": 28, "id": 3395}, {"source": 4, "target": 20, "id": 3396}, {"source": 4, "target": 13, "id": 3402}, {"source": 7, "target": 22, "id": 3486}, {"source": 7, "target": 35, "id": 3490}, {"source": 7, "target": 34, "id": 3491}, {"source": 7, "target": 2, "id": 3501}, {"source": 7, "target": 37, "id": 3503}, {"source": 7, "target": 11, "id": 3504}, {"source": 7, "target": 28, "id": 3506}, {"source": 7, "target": 20, "id": 3507}, {"source": 7, "target": 6, "id": 3512}, {"source": 7, "target": 25, "id": 3514}, {"source": 7, "target": 43, "id": 3515}, {"source": 7, "target": 26, "id": 3519}, {"source": 7, "target": 23, "id": 3520}, {"source": 7, "target": 39, "id": 3521}, {"source": 7, "target": 13, "id": 3527}, {"source": 7, "target": 9, "id": 3608}, {"source": 33, "target": 11, "id": 3632}, {"source": 32, "target": 30, "id": 3878}, {"source": 32, "target": 22, "id": 4080}, {"source": 19, "target": 37, "id": 4232}, {"source": 19, "target": 11, "id": 4233}, {"source": 19, "target": 28, "id": 4234}, {"source": 19, "target": 20, "id": 4235}, {"source": 1, "target": 8, "id": 4290}, {"source": 1, "target": 16, "id": 4291}, {"source": 1, "target": 44, "id": 4327}, {"source": 1, "target": 18, "id": 4357}, {"source": 12, "target": 44, "id": 4588}, {"source": 12, "target": 22, "id": 4700}, {"source": 12, "target": 35, "id": 4704}, {"source": 12, "target": 34, "id": 4705}, {"source": 12, "target": 2, "id": 4715}, {"source": 12, "target": 37, "id": 4717}, {"source": 12, "target": 11, "id": 4718}, {"source": 12, "target": 28, "id": 4720}, {"source": 12, "target": 20, "id": 4721}, {"source": 12, "target": 6, "id": 4726}, {"source": 12, "target": 25, "id": 4728}, {"source": 12, "target": 43, "id": 4729}, {"source": 12, "target": 26, "id": 4733}, {"source": 12, "target": 23, "id": 4734}, {"source": 12, "target": 39, "id": 4735}, {"source": 12, "target": 13, "id": 4741}, {"source": 12, "target": 9, "id": 4822}, {"source": 12, "target": 18, "id": 4856}, {"source": 8, "target": 16, "id": 4999}, {"source": 8, "target": 44, "id": 5028}, {"source": 8, "target": 18, "id": 5058}, {"source": 24, "target": 22, "id": 5611}, {"source": 24, "target": 35, "id": 5615}, {"source": 24, "target": 34, "id": 5616}, {"source": 24, "target": 2, "id": 5625}, {"source": 24, "target": 37, "id": 5627}, {"source": 24, "target": 11, "id": 5628}, {"source": 24, "target": 28, "id": 5630}, {"source": 24, "target": 20, "id": 5631}, {"source": 24, "target": 6, "id": 5636}, {"source": 24, "target": 25, "id": 5637}, {"source": 24, "target": 26, "id": 5638}, {"source": 24, "target": 23, "id": 5639}, {"source": 24, "target": 39, "id": 5640}, {"source": 24, "target": 13, "id": 5646}, {"source": 24, "target": 9, "id": 5706}, {"source": 16, "target": 8, "id": 5748}, {"source": 16, "target": 44, "id": 5776}, {"source": 16, "target": 18, "id": 5806}, {"source": 5, "target": 11, "id": 5821}, {"source": 38, "target": 11, "id": 5845}, {"source": 38, "target": 9, "id": 5853}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

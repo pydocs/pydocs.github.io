@@ -1,0 +1,603 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Underlying task state of dynamic scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Tracks the current state of workers, data, and computations."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Handles transitions between different task states. Notifies the Scheduler of changes by messaging passing through Queues, which the Scheduler listens to responds accordingly."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "All events are handled quickly, in linear time with respect to their input (which is often of constant size) and generally within a millisecond. Additionally when Cythonized, this can be faster still. To accomplish this the scheduler tracks a lot of state.  Every operation maintains the consistency of this state."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Users typically do not interact with "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Transitions"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " directly. Instead users interact with the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Client"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", which in turn engages the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Scheduler"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " affecting different transitions here under-the-hood. In the background "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Worker"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "s also engage with the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Scheduler"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " affecting these state transitions as well."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "**State**"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Transitions"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " object contains the following state variables. Each variable is listed along with what it stores and a brief description."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **tasks:** `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{task",
+                    " ",
+                    "key",
+                    ":",
+                    " ",
+                    "TaskState}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Tasks currently known to the scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **unrunnable:** `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{TaskState}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Tasks in the \"no-worker\" state"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **workers:** `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{worker",
+                    " ",
+                    "key",
+                    ":",
+                    " ",
+                    "WorkerState}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Workers currently connected to the scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **idle:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{WorkerState}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Set of workers that are not fully utilized"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **saturated:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{WorkerState}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Set of workers that are not over-utilized"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **clients:** `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{client",
+                    " ",
+                    "key",
+                    ":",
+                    " ",
+                    "ClientState}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Clients currently connected to the scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **task_duration:** `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{key-prefix",
+                    ":",
+                    " ",
+                    "time}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Time we expect certain functions to take, e.g. `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{'sum'",
+                    ":",
+                    " ",
+                    "0.25}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/Users/bussonniermatthias/dev/distributed/distributed/scheduler.py",
+  "item_line": 1531,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "distributed.scheduler.SchedulerState"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "2021.01.1+9.g613b3c820",
+  "signature": "SchedulerState(aliases: dict = None, clients: dict = None, workers=None, host_info=None, resources=None, tasks: dict = None, unrunnable: set = None, validate: bool = False, **kwargs)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "distributed.scheduler.SchedulerState",
+  "arbitrary": []
+}

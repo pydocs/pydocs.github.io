@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -484,13 +485,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -518,16 +519,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Solve a standard or generalized eigenvalue problem for a complex Hermitian or real symmetric matrix.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -567,6 +563,74 @@ b @ vi = 1</pre>
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>This function does not check the input array for being Hermitian/symmetric in order to allow for representing arrays with only their upper/lower triangular parts. Also, note that even though not taken into account, finiteness check applies to the whole array and unaffected by &#34;lower&#34; keyword.</p>
+
+    
+           
+               
+        <p>This function uses LAPACK drivers for computations in all possible keyword combinations, prefixed with 
+        <code class='verbatim'>sy</code>
+     if arrays are real and 
+        <code class='verbatim'>he</code>
+     if complex, e.g., a float array with &#34;evr&#34; driver is solved via &#34;syevr&#34;, complex arrays with &#34;gvx&#34; driver problem is solved via &#34;hegvx&#34; etc.</p>
+
+    
+           
+               
+        <p>As a brief summary, the slowest and the most robust driver is the classical 
+        <code class='verbatim'>&lt;sy/he&gt;ev</code>
+     which uses symmetric QR. 
+        <code class='verbatim'>&lt;sy/he&gt;evr</code>
+     is seen as the optimal choice for the most general cases. However, there are certain occasions that 
+        <code class='verbatim'>&lt;sy/he&gt;evd</code>
+     computes faster at the expense of more memory usage. 
+        <code class='verbatim'>&lt;sy/he&gt;evx</code>
+    , while still being faster than 
+        <code class='verbatim'>&lt;sy/he&gt;ev</code>
+    , often performs worse than the rest except when very few eigenvalues are requested for large arrays though there is still no performance guarantee.</p>
+
+    
+           
+               
+        <p>For the generalized problem, normalization with respect to the given type argument::          </p>
+
+    
+           
+               
+            <pre>type 1 and 3 :      v.conj().T @ a @ v = w
+type 2       : inv(v).conj().T @ a @ inv(v) = w
+
+type 1 or 2  :      v.conj().T @ b @ v  = I
+type 3       : v.conj().T @ inv(b) @ v  = I</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -796,6 +860,37 @@ b @ vi = 1</pre>
 
 
     
+        <h3 id="section-Raises">Raises</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>LinAlgError</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If eigenvalue computation does not converge, an error occurred, or b matrix is not definite positive. Note that if input matrices are not symmetric or Hermitian, no error will be reported but results will be wrong.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -838,125 +933,13 @@ b @ vi = 1</pre>
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Raises">Raises</h3>
-    
-    
-       <dl>
-           
-            
-                <dt>LinAlgError</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>If eigenvalue computation does not converge, an error occurred, or b matrix is not definite positive. Note that if input matrices are not symmetric or Hermitian, no error will be reported but results will be wrong.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>This function does not check the input array for being Hermitian/symmetric in order to allow for representing arrays with only their upper/lower triangular parts. Also, note that even though not taken into account, finiteness check applies to the whole array and unaffected by &#34;lower&#34; keyword.</p>
+        <p>Solve a standard or generalized eigenvalue problem for a complex Hermitian or real symmetric matrix.</p>
 
     
-           
-               
-        <p>This function uses LAPACK drivers for computations in all possible keyword combinations, prefixed with 
-        <code class='verbatim'>sy</code>
-     if arrays are real and 
-        <code class='verbatim'>he</code>
-     if complex, e.g., a float array with &#34;evr&#34; driver is solved via &#34;syevr&#34;, complex arrays with &#34;gvx&#34; driver problem is solved via &#34;hegvx&#34; etc.</p>
-
-    
-           
-               
-        <p>As a brief summary, the slowest and the most robust driver is the classical 
-        <code class='verbatim'>&lt;sy/he&gt;ev</code>
-     which uses symmetric QR. 
-        <code class='verbatim'>&lt;sy/he&gt;evr</code>
-     is seen as the optimal choice for the most general cases. However, there are certain occasions that 
-        <code class='verbatim'>&lt;sy/he&gt;evd</code>
-     computes faster at the expense of more memory usage. 
-        <code class='verbatim'>&lt;sy/he&gt;evx</code>
-    , while still being faster than 
-        <code class='verbatim'>&lt;sy/he&gt;ev</code>
-    , often performs worse than the rest except when very few eigenvalues are requested for large arrays though there is still no performance guarantee.</p>
-
-    
-           
-               
-        <p>For the generalized problem, normalization with respect to the given type argument::          </p>
-
-    
-           
-               
-            <pre>type 1 and 3 :      v.conj().T @ a @ v = w
-type 2       : inv(v).conj().T @ a @ inv(v) = w
-
-type 1 or 2  :      v.conj().T @ b @ v  = I
-type 3       : v.conj().T @ inv(b) @ v  = I</pre>
-       
            
        
     
@@ -965,6 +948,24 @@ type 3       : v.conj().T @ inv(b) @ v  = I</pre>
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1019,34 +1020,34 @@ array([9.11938152])</pre>
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12.html" class='exists'>scipy.optimize.optimize._line_search_wolfe12</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.diag.html" class='exists'>numpy.diag</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigh.html" class='exists'>scipy.linalg.decomp.eigh</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.allclose.html" class='exists'>numpy.allclose</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.diag.html" class='exists'>numpy.diag</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigh.html" class='exists'>scipy.linalg.decomp.eigh</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12.html" class='exists'>scipy.optimize.optimize._line_search_wolfe12</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
      
@@ -1122,7 +1123,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 4, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 7, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 8, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 9, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 10, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}], "links": [{"source": 10, "target": 2, "id": 126}, {"source": 1, "target": 2, "id": 645}, {"source": 9, "target": 2, "id": 2563}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 4, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 5, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 6, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 7, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 8, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 9, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 1, "target": 9, "id": 246}, {"source": 4, "target": 9, "id": 2311}, {"source": 8, "target": 9, "id": 2912}]};
 
 (function() {
 
@@ -1250,7 +1251,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 4, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 7, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 8, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 9, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 10, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}], "links": [{"source": 10, "target": 2, "id": 126}, {"source": 1, "target": 2, "id": 645}, {"source": 9, "target": 2, "id": 2563}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 4, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 5, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 6, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 7, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 8, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 9, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}], "links": [{"source": 1, "target": 9, "id": 246}, {"source": 4, "target": 9, "id": 2311}, {"source": 8, "target": 9, "id": 2912}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

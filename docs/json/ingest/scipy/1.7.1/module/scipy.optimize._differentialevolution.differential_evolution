@@ -1,0 +1,6051 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Differential Evolution is stochastic in nature (does not use gradient methods) to find the minimum, and can search large areas of candidate space, but often requires larger numbers of function evaluations than conventional gradient-based techniques."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The algorithm is due to Storn and Price ."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Differential evolution is a stochastic population based method that is useful for global optimization problems. At each pass through the population the algorithm mutates each candidate solution by mixing with other candidate solutions to create a trial candidate. There are several strategies  for creating trial candidates, which suit some problems more than others. The 'best1bin' strategy is a good starting point for many systems. In this strategy two members of the population are randomly chosen. Their difference is used to mutate the best member (the 'best' in 'best1bin'), "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "b_0"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", so far:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockMath",
+          "data": {
+            "value": "b ' = b_0 + mutation * ( population [ rand0] - population [ rand1]) "
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "A trial vector is then constructed. Starting with a randomly chosen ith parameter the trial is sequentially filled (in modulo) with parameters from "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "b'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or the original candidate. The choice of whether to use "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "b'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or the original candidate is made with a binomial distribution (the 'bin' in 'best1bin') - a random number in [0, 1) is generated. If this number is less than the "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "recombination",
+                  "reference": {
+                    "module": null,
+                    "version": null,
+                    "kind": "local",
+                    "path": "recombination"
+                  },
+                  "kind": "local",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " constant then the parameter is loaded from "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "b'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", otherwise it is loaded from the original candidate. The final parameter is always loaded from "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "b'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". Once the trial candidate is built its fitness is assessed. If the trial is better than the original candidate then it takes its place. If it is also better than the best overall candidate it also replaces that. To improve your chances of finding a global minimum use higher "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "popsize",
+                  "reference": {
+                    "module": null,
+                    "version": null,
+                    "kind": "local",
+                    "path": "popsize"
+                  },
+                  "kind": "local",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " values, with higher "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "mutation",
+                  "reference": {
+                    "module": null,
+                    "version": null,
+                    "kind": "local",
+                    "path": "mutation"
+                  },
+                  "kind": "local",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " and (dithering), but lower "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "recombination",
+                  "reference": {
+                    "module": null,
+                    "version": null,
+                    "kind": "local",
+                    "path": "recombination"
+                  },
+                  "kind": "local",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " values. This has the effect of widening the search radius, but slowing convergence. By default the best solution vector is updated continuously within a single iteration ("
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "updating='immediate'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "). This is a modification  of the original differential evolution algorithm which can lead to faster convergence as trial vectors can immediately benefit from improved solutions. To use the original Storn and Price behaviour, updating the best solution once per iteration, set "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "updating='deferred'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionadded",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "0.15.0 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "func",
+            "type_": "callable",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The objective function to be minimized. Must be in the form "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "f(x, *args)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", where "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is the argument in the form of a 1-D array and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "args"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is a  tuple of any additional fixed parameters needed to completely specify the function."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "bounds",
+            "type_": "sequence or `Bounds`",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Bounds for variables. There are two ways to specify the bounds: 1. Instance of "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "Bounds",
+                        "reference": {
+                          "module": "scipy",
+                          "version": "1.7.1",
+                          "kind": "module",
+                          "path": "scipy.optimize._constraints.Bounds"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " class. 2. "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(min, max)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " pairs for each element in "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", defining the finite lower and upper bounds for the optimizing argument of "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "func",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "func"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". It is required to have "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "len(bounds) == len(x)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "len(bounds)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is used to determine the number of parameters in "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "args",
+            "type_": "tuple, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Any additional fixed parameters needed to completely specify the objective function."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "strategy",
+            "type_": "str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The differential evolution strategy to use. Should be one of:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "BlockQuote",
+                "data": {
+                  "value": [
+                    "- 'best1bin'",
+                    "- 'best1exp'",
+                    "- 'rand1exp'",
+                    "- 'randtobest1exp'",
+                    "- 'currenttobest1exp'",
+                    "- 'best2exp'",
+                    "- 'rand2exp'",
+                    "- 'randtobest1bin'",
+                    "- 'currenttobest1bin'",
+                    "- 'best2bin'",
+                    "- 'rand2bin'",
+                    "- 'rand1bin'"
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The default is 'best1bin'."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "maxiter",
+            "type_": "int, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The maximum number of generations over which the entire population is evolved. The maximum number of function evaluations (with no polishing) is: "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(maxiter + 1) * popsize * len(x)"
+                        ]
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "popsize",
+            "type_": "int, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A multiplier for setting the total population size. The population has "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "popsize * len(x)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " individuals. This keyword is overridden if an initial population is supplied via the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "init",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "init"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " keyword. When using "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "init='sobol'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " the population size is calculated as the next power of 2 after "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "popsize * len(x)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "tol",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Relative tolerance for convergence, the solving stops when "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.std(pop) <= atol + tol * np.abs(np.mean(population_energies))"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", where and "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "atol",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "atol"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "tol",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "tol"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " are the absolute and relative tolerance respectively."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mutation",
+            "type_": "float or tuple(float, float), optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The mutation constant. In the literature this is also known as differential weight, being denoted by F. If specified as a float it should be in the range [0, 2]. If specified as a tuple "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "(min, max)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " dithering is employed. Dithering randomly changes the mutation constant on a generation by generation basis. The mutation constant for that generation is taken from "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "U[min, max)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Dithering can help speed convergence significantly. Increasing the mutation constant increases the search radius, but will slow down convergence."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "recombination",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The recombination constant, should be in the range [0, 1]. In the literature this is also known as the crossover probability, being denoted by CR. Increasing this value allows a larger number of mutants to progress into the next generation, but at the risk of population stability."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "seed",
+            "type_": "{None, int, `numpy.random.Generator`,",
+            "desc": [
+              {
+                "type": "BlockQuote",
+                "data": {
+                  "value": [
+                    "`numpy.random.RandomState`}, optional"
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "seed",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "seed"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is None (or "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "np.random"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "), the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "numpy.random.RandomState",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.random.mtrand.RandomState"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " singleton is used. If "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "seed",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "seed"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is an int, a new "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "RandomState"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " instance is used, seeded with "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "seed",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "seed"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". If "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "seed",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "seed"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is already a "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "Generator"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "RandomState"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " instance then that instance is used. Specify "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "seed",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "seed"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for repeatable minimizations."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "disp",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Prints the evaluated "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "func",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "func"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " at every iteration."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "callback",
+            "type_": "callable, `callback(xk, convergence=val)`, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A function to follow the progress of the minimization. "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "xk"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is the current value of "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x0"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "val"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " represents the fractional value of the population convergence.  When "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "val"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is greater than one the function halts. If callback returns "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "True"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", then the minimization is halted (any polishing is still carried out)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "polish",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True (default), then "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "scipy.optimize.minimize"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " with the "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "L-BFGS-B"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " method is used to polish the best population member at the end, which can improve the minimization slightly. If a constrained problem is being studied then the "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "trust-constr"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " method is used instead."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "init",
+            "type_": "str or array-like, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Specify which type of population initialization is performed. Should be one of:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "BlockQuote",
+                "data": {
+                  "value": [
+                    "- 'latinhypercube'",
+                    "- 'sobol'",
+                    "- 'halton'",
+                    "- 'random'",
+                    "- array specifying the initial population. The array should have",
+                    "  shape ``(M, len(x))``, where M is the total population size and",
+                    "  len(x) is the number of parameters.",
+                    "  `init` is clipped to `bounds` before use."
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The default is 'latinhypercube'. Latin Hypercube sampling tries to maximize coverage of the available parameter space."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "'sobol' and 'halton' are superior alternatives and maximize even more the parameter space. 'sobol' will enforce an initial population size which is calculated as the next power of 2 after "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "popsize * len(x)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". 'halton' has no requirements but is a bit less efficient. See "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "scipy.stats.qmc"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for more details."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "'random' initializes the population randomly - this has the drawback that clustering can occur, preventing the whole of parameter space being covered. Use of an array to specify a population could be used, for example, to create a tight bunch of initial guesses in an location where the solution is known to exist, thereby reducing time for convergence."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "atol",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Absolute tolerance for convergence, the solving stops when "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.std(pop) <= atol + tol * np.abs(np.mean(population_energies))"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", where and "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "atol",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "atol"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "tol",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "tol"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " are the absolute and relative tolerance respectively."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "updating",
+            "type_": "{'immediate', 'deferred'}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "'immediate'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", the best solution vector is continuously updated within a single generation . This can lead to faster convergence as trial vectors can take advantage of continuous improvements in the best solution. With "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "'deferred'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", the best solution vector is updated once per generation. Only "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "'deferred'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is compatible with parallelization, and the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "workers",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "workers"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " keyword can over-ride this option."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": "TODO",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "1.2.0 "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "workers",
+            "type_": "int or map-like callable, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "workers",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "workers"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is an int the population is subdivided into "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "workers",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "workers"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " sections and evaluated in parallel (uses "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "multiprocessing.Pool <multiprocessing>"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "). Supply -1 to use all available CPU cores. Alternatively supply a map-like callable, such as "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "multiprocessing.Pool.map"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for evaluating the population in parallel. This evaluation is carried out as "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "workers(func, iterable)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". This option will override the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "updating",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "updating"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " keyword to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "updating='deferred'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " if "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "workers != 1"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Requires that "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "func",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "func"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " be pickleable."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": "TODO",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "1.2.0 "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "constraints",
+            "type_": "{NonLinearConstraint, LinearConstraint, Bounds}",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Constraints on the solver, over and above those applied by the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "bounds",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "bounds"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " kwd. Uses the approach by Lampinen ."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": "TODO",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "1.4.0 "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "x0",
+            "type_": "None or array-like, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Provides an initial guess to the minimization. Once the population has been initialized this vector replaces the first (best) member. This replacement is done even if "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "init",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "init"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is given an initial population."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": "TODO",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "1.7.0 "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "res",
+            "type_": "OptimizeResult",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The optimization result represented as a "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "OptimizeResult",
+                        "reference": {
+                          "module": "scipy",
+                          "version": "1.7.1",
+                          "kind": "module",
+                          "path": "scipy.optimize.optimize.OptimizeResult"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " object. Important attributes are: "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " the solution array, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "success"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " a Boolean flag indicating if the optimizer exited successfully and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "message"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " which describes the cause of the termination. See "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "OptimizeResult",
+                        "reference": {
+                          "module": "scipy",
+                          "version": "1.7.1",
+                          "kind": "module",
+                          "path": "scipy.optimize.optimize.OptimizeResult"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for a description of other attributes. If "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "polish",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "polish"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " was employed, and a lower minimum was obtained by the polishing, then OptimizeResult also contains the "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "jac"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " attribute. If the eventual solution does not satisfy the applied constraints "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "success"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " will be "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "False"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Finds the global minimum of a multivariate function."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize._constraints.NonlinearConstraint"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize.optimize.OptimizeResult"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal.ltisys._default_response_times"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.ufunc"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.array"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random.mtrand.RandomState"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize.optimize.rosen"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.integrate._ode.ode.get_return_code"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize._differentialevolution.differential_evolution"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.linalg.interpolative.seed"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.optimize._constraints.Bounds"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "Examples",
+    "References"
+  ],
+  "item_file": "/scipy/optimize/_differentialevolution.py",
+  "item_line": 22,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "scipy.signal.filter_design.optimize.differential_evolution"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Let us consider the problem of minimizing the Rosenbrock function. This function is implemented in "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "rosen",
+                "reference": {
+                  "module": "scipy",
+                  "version": "1.7.1",
+                  "kind": "module",
+                  "path": "scipy.optimize.optimize.rosen"
+                },
+                "kind": "module",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " in "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "scipy.optimize",
+                "reference": {
+                  "module": "scipy",
+                  "version": "1.7.1",
+                  "kind": "module",
+                  "path": "scipy.optimize"
+                },
+                "kind": "module",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": "."
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "scipy",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "optimize",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rosen",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize.optimize.rosen"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rosen",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize.optimize.rosen"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "fun"
+              }
+            }
+          ],
+          "out": "(array([1., 1., 1., 1., 1.]), 1.9216496320061384e-19)",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Now repeat, but with parallelization."
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rosen",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize.optimize.rosen"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "updating"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "deferred"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                                "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "workers"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "fun"
+              }
+            }
+          ],
+          "out": "(array([1., 1., 1., 1., 1.]), 1.9216496320061384e-19)",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Let's try and do a constrained minimization"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "scipy",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "optimize",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "NonlinearConstraint",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._constraints.NonlinearConstraint"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Bounds",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._constraints.Bounds"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "def",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.signal.ltisys._default_response_times"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "constr_f"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "return",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.integrate._ode.ode.get_return_code"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": ">>>",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# the sum of x[0] and x[1] must be less than 1.9"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "nlc"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "NonlinearConstraint",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._constraints.NonlinearConstraint"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "constr_f"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "inf"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "1.9"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# specify limits using a `Bounds` object."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Bounds",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._constraints.Bounds"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "2."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "2."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rosen",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize.optimize.rosen"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "constraints"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "nlc"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                                "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "seed",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.linalg.interpolative.seed"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "fun"
+              }
+            }
+          ],
+          "out": "(array([0.96633867, 0.93363577]), 0.0011361355854792312)",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Next find the minimum of the Ackley function (https://en.wikipedia.org/wiki/Test_functions_for_optimization)."
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "scipy",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "optimize",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "numpy",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "as"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "def",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.signal.ltisys._default_response_times"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "ackley"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "arg1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sqrt",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "arg2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "cos",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "2."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "pi"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "cos",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "2."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "pi"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "return",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.integrate._ode.ode.get_return_code"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "20."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "exp",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "arg1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "exp",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "arg2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "20."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "e"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "differential_evolution",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.optimize._differentialevolution.differential_evolution"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "ackley"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "bounds"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "result"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "fun"
+              }
+            }
+          ],
+          "out": "(array([ 0.,  0.]), 4.4408920985006262e-16)",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.7.1",
+  "signature": "differential_evolution(func, bounds, args=(), strategy='best1bin', maxiter=1000, popsize=15, tol=0.01, mutation=(0.5, 1), recombination=0.7, seed=None, callback=None, disp=False, polish=True, init='latinhypercube', atol=0, updating='immediate', workers=1, constraints=(), x0=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "scipy.optimize._differentialevolution.differential_evolution",
+  "arbitrary": []
+}

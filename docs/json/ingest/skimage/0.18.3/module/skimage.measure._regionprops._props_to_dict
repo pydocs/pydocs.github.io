@@ -1,0 +1,1703 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Convert image region properties list into a column dictionary."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "regions",
+            "type_": "(N,) list",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "List of RegionProperties objects as returned by "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "regionprops",
+                        "reference": {
+                          "module": "skimage",
+                          "version": "0.17.2",
+                          "kind": "module",
+                          "path": "skimage.measure._regionprops.regionprops"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "properties",
+            "type_": "tuple or list of str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Properties that will be included in the resulting dictionary For a list of available properties, please see "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "regionprops",
+                        "reference": {
+                          "module": "skimage",
+                          "version": "0.17.2",
+                          "kind": "module",
+                          "path": "skimage.measure._regionprops.regionprops"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Users should remember to add \"label\" to keep track of region identities."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "separator",
+            "type_": "str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "For non-scalar properties not listed in OBJECT_COLUMNS, each element will appear in its own column, with the index of that element separated from the property name by this separator. For example, the inertia tensor of a 2D region will appear in four columns: "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "inertia",
+                          "_",
+                          "tensor-0-0"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "inertia",
+                          "_",
+                          "tensor-0-1"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "inertia",
+                          "_",
+                          "tensor-1-0"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "inertia",
+                          "_",
+                          "tensor-1-1"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " (where the separator is "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "-"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ")."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Object columns are those that cannot be split in this way because the number of columns would change depending on the object. For example, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "image"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "coords"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "out_dict",
+            "type_": "dict",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Dictionary mapping property names to an array of values of that property, one value per region. This dictionary can be used as input to pandas "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "DataFrame"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " to map property names to columns in the frame and regions to rows."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Each column contains either a scalar property, an object property, or an element in a multidimensional array."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Properties with scalar values for each region, such as \"eccentricity\", will appear as a float or int array with that property name as key."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Multidimensional properties "
+                }
+              },
+              {
+                "type": "Emph",
+                "data": {
+                  "value": {
+                    "value": "of fixed size"
+                  }
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " for a given image dimension, such as \"centroid\" (every centroid will have three elements in a 3D image, no matter the region size), will be split into that many columns, with the name {property_name}{separator}{element_num} (for 1D properties), {property_name}{separator}{elem_num0}{separator}{elem_num1} (for 2D properties), and so on."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "For multidimensional properties that don't have a fixed size, such as \"image\" (the image of a region varies in size depending on the region size), an object array will be used, with the corresponding property name as the key."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "pandas",
+      "version": "1.3.4",
+      "kind": "module",
+      "path": "pandas.core.generic.NDFrame.head"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.measure._moments.inertia_tensor_eigvals"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.ndarray"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data"
+    },
+    {
+      "module": "pandas",
+      "version": "1.3.4",
+      "kind": "module",
+      "path": "pandas"
+    },
+    {
+      "module": "pandas",
+      "version": "1.3.4",
+      "kind": "module",
+      "path": "pandas.core.frame.DataFrame"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.measure._regionprops.regionprops"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.measure._moments.inertia_tensor"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.transform._geometric._to_ndimage_mode"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.util"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.io.collection.imread_collection_wrapper.<locals>.imread_collection"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.measure._regionprops.regionprops"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.measure._label.label"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data.coins"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.measure._label.label"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.measure._regionprops._props_to_dict"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.measure"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.io._plugins.matplotlib_plugin._get_image_properties"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "Examples"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/skimage/measure/_regionprops.py",
+  "item_line": 586,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "skimage.measure._regionprops._props_to_dict"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "skimage",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "util",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.util"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "measure",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.measure"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "image",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "coins",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data.coins"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "label_image"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "measure",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.measure"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "label",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.measure._label.label"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "image",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": ">",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.io.collection.imread_collection_wrapper.<locals>.imread_collection"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "110"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "connectivity"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "image",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ndim",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.transform._geometric._to_ndimage_mode"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "proplist"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "regionprops",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.measure._regionprops.regionprops"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "label_image",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "image",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "props"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "_props_to_dict",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.measure._regionprops._props_to_dict"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "proplist"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "properties",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.io._plugins.matplotlib_plugin._get_image_properties"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "label",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.measure._label.label"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "inertia_tensor",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.measure._moments.inertia_tensor"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                                             "
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "inertia_tensor_eigvals",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.measure._moments.inertia_tensor_eigvals"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "props"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "  "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +ELLIPSIS +SKIP"
+              }
+            }
+          ],
+          "out": "{'label': array([ 1,  2, ...]), ...\n 'inertia_tensor-0-0': array([  4.012...e+03,   8.51..., ...]), ...\n ...,\n 'inertia_tensor_eigvals-1': array([  2.67...e+02,   2.83..., ...])}",
+          "ce_status": "exception_in_exec"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "The resulting dictionary can be directly passed to pandas, if installed, to obtain a clean DataFrame:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "pandas",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "as"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "pd",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "  "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +SKIP"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas.core.frame.DataFrame"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "pd",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "DataFrame",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas.core.frame.DataFrame"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "props"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "  "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +SKIP"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas.core.frame.DataFrame"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "head",
+                  "reference": {
+                    "module": "pandas",
+                    "version": "1.3.4",
+                    "kind": "module",
+                    "path": "pandas.core.generic.NDFrame.head"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "  "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +SKIP"
+              }
+            }
+          ],
+          "out": "   label  inertia_tensor-0-0  ...  inertia_tensor_eigvals-1\n0      1         4012.909888  ...                267.065503\n1      2            8.514739  ...                  2.834806\n2      3            0.666667  ...                  0.000000\n3      4            0.000000  ...                  0.000000\n4      5            0.222222  ...                  0.111111",
+          "ce_status": "exception_in_exec"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "0.18.3",
+  "signature": "_props_to_dict(regions, properties=('label', 'bbox'), separator='-')",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "skimage.measure._regionprops._props_to_dict",
+  "arbitrary": []
+}

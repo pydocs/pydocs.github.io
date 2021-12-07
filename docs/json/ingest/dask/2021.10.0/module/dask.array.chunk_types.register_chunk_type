@@ -1,0 +1,4103 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "A "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "dask.array.Array",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core.Array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can contain any sufficiently \"NumPy-like\" array in its chunks. These are also referred to as \"duck arrays\" since they match the most important parts of NumPy's array API, and so, behave the same way when relying on duck typing."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "However, for multiple duck array types to interoperate properly, they need to properly defer to each other in arithmetic operations and NumPy functions/ufuncs according to a well-defined type casting hierarchy ( "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "see NEP 13 <https://numpy.org/neps/nep-0013-ufunc-overrides.html#type-casting-hierarchy>`"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " ). In an effort to maintain this hierarchy, Dask defers to all other duck array types except those in its internal registry. By default, this registry contains"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "numpy.ndarray"
+                        ],
+                        "domain": null,
+                        "role": "class"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "numpy.ma.MaskedArray"
+                        ],
+                        "domain": null,
+                        "role": "class"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "cupy.ndarray"
+                        ],
+                        "domain": null,
+                        "role": "class"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "sparse.SparseArray"
+                        ],
+                        "domain": null,
+                        "role": "class"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "scipy.sparse.spmatrix"
+                        ],
+                        "domain": null,
+                        "role": "class"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This function exists to append any other types to this registry. If a type is not in this registry, and yet is a downcast type (it comes below "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "dask.array.Array",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core.Array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " in the type casting hierarchy), a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "TypeError"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " will be raised due to all operand types returning "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "NotImplemented"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "type",
+            "type_": "type",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Duck array type to be registered as a type Dask can safely wrap as a chunk and to which Dask does not defer in arithmetic operations and NumPy functions/ufuncs."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Register the given type as a valid chunk and downcast array type"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.core.Array"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.chunk_types.register_chunk_type"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.core.asarray"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.random.RandomState.f"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.creation.ones_like"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.ufunc"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.routines.append"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.core.Array.__repr__"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.highlevelgraph.Layer.__init__"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.blockwise.BlockwiseDep.__getitem__"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.core._pass_extra_kwargs"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.utils.Dispatch.__call__"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.einsumfuncs.parse_einsum_input"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.lib"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.routines.shape"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Notes",
+    "Examples"
+  ],
+  "item_file": "/dask/array/chunk_types.py",
+  "item_line": 7,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "dask.array.register_chunk_type"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Using a mock "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "FlaggedArray"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " class as an example chunk type unknown to Dask with minimal duck array API:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "numpy",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "lib",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.lib"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "mixins"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "class"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nc",
+              "link": {
+                "type": "str",
+                "data": "FlaggedArray"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "numpy",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "lib",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.lib"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "mixins"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "NDArrayOperatorsMixin"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "fm",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "__init__",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.highlevelgraph.Layer.__init__"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "False"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "fm",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "__repr__",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core.Array.__repr__"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "sa",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "f",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.random.RandomState.f"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "\""
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "Flag: "
+              }
+            },
+            {
+              "type": "si",
+              "link": {
+                "type": "str",
+                "data": "{"
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "si",
+              "link": {
+                "type": "str",
+                "data": "}"
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": ", Array: "
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "\""
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "repr"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "__array__"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "asarray",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core.asarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "__array_ufunc__"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ufunc",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "method"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "inputs"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "kwargs",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core._pass_extra_kwargs"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "if"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "method"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "=="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "__call__",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.utils.Dispatch.__call__"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "            "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "downcast_inputs"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "            "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "False"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "            "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "for"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "ow",
+              "link": {
+                "type": "str",
+                "data": "in"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "inputs"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "if"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "isinstance"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "vm",
+              "link": {
+                "type": "str",
+                "data": "__class__"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "ow",
+              "link": {
+                "type": "str",
+                "data": "or"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "downcast_inputs"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "append",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.routines.append"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "elif"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "isinstance"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "ndarray"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "downcast_inputs"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "append",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.routines.append"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "input",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.einsumfuncs.parse_einsum_input"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "else"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "NotImplemented"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "            "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "vm",
+              "link": {
+                "type": "str",
+                "data": "__class__"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ufunc",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "downcast_inputs"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "kwargs",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.core._pass_extra_kwargs"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "else"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "            "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "NotImplemented"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "nd",
+              "link": {
+                "type": "str",
+                "data": "@property"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "shape",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.routines.shape"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "shape",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.routines.shape"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "nd",
+              "link": {
+                "type": "str",
+                "data": "@property"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "ndim"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "ndim"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "nd",
+              "link": {
+                "type": "str",
+                "data": "@property"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "dtype"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "dtype"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "fm",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "__getitem__",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.blockwise.BlockwiseDep.__getitem__"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "key"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "type"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "key"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "flag"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "def"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "fm",
+              "link": {
+                "type": "str",
+                "data": "__setitem__"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "key"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "value"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "bp",
+              "link": {
+                "type": "str",
+                "data": "self"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "key"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "value"
+              }
+            }
+          ],
+          "out": "",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Before registering "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "FlaggedArray"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ", both types will attempt to defer to the other:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "dask",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "as"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "da"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "da"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ones",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.creation.ones_like"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "FlaggedArray"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ones",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.creation.ones_like"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "True"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "Traceback (most recent call last):\n...\nTypeError: operand type(s) all returned NotImplemented ...",
+          "ce_status": "exception_in_exec"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "However, once registered, Dask will be able to handle operations with this new type:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "da"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "register_chunk_type",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.chunk_types.register_chunk_type"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "FlaggedArray"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "da"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ones",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.creation.ones_like"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "FlaggedArray"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "ones",
+                  "reference": {
+                    "module": "dask",
+                    "version": "2021.10.0",
+                    "kind": "module",
+                    "path": "dask.array.creation.ones_like"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "True"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            }
+          ],
+          "out": "dask.array<sub, shape=(5,), dtype=float64, chunksize=(5,), chunktype=dask.FlaggedArray>",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "compute"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "Flag: True, Array: array([0., 0., 0., 0., 0.])",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "2021.10.0",
+  "signature": "register_chunk_type(type)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "dask.array.chunk_types.register_chunk_type",
+  "arbitrary": []
+}

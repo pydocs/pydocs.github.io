@@ -1,0 +1,926 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Open and decode a dataset from a file or file-like object."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "filename_or_obj",
+            "type_": "str, Path, file-like or DataStore",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Strings and Path objects are interpreted as a path to a netCDF file or an OpenDAP URL and opened with python-netCDF4, unless the filename ends with .gz, in which case the file is gunzipped and opened with scipy.io.netcdf (only netCDF3 supported). Byte-strings or file-like objects are opened by scipy.io.netcdf (netCDF3) or h5py (netCDF4/HDF)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "group",
+            "type_": "str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Path to the netCDF4 group in the given file to open (only works for netCDF4 files)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_cf",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Whether to decode these variables, assuming they were saved according to CF conventions."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mask_and_scale",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, replace array values equal to "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "_",
+                          "FillValue"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " with NA and scale values according to the formula "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "original",
+                          "_",
+                          "values",
+                          " ",
+                          "*",
+                          " ",
+                          "scale",
+                          "_",
+                          "factor",
+                          " ",
+                          "+",
+                          " ",
+                          "add",
+                          "_",
+                          "offset"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", where "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "_",
+                          "FillValue"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "scale",
+                          "_",
+                          "factor"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "add",
+                          "_",
+                          "offset"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " are taken from variable attributes (if they exist).  If the "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "_",
+                          "FillValue"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "missing",
+                          "_",
+                          "value"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " attribute contains multiple values a warning will be issued and all array values matching one of the multiple values will be replaced by NA. mask_and_scale defaults to True except for the pseudonetcdf backend."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_times",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, decode times encoded in the standard NetCDF datetime format into datetime objects. Otherwise, leave them encoded as numbers."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "concat_characters",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, concatenate along the last dimension of character arrays to form string arrays. Dimensions will only be concatenated over (and removed) if they have no corresponding variable and if they are only used as the last dimension of character arrays."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_coords",
+            "type_": "bool or {\"coordinates\", \"all\"}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Controls which variables are set as coordinate variables:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": "- \"coordinates\" or True: Set variables referred to in the",
+                            "_number": 2,
+                            "_offset": 0
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": "  ``'coordinates'`` attribute of the datasets or individual variables",
+                            "_number": 3,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "  as coordinate variables.",
+                            "_number": 4,
+                            "_offset": 2
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "- \"coordinates\" or True: Set variables referred to in the"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Verbatim",
+                                "data": {
+                                  "value": [
+                                    "'coordinates'"
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": " attribute of the datasets or individual variables as coordinate variables."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- \"all\": Set variables referred to in  "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "'grid",
+                          "_",
+                          "mapping'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "'bounds'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  other attributes as coordinate variables."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "engine",
+            "type_": "{\"netcdf4\", \"scipy\", \"pydap\", \"h5netcdf\", \"pynio\", \"cfgrib\",         \"pseudonetcdf\", \"zarr\"}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Engine to use when reading files. If not provided, the default engine is chosen based on available dependencies, with a preference for \"netcdf4\"."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "chunks",
+            "type_": "int or dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If chunks is provided, it is used to load the new dataset into dask arrays. "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "chunks=-1"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " loads the dataset with dask using a single chunk for all arrays. "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "chunks={}"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "` loads the dataset with dask using engine preferred chunks if exposed by the backend, otherwise with a single chunk for all arrays. "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "chunks='auto'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " will use dask "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "auto"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " chunking taking into account the engine preferred chunks. See dask chunking for more details."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lock",
+            "type_": "False or lock-like, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Resource lock to use when reading data from disk. Only relevant when using dask or another form of parallelism. By default, appropriate locks are chosen to safely read and write files with the currently active dask scheduler."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "cache",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, cache data loaded from the underlying datastore in memory as NumPy arrays when accessed to avoid reading from the underlying data- store multiple times. Defaults to True unless you specify the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "chunks",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "chunks"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " argument to use dask, in which case it defaults to False. Does not change the behavior of coordinates corresponding to dimensions, which always load their data from disk into a "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "pandas.Index"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "drop_variables: str or iterable, optional",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A variable or list of variables to exclude from being parsed from the dataset. This may be useful to drop variables with problems or inconsistent values."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "backend_kwargs: dict, optional",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A dictionary of keyword arguments to pass on to the backend. This may be useful when backend options would improve performance or allow user control of dataset processing."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "use_cftime: bool, optional",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Only relevant if encoded dates come from a standard calendar (e.g. \"gregorian\", \"proleptic_gregorian\", \"standard\", or not specified).  If None (default), attempt to decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects; if this is not possible, decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "cftime.datetime"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects. If True, always decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "cftime.datetime"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects, regardless of whether or not they can be represented using "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects.  If False, always decode times to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "np.datetime64[ns]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " objects; if this is not possible raise an error."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "decode_timedelta",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, decode variables and coordinates with time units in {\"days\", \"hours\", \"minutes\", \"seconds\", \"milliseconds\", \"microseconds\"} into timedelta objects. If False, leave them encoded as numbers. If None (default), assume the same value of decode_time."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "dataset",
+            "type_": "Dataset",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The newly created dataset."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "open",
+                    "_",
+                    "dataset"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " opens the file with read-only access. When you modify values of a Dataset, even one linked to files on disk, only the in-memory copy you are manipulating in xarray is modified: the original file on disk is never touched."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "See Also"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/backends/api.py",
+  "item_line": 307,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "xarray.open_dataset"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "open_mfdataset",
+        "ref": "xarray.backends.api.open_mfdataset",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "0.17.0",
+  "signature": "open_dataset(filename_or_obj, group=None, decode_cf=True, mask_and_scale=None, decode_times=True, concat_characters=True, decode_coords=True, engine=None, chunks=None, lock=None, cache=None, drop_variables=None, backend_kwargs=None, use_cftime=None, decode_timedelta=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "xarray.backends.api.open_dataset",
+  "arbitrary": []
+}

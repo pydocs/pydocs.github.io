@@ -1,0 +1,1528 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Perform wavelet denoising on an image."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "image",
+            "type_": "ndarray ([M[, N[, ...P]][, C]) of ints, uints or floats",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Input data to be denoised. "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "image",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "image"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " can be of any numeric type, but it is cast into an ndarray of floats for the computation of the denoised image."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "sigma",
+            "type_": "float or list, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The noise standard deviation used when computing the wavelet detail coefficient threshold(s). When None (default), the noise standard deviation is estimated via the method in [2]_."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "wavelet",
+            "type_": "string, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The type of wavelet to perform and can be any of the options "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "pywt.wavelist"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " outputs. The default is "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "'db1'"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". For example, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "wavelet"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " can be any of "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "{'db2',",
+                          " ",
+                          "'haar',",
+                          " ",
+                          "'sym9'}"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and many more."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mode",
+            "type_": "{'soft', 'hard'}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "An optional argument to choose the type of denoising performed. It noted that choosing soft thresholding given additive noise finds the best approximation of the original image."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "wavelet_levels",
+            "type_": "int or None, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The number of wavelet decomposition levels to use.  The default is three less than the maximum number of possible decomposition levels."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "multichannel",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Apply wavelet denoising separately for each channel (where channels correspond to the final axis of the array)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "convert2ycbcr",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True and multichannel True, do the wavelet denoising in the YCbCr colorspace instead of the RGB color space. This typically results in better performance for RGB images."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "method",
+            "type_": "{'BayesShrink', 'VisuShrink'}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Thresholding method to be used. The currently supported methods are \"BayesShrink\" [1]_ and \"VisuShrink\" [2]_. Defaults to \"BayesShrink\"."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "rescale_sigma",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If False, no rescaling of the user-provided "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "sigma"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " will be performed. The default of "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "True"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " rescales sigma appropriately if the image is rescaled internally."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": " 0.16",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Verbatim",
+                          "data": {
+                            "value": [
+                              "rescale",
+                              "_",
+                              "sigma"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": " was introduced in 0.16"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "out",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Denoised image."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The wavelet domain is a sparse representation of the image, and can be thought of similarly to the frequency domain of the Fourier transform. Sparse representations have most values zero or near-zero and truly random noise is (usually) represented by many small values in the wavelet domain. Setting all values below some threshold to 0 reduces the noise in the image, but larger thresholds also decrease the detail present in the image."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "If the input is 3D, this function performs wavelet denoising on each color plane separately."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionchanged",
+            "title": "0.16",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "For floating point inputs, the original input range is maintained and there is no clipping applied to the output. Other input types will be converted to a floating point value in the range [ - 1, 1] or [ 0, 1] depending on the input image range. Unless ``rescale_sigma = False``, any internal rescaling applied to the ``image`` will also be applied to ``sigma`` to maintain the same relative amplitude. "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Many wavelet coefficient thresholding approaches have been proposed. By default, "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "denoise_wavelet"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " applies BayesShrink, which is an adaptive thresholding method that computes separate thresholds for each wavelet sub-band as described in ."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "If "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "method == \"VisuShrink\""
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", a single \"universal threshold\" is applied to all wavelet detail coefficients as described in . This threshold is designed to remove all Gaussian noise at a given "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "sigma"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " with high probability, but tends to produce images that appear overly smooth."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Although any of the wavelets from "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "PyWavelets"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can be selected, the thresholding methods assume an orthogonal wavelet transform and may not choose the threshold appropriately for biorthogonal wavelets. Orthogonal wavelets are desirable because white noise in the input remains white noise in the subbands. Biorthogonal wavelets lead to colored noise in the subbands. Additionally, the orthogonal wavelets in PyWavelets are orthonormal so that noise variance in the subbands remains identical to the noise variance of the input. Example orthogonal wavelets are the Daubechies (e.g. 'db2') or symmlet (e.g. 'sym2') families."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.color.delta_e.deltaE_ciede2000"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.restoration._denoise.denoise_wavelet"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.ndarray"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.util.shape"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data.astronaut"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.data"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.clip"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.color"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage.color.colorconv.rgb2gray"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.util.dtype.img_as_float"
+    },
+    {
+      "module": "skimage",
+      "version": "0.17.2",
+      "kind": "module",
+      "path": "skimage"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "skimage",
+      "version": "0.18.3",
+      "kind": "module",
+      "path": "skimage.restoration._denoise._rescale_sigma_rgb2ycbcr"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "References",
+    "Examples"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/skimage/restoration/_denoise.py",
+  "item_line": 694,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "skimage.restoration.denoise_wavelet"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "skimage",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "color",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.color"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "img_as_float",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.util.dtype.img_as_float"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "data",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "astronaut",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.data.astronaut"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "img",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "color",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.color"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rgb2gray",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.color.colorconv.rgb2gray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "random",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.random"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "randn"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "img",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "shape",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.util.shape"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "clip",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.clip"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "0",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.color.delta_e.deltaE_ciede2000"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "denoised_img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "denoise_wavelet",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.17.2",
+                    "kind": "module",
+                    "path": "skimage.restoration._denoise.denoise_wavelet"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "img"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "sigma"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "rescale_sigma",
+                  "reference": {
+                    "module": "skimage",
+                    "version": "0.18.3",
+                    "kind": "module",
+                    "path": "skimage.restoration._denoise._rescale_sigma_rgb2ycbcr"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "True"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "",
+          "ce_status": "exception_in_exec"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "0.18.3",
+  "signature": "denoise_wavelet(image, sigma=None, wavelet='db1', mode='soft', wavelet_levels=None, multichannel=False, convert2ycbcr=False, method='BayesShrink', rescale_sigma=True)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "skimage.restoration._denoise.denoise_wavelet",
+  "arbitrary": []
+}

@@ -334,6 +334,7 @@ user-select: none;
                 <a href=pandas>pandas</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -602,11 +603,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -634,16 +635,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Make a copy of this object&#39; s indices and data.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -654,19 +650,63 @@ user-select: none;
                
         <p>When 
         <code class='verbatim'>deep=True</code>
-     ( default), a new object will be created with a copy of the calling object&#39; s data and indices. Modifications to the data or indices of the copy will not be reflected in the original object ( see notes below).</p>
+     (default), a new object will be created with a copy of the calling object&#39;s data and indices. Modifications to the data or indices of the copy will not be reflected in the original object (see notes below).</p>
 
     
            
                
         <p>When 
         <code class='verbatim'>deep=False</code>
-     , a new object will be created without copying the calling object&#39; s data or index ( only references to the data and index are copied). Any changes to the data of the original will be reflected in the shallow copy ( and vice versa).</p>
+    , a new object will be created without copying the calling object&#39;s data or index (only references to the data and index are copied). Any changes to the data of the original will be reflected in the shallow copy (and vice versa).</p>
 
     
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>When 
+        <code class='verbatim'>deep=True</code>
+    , data is copied but actual Python objects will not be copied recursively, only the reference to the object. This is in contrast to <code>:None:None:`copy.deepcopy`</code> in the Standard Library, which recursively copies object data (see examples below).</p>
+
+    
+           
+               
+        <p>While 
+        <code class='verbatim'>Index</code>
+     objects are copied when 
+        <code class='verbatim'>deep=True</code>
+    , the underlying numpy array is not copied for performance reasons. Since 
+        <code class='verbatim'>Index</code>
+     is immutable, the underlying data can be safely shared and a copy is not needed.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -697,6 +737,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -723,83 +778,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>When 
-        <code class='verbatim'>deep=True</code>
-     , data is copied but actual Python objects will not be copied recursively, only the reference to the object. This is in contrast to <code>:None:None:`copy.deepcopy`</code> in the Standard Library, which recursively copies object data ( see examples below).</p>
-
-    
-           
-               
-        <p>While 
-        <code class='verbatim'>Index</code>
-     objects are copied when 
-        <code class='verbatim'>deep=True</code>
-     , the underlying numpy array is not copied for performance reasons. Since 
-        <code class='verbatim'>Index</code>
-     is immutable, the underlying data can be safely shared and a copy is not needed.</p>
+        <p>Make a copy of this object&#39;s indices and data.</p>
 
     
            
@@ -810,6 +793,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -831,7 +832,7 @@ dtype: int64</pre>
             
          
                 
-        <p>**Shallow copy versus default (deep) copy:**</p>
+        <p><b>Shallow copy versus default (deep) copy:</b></p>
 
     
             
@@ -975,7 +976,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/pandas/core/generic.py </br>
+File: /pandas/core/generic.py </br>
 Line: 5827 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
@@ -1012,7 +1013,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 23.329709716755893, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 2, "val": 9.0, "label": "pandas.core.generic.NDFrame.astype", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.astype"}, {"id": 3, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_excel", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_excel"}], "links": [{"source": 1, "target": 2, "id": 83}]};
+var canvas_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_excel", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_excel"}, {"id": 3, "val": 23.13274595042156, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 4, "val": 9.0, "label": "pandas.core.generic.NDFrame.astype", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.astype"}], "links": [{"source": 3, "target": 4, "id": 82}]};
 
 (function() {
 
@@ -1140,7 +1141,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 23.329709716755893, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 2, "val": 9.0, "label": "pandas.core.generic.NDFrame.astype", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.astype"}, {"id": 3, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_excel", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_excel"}], "links": [{"source": 1, "target": 2, "id": 83}]};
+    var svg_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_excel", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_excel"}, {"id": 3, "val": 23.13274595042156, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 4, "val": 9.0, "label": "pandas.core.generic.NDFrame.astype", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.astype"}], "links": [{"source": 3, "target": 4, "id": 82}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

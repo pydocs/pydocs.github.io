@@ -1,0 +1,367 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Return a dictionary of the return values"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "If the function raises an exception, raise the errror unless "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "raise_errors=False"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", in which case set the return value to "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "False"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Any unrecognized keyword arguments you pass to walk, will be pased on to the function you pass in."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Note: if "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "call_on_sections"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "True"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " then - on encountering a subsection, "
+                }
+              },
+              {
+                "type": "Emph",
+                "data": {
+                  "value": {
+                    "value": "first"
+                  }
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " the function is called for the "
+                }
+              },
+              {
+                "type": "Emph",
+                "data": {
+                  "value": {
+                    "value": "whole"
+                  }
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " subsection, and then recurses into it's members. This means your function must be able to handle strings, dictionaries and lists. This allows you to change the key of subsections as well as for ordinary members. The return value when called on the whole subsection has to be discarded."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "See  the encode and decode methods for examples, including functions."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockDirective",
+          "data": {
+            "directive_name": "admonition",
+            "args0": [
+              "caution"
+            ],
+            "inner": {
+              "inline": [
+                {
+                  "type": "Words",
+                  "data": {
+                    "value": "You can use ``walk`` to transform the names of members of a section but you mustn ' t add or delete members. "
+                  }
+                }
+              ],
+              "inner": []
+            }
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> config = '''[XXXXsection]",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "... XXXXkey = XXXXvalue'''.splitlines()",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> cfg = ConfigObj(config)",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> cfg",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": "ConfigObj({'XXXXsection': {'XXXXkey': 'XXXXvalue'}})",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> def transform(section, key):",
+                  "_number": 5,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...     val = section[key]",
+                  "_number": 6,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...     newkey = key.replace('XXXX', 'CLIENT1')",
+                  "_number": 7,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...     section.rename(key, newkey)",
+                  "_number": 8,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...     if isinstance(val, (tuple, list, dict)):",
+                  "_number": 9,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...         pass",
+                  "_number": 10,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...     else:",
+                  "_number": 11,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...         val = val.replace('XXXX', 'CLIENT1')",
+                  "_number": 12,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...         section[newkey] = val",
+                  "_number": 13,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> cfg.walk(transform, call_on_sections=True)",
+                  "_number": 14,
+                  "_offset": 0
+                },
+                {
+                  "_line": "{'CLIENT1section': {'CLIENT1key': None}}",
+                  "_number": 15,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> cfg",
+                  "_number": 16,
+                  "_offset": 0
+                },
+                {
+                  "_line": "ConfigObj({'CLIENT1section': {'CLIENT1key': 'CLIENT1value'}})",
+                  "_number": 17,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Walk every member and call a function on the keyword and value."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/astropy/extern/configobj/configobj.py",
+  "item_line": 840,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "astropy.config.configuration.configobj.Section.walk"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "5.0",
+  "signature": "walk(self, function, raise_errors=True, call_on_sections=False, **keywargs)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "astropy.extern.configobj.configobj.Section.walk",
+  "arbitrary": []
+}

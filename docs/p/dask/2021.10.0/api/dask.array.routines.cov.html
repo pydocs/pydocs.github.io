@@ -334,6 +334,7 @@ user-select: none;
                 <a href=dask>dask</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -549,11 +550,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -581,16 +582,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Estimate a covariance matrix, given data and weights.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -632,6 +628,64 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Assume that the observations are in the columns of the observation array <code><a link href="#m" class='local'>m</a></code> and let 
+        <code class='verbatim'>f = fweights</code>
+     and 
+        <code class='verbatim'>a = aweights</code>
+     for brevity. The steps to compute the weighted covariance are as follows::      </p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; m = np.arange(10, dtype=np.float64)  # doctest: +SKIP
+&gt;&gt;&gt; f = np.arange(10) * 2  # doctest: +SKIP
+&gt;&gt;&gt; a = np.arange(10) ** 2.  # doctest: +SKIP
+&gt;&gt;&gt; ddof = 1  # doctest: +SKIP
+&gt;&gt;&gt; w = f * a  # doctest: +SKIP
+&gt;&gt;&gt; v1 = np.sum(w)  # doctest: +SKIP
+&gt;&gt;&gt; v2 = np.sum(w * a)  # doctest: +SKIP
+&gt;&gt;&gt; m -= np.sum(m * w, axis=None, keepdims=True) / v1  # doctest: +SKIP
+&gt;&gt;&gt; cov = np.dot(m * w, m.T) * v1 / (v1**2 - ddof * v2)  # doctest: +SKIP</pre>
+       
+           
+               
+        <p>Note that when 
+        <code class='verbatim'>a == 1</code>
+    , the normalization factor 
+        <code class='verbatim'>v1 / (v1**2 - ddof * v2)</code>
+     goes over to 
+        <code class='verbatim'>1 / (np.sum(f) - ddof)</code>
+     as it should.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -829,6 +883,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -855,97 +924,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Assume that the observations are in the columns of the observation array <code><a link href="#m" class='local'>m</a></code> and let 
-        <code class='verbatim'>f = fweights</code>
-     and 
-        <code class='verbatim'>a = aweights</code>
-     for brevity. The steps to compute the weighted covariance are as follows::      </p>
-
-    
-           
-               
-            <pre>&gt;&gt;&gt; m = np.arange(10, dtype=np.float64)  # doctest: +SKIP
-&gt;&gt;&gt; f = np.arange(10) * 2  # doctest: +SKIP
-&gt;&gt;&gt; a = np.arange(10) ** 2.  # doctest: +SKIP
-&gt;&gt;&gt; ddof = 1  # doctest: +SKIP
-&gt;&gt;&gt; w = f * a  # doctest: +SKIP
-&gt;&gt;&gt; v1 = np.sum(w)  # doctest: +SKIP
-&gt;&gt;&gt; v2 = np.sum(w * a)  # doctest: +SKIP
-&gt;&gt;&gt; m -= np.sum(m * w, axis=None, keepdims=True) / v1  # doctest: +SKIP
-&gt;&gt;&gt; cov = np.dot(m * w, m.T) * v1 / (v1**2 - ddof * v2)  # doctest: +SKIP</pre>
-       
-           
-               
-        <p>Note that when 
-        <code class='verbatim'>a == 1</code>
-    , the normalization factor 
-        <code class='verbatim'>v1 / (v1**2 - ddof * v2)</code>
-     goes over to 
-        <code class='verbatim'>1 / (np.sum(f) - ddof)</code>
-     as it should.</p>
+        <p>Estimate a covariance matrix, given data and weights.</p>
 
     
            
@@ -956,6 +939,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1035,22 +1036,22 @@ array(11.71)</pre>
          
          See :
          
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.html" class='exists'>dask.array</a></code>
+        
+         
              <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.cov.html" class='exists'>dask.array.routines.cov</a></code>
+        
+         
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.ufunc.log10.html" class='exists'>dask.array.ufunc.log10</a></code>
         
          
              <code><a link href="/p/dask/2021.10.0/api/dask.utils_test.GetFunctionTestMixin.html" class='exists'>dask.utils_test.GetFunctionTestMixin</a></code>
         
          
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.core.stack.html" class='exists'>dask.array.core.stack</a></code>
-        
-         
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.html" class='exists'>dask.array</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.float64.html" class='exists'>numpy.float64</a></code>
         
          
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.ufunc.log10.html" class='exists'>dask.array.ufunc.log10</a></code>
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.core.stack.html" class='exists'>dask.array.core.stack</a></code>
         
          
      
@@ -1129,7 +1130,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 10.23606797749979, "label": "dask.utils_test.GetFunctionTestMixin", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.utils_test.GetFunctionTestMixin"}, {"id": 3, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 4, "val": 10.449489742783179, "label": "dask.array.core.stack", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.stack"}, {"id": 5, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 6, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 7, "val": 9.0, "label": "dask.array.routines.corrcoef", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.corrcoef"}], "links": [{"source": 6, "target": 4, "id": 35}, {"source": 3, "target": 7, "id": 152}, {"source": 5, "target": 4, "id": 193}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 2, "val": 10.449489742783179, "label": "dask.array.core.stack", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.stack"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 5, "val": 10.23606797749979, "label": "dask.utils_test.GetFunctionTestMixin", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.utils_test.GetFunctionTestMixin"}, {"id": 6, "val": 9.0, "label": "dask.array.routines.corrcoef", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.corrcoef"}, {"id": 7, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}], "links": [{"source": 1, "target": 2, "id": 22}, {"source": 4, "target": 2, "id": 151}, {"source": 7, "target": 6, "id": 312}]};
 
 (function() {
 
@@ -1257,7 +1258,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 10.23606797749979, "label": "dask.utils_test.GetFunctionTestMixin", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.utils_test.GetFunctionTestMixin"}, {"id": 3, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 4, "val": 10.449489742783179, "label": "dask.array.core.stack", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.stack"}, {"id": 5, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 6, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 7, "val": 9.0, "label": "dask.array.routines.corrcoef", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.corrcoef"}], "links": [{"source": 6, "target": 4, "id": 35}, {"source": 3, "target": 7, "id": 152}, {"source": 5, "target": 4, "id": 193}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 2, "val": 10.449489742783179, "label": "dask.array.core.stack", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.stack"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 5, "val": 10.23606797749979, "label": "dask.utils_test.GetFunctionTestMixin", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.utils_test.GetFunctionTestMixin"}, {"id": 6, "val": 9.0, "label": "dask.array.routines.corrcoef", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.corrcoef"}, {"id": 7, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}], "links": [{"source": 1, "target": 2, "id": 22}, {"source": 4, "target": 2, "id": 151}, {"source": 7, "target": 6, "id": 312}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

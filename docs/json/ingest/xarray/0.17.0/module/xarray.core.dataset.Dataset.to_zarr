@@ -1,0 +1,849 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Write dataset contents to a zarr group."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "note",
+            "title": "Experimental",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "The Zarr backend is new and experimental. Please report any unexpected behavior via github issues."
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "store",
+            "type_": "MutableMapping, str or Path, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Store or path to directory in file system."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "chunk_store",
+            "type_": "MutableMapping, str or Path, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Store or path to directory in file system only for Zarr array chunks. Requires zarr-python v2.4.0 or later."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mode",
+            "type_": "{\"w\", \"w-\", \"a\", None}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Persistence mode: \"w\" means create (overwrite if exists); \"w-\" means create (fail if exists); \"a\" means override existing variables (create if does not exist). If "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "append",
+                          "_",
+                          "dim"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is set, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "mode"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " can be omitted as it is internally set to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "\"a\""
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Otherwise, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "mode"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " will default to "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "w-"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " if not set."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "synchronizer",
+            "type_": "object, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Zarr array synchronizer."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "group",
+            "type_": "str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Group path. (a.k.a. "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "path"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " in zarr terminology.)"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "encoding",
+            "type_": "dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Nested dictionary with variable names as keys and dictionaries of variable specific encodings as values, e.g., "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "{\"my",
+                          "_",
+                          "variable\"",
+                          ":",
+                          " ",
+                          "{\"dtype\"",
+                          ":",
+                          " ",
+                          "\"int16\",",
+                          " ",
+                          "\"scale",
+                          "_",
+                          "factor\"",
+                          ":",
+                          " ",
+                          "0.1,},",
+                          " ",
+                          "...}"
+                        ]
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "compute",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True write array data immediately, otherwise return a "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask.delayed.Delayed"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " object that can be computed to write array data later. Metadata is always updated eagerly."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "consolidated",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, apply zarr's "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "consolidate",
+                          "_",
+                          "metadata"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " function to the store after writing metadata."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "append_dim",
+            "type_": "hashable, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If set, the dimension along which the data will be appended. All other dimensions on overriden variables must remain the same size."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "region",
+            "type_": "dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Optional mapping from dimension names to integer slices along dataset dimensions to indicate the region of existing zarr array(s) in which to write this dataset's data. For example, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "{'x'",
+                          ":",
+                          " ",
+                          "slice(0,",
+                          " ",
+                          "1000),",
+                          " ",
+                          "'y'",
+                          ":",
+                          " ",
+                          "slice(10000,",
+                          " ",
+                          "11000)}"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " would indicate that values should be written to the region "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "0",
+                          ":",
+                          "1000"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " along "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "x"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "10000",
+                          ":",
+                          "11000"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " along "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "y"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Two restrictions apply to the use of "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "region"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ":"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- If "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "region"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is set, _all_ variables in a dataset must have at"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  least one dimension in common with the region. Other variables   should be written in a separate call to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "to",
+                          "_",
+                          "zarr()"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- Dimensions cannot be included in both "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "region"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "append",
+                          "_",
+                          "dim"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " at the same time. To create empty arrays to fill   in with "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "region"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", use a separate call to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "to",
+                          "_",
+                          "zarr()"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " with   "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "compute=False"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". See \"Appending to existing Zarr stores\" in   the reference documentation for full details."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "DefList",
+          "data": {
+            "children": [
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "Zarr chunking behavior:",
+                      "_number": 0,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    If chunks are found in the encoding argument or attribute",
+                      "_number": 1,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    corresponding to any DataArray, those chunks are used.",
+                      "_number": 2,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    If a DataArray is a dask array, it is written with those chunks.",
+                      "_number": 3,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    If not other chunks are found, Zarr uses its own heuristics to",
+                      "_number": 4,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    choose automatic chunk sizes.",
+                      "_number": 5,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Zarr chunking behavior:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "If chunks are found in the encoding argument or attribute corresponding to any DataArray, those chunks are used. If a DataArray is a dask array, it is written with those chunks. If not other chunks are found, Zarr uses its own heuristics to choose automatic chunk sizes."
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "References",
+    "Notes"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/core/dataset.py",
+  "item_line": 1702,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "xarray.Dataset.to_zarr"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "0.17.0",
+  "signature": "to_zarr(self, store: Union[MutableMapping, str, pathlib.Path] = None, chunk_store: Union[MutableMapping, str, pathlib.Path] = None, mode: str = None, synchronizer=None, group: str = None, encoding: Mapping = None, compute: bool = True, consolidated: bool = False, append_dim: Hashable = None, region: Mapping[str, slice] = None) -> 'ZarrStore'",
+  "references": [
+    "https://zarr.readthedocs.io/"
+  ],
+  "logo": "logo.png",
+  "qa": "xarray.core.dataset.Dataset.to_zarr",
+  "arbitrary": []
+}

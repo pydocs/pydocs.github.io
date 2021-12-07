@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -464,13 +465,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -498,16 +499,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Compute the N-D FFT of Hermitian symmetric complex input, i.e., a signal with a real spectrum.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -533,6 +529,66 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>For a 1-D signal 
+        <code class='verbatim'>x</code>
+     to have a real spectrum, it must satisfy the Hermitian property::      </p>
+
+    
+           
+               
+            <pre>x[i] == np.conj(x[-i]) for all i</pre>
+       
+           
+               
+        <p>This generalizes into higher dimensions by reflecting over each axis in turn::      </p>
+
+    
+           
+               
+            <pre>x[i, j, k, ...] == np.conj(x[-i, -j, -k, ...]) for all i, j, k, ...</pre>
+       
+           
+               
+        <p>This should not be confused with a Hermitian matrix, for which the transpose is its own conjugate::      </p>
+
+    
+           
+               
+            <pre>x[i, j] == np.conj(x[j, i]) for all i, j</pre>
+       
+           
+               
+        <p>The default value of <code><a link href="#s" class='local'>s</a></code> assumes an even output length in the final transformation axis. When performing the final complex to real transformation, the Hermitian symmetry requires that the last imaginary component along that axis must be 0 and so it is ignored. To avoid losing information, the correct length of the real input <em>must</em> be given.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -672,50 +728,6 @@ user-select: none;
 
 
     
-        <h3 id="section-Returns">Returns</h3>
-    
-    
-       <dl>
-           
-            
-                <dt><a id="out">out</a> : ndarray</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>The truncated or zero-padded input, transformed along the axes indicated by <code><a link href="#axes" class='local'>axes</a></code>, or by a combination of <code><a link href="#s" class='local'>s</a></code> or <code><a link href="#x" class='local'>x</a></code>, as explained in the parameters section above. The length of each transformed axis is as given by the corresponding element of <code><a link href="#s" class='local'>s</a></code>, or the length of the input in every axis except for the last one if <code><a link href="#s" class='local'>s</a></code> is not given.  In the final transformed axis the length of the output when <code><a link href="#s" class='local'>s</a></code> is not given is 
-        <code class='verbatim'>2*(m-1)</code>
-     where 
-        <code class='verbatim'>m</code>
-     is the length of the final transformed axis of the input.  To get an odd number of output points in the final axis, <code><a link href="#s" class='local'>s</a></code> must be specified.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
         <h3 id="section-Raises">Raises</h3>
     
     
@@ -756,75 +768,46 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
 
     
-        <h3 id="section-Notes">Notes</h3>
+        <h3 id="section-Returns">Returns</h3>
     
     
-        <!-- rendering Notes -->
+       <dl>
+           
+            
+                <dt><a id="out">out</a> : ndarray</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The truncated or zero-padded input, transformed along the axes indicated by <code><a link href="#axes" class='local'>axes</a></code>, or by a combination of <code><a link href="#s" class='local'>s</a></code> or <code><a link href="#x" class='local'>x</a></code>, as explained in the parameters section above. The length of each transformed axis is as given by the corresponding element of <code><a link href="#s" class='local'>s</a></code>, or the length of the input in every axis except for the last one if <code><a link href="#s" class='local'>s</a></code> is not given.  In the final transformed axis the length of the output when <code><a link href="#s" class='local'>s</a></code> is not given is 
+        <code class='verbatim'>2*(m-1)</code>
+     where 
+        <code class='verbatim'>m</code>
+     is the length of the final transformed axis of the input.  To get an odd number of output points in the final axis, <code><a link href="#s" class='local'>s</a></code> must be specified.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
         
            
                
-        <p>For a 1-D signal 
-        <code class='verbatim'>x</code>
-     to have a real spectrum, it must satisfy the Hermitian property::      </p>
-
-    
-           
-               
-            <pre>x[i] == np.conj(x[-i]) for all i</pre>
-       
-           
-               
-        <p>This generalizes into higher dimensions by reflecting over each axis in turn::      </p>
-
-    
-           
-               
-            <pre>x[i, j, k, ...] == np.conj(x[-i, -j, -k, ...]) for all i, j, k, ...</pre>
-       
-           
-               
-        <p>This should not be confused with a Hermitian matrix, for which the transpose is its own conjugate::      </p>
-
-    
-           
-               
-            <pre>x[i, j] == np.conj(x[j, i]) for all i, j</pre>
-       
-           
-               
-        <p>The default value of <code><a link href="#s" class='local'>s</a></code> assumes an even output length in the final transformation axis. When performing the final complex to real transformation, the Hermitian symmetry requires that the last imaginary component along that axis must be 0 and so it is ignored. To avoid losing information, the correct length of the real input <em>must</em> be given.</p>
+        <p>Compute the N-D FFT of Hermitian symmetric complex input, i.e., a signal with a real spectrum.</p>
 
     
            
@@ -835,6 +818,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -853,25 +854,25 @@ array([[[12.,  0.],
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ones.html" class='exists'>numpy.ones</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.hfftn.html" class='exists'>scipy.fft._basic.hfftn</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.irfft.html" class='exists'>scipy.fft._basic.irfft</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ones.html" class='exists'>numpy.ones</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.hfftn.html" class='exists'>scipy.fft._basic.hfftn</a></code>
         
          
      
@@ -950,7 +951,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 4, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 7, "val": 8.0, "label": "scipy.fft._basic.hfft2", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.hfft2"}, {"id": 8, "val": 10.23606797749979, "label": "scipy.fft._basic.irfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.irfft"}], "links": [{"source": 3, "target": 7, "id": 61}, {"source": 3, "target": 8, "id": 69}, {"source": 1, "target": 2, "id": 546}, {"source": 5, "target": 8, "id": 2256}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 3, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 4, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 5, "val": 10.23606797749979, "label": "scipy.fft._basic.irfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.irfft"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 8, "val": 8.0, "label": "scipy.fft._basic.hfft2", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.hfft2"}], "links": [{"source": 4, "target": 8, "id": 10}, {"source": 4, "target": 5, "id": 18}, {"source": 6, "target": 7, "id": 1415}, {"source": 3, "target": 5, "id": 2649}]};
 
 (function() {
 
@@ -1078,7 +1079,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 4, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 7, "val": 8.0, "label": "scipy.fft._basic.hfft2", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.hfft2"}, {"id": 8, "val": 10.23606797749979, "label": "scipy.fft._basic.irfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.irfft"}], "links": [{"source": 3, "target": 7, "id": 61}, {"source": 3, "target": 8, "id": 69}, {"source": 1, "target": 2, "id": 546}, {"source": 5, "target": 8, "id": 2256}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 3, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 4, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 5, "val": 10.23606797749979, "label": "scipy.fft._basic.irfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.irfft"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 8, "val": 8.0, "label": "scipy.fft._basic.hfft2", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.hfft2"}], "links": [{"source": 4, "target": 8, "id": 10}, {"source": 4, "target": 5, "id": 18}, {"source": 6, "target": 7, "id": 1415}, {"source": 3, "target": 5, "id": 2649}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

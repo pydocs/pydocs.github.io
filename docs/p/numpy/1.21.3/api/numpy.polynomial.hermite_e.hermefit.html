@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -820,13 +822,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
 
     <a href="#section-Warns">Warns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -854,16 +856,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Least squares fit of Hermite series to data.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -887,6 +884,75 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The solution is the coefficients of the HermiteE series <code>:None:None:`p`</code> that minimizes the sum of the weighted squared errors</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$E = \sum_j w_j^2 * |y_j - p ( x_j)|^2, $$</span>
+       
+           
+               
+        <p>where the 
+        <span class="tex2jax_process">$w_j$</span>
+     are the weights. This problem is solved by setting up the (typically) overdetermined matrix equation</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$V ( x) * c = w * y, $$</span>
+       
+           
+               
+        <p>where <code>:None:None:`V`</code> is the pseudo Vandermonde matrix of <code><a link href="#x" class='local'>x</a></code>, the elements of <code>:None:None:`c`</code> are the coefficients to be solved for, and the elements of <code><a link href="#y" class='local'>y</a></code> are the observed values.  This equation is then solved using the singular value decomposition of <code>:None:None:`V`</code>.</p>
+
+    
+           
+               
+        <p>If some of the singular values of <code>:None:None:`V`</code> are so small that they are neglected, then a <code><a link href="/p/numpy/1.21.3/api/numpy.RankWarning.html" class='exists'>RankWarning</a></code>
+         will be issued. This means that the coefficient values may be poorly determined. Using a lower order fit will usually get rid of the warning.  The <code><a link href="#rcond" class='local'>rcond</a></code> parameter can also be set to a value smaller than its default, but the resulting fit may be spurious and have large contributions from roundoff error.</p>
+
+    
+           
+               
+        <p>Fits using HermiteE series are probably most useful when the data can be approximated by 
+        <code class='verbatim'>sqrt(w(x)) * p(x)</code>
+    , where <code>:None:None:`w(x)`</code> is the HermiteE weight. In that case the weight 
+        <code class='verbatim'>sqrt(w(x[i]))</code>
+     should be used together with data values 
+        <code class='verbatim'>y[i]/sqrt(w(x[i]))</code>
+    . The weight function is available as <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight.html" class='exists'>hermeweight</a></code>
+        .</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -993,6 +1059,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -1044,25 +1125,21 @@ user-select: none;
 
     
     
-       <dl>
+        <!-- rendering Summary -->
+        
            
+               
+        <p>Least squares fit of Hermite series to data.</p>
 
-   </pre>
-   
+    
+           
+       
+    
 
 
     
     
        
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
    
 
 
@@ -1105,90 +1182,30 @@ user-select: none;
    
 
 
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
-        
-           
-               
-        <p>The solution is the coefficients of the HermiteE series <code>:None:None:`p`</code> that minimizes the sum of the weighted squared errors</p>
-
-    
-           
-               
-        <span class="tex2jax_process">$$E = \sum_j w_j^2 * |y_j - p ( x_j)|^2, $$</span>
-       
-           
-               
-        <p>where the 
-        <span class="tex2jax_process">$w_j$</span>
-     are the weights. This problem is solved by setting up the (typically) overdetermined matrix equation</p>
-
-    
-           
-               
-        <span class="tex2jax_process">$$V ( x) * c = w * y, $$</span>
-       
-           
-               
-        <p>where <code>:None:None:`V`</code> is the pseudo Vandermonde matrix of <code><a link href="#x" class='local'>x</a></code>, the elements of <code>:None:None:`c`</code> are the coefficients to be solved for, and the elements of <code><a link href="#y" class='local'>y</a></code> are the observed values.  This equation is then solved using the singular value decomposition of <code>:None:None:`V`</code>.</p>
-
-    
-           
-               
-        <p>If some of the singular values of <code>:None:None:`V`</code> are so small that they are neglected, then a <code><a link href="/p/numpy/1.21.3/api/numpy.RankWarning.html" class='exists'>RankWarning</a></code>
-         will be issued. This means that the coefficient values may be poorly determined. Using a lower order fit will usually get rid of the warning.  The <code><a link href="#rcond" class='local'>rcond</a></code> parameter can also be set to a value smaller than its default, but the resulting fit may be spurious and have large contributions from roundoff error.</p>
-
-    
-           
-               
-        <p>Fits using HermiteE series are probably most useful when the data can be approximated by 
-        <code class='verbatim'>sqrt(w(x)) * p(x)</code>
-    , where <code>:None:None:`w(x)`</code> is the HermiteE weight. In that case the weight 
-        <code class='verbatim'>sqrt(w(x[i]))</code>
-     should be used together with data values 
-        <code class='verbatim'>y[i]/sqrt(w(x[i]))</code>
-    . The weight function is available as <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight.html" class='exists'>hermeweight</a></code>
-        .</p>
-
-    
-           
-       
-    
-
-
-    
-    
-       
-   
-
-
 
     <h3 id="section-Examples">Examples</h3>
         
-                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">numpy</a><span class="nn">.</span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.polynomial.html">polynomial</a><span class="nn">.</span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.html">hermite_e</a><span class=""> </span><a class="foo kn", href="/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose.html">import</a><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html">hermefit</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval.html">hermeval</a><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.linspace.html">linspace</a><span class="">(</span><span class="o">-</span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">seed</span><span class="">(</span><span class="mi">123</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">err</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">randn</span><span class="">(</span><span class="nb">len</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">)</span><span class="o">/</span><span class="mi">10</span><br><span class='nsl'>...&nbsp;</span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval.html">hermeval</a><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">err</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html">hermefit</a><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">y</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span>
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.html">numpy</a><span class="nn">.</span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.polynomial.html">polynomial</a><span class="nn">.</span><a class="foo nn", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.html">hermite_e</a><span class=""> </span><a class="foo kn", href="/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose.html">import</a><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html">hermefit</a><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval.html">hermeval</a><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.linspace.html">linspace</a><span class="">(</span><span class="o">-</span><span class="mi">10</span><span class="">,</span><span class=""> </span><span class="mi">10</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">seed</span><span class="">(</span><span class="mi">123</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">err</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.matlib.randn.html">randn</a><span class="">(</span><span class="nb">len</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">)</span><span class="o">/</span><span class="mi">10</span><br><span class='nsl'>...&nbsp;</span><span class="">y</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval.html">hermeval</a><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="">err</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html">hermefit</a><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">y</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">)</span>
 array([ 1.01690445,  1.99951418,  2.99948696]) # may vary</pre>
             
             
          
          See :
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.RankWarning.html" class='exists'>numpy.RankWarning</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.lstsq.html" class='exists'>numpy.linalg.lstsq</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html" class='exists'>numpy.polynomial.hermite_e.hermefit</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose.html" class='exists'>numpy.testing._private.utils.import_nose</a></code>
+        
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.html" class='exists'>numpy.polynomial</a></code>
         
@@ -1202,25 +1219,13 @@ array([ 1.01690445,  1.99951418,  2.99948696]) # may vary</pre>
              <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight.html" class='exists'>numpy.polynomial.hermite_e.hermeweight</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.matlib.randn.html" class='exists'>numpy.matlib.randn</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.html" class='exists'>numpy.polynomial.hermite_e</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose.html" class='exists'>numpy.testing._private.utils.import_nose</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.lstsq.html" class='exists'>numpy.linalg.lstsq</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.RankWarning.html" class='exists'>numpy.RankWarning</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermefit.html" class='exists'>numpy.polynomial.hermite_e.hermefit</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
         
          
      
@@ -1296,7 +1301,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 10.0, "label": "numpy.polynomial.hermite_e.hermeval", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval"}, {"id": 4, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 5, "val": 9.0, "label": "numpy.polynomial.hermite_e.hermeweight", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight"}, {"id": 6, "val": 10.82842712474619, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.lstsq"}, {"id": 7, "val": 11.872983346207416, "label": "numpy.polynomial.hermite_e", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e"}, {"id": 8, "val": 10.449489742783179, "label": "numpy.RankWarning", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.RankWarning"}, {"id": 9, "val": 17.74679434480896, "label": "numpy.polynomial", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial"}, {"id": 10, "val": 22.07124727947029, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 11, "val": 20.767145334803704, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}], "links": [{"source": 9, "target": 7, "id": 32}, {"source": 9, "target": 2, "id": 45}, {"source": 7, "target": 2, "id": 276}, {"source": 10, "target": 6, "id": 320}, {"source": 10, "target": 11, "id": 325}, {"source": 10, "target": 2, "id": 417}, {"source": 1, "target": 2, "id": 949}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.0, "label": "numpy.polynomial.hermite_e.hermeval", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval"}, {"id": 2, "val": 11.872983346207416, "label": "numpy.polynomial.hermite_e", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e"}, {"id": 3, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 4, "val": 11.872983346207416, "label": "numpy.matlib.randn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matlib.randn"}, {"id": 5, "val": 22.317821063276355, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 6, "val": 9.0, "label": "numpy.polynomial.hermite_e.hermeweight", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight"}, {"id": 7, "val": 10.64575131106459, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.lstsq"}, {"id": 8, "val": 21.038404810405297, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 9, "val": 17.38083151964686, "label": "numpy.polynomial", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial"}, {"id": 10, "val": 10.449489742783179, "label": "numpy.RankWarning", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.RankWarning"}, {"id": 11, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 3, "target": 4, "id": 29}, {"source": 5, "target": 7, "id": 232}, {"source": 5, "target": 8, "id": 237}, {"source": 5, "target": 4, "id": 289}, {"source": 5, "target": 1, "id": 336}, {"source": 9, "target": 1, "id": 437}, {"source": 2, "target": 1, "id": 686}, {"source": 11, "target": 4, "id": 1107}, {"source": 11, "target": 1, "id": 1153}]};
 
 (function() {
 
@@ -1424,7 +1429,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 10.0, "label": "numpy.polynomial.hermite_e.hermeval", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval"}, {"id": 4, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 5, "val": 9.0, "label": "numpy.polynomial.hermite_e.hermeweight", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight"}, {"id": 6, "val": 10.82842712474619, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.lstsq"}, {"id": 7, "val": 11.872983346207416, "label": "numpy.polynomial.hermite_e", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e"}, {"id": 8, "val": 10.449489742783179, "label": "numpy.RankWarning", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.RankWarning"}, {"id": 9, "val": 17.74679434480896, "label": "numpy.polynomial", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial"}, {"id": 10, "val": 22.07124727947029, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 11, "val": 20.767145334803704, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}], "links": [{"source": 9, "target": 7, "id": 32}, {"source": 9, "target": 2, "id": 45}, {"source": 7, "target": 2, "id": 276}, {"source": 10, "target": 6, "id": 320}, {"source": 10, "target": 11, "id": 325}, {"source": 10, "target": 2, "id": 417}, {"source": 1, "target": 2, "id": 949}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.0, "label": "numpy.polynomial.hermite_e.hermeval", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeval"}, {"id": 2, "val": 11.872983346207416, "label": "numpy.polynomial.hermite_e", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e"}, {"id": 3, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 4, "val": 11.872983346207416, "label": "numpy.matlib.randn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matlib.randn"}, {"id": 5, "val": 22.317821063276355, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 6, "val": 9.0, "label": "numpy.polynomial.hermite_e.hermeweight", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial.hermite_e.hermeweight"}, {"id": 7, "val": 10.64575131106459, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.lstsq"}, {"id": 8, "val": 21.038404810405297, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 9, "val": 17.38083151964686, "label": "numpy.polynomial", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.polynomial"}, {"id": 10, "val": 10.449489742783179, "label": "numpy.RankWarning", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.RankWarning"}, {"id": 11, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}], "links": [{"source": 3, "target": 4, "id": 29}, {"source": 5, "target": 7, "id": 232}, {"source": 5, "target": 8, "id": 237}, {"source": 5, "target": 4, "id": 289}, {"source": 5, "target": 1, "id": 336}, {"source": 9, "target": 1, "id": 437}, {"source": 2, "target": 1, "id": 686}, {"source": 11, "target": 4, "id": 1107}, {"source": 11, "target": 1, "id": 1153}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

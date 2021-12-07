@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -440,13 +441,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     
 
@@ -473,16 +474,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Compute the 1-D discrete Fourier Transform.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -497,6 +493,100 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>FFT (Fast Fourier Transform) refers to a way the discrete Fourier Transform (DFT) can be calculated efficiently, by using symmetries in the calculated terms. The symmetry is highest when <code><a link href="#n" class='local'>n</a></code> is a power of 2, and the transform is therefore most efficient for these sizes. For poorly factorizable sizes, <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
+         uses Bluestein&#39;s algorithm  and so is never worse than O(<code><a link href="#n" class='local'>n</a></code> log <code><a link href="#n" class='local'>n</a></code>). Further performance improvements may be seen by zero-padding the input using <code><a link href="/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len.html" class='exists'>next_fast_len</a></code>
+        .</p>
+
+    
+           
+               
+        <p>If 
+        <code class='verbatim'>x</code>
+     is a 1d array, then the <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>fft</a></code>
+         is equivalent to ::      </p>
+
+    
+           
+               
+            <pre>y[k] = np.sum(x * np.exp(-2j * np.pi * k * np.arange(n)/n))</pre>
+       
+           
+               
+        <p>The frequency term 
+        <code class='verbatim'>f=k/n</code>
+     is found at 
+        <code class='verbatim'>y[k]</code>
+    . At 
+        <code class='verbatim'>y[n/2]</code>
+     we reach the Nyquist frequency and wrap around to the negative-frequency terms. So, for an 8-point transform, the frequencies of the result are [0, 1, 2, 3, -4, -3, -2, -1]. To rearrange the fft output so that the zero-frequency component is centered, like [-4, -3, -2, -1, 0, 1, 2, 3], use <code>:None:None:`fftshift`</code>.</p>
+
+    
+           
+               
+        <p>Transforms can be done in single, double, or extended precision (long double) floating point. Half precision inputs will be converted to single precision and non-floating-point inputs will be converted to double precision.</p>
+
+    
+           
+               
+        <p>If the data type of 
+        <code class='verbatim'>x</code>
+     is real, a &#34;real FFT&#34; algorithm is automatically used, which roughly halves the computation time. To increase efficiency a little further, use <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.rfft.html" class='exists'>rfft</a></code>
+        , which does the same calculation, but only outputs half of the symmetrical spectrum. If the data are both real and symmetrical, the <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>dct</a></code>
+         can again double the efficiency, by generating half of the spectrum from half of the signal.</p>
+
+    
+           
+               
+        <p>When 
+        <code class='verbatim'>overwrite_x=True</code>
+     is specified, the memory referenced by 
+        <code class='verbatim'>x</code>
+     may be used by the implementation in any way. This may include reusing the memory for the result, but this is in no way guaranteed. You should not rely on the contents of 
+        <code class='verbatim'>x</code>
+     after the transform as this may change in future without warning.</p>
+
+    
+           
+               
+        <p>The 
+        <code class='verbatim'>workers</code>
+     argument specifies the maximum number of parallel jobs to split the FFT computation into. This will execute independent 1-D FFTs within 
+        <code class='verbatim'>x</code>
+    . So, 
+        <code class='verbatim'>x</code>
+     must be at least 2-D and the non-transformed axes must be large enough to split into chunks. If 
+        <code class='verbatim'>x</code>
+     is too small, fewer jobs may be used than requested.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -646,46 +736,6 @@ user-select: none;
 
 
     
-        <h3 id="section-Returns">Returns</h3>
-    
-    
-       <dl>
-           
-            
-                <dt><a id="out">out</a> : complex ndarray</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>The truncated or zero-padded input, transformed along the axis indicated by <code><a link href="#axis" class='local'>axis</a></code>, or the last one if <code><a link href="#axis" class='local'>axis</a></code> is not specified.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
         <h3 id="section-Raises">Raises</h3>
     
     
@@ -712,109 +762,42 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
 
     
-        <h3 id="section-Notes">Notes</h3>
+        <h3 id="section-Returns">Returns</h3>
     
     
-        <!-- rendering Notes -->
+       <dl>
+           
+            
+                <dt><a id="out">out</a> : complex ndarray</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The truncated or zero-padded input, transformed along the axis indicated by <code><a link href="#axis" class='local'>axis</a></code>, or the last one if <code><a link href="#axis" class='local'>axis</a></code> is not specified.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
         
            
                
-        <p>FFT (Fast Fourier Transform) refers to a way the discrete Fourier Transform (DFT) can be calculated efficiently, by using symmetries in the calculated terms. The symmetry is highest when <code><a link href="#n" class='local'>n</a></code> is a power of 2, and the transform is therefore most efficient for these sizes. For poorly factorizable sizes, <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
-         uses Bluestein&#39;s algorithm  and so is never worse than O(<code><a link href="#n" class='local'>n</a></code> log <code><a link href="#n" class='local'>n</a></code>). Further performance improvements may be seen by zero-padding the input using <code><a link href="/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len.html" class='exists'>next_fast_len</a></code>
-        .</p>
-
-    
-           
-               
-        <p>If 
-        <code class='verbatim'>x</code>
-     is a 1d array, then the <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>fft</a></code>
-         is equivalent to ::      </p>
-
-    
-           
-               
-            <pre>y[k] = np.sum(x * np.exp(-2j * np.pi * k * np.arange(n)/n))</pre>
-       
-           
-               
-        <p>The frequency term 
-        <code class='verbatim'>f=k/n</code>
-     is found at 
-        <code class='verbatim'>y[k]</code>
-    . At 
-        <code class='verbatim'>y[n/2]</code>
-     we reach the Nyquist frequency and wrap around to the negative-frequency terms. So, for an 8-point transform, the frequencies of the result are [0, 1, 2, 3, -4, -3, -2, -1]. To rearrange the fft output so that the zero-frequency component is centered, like [-4, -3, -2, -1, 0, 1, 2, 3], use <code>:None:None:`fftshift`</code>.</p>
-
-    
-           
-               
-        <p>Transforms can be done in single, double, or extended precision (long double) floating point. Half precision inputs will be converted to single precision and non-floating-point inputs will be converted to double precision.</p>
-
-    
-           
-               
-        <p>If the data type of 
-        <code class='verbatim'>x</code>
-     is real, a &#34;real FFT&#34; algorithm is automatically used, which roughly halves the computation time. To increase efficiency a little further, use <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.rfft.html" class='exists'>rfft</a></code>
-        , which does the same calculation, but only outputs half of the symmetrical spectrum. If the data are both real and symmetrical, the <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>dct</a></code>
-         can again double the efficiency, by generating half of the spectrum from half of the signal.</p>
-
-    
-           
-               
-        <p>When 
-        <code class='verbatim'>overwrite_x=True</code>
-     is specified, the memory referenced by 
-        <code class='verbatim'>x</code>
-     may be used by the implementation in any way. This may include reusing the memory for the result, but this is in no way guaranteed. You should not rely on the contents of 
-        <code class='verbatim'>x</code>
-     after the transform as this may change in future without warning.</p>
-
-    
-           
-               
-        <p>The 
-        <code class='verbatim'>workers</code>
-     argument specifies the maximum number of parallel jobs to split the FFT computation into. This will execute independent 1-D FFTs within 
-        <code class='verbatim'>x</code>
-    . So, 
-        <code class='verbatim'>x</code>
-     must be at least 2-D and the non-transformed axes must be large enough to split into chunks. If 
-        <code class='verbatim'>x</code>
-     is too small, fewer jobs may be used than requested.</p>
+        <p>Compute the 1-D discrete Fourier Transform.</p>
 
     
            
@@ -825,6 +808,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -862,34 +863,16 @@ array([-2.33486982e-16+1.14423775e-17j,  8.00000000e+00-1.25557246e-15j,
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
-        
-         
              <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.rfft.html" class='exists'>scipy.fft._basic.rfft</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png.html" class='exists'>fig-scipy.fft._basic.fft-1.png</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>scipy.fft._realtransforms.dct</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.ifft.html" class='exists'>scipy.fft._basic.ifft</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
              <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
         
          
              <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
@@ -898,13 +881,31 @@ array([-2.33486982e-16+1.14423775e-17j,  8.00000000e+00-1.25557246e-15j,
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>scipy.fft._realtransforms.dct</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft.html" class='exists'>scipy.fft</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len.html" class='exists'>scipy.fft._helper.next_fast_len</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png.html" class='exists'>fig-scipy.fft._basic.fft-1.png</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.rfft.html" class='exists'>scipy.fft._basic.rfft</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.ifft.html" class='exists'>scipy.fft._basic.ifft</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
         
          
      
@@ -969,7 +970,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.fft._realtransforms.dct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 9.0, "label": "fig-scipy.fft._basic.fft-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png"}, {"id": 5, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 6, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 7, "val": 11.16227766016838, "label": "scipy.fft._basic.ifft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.ifft"}, {"id": 8, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 9, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 10, "val": 11.0, "label": "scipy.fft._basic.rfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.rfft"}, {"id": 11, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 12, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 13, "val": 9.414213562373096, "label": "scipy.fft._helper.next_fast_len", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len"}, {"id": 14, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 15, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}], "links": [{"source": 8, "target": 7, "id": 10}, {"source": 8, "target": 10, "id": 19}, {"source": 8, "target": 13, "id": 22}, {"source": 8, "target": 2, "id": 25}, {"source": 15, "target": 7, "id": 100}, {"source": 10, "target": 13, "id": 228}, {"source": 7, "target": 13, "id": 451}, {"source": 5, "target": 7, "id": 486}, {"source": 9, "target": 7, "id": 1094}, {"source": 11, "target": 7, "id": 1473}, {"source": 12, "target": 7, "id": 1588}, {"source": 3, "target": 6, "id": 2186}, {"source": 3, "target": 7, "id": 2486}, {"source": 3, "target": 13, "id": 2493}, {"source": 3, "target": 2, "id": 2495}, {"source": 6, "target": 7, "id": 3241}, {"source": 14, "target": 7, "id": 3886}, {"source": 14, "target": 10, "id": 3893}, {"source": 14, "target": 13, "id": 3895}, {"source": 14, "target": 2, "id": 3898}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 9.0, "label": "fig-scipy.fft._basic.fft-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png"}, {"id": 4, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 5, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 6, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 7, "val": 11.16227766016838, "label": "scipy.fft._basic.ifft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.ifft"}, {"id": 8, "val": 9.732050807568877, "label": "scipy.fft._realtransforms.dct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct"}, {"id": 9, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 10, "val": 11.0, "label": "scipy.fft._basic.rfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.rfft"}, {"id": 11, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 12, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 13, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 14, "val": 9.414213562373096, "label": "scipy.fft._helper.next_fast_len", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len"}, {"id": 15, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}], "links": [{"source": 11, "target": 7, "id": 23}, {"source": 13, "target": 7, "id": 450}, {"source": 5, "target": 7, "id": 1313}, {"source": 1, "target": 7, "id": 1468}, {"source": 12, "target": 13, "id": 2075}, {"source": 12, "target": 7, "id": 2373}, {"source": 12, "target": 14, "id": 2380}, {"source": 12, "target": 8, "id": 2382}, {"source": 4, "target": 7, "id": 3218}, {"source": 4, "target": 10, "id": 3227}, {"source": 4, "target": 14, "id": 3230}, {"source": 4, "target": 8, "id": 3233}, {"source": 2, "target": 7, "id": 3312}, {"source": 2, "target": 10, "id": 3319}, {"source": 2, "target": 14, "id": 3321}, {"source": 2, "target": 8, "id": 3324}, {"source": 6, "target": 7, "id": 4336}, {"source": 10, "target": 14, "id": 4532}, {"source": 7, "target": 14, "id": 4539}, {"source": 15, "target": 7, "id": 4739}]};
 
 (function() {
 
@@ -1097,7 +1098,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.fft._realtransforms.dct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 9.0, "label": "fig-scipy.fft._basic.fft-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png"}, {"id": 5, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 6, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 7, "val": 11.16227766016838, "label": "scipy.fft._basic.ifft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.ifft"}, {"id": 8, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 9, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 10, "val": 11.0, "label": "scipy.fft._basic.rfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.rfft"}, {"id": 11, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 12, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 13, "val": 9.414213562373096, "label": "scipy.fft._helper.next_fast_len", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len"}, {"id": 14, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 15, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}], "links": [{"source": 8, "target": 7, "id": 10}, {"source": 8, "target": 10, "id": 19}, {"source": 8, "target": 13, "id": 22}, {"source": 8, "target": 2, "id": 25}, {"source": 15, "target": 7, "id": 100}, {"source": 10, "target": 13, "id": 228}, {"source": 7, "target": 13, "id": 451}, {"source": 5, "target": 7, "id": 486}, {"source": 9, "target": 7, "id": 1094}, {"source": 11, "target": 7, "id": 1473}, {"source": 12, "target": 7, "id": 1588}, {"source": 3, "target": 6, "id": 2186}, {"source": 3, "target": 7, "id": 2486}, {"source": 3, "target": 13, "id": 2493}, {"source": 3, "target": 2, "id": 2495}, {"source": 6, "target": 7, "id": 3241}, {"source": 14, "target": 7, "id": 3886}, {"source": 14, "target": 10, "id": 3893}, {"source": 14, "target": 13, "id": 3895}, {"source": 14, "target": 2, "id": 3898}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 9.0, "label": "fig-scipy.fft._basic.fft-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.fft._basic.fft-1.png"}, {"id": 4, "val": 16.774964387392124, "label": "scipy.fft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft"}, {"id": 5, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 6, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 7, "val": 11.16227766016838, "label": "scipy.fft._basic.ifft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.ifft"}, {"id": 8, "val": 9.732050807568877, "label": "scipy.fft._realtransforms.dct", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct"}, {"id": 9, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 10, "val": 11.0, "label": "scipy.fft._basic.rfft", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._basic.rfft"}, {"id": 11, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 12, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 13, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 14, "val": 9.414213562373096, "label": "scipy.fft._helper.next_fast_len", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.fft._helper.next_fast_len"}, {"id": 15, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}], "links": [{"source": 11, "target": 7, "id": 23}, {"source": 13, "target": 7, "id": 450}, {"source": 5, "target": 7, "id": 1313}, {"source": 1, "target": 7, "id": 1468}, {"source": 12, "target": 13, "id": 2075}, {"source": 12, "target": 7, "id": 2373}, {"source": 12, "target": 14, "id": 2380}, {"source": 12, "target": 8, "id": 2382}, {"source": 4, "target": 7, "id": 3218}, {"source": 4, "target": 10, "id": 3227}, {"source": 4, "target": 14, "id": 3230}, {"source": 4, "target": 8, "id": 3233}, {"source": 2, "target": 7, "id": 3312}, {"source": 2, "target": 10, "id": 3319}, {"source": 2, "target": 14, "id": 3321}, {"source": 2, "target": 8, "id": 3324}, {"source": 6, "target": 7, "id": 4336}, {"source": 10, "target": 14, "id": 4532}, {"source": 7, "target": 14, "id": 4539}, {"source": 15, "target": 7, "id": 4739}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

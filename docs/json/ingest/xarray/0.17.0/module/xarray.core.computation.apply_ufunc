@@ -1,0 +1,3057 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Apply a vectorized function for unlabeled arrays on xarray objects."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The function will be mapped over the data variable(s) of the input arguments using xarray's standard rules for labeled computation, including alignment, broadcasting, looping over GroupBy/Dataset variables, and merging of coordinates."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "func",
+            "type_": "callable",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Function to call like "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func(",
+                          "*",
+                          "args,",
+                          " ",
+                          "*",
+                          "*",
+                          "kwargs)"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " on unlabeled arrays ("
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          ".data"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ") that returns an array or tuple of arrays. If multiple arguments with non-matching dimensions are supplied, this function is expected to vectorize (broadcast) over axes of positional arguments in the style of NumPy universal functions [1]_ (if this is not the case, set "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "vectorize=True"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "). If this function returns multiple outputs, you must set "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "output",
+                          "_",
+                          "core",
+                          "_",
+                          "dims"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " as well."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "*args",
+            "type_": "Dataset, DataArray, GroupBy, Variable, numpy.ndarray, dask.array.Array or scalar",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Mix of labeled and/or unlabeled arrays to which to apply the function."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "input_core_dims",
+            "type_": "sequence of sequence, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "List of the same length as "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "args"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " giving the list of core dimensions on each input argument that should not be broadcast. By default, we assume there are no core dimensions on any input arguments."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "For example, "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "input",
+                          "_",
+                          "core",
+                          "_",
+                          "dims=[[],",
+                          " ",
+                          "['time']]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " indicates that all dimensions on the first argument and all dimensions other than 'time' on the second argument should be broadcast."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Core dimensions are automatically moved to the last axes of input variables before applying "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", which facilitates using NumPy style generalized ufuncs [2]_."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "output_core_dims",
+            "type_": "list of tuple, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "List of the same length as the number of output arguments from "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", giving the list of core dimensions on each output that were not broadcast on the inputs. By default, we assume that "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " outputs exactly one array, with axes corresponding to each broadcast dimension."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Core dimensions are assumed to appear as the last dimensions of each output in the provided order."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "exclude_dims",
+            "type_": "set, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Core dimensions on the inputs to exclude from alignment and broadcasting entirely. Any input coordinates along these dimensions will be dropped. Each excluded dimension must also appear in "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "input",
+                          "_",
+                          "core",
+                          "_",
+                          "dims"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for at least one argument. Only dimensions listed here are allowed to change size between input and output objects."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "vectorize",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, then assume "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " only takes arrays defined over core dimensions as input and vectorize it automatically with "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "numpy.vectorize",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.vectorize"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". This option exists for convenience, but is almost always slower than supplying a pre-vectorized function. Using this option requires NumPy version 1.12 or newer."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "join",
+            "type_": "{\"outer\", \"inner\", \"left\", \"right\", \"exact\"}, default: \"exact\"",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Method for joining the indexes of the passed objects along each dimension, and the variables of Dataset objects with mismatched data variables:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- 'outer': use the union of object indexes - 'inner': use the intersection of object indexes - 'left': use indexes from the first object with each dimension - 'right': use indexes from the last object with each dimension - 'exact': raise "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "ValueError"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " instead of aligning when indexes to be"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  aligned are not equal"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "dataset_join",
+            "type_": "{\"outer\", \"inner\", \"left\", \"right\", \"exact\"}, default: \"exact\"",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Method for joining variables of Dataset objects with mismatched data variables."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- 'outer': take variables from both Dataset objects - 'inner': take only overlapped variables - 'left': take only variables from the first object - 'right': take only variables from the last object - 'exact': data variables on all Dataset objects must match exactly"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "dataset_fill_value",
+            "type_": "optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Value used in place of missing variables on Dataset inputs when the datasets do not share the exact same "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "data",
+                          "_",
+                          "vars"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Required if "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dataset",
+                          "_",
+                          "join",
+                          " ",
+                          "not",
+                          " ",
+                          "in",
+                          " ",
+                          "{'inner',",
+                          " ",
+                          "'exact'}"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", otherwise ignored."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "keep_attrs",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Whether to copy attributes from the first argument to the output."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "kwargs",
+            "type_": "dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Optional keyword arguments passed directly on to call "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "dask",
+            "type_": "{\"forbidden\", \"allowed\", \"parallelized\"}, default: \"forbidden\"",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "How to handle applying to objects containing lazy data in the form of dask arrays:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- 'forbidden' (default): raise an error if a dask array is encountered. - 'allowed': pass dask arrays directly on to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Prefer this option if"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " natively supports dask arrays."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- 'parallelized': automatically parallelize "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " if any of the"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  inputs are a dask array by using "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "dask.array.apply_gufunc",
+                        "reference": {
+                          "module": "dask",
+                          "version": "2021.10.0",
+                          "kind": "module",
+                          "path": "dask.array.gufunc.apply_gufunc"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Multiple output   arguments are supported. Only use this option if "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "func"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " does not natively   support dask arrays (e.g. converts them to numpy arrays)."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "dask_gufunc_kwargs",
+            "type_": "dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Optional keyword arguments passed to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask.array.apply",
+                          "_",
+                          "gufunc"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " if dask='parallelized'. Possible keywords are "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "output",
+                          "_",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "allow",
+                          "_",
+                          "rechunk"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "meta"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "output_dtypes",
+            "type_": "list of dtype, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Optional list of output dtypes. Only used if "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask='parallelized'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or vectorize=True."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "output_sizes",
+            "type_": "dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Optional mapping from dimension names to sizes for outputs. Only used if dask='parallelized' and new dimensions (not found on inputs) appear on outputs. "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "output",
+                          "_",
+                          "sizes"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " should be given in the "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask",
+                          "_",
+                          "gufunc",
+                          "_",
+                          "kwargs"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " parameter. It will be removed as direct parameter in a future version."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "meta",
+            "type_": "optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Size-0 object representing the type of array wrapped by dask array. Passed on to "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask.array.apply",
+                          "_",
+                          "gufunc"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "meta"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " should be given in the "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask",
+                          "_",
+                          "gufunc",
+                          "_",
+                          "kwargs"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " parameter . It will be removed as direct parameter a future version."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "",
+            "type_": "Single value or tuple of Dataset, DataArray, Variable, dask.array.Array or",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "",
+            "type_": "numpy.ndarray, the first type on that list to appear on an input.",
+            "desc": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.array"
+    },
+    {
+      "module": "xarray",
+      "version": "0.17.0",
+      "kind": "module",
+      "path": "xarray.core.dataarray.DataArray"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.ufunc"
+    },
+    {
+      "module": "xarray",
+      "version": "0.17.0",
+      "kind": "module",
+      "path": "xarray.core.computation.apply_ufunc"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
+      "path": "dask.array.gufunc.apply_gufunc"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.vectorize"
+    },
+    {
+      "module": "xarray",
+      "version": "0.17.0",
+      "kind": "module",
+      "path": "xarray.core.indexes.default_indexes"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "Examples",
+    "See Also",
+    "References"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/core/computation.py",
+  "item_line": 794,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "xarray.apply_ufunc"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Calculate the vector magnitude of two arguments:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "k",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "def",
+                  "reference": {
+                    "module": "xarray",
+                    "version": "0.17.0",
+                    "kind": "module",
+                    "path": "xarray.core.indexes.default_indexes"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nf",
+              "link": {
+                "type": "str",
+                "data": "magnitude"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "b"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "func"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "lambda"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "y"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ":"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sqrt",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "+"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "y"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "*"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "    "
+              }
+            },
+            {
+              "type": "k",
+              "link": {
+                "type": "str",
+                "data": "return"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "xr"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "apply_ufunc",
+                  "reference": {
+                    "module": "xarray",
+                    "version": "0.17.0",
+                    "kind": "module",
+                    "path": "xarray.core.computation.apply_ufunc"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "func"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "b"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "...",
+          "ce_status": "compiled"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "You can now apply "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "magnitude()"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " to "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "xr.DataArray"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " and "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "xr.Dataset"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " objects, with automatically preserved dimensions and coordinates, e.g.,"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "array"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "xr"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "DataArray",
+                  "reference": {
+                    "module": "xarray",
+                    "version": "0.17.0",
+                    "kind": "module",
+                    "path": "xarray.core.dataarray.DataArray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "coords"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "\""
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "x"
+              }
+            },
+            {
+              "type": "s2",
+              "link": {
+                "type": "str",
+                "data": "\""
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "0.3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "magnitude"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "array"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "-"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "array"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "<xarray.DataArray (x: 3)>\narray([1.41421356, 2.82842712, 4.24264069])\nCoordinates:\n  * x        (x) float64 0.1 0.2 0.3",
+          "ce_status": "compiled"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Plain scalars, numpy arrays and a mix of these with xarray objects is also supported:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "magnitude"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "4"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "5.0",
+          "ce_status": "compiled"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "magnitude"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "np",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "4"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "array([3., 5.])",
+          "ce_status": "compiled"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "magnitude"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "array"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "<xarray.DataArray (x: 3)>\narray([1., 2., 3.])\nCoordinates:\n  * x        (x) float64 0.1 0.2 0.3",
+          "ce_status": "compiled"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Other examples of how you could use "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "apply",
+                  "_",
+                  "ufunc"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " to write functions to (very nearly) replicate existing xarray functionality:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Compute the mean ("
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  ".mean"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ") over one dimension::"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    def mean(obj, dim):",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        # note: apply always moves core dimensions to the end",
+                    "_number": 1,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        return apply_ufunc(np.mean, obj,",
+                    "_number": 2,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                           input_core_dims=[[dim]],",
+                    "_number": 3,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                           kwargs={'axis': -1})",
+                    "_number": 4,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "def mean(obj, dim):     # note: apply always moves core dimensions to the end     return apply_ufunc(np.mean, obj,                        input_core_dims=[[dim]],                        kwargs={'axis': -1})"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Inner product over a specific dimension (like "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "xr.dot"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ")::"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    def _inner(x, y):",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        result = np.matmul(x[..., np.newaxis, :], y[..., :, np.newaxis])",
+                    "_number": 1,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        return result[..., 0, 0]",
+                    "_number": 2,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "def _inner(x, y):     result = np.matmul(x[..., np.newaxis, :], y[..., :, np.newaxis])     return result[..., 0, 0]"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    def inner_product(a, b, dim):",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        return apply_ufunc(_inner, a, b, input_core_dims=[[dim], [dim]])",
+                    "_number": 1,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "def inner_product(a, b, dim):     return apply_ufunc(_inner, a, b, input_core_dims=[[dim], [dim]])"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Stack objects along a new dimension (like "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "xr.concat"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ")::"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    def stack(objects, dim, new_coord):",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        # note: this version does not stack coordinates",
+                    "_number": 1,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        func = lambda *x: np.stack(x, axis=-1)",
+                    "_number": 2,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        result = apply_ufunc(func, *objects,",
+                    "_number": 3,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                             output_core_dims=[[dim]],",
+                    "_number": 4,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                             join='outer',",
+                    "_number": 5,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                             dataset_fill_value=np.nan)",
+                    "_number": 6,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        result[dim] = new_coord",
+                    "_number": 7,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        return result",
+                    "_number": 8,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "def stack(objects, dim, new_coord):     # note: this version does not stack coordinates     func = lambda *x: np.stack(x, axis=-1)     result = apply_ufunc(func, *objects,                          output_core_dims=[[dim]],                          join='outer',                          dataset_fill_value=np.nan)     result[dim] = new_coord     return result"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "If your function is not vectorized but can be applied only to core dimensions, you can use "
+              }
+            },
+            {
+              "type": "Verbatim",
+              "data": {
+                "value": [
+                  "vectorize=True"
+                ]
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " to turn into a vectorized function. This wraps "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "numpy.vectorize",
+                "reference": {
+                  "module": "numpy",
+                  "version": "1.21.3",
+                  "kind": "module",
+                  "path": "numpy.vectorize"
+                },
+                "kind": "module",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ", so the operation isn't terribly fast. Here we'll use it to calculate the distance between empirical samples from two probability distributions, using a scipy function that needs to be applied to vectors::"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    import scipy.stats",
+                    "_number": 0,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "import scipy.stats"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    def earth_mover_distance(first_samples,",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                             second_samples,",
+                    "_number": 1,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                             dim='ensemble'):",
+                    "_number": 2,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "        return apply_ufunc(scipy.stats.wasserstein_distance,",
+                    "_number": 3,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                           first_samples, second_samples,",
+                    "_number": 4,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                           input_core_dims=[[dim], [dim]],",
+                    "_number": 5,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "                           vectorize=True)",
+                    "_number": 6,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "def earth_mover_distance(first_samples,                          second_samples,                          dim='ensemble'):     return apply_ufunc(scipy.stats.wasserstein_distance,                        first_samples, second_samples,                        input_core_dims=[[dim], [dim]],                        vectorize=True)"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Most of NumPy's builtin functions already broadcast their inputs appropriately for use in "
+              }
+            },
+            {
+              "type": "Directive",
+              "data": {
+                "value": [
+                  "apply"
+                ],
+                "domain": null,
+                "role": null
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": ". You may find helper functions such as numpy.broadcast_arrays helpful in writing your function. "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "apply_ufunc",
+                "reference": {
+                  "module": "xarray",
+                  "version": "0.17.0",
+                  "kind": "module",
+                  "path": "xarray.core.computation.apply_ufunc"
+                },
+                "kind": "module",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " also works well with numba's vectorize and guvectorize. Further explanation with examples are provided in the xarray documentation [3]_."
+              }
+            }
+          ],
+          "inner": []
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "numba.guvectorize",
+        "ref": null,
+        "exists": null
+      },
+      "descriptions": [],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "numba.vectorize",
+        "ref": null,
+        "exists": null
+      },
+      "descriptions": [],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "numpy.broadcast_arrays",
+        "ref": "numpy.broadcast_arrays",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "0.17.0",
+  "signature": "apply_ufunc(func: Callable, *args: Any, input_core_dims: Sequence[Sequence] = None, output_core_dims: Union[Sequence[Sequence], NoneType] = ((),), exclude_dims: AbstractSet = frozenset(), vectorize: bool = False, join: str = 'exact', dataset_join: str = 'exact', dataset_fill_value: object = <no-fill-value>, keep_attrs: bool = False, kwargs: Mapping = None, dask: str = 'forbidden', output_dtypes: Sequence = None, output_sizes: Mapping[Any, int] = None, meta: Any = None, dask_gufunc_kwargs: Dict[str, Any] = None) -> Any",
+  "references": [
+    ".. [1] http://docs.scipy.org/doc/numpy/reference/ufuncs.html",
+    ".. [2] http://docs.scipy.org/doc/numpy/reference/c-api.generalized-ufuncs.html",
+    ".. [3] http://xarray.pydata.org/en/stable/computation.html#wrapping-custom-computation"
+  ],
+  "logo": "logo.png",
+  "qa": "xarray.core.computation.apply_ufunc",
+  "arbitrary": []
+}

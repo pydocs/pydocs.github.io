@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -494,11 +495,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -526,16 +527,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Finds the global minimum of a function using SHG optimization.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -550,6 +546,100 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Global optimization using simplicial homology global optimization . Appropriate for solving general purpose NLP and blackbox optimization problems to global optimality (low-dimensional problems).</p>
+
+    
+           
+               
+        <p>In general, the optimization problems are of the form::      </p>
+
+    
+           
+               
+            <pre>minimize f(x) subject to
+
+g_i(x) &gt;= 0,  i = 1,...,m
+h_j(x)  = 0,  j = 1,...,p</pre>
+       
+           
+               
+        <p>where x is a vector of one or more variables. 
+        <code class='verbatim'>f(x)</code>
+     is the objective function 
+        <code class='verbatim'>R^n -&gt; R</code>
+    , 
+        <code class='verbatim'>g_i(x)</code>
+     are the inequality constraints, and 
+        <code class='verbatim'>h_j(x)</code>
+     are the equality constraints.</p>
+
+    
+           
+               
+        <p>Optionally, the lower and upper bounds for each element in x can also be specified using the <code><a link href="#bounds" class='local'>bounds</a></code> argument.</p>
+
+    
+           
+               
+        <p>While most of the theoretical advantages of SHGO are only proven for when 
+        <code class='verbatim'>f(x)</code>
+     is a Lipschitz smooth function, the algorithm is also proven to converge to the global optimum for the more general case where 
+        <code class='verbatim'>f(x)</code>
+     is non-continuous, non-convex and non-smooth, if the default sampling method is used .</p>
+
+    
+           
+               
+        <p>The local search method may be specified using the 
+        <code class='verbatim'>minimizer_kwargs</code>
+     parameter which is passed on to 
+        <code class='verbatim'>scipy.optimize.minimize</code>
+    . By default, the 
+        <code class='verbatim'>SLSQP</code>
+     method is used. In general, it is recommended to use the 
+        <code class='verbatim'>SLSQP</code>
+     or 
+        <code class='verbatim'>COBYLA</code>
+     local minimization if inequality constraints are defined for the problem since the other methods do not use constraints.</p>
+
+    
+           
+               
+        <p>The 
+        <code class='verbatim'>halton</code>
+     and 
+        <code class='verbatim'>sobol</code>
+     method points are generated using <code>:None:None:`scipy.stats.qmc`</code>. Any other QMC method could be used.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -1144,6 +1234,21 @@ args : sequence, optional
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -1189,133 +1294,11 @@ args : sequence, optional
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Global optimization using simplicial homology global optimization . Appropriate for solving general purpose NLP and blackbox optimization problems to global optimality (low-dimensional problems).</p>
-
-    
-           
-               
-        <p>In general, the optimization problems are of the form::      </p>
-
-    
-           
-               
-            <pre>minimize f(x) subject to
-
-g_i(x) &gt;= 0,  i = 1,...,m
-h_j(x)  = 0,  j = 1,...,p</pre>
-       
-           
-               
-        <p>where x is a vector of one or more variables. 
-        <code class='verbatim'>f(x)</code>
-     is the objective function 
-        <code class='verbatim'>R^n -&gt; R</code>
-    , 
-        <code class='verbatim'>g_i(x)</code>
-     are the inequality constraints, and 
-        <code class='verbatim'>h_j(x)</code>
-     are the equality constraints.</p>
-
-    
-           
-               
-        <p>Optionally, the lower and upper bounds for each element in x can also be specified using the <code><a link href="#bounds" class='local'>bounds</a></code> argument.</p>
-
-    
-           
-               
-        <p>While most of the theoretical advantages of SHGO are only proven for when 
-        <code class='verbatim'>f(x)</code>
-     is a Lipschitz smooth function, the algorithm is also proven to converge to the global optimum for the more general case where 
-        <code class='verbatim'>f(x)</code>
-     is non-continuous, non-convex and non-smooth, if the default sampling method is used .</p>
-
-    
-           
-               
-        <p>The local search method may be specified using the 
-        <code class='verbatim'>minimizer_kwargs</code>
-     parameter which is passed on to 
-        <code class='verbatim'>scipy.optimize.minimize</code>
-    . By default, the 
-        <code class='verbatim'>SLSQP</code>
-     method is used. In general, it is recommended to use the 
-        <code class='verbatim'>SLSQP</code>
-     or 
-        <code class='verbatim'>COBYLA</code>
-     local minimization if inequality constraints are defined for the problem since the other methods do not use constraints.</p>
-
-    
-           
-               
-        <p>The 
-        <code class='verbatim'>halton</code>
-     and 
-        <code class='verbatim'>sobol</code>
-     method points are generated using <code>:None:None:`scipy.stats.qmc`</code>. Any other QMC method could be used.</p>
+        <p>Finds the global minimum of a function using SHG optimization.</p>
 
     
            
@@ -1326,6 +1309,24 @@ h_j(x)  = 0,  j = 1,...,p</pre>
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1565,40 +1566,40 @@ iters=3</code>
              <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._quad_vec._quadrature_gk21.html" class='exists'>scipy.integrate._quad_vec._quadrature_gk21</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12.html" class='exists'>scipy.optimize.optimize._line_search_wolfe12</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>scipy.optimize._shgo.shgo</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step.html" class='exists'>scipy.optimize._numdiff._compute_absolute_step</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code.html" class='exists'>scipy.integrate._ode.ode.get_return_code</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.html" class='exists'>scipy.optimize</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.special._basic.h1vp.html" class='exists'>scipy.special._basic.h1vp</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>scipy.optimize.optimize.rosen</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult.html" class='exists'>scipy.optimize.optimize.OptimizeResult</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times.html" class='exists'>scipy.signal.ltisys._default_response_times</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.special._basic.h1vp.html" class='exists'>scipy.special._basic.h1vp</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._shgo.shgo.html" class='exists'>scipy.optimize._shgo.shgo</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen.html" class='exists'>scipy.optimize.optimize.rosen</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.html" class='exists'>scipy.optimize</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code.html" class='exists'>scipy.integrate._ode.ode.get_return_code</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12.html" class='exists'>scipy.optimize.optimize._line_search_wolfe12</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step.html" class='exists'>scipy.optimize._numdiff._compute_absolute_step</a></code>
         
          
      
@@ -1674,7 +1675,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 2, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.special._basic.h1vp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.special._basic.h1vp"}, {"id": 6, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 7, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 8, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 9, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 11, "val": 9.414213562373096, "label": "scipy.integrate._quad_vec._quadrature_gk21", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._quad_vec._quadrature_gk21"}, {"id": 12, "val": 14.32455532033676, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 13, "val": 10.0, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}], "links": [{"source": 12, "target": 13, "id": 160}, {"source": 3, "target": 13, "id": 1261}, {"source": 9, "target": 13, "id": 2101}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 9.414213562373096, "label": "scipy.special._basic.h1vp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.special._basic.h1vp"}, {"id": 4, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 5, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 6, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 7, "val": 9.414213562373096, "label": "scipy.integrate._quad_vec._quadrature_gk21", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._quad_vec._quadrature_gk21"}, {"id": 9, "val": 14.32455532033676, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 10, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 11, "val": 10.0, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 12, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 13, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}], "links": [{"source": 2, "target": 11, "id": 555}, {"source": 9, "target": 11, "id": 930}, {"source": 10, "target": 11, "id": 1877}]};
 
 (function() {
 
@@ -1802,7 +1803,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 2, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.special._basic.h1vp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.special._basic.h1vp"}, {"id": 6, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 7, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 8, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 9, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 11, "val": 9.414213562373096, "label": "scipy.integrate._quad_vec._quadrature_gk21", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._quad_vec._quadrature_gk21"}, {"id": 12, "val": 14.32455532033676, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 13, "val": 10.0, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}], "links": [{"source": 12, "target": 13, "id": 160}, {"source": 3, "target": 13, "id": 1261}, {"source": 9, "target": 13, "id": 2101}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 9.414213562373096, "label": "scipy.special._basic.h1vp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.special._basic.h1vp"}, {"id": 4, "val": 11.60555127546399, "label": "scipy.optimize.optimize._line_search_wolfe12", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize._line_search_wolfe12"}, {"id": 5, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 6, "val": 16.06225774829855, "label": "scipy.optimize._numdiff._compute_absolute_step", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._numdiff._compute_absolute_step"}, {"id": 7, "val": 9.414213562373096, "label": "scipy.integrate._quad_vec._quadrature_gk21", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._quad_vec._quadrature_gk21"}, {"id": 9, "val": 14.32455532033676, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize"}, {"id": 10, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 11, "val": 10.0, "label": "scipy.optimize.optimize.rosen", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.rosen"}, {"id": 12, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 13, "val": 11.3166247903554, "label": "scipy.optimize.optimize.OptimizeResult", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize.optimize.OptimizeResult"}], "links": [{"source": 2, "target": 11, "id": 555}, {"source": 9, "target": 11, "id": 930}, {"source": 10, "target": 11, "id": 1877}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

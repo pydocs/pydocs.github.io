@@ -1,0 +1,621 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "To remove in the future \u2013\u2013 dask.local"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/dask/local.py",
+  "item_line": 0,
+  "item_type": "<class 'module'>",
+  "aliases": [
+    "dask.local"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "2021.10.0",
+  "signature": null,
+  "references": null,
+  "logo": "logo.png",
+  "qa": "dask.local",
+  "arbitrary": [
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Asynchronous Shared-Memory Scheduler for Dask Graphs."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This scheduler coordinates several workers to execute tasks in a dask graph in parallel.  It depends on a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "concurrent.futures.Executor"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " and a corresponding Queue for worker-to-scheduler communication."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "It tries to execute tasks in an order which maintains a small memory footprint throughout execution.  It does this by running tasks that allow us to release data resources."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "When we complete a task we add more data in to our set of available data; this new data makes new tasks available.  We preferentially choose tasks that were just made available in a last-in-first-out fashion.  We implement this as a simple stack.  This results in more depth-first rather than breadth first behavior which encourages us to process batches of data to completion before starting in on new data when possible."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "When the addition of new data readies multiple tasks simultaneously we add tasks to the stack in sorted order so that tasks with greater keynames are run first.  This can be handy to break ties in a predictable fashion."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": "Task Selection Policy"
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Many functions pass around a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "state"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " variable that holds the current state of the computation.  This variable consists of several other dictionaries and sets, explained below."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": "State"
+    },
+    {
+      "children": [
+        {
+          "type": "EnumeratedList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "dependencies: {x: [a, b ,c]} a,b,c, must be run before x"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "dependents: {a: [x, y]} a must run before x or y"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Constant state"
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "### Data"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "EnumeratedList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "cache: available concrete data.  {key: actual-data}"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "released: data that we've seen, used, and released because it is no longer     needed"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "### Jobs"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "EnumeratedList",
+          "data": {
+            "value": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "ready: A fifo stack of ready-to-run tasks"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "running: A set of tasks currently in execution"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "finished: A set of finished tasks"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "waiting: which tasks are still waiting on others :: {key: {keys}}     Real-time equivalent of dependencies"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "waiting_data: available data to yet-to-be-run-tasks :: {key: {keys}}     Real-time equivalent of dependents"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Changing state"
+    },
+    {
+      "children": [
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> import pprint  # doctest: +SKIP",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> dsk = {'x': 1, 'y': 2, 'z': (inc, 'x'), 'w': (add, 'z', 'y')}  # doctest: +SKIP",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> pprint.pprint(start_state_from_dask(dsk))  # doctest: +SKIP",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": "{'cache': {'x': 1, 'y': 2},",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'dependencies': {'w': {'z', 'y'}, 'x': set(), 'y': set(), 'z': {'x'}},",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'dependents': defaultdict(None, {'w': set(), 'x': {'z'}, 'y': {'w'}, 'z': {'w'}}),",
+                  "_number": 5,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'finished': set(),",
+                  "_number": 6,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'ready': ['z'],",
+                  "_number": 7,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'released': set(),",
+                  "_number": 8,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'running': set(),",
+                  "_number": 9,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'waiting': {'w': {'z'}},",
+                  "_number": 10,
+                  "_offset": 0
+                },
+                {
+                  "_line": " 'waiting_data': {'x': {'z'}, 'y': {'w'}, 'z': {'w'}}}",
+                  "_number": 11,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "title": "Examples"
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "We build this scheduler with out-of-core array operations in mind.  To this end we have encoded some particular optimizations."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": "Optimizations"
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "When we choose a new task to execute we often have many options.  Policies at this stage are cheap and can significantly impact performance.  One could imagine policies that expose parallelism, drive towards a particular output, etc.."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Our current policy is to run tasks that were most recently made available."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": "Compute to release data"
+    },
+    {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "We hold on to intermediate computations either in memory or on disk."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "For very cheap computations that may emit new copies of the data, like "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "np.transpose"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or possibly even "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "x + 1"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " we choose not to store these as separate pieces of data / tasks.  Instead we combine them with the computations that require them.  This may result in repeated computation but saves significantly on space and computation complexity."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "See the function "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "inline_functions"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " for more information."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": "Inlining computations"
+    }
+  ]
+}

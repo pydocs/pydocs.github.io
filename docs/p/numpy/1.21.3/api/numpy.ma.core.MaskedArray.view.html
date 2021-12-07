@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -1056,9 +1058,9 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
-
     <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -1086,16 +1088,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Return a view of the MaskedArray data.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -1105,6 +1102,79 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>
+        <code class='verbatim'>a.view()</code>
+     is used two different ways:</p>
+
+    
+           
+               
+        <p>
+        <code class='verbatim'>a.view(some_dtype)</code>
+     or 
+        <code class='verbatim'>a.view(dtype=some_dtype)</code>
+     constructs a view of the array&#39;s memory with a different data-type.  This can cause a reinterpretation of the bytes of memory.</p>
+
+    
+           
+               
+        <p>
+        <code class='verbatim'>a.view(ndarray_subclass)</code>
+     or 
+        <code class='verbatim'>a.view(type=ndarray_subclass)</code>
+     just returns an instance of <code>:None:None:`ndarray_subclass`</code> that looks at the same array (same shape, dtype, etc.)  This does not cause a reinterpretation of the memory.</p>
+
+    
+           
+               
+        <p>If <code><a link href="#fill_value" class='local'>fill_value</a></code> is not specified, but <code><a link href="#dtype" class='local'>dtype</a></code> is specified (and is not an ndarray sub-class), the <code><a link href="#fill_value" class='local'>fill_value</a></code> of the MaskedArray will be reset. If neither <code><a link href="#fill_value" class='local'>fill_value</a></code> nor <code><a link href="#dtype" class='local'>dtype</a></code> are specified (or if <code><a link href="#dtype" class='local'>dtype</a></code> is an ndarray sub-class), then the fill value is preserved. Finally, if <code><a link href="#fill_value" class='local'>fill_value</a></code> is specified, but <code><a link href="#dtype" class='local'>dtype</a></code> is not, the fill value is set to the specified value.</p>
+
+    
+           
+               
+        <p>For 
+        <code class='verbatim'>a.view(some_dtype)</code>
+    , if 
+        <code class='verbatim'>some_dtype</code>
+     has a different number of bytes per entry than the previous dtype (for example, converting a regular array to a structured array), then the behavior of the view cannot be predicted just from the superficial appearance of 
+        <code class='verbatim'>a</code>
+     (shown by 
+        <code class='verbatim'>print(a)</code>
+    ). It also depends on exactly how 
+        <code class='verbatim'>a</code>
+     is stored in memory. Therefore if 
+        <code class='verbatim'>a</code>
+     is C-ordered versus fortran-ordered, versus defined as a slice or transpose, etc., the view may give different results.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -1175,15 +1245,6 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
@@ -1199,88 +1260,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>
-        <code class='verbatim'>a.view()</code>
-     is used two different ways:</p>
-
-    
-           
-               
-        <p>
-        <code class='verbatim'>a.view(some_dtype)</code>
-     or 
-        <code class='verbatim'>a.view(dtype=some_dtype)</code>
-     constructs a view of the array&#39;s memory with a different data-type.  This can cause a reinterpretation of the bytes of memory.</p>
-
-    
-           
-               
-        <p>
-        <code class='verbatim'>a.view(ndarray_subclass)</code>
-     or 
-        <code class='verbatim'>a.view(type=ndarray_subclass)</code>
-     just returns an instance of <code>:None:None:`ndarray_subclass`</code> that looks at the same array (same shape, dtype, etc.)  This does not cause a reinterpretation of the memory.</p>
-
-    
-           
-               
-        <p>If <code><a link href="#fill_value" class='local'>fill_value</a></code> is not specified, but <code><a link href="#dtype" class='local'>dtype</a></code> is specified (and is not an ndarray sub-class), the <code><a link href="#fill_value" class='local'>fill_value</a></code> of the MaskedArray will be reset. If neither <code><a link href="#fill_value" class='local'>fill_value</a></code> nor <code><a link href="#dtype" class='local'>dtype</a></code> are specified (or if <code><a link href="#dtype" class='local'>dtype</a></code> is an ndarray sub-class), then the fill value is preserved. Finally, if <code><a link href="#fill_value" class='local'>fill_value</a></code> is specified, but <code><a link href="#dtype" class='local'>dtype</a></code> is not, the fill value is set to the specified value.</p>
-
-    
-           
-               
-        <p>For 
-        <code class='verbatim'>a.view(some_dtype)</code>
-    , if 
-        <code class='verbatim'>some_dtype</code>
-     has a different number of bytes per entry than the previous dtype (for example, converting a regular array to a structured array), then the behavior of the view cannot be predicted just from the superficial appearance of 
-        <code class='verbatim'>a</code>
-     (shown by 
-        <code class='verbatim'>print(a)</code>
-    ). It also depends on exactly how 
-        <code class='verbatim'>a</code>
-     is stored in memory. Therefore if 
-        <code class='verbatim'>a</code>
-     is C-ordered versus fortran-ordered, versus defined as a slice or transpose, etc., the view may give different results.</p>
+        <p>Return a view of the MaskedArray data.</p>
 
     
            
@@ -1291,6 +1275,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1390,7 +1392,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "numpy.ma.core.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.ptp"}, {"id": 2, "val": 8.0, "label": "numpy.ma.core.MaskedArray.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.ptp"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asarray"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ptp"}, {"id": 5, "val": 10.64575131106459, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.recarray"}, {"id": 6, "val": 10.0, "label": "numpy.asanyarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asanyarray"}, {"id": 7, "val": 8.0, "label": "numpy.ma.core.MaskedArray.filled", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.filled"}], "links": [{"source": 6, "target": 3, "id": 2}, {"source": 4, "target": 2, "id": 10}, {"source": 4, "target": 1, "id": 11}, {"source": 5, "target": 6, "id": 14}, {"source": 5, "target": 3, "id": 15}, {"source": 5, "target": 7, "id": 19}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 11.0, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.recarray"}, {"id": 2, "val": 10.64575131106459, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asarray"}, {"id": 3, "val": 8.0, "label": "numpy.ma.core.MaskedArray.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.ptp"}, {"id": 4, "val": 10.0, "label": "numpy.asanyarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asanyarray"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ptp"}, {"id": 6, "val": 8.0, "label": "numpy.ma.core.MaskedArray.filled", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.filled"}, {"id": 7, "val": 8.0, "label": "numpy.ma.core.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.ptp"}], "links": [{"source": 4, "target": 2, "id": 2}, {"source": 5, "target": 3, "id": 12}, {"source": 5, "target": 7, "id": 13}, {"source": 1, "target": 4, "id": 18}, {"source": 1, "target": 2, "id": 19}, {"source": 1, "target": 6, "id": 23}]};
 
 (function() {
 
@@ -1518,7 +1520,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 8.0, "label": "numpy.ma.core.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.ptp"}, {"id": 2, "val": 8.0, "label": "numpy.ma.core.MaskedArray.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.ptp"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asarray"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ptp"}, {"id": 5, "val": 10.64575131106459, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.recarray"}, {"id": 6, "val": 10.0, "label": "numpy.asanyarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asanyarray"}, {"id": 7, "val": 8.0, "label": "numpy.ma.core.MaskedArray.filled", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.filled"}], "links": [{"source": 6, "target": 3, "id": 2}, {"source": 4, "target": 2, "id": 10}, {"source": 4, "target": 1, "id": 11}, {"source": 5, "target": 6, "id": 14}, {"source": 5, "target": 3, "id": 15}, {"source": 5, "target": 7, "id": 19}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 11.0, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.recarray"}, {"id": 2, "val": 10.64575131106459, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asarray"}, {"id": 3, "val": 8.0, "label": "numpy.ma.core.MaskedArray.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.ptp"}, {"id": 4, "val": 10.0, "label": "numpy.asanyarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asanyarray"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ptp"}, {"id": 6, "val": 8.0, "label": "numpy.ma.core.MaskedArray.filled", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.MaskedArray.filled"}, {"id": 7, "val": 8.0, "label": "numpy.ma.core.ptp", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.core.ptp"}], "links": [{"source": 4, "target": 2, "id": 2}, {"source": 5, "target": 3, "id": 12}, {"source": 5, "target": 7, "id": 13}, {"source": 1, "target": 4, "id": 18}, {"source": 1, "target": 2, "id": 19}, {"source": 1, "target": 6, "id": 23}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

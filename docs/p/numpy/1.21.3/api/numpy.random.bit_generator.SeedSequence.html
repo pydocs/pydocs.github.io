@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -802,9 +804,9 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
-
     <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -832,16 +834,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>SeedSequence mixes sources of entropy in a reproducible way to set the initial state for independent and very probably non-overlapping BitGenerators.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -860,6 +857,48 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Best practice for achieving reproducible bit streams is to use the default 
+        <code class='verbatim'>None</code>
+     for the initial entropy, and then use <code>:None:None:`SeedSequence.entropy`</code> to log/pickle the <code><a link href="#entropy" class='local'>entropy</a></code> for reproducibility:</p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; sq1 = np.random.SeedSequence()
+&gt;&gt;&gt; sq1.entropy
+243799254704924441050048792905230269161  # random
+&gt;&gt;&gt; sq2 = np.random.SeedSequence(sq1.entropy)
+&gt;&gt;&gt; np.all(sq1.generate_state(10) == sq2.generate_state(10))
+True</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -943,15 +982,6 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
@@ -967,67 +997,39 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Best practice for achieving reproducible bit streams is to use the default 
-        <code class='verbatim'>None</code>
-     for the initial entropy, and then use <code>:None:None:`SeedSequence.entropy`</code> to log/pickle the <code><a link href="#entropy" class='local'>entropy</a></code> for reproducibility:</p>
+        <p>SeedSequence mixes sources of entropy in a reproducible way to set the initial state for independent and very probably non-overlapping BitGenerators.</p>
 
     
            
-               
-            <pre>&gt;&gt;&gt; sq1 = np.random.SeedSequence()
-&gt;&gt;&gt; sq1.entropy
-243799254704924441050048792905230269161  # random
-&gt;&gt;&gt; sq2 = np.random.SeedSequence(sq1.entropy)
-&gt;&gt;&gt; np.all(sq1.generate_state(10) == sq2.generate_state(10))
-True</pre>
        
+    
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
            
-       
-    
+
+   </pre>
+   
 
 
     
     
-       
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1036,13 +1038,13 @@ True</pre>
         
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn.html" class='exists'>numpy.random.bit_generator.ISpawnableSeedSequence.spawn</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.bit_generator.SeedSequence.html" class='exists'>numpy.random.bit_generator.SeedSequence</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.random.bit_generator.ISeedSequence.generate_state.html" class='exists'>numpy.random.bit_generator.ISeedSequence.generate_state</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.bit_generator.SeedSequence.html" class='exists'>numpy.random.bit_generator.SeedSequence</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn.html" class='exists'>numpy.random.bit_generator.ISpawnableSeedSequence.spawn</a></code>
         
          
      
@@ -1142,7 +1144,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "numpy.random._philox.Philox", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._philox.Philox"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn"}, {"id": 4, "val": 8.0, "label": "numpy.random._sfc64.SFC64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._sfc64.SFC64"}, {"id": 5, "val": 10.82842712474619, "label": "numpy.random.bit_generator.BitGenerator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.BitGenerator"}, {"id": 6, "val": 9.0, "label": "numpy.random.bit_generator.ISeedSequence.generate_state", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISeedSequence.generate_state"}, {"id": 8, "val": 10.449489742783179, "label": "numpy.random._mt19937.MT19937", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._mt19937.MT19937"}, {"id": 9, "val": 9.0, "label": "numpy.random._pcg64.PCG64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64"}, {"id": 10, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}], "links": [{"source": 5, "target": 10, "id": 84}, {"source": 5, "target": 8, "id": 85}, {"source": 5, "target": 9, "id": 86}, {"source": 5, "target": 2, "id": 87}, {"source": 5, "target": 1, "id": 88}, {"source": 5, "target": 4, "id": 89}, {"source": 3, "target": 8, "id": 91}, {"source": 3, "target": 9, "id": 92}, {"source": 3, "target": 2, "id": 93}, {"source": 3, "target": 1, "id": 94}, {"source": 3, "target": 8, "id": 105}, {"source": 3, "target": 9, "id": 106}, {"source": 3, "target": 2, "id": 107}, {"source": 3, "target": 1, "id": 108}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "numpy.random.bit_generator.ISeedSequence.generate_state", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISeedSequence.generate_state"}, {"id": 2, "val": 9.0, "label": "numpy.random._philox.Philox", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._philox.Philox"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 5, "val": 10.449489742783179, "label": "numpy.random._mt19937.MT19937", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._mt19937.MT19937"}, {"id": 6, "val": 10.82842712474619, "label": "numpy.random.bit_generator.BitGenerator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.BitGenerator"}, {"id": 7, "val": 10.23606797749979, "label": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn"}, {"id": 8, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 9, "val": 9.0, "label": "numpy.random._pcg64.PCG64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64"}, {"id": 10, "val": 8.0, "label": "numpy.random._sfc64.SFC64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._sfc64.SFC64"}], "links": [{"source": 6, "target": 8, "id": 84}, {"source": 6, "target": 5, "id": 85}, {"source": 6, "target": 9, "id": 86}, {"source": 6, "target": 4, "id": 87}, {"source": 6, "target": 2, "id": 88}, {"source": 6, "target": 10, "id": 89}, {"source": 7, "target": 5, "id": 91}, {"source": 7, "target": 9, "id": 92}, {"source": 7, "target": 4, "id": 93}, {"source": 7, "target": 2, "id": 94}, {"source": 7, "target": 5, "id": 115}, {"source": 7, "target": 9, "id": 116}, {"source": 7, "target": 4, "id": 117}, {"source": 7, "target": 2, "id": 118}]};
 
 (function() {
 
@@ -1270,7 +1272,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "numpy.random._philox.Philox", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._philox.Philox"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn"}, {"id": 4, "val": 8.0, "label": "numpy.random._sfc64.SFC64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._sfc64.SFC64"}, {"id": 5, "val": 10.82842712474619, "label": "numpy.random.bit_generator.BitGenerator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.BitGenerator"}, {"id": 6, "val": 9.0, "label": "numpy.random.bit_generator.ISeedSequence.generate_state", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISeedSequence.generate_state"}, {"id": 8, "val": 10.449489742783179, "label": "numpy.random._mt19937.MT19937", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._mt19937.MT19937"}, {"id": 9, "val": 9.0, "label": "numpy.random._pcg64.PCG64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64"}, {"id": 10, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}], "links": [{"source": 5, "target": 10, "id": 84}, {"source": 5, "target": 8, "id": 85}, {"source": 5, "target": 9, "id": 86}, {"source": 5, "target": 2, "id": 87}, {"source": 5, "target": 1, "id": 88}, {"source": 5, "target": 4, "id": 89}, {"source": 3, "target": 8, "id": 91}, {"source": 3, "target": 9, "id": 92}, {"source": 3, "target": 2, "id": 93}, {"source": 3, "target": 1, "id": 94}, {"source": 3, "target": 8, "id": 105}, {"source": 3, "target": 9, "id": 106}, {"source": 3, "target": 2, "id": 107}, {"source": 3, "target": 1, "id": 108}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "numpy.random.bit_generator.ISeedSequence.generate_state", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISeedSequence.generate_state"}, {"id": 2, "val": 9.0, "label": "numpy.random._philox.Philox", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._philox.Philox"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 5, "val": 10.449489742783179, "label": "numpy.random._mt19937.MT19937", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._mt19937.MT19937"}, {"id": 6, "val": 10.82842712474619, "label": "numpy.random.bit_generator.BitGenerator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.BitGenerator"}, {"id": 7, "val": 10.23606797749979, "label": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random.bit_generator.ISpawnableSeedSequence.spawn"}, {"id": 8, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 9, "val": 9.0, "label": "numpy.random._pcg64.PCG64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64"}, {"id": 10, "val": 8.0, "label": "numpy.random._sfc64.SFC64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._sfc64.SFC64"}], "links": [{"source": 6, "target": 8, "id": 84}, {"source": 6, "target": 5, "id": 85}, {"source": 6, "target": 9, "id": 86}, {"source": 6, "target": 4, "id": 87}, {"source": 6, "target": 2, "id": 88}, {"source": 6, "target": 10, "id": 89}, {"source": 7, "target": 5, "id": 91}, {"source": 7, "target": 9, "id": 92}, {"source": 7, "target": 4, "id": 93}, {"source": 7, "target": 2, "id": 94}, {"source": 7, "target": 5, "id": 115}, {"source": 7, "target": 9, "id": 116}, {"source": 7, "target": 4, "id": 117}, {"source": 7, "target": 2, "id": 118}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

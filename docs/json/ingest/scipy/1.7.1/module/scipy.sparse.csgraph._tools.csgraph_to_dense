@@ -1,0 +1,1182 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionadded",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "0.11.0 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "For normal sparse graph representations, calling csgraph_to_dense with null_value=0 produces an equivalent result to using dense format conversions in the main sparse package.  When the sparse representations have repeated values, however, the results will differ.  The tools in scipy.sparse will add repeating values to obtain a final value.  This function will select the minimum among repeating values to obtain a final value.  For example, here we'll create a two-node directed sparse graph with multiple edges from node 0 to node 1, of weights 2 and 3. This illustrates the difference in behavior:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> from scipy.sparse import csr_matrix, csgraph",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> data = np.array([2, 3])",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> indices = np.array([1, 1])",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> indptr = np.array([0, 2, 2])",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> M = csr_matrix((data, indices, indptr), shape=(2, 2))",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> M.toarray()",
+                  "_number": 5,
+                  "_offset": 0
+                },
+                {
+                  "_line": "array([[0, 5],",
+                  "_number": 6,
+                  "_offset": 0
+                },
+                {
+                  "_line": "       [0, 0]])",
+                  "_number": 7,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> csgraph.csgraph_to_dense(M)",
+                  "_number": 8,
+                  "_offset": 0
+                },
+                {
+                  "_line": "array([[0., 2.],",
+                  "_number": 9,
+                  "_offset": 0
+                },
+                {
+                  "_line": "       [0., 0.]])",
+                  "_number": 10,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The reason for this difference is to allow a compressed sparse graph to represent multiple edges between any two nodes.  As most sparse graph algorithms are concerned with the single lowest-cost edge between any two nodes, the default scipy.sparse behavior of summming multiple weights does not make sense in this context."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The other reason for using this routine is to allow for graphs with zero-weight edges.  Let's look at the example of a two-node directed graph, connected by an edge of weight zero:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> from scipy.sparse import csr_matrix, csgraph",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> data = np.array([0.0])",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> indices = np.array([1])",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> indptr = np.array([0, 1, 1])",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> M = csr_matrix((data, indices, indptr), shape=(2, 2))",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> M.toarray()",
+                  "_number": 5,
+                  "_offset": 0
+                },
+                {
+                  "_line": "array([[0, 0],",
+                  "_number": 6,
+                  "_offset": 0
+                },
+                {
+                  "_line": "       [0, 0]])",
+                  "_number": 7,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> csgraph.csgraph_to_dense(M, np.inf)",
+                  "_number": 8,
+                  "_offset": 0
+                },
+                {
+                  "_line": "array([[ inf,   0.],",
+                  "_number": 9,
+                  "_offset": 0
+                },
+                {
+                  "_line": "       [ inf,  inf]])",
+                  "_number": 10,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "In the first case, the zero-weight edge gets lost in the dense representation.  In the second case, we can choose a different null value and see the true form of the graph."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "csgraph",
+            "type_": "csr_matrix, csc_matrix, or lil_matrix",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Sparse representation of a graph."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "null_value",
+            "type_": "float, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The value used to indicate null edges in the dense representation. Default is 0."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "graph",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The dense representation of the sparse graph."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Convert a sparse graph representation to a dense representation"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.sparse.csgraph"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.sparse.csr.csr_matrix"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.sparse.csgraph._tools.csgraph_to_dense"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.sparse"
+    }
+  ],
+  "ordered_sections": [
+    "Signature",
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "Examples"
+  ],
+  "item_file": null,
+  "item_line": null,
+  "item_type": "<class 'builtin_function_or_method'>",
+  "aliases": [
+    "scipy.signal.filter_design.optimize._differentiable_functions.sps.csgraph.csgraph_to_dense"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "scipy",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sparse",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "csr_matrix",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse.csr.csr_matrix"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "scipy",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sparse",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "csgraph",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse.csgraph"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "csgraph_to_dense",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse.csgraph._tools.csgraph_to_dense"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            }
+          ],
+          "out": "",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "graph"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "csr_matrix",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse.csr.csr_matrix"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "graph"
+              }
+            }
+          ],
+          "out": "<4x4 sparse matrix of type '<class 'numpy.int64'>'\n    with 4 stored elements in Compressed Sparse Row format>",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "csgraph_to_dense",
+                  "reference": {
+                    "module": "scipy",
+                    "version": "1.7.1",
+                    "kind": "module",
+                    "path": "scipy.sparse.csgraph._tools.csgraph_to_dense"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "graph"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "array([[ 0.,  1.,  2.,  0.],\n       [ 0.,  0.,  0.,  1.],\n       [ 0.,  0.,  0.,  3.],\n       [ 0.,  0.,  0.,  0.]])",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.7.1",
+  "signature": "csgraph_to_dense(csgraph, null_value=0)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "scipy.sparse.csgraph._tools.csgraph_to_dense",
+  "arbitrary": []
+}

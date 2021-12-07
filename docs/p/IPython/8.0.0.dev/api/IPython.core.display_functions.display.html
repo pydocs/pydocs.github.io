@@ -334,6 +334,7 @@ user-select: none;
                 <a href=IPython>IPython</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -485,11 +486,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     
 
@@ -516,16 +517,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Display a Python object in all frontends.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -545,6 +541,124 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>In Python, objects can declare their textual representation using the <code>:None:None:`__repr__`</code> method. IPython expands on this idea and allows objects to declare other, rich representations including:</p>
+
+    
+           
+               
+            <pre>- HTML
+- JSON
+- PNG
+- JPEG
+- SVG
+- LaTeX
+</pre>
+
+       
+           
+               
+        <p>A single object can declare some or all of these representations; all are handled by IPython&#39;s display system.</p>
+
+    
+           
+               
+        <p>The main idea of the first approach is that you have to implement special display methods when you define your class, one for each representation you want to use. Here is a list of the names of the special methods and the values they must return:</p>
+
+    
+           
+               
+            <pre>- `_repr_html_`: return raw HTML as a string, or a tuple (see below).
+- `_repr_json_`: return a JSONable dict, or a tuple (see below).
+- `_repr_jpeg_`: return raw JPEG data, or a tuple (see below).
+- `_repr_png_`: return raw PNG data, or a tuple (see below).
+- `_repr_svg_`: return raw SVG data as a string, or a tuple (see below).
+- `_repr_latex_`: return LaTeX commands in a string surrounded by &#34;$&#34;,
+                  or a tuple (see below).
+- `_repr_mimebundle_`: return a full mimebundle containing the mapping
+                       from all mimetypes to data.
+                       Use this for any mime-type not listed above.
+</pre>
+
+       
+           
+               
+        <p>The above functions may also return the object&#39;s metadata alonside the data.  If the metadata is available, the functions will return a tuple containing the data and metadata, in that order.  If there is no metadata available, then the functions will return the data only.</p>
+
+    
+           
+               
+        <p>When you are directly writing your own classes, you can adapt them for display in IPython by following the above approach. But in practice, you often need to work with existing classes that you can&#39;t easily modify.</p>
+
+    
+           
+               
+        <p>You can refer to the documentation on integrating with the display system in order to register custom formatters for already existing types (<code>:None:ref:`integrating_rich_display`</code>).</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>5.4 display available without import </p>
+
+    
+    
+</div>
+
+       
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>6.1 display available without import </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Since IPython 5.4 and 6.1 <code><a link href="/p/IPython/8.0.0.dev/api/IPython.display.html" class='exists'>display</a></code>
+         is automatically made available to the user without import. If you are using display in a document that might be used in a pure python context or with older version of IPython, use the following import at the top of your file::      </p>
+
+    
+           
+               
+            <pre>from IPython.display import display</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -687,6 +801,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -714,159 +843,13 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>In Python, objects can declare their textual representation using the <code>:None:None:`__repr__`</code> method. IPython expands on this idea and allows objects to declare other, rich representations including:</p>
+        <p>Display a Python object in all frontends.</p>
 
     
-           
-               
-            <pre>- HTML
-- JSON
-- PNG
-- JPEG
-- SVG
-- LaTeX
-</pre>
-
-       
-           
-               
-        <p>A single object can declare some or all of these representations; all are handled by IPython&#39;s display system.</p>
-
-    
-           
-               
-        <p>The main idea of the first approach is that you have to implement special display methods when you define your class, one for each representation you want to use. Here is a list of the names of the special methods and the values they must return:</p>
-
-    
-           
-               
-            <pre>- `_repr_html_`: return raw HTML as a string, or a tuple (see below).
-- `_repr_json_`: return a JSONable dict, or a tuple (see below).
-- `_repr_jpeg_`: return raw JPEG data, or a tuple (see below).
-- `_repr_png_`: return raw PNG data, or a tuple (see below).
-- `_repr_svg_`: return raw SVG data as a string, or a tuple (see below).
-- `_repr_latex_`: return LaTeX commands in a string surrounded by &#34;$&#34;,
-                  or a tuple (see below).
-- `_repr_mimebundle_`: return a full mimebundle containing the mapping
-                       from all mimetypes to data.
-                       Use this for any mime-type not listed above.
-</pre>
-
-       
-           
-               
-        <p>The above functions may also return the object&#39;s metadata alonside the data.  If the metadata is available, the functions will return a tuple containing the data and metadata, in that order.  If there is no metadata available, then the functions will return the data only.</p>
-
-    
-           
-               
-        <p>When you are directly writing your own classes, you can adapt them for display in IPython by following the above approach. But in practice, you often need to work with existing classes that you can&#39;t easily modify.</p>
-
-    
-           
-               
-        <p>You can refer to the documentation on integrating with the display system in order to register custom formatters for already existing types (<code>:None:ref:`integrating_rich_display`</code>).</p>
-
-    
-           
-               
-            <div class='admonition'>
-    <div>versionadded</div>
-    
-        
-        <p>5.4 display available without import </p>
-
-    
-    
-</div>
-
-       
-           
-               
-            <div class='admonition'>
-    <div>versionadded</div>
-    
-        
-        <p>6.1 display available without import </p>
-
-    
-    
-</div>
-
-       
-           
-               
-        <p>Since IPython 5.4 and 6.1 <code><a link href="/p/IPython/8.0.0.dev/api/IPython.display.html" class='exists'>display</a></code>
-         is automatically made available to the user without import. If you are using display in a document that might be used in a pure python context or with older version of IPython, use the following import at the top of your file::      </p>
-
-    
-           
-               
-            <pre>from IPython.display import display</pre>
-       
            
        
     
@@ -875,6 +858,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -931,10 +932,10 @@ II</pre>
              <code><a link href="/p/IPython/8.0.0.dev/api/IPython.display.html" class='exists'>IPython.display</a></code>
         
          
-             <code><a link href="/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display.html" class='exists'>IPython.core.display_functions.update_display</a></code>
+             <code><a link href="/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class.html" class='exists'>IPython.core.magic.magics_class</a></code>
         
          
-             <code><a link href="/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class.html" class='exists'>IPython.core.magic.magics_class</a></code>
+             <code><a link href="/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display.html" class='exists'>IPython.core.display_functions.update_display</a></code>
         
          
              <code><a link href="/p/IPython/8.0.0.dev/api/IPython.core.formatters.html" class='exists'>IPython.core.formatters</a></code>
@@ -1002,7 +1003,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display"}, {"id": 2, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class"}, {"id": 3, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.formatters"}, {"id": 4, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.display"}], "links": []};
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class"}, {"id": 2, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.formatters"}, {"id": 3, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.display"}, {"id": 4, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display"}], "links": []};
 
 (function() {
 
@@ -1130,7 +1131,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display"}, {"id": 2, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class"}, {"id": 3, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.formatters"}, {"id": 4, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.display"}], "links": []};
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.magic.magics_class"}, {"id": 2, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.formatters"}, {"id": 3, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.display"}, {"id": 4, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.0.0.dev/api/IPython.core.display_functions.update_display"}], "links": []};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

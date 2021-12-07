@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -797,13 +799,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -831,16 +833,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Singular Value Decomposition.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -858,6 +855,99 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+            <div class='admonition'>
+    <div>versionchanged</div>
+    
+        
+        <p>Broadcasting rules apply, see the `numpy.linalg` documentation for details. </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>The decomposition is performed using LAPACK routine 
+        <code class='verbatim'>_gesdd</code>
+    .</p>
+
+    
+           
+               
+        <p>SVD is usually described for the factorization of a 2D matrix 
+        <span class="tex2jax_process">$A$</span>
+    . The higher-dimensional case will be discussed below. In the 2D case, SVD is written as 
+        <span class="tex2jax_process">$A = U S V^H$</span>
+    , where 
+        <span class="tex2jax_process">$A = a$</span>
+    , 
+        <span class="tex2jax_process">$U= u$</span>
+    , 
+        <span class="tex2jax_process">$S= \mathtt{np.diag}(s)$</span>
+     and 
+        <span class="tex2jax_process">$V^H = vh$</span>
+    . The 1D array <code><a link href="#s" class='local'>s</a></code> contains the singular values of <code><a link href="#a" class='local'>a</a></code> and <code><a link href="#u" class='local'>u</a></code> and <code><a link href="#vh" class='local'>vh</a></code> are unitary. The rows of <code><a link href="#vh" class='local'>vh</a></code> are the eigenvectors of 
+        <span class="tex2jax_process">$A^H A$</span>
+     and the columns of <code><a link href="#u" class='local'>u</a></code> are the eigenvectors of 
+        <span class="tex2jax_process">$A A^H$</span>
+    . In both cases the corresponding (possibly non-zero) eigenvalues are given by 
+        <code class='verbatim'>s**2</code>
+    .</p>
+
+    
+           
+               
+        <p>If <code><a link href="#a" class='local'>a</a></code> has more than two dimensions, then broadcasting rules apply, as explained in <code>:None:ref:`routines.linalg-broadcasting`</code>. This means that SVD is working in &#34;stacked&#34; mode: it iterates over all indices of the first 
+        <code class='verbatim'>a.ndim - 2</code>
+     dimensions and for each combination SVD is applied to the last two indices. The matrix <code><a link href="#a" class='local'>a</a></code> can be reconstructed from the decomposition with either 
+        <code class='verbatim'>(u * s[..., None, :]) @ vh</code>
+     or 
+        <code class='verbatim'>u @ (s[..., None] * vh)</code>
+    . (The 
+        <code class='verbatim'>@</code>
+     operator can be replaced by the function 
+        <code class='verbatim'>np.matmul</code>
+     for python versions below 3.5.)</p>
+
+    
+           
+               
+        <p>If <code><a link href="#a" class='local'>a</a></code> is a 
+        <code class='verbatim'>matrix</code>
+     object (as opposed to an 
+        <code class='verbatim'>ndarray</code>
+    ), then so are all the return values.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -953,6 +1043,37 @@ user-select: none;
 
 
     
+        <h3 id="section-Raises">Raises</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>LinAlgError</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If SVD computation does not converge.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -1013,148 +1134,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Raises">Raises</h3>
-    
-    
-       <dl>
-           
-            
-                <dt>LinAlgError</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>If SVD computation does not converge.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-            <div class='admonition'>
-    <div>versionchanged</div>
-    
-        
-        <p>Broadcasting rules apply, see the `numpy.linalg` documentation for details. </p>
-
-    
-    
-</div>
-
-       
-           
-               
-        <p>The decomposition is performed using LAPACK routine 
-        <code class='verbatim'>_gesdd</code>
-    .</p>
-
-    
-           
-               
-        <p>SVD is usually described for the factorization of a 2D matrix 
-        <span class="tex2jax_process">$A$</span>
-    . The higher-dimensional case will be discussed below. In the 2D case, SVD is written as 
-        <span class="tex2jax_process">$A = U S V^H$</span>
-    , where 
-        <span class="tex2jax_process">$A = a$</span>
-    , 
-        <span class="tex2jax_process">$U= u$</span>
-    , 
-        <span class="tex2jax_process">$S= \mathtt{np.diag}(s)$</span>
-     and 
-        <span class="tex2jax_process">$V^H = vh$</span>
-    . The 1D array <code><a link href="#s" class='local'>s</a></code> contains the singular values of <code><a link href="#a" class='local'>a</a></code> and <code><a link href="#u" class='local'>u</a></code> and <code><a link href="#vh" class='local'>vh</a></code> are unitary. The rows of <code><a link href="#vh" class='local'>vh</a></code> are the eigenvectors of 
-        <span class="tex2jax_process">$A^H A$</span>
-     and the columns of <code><a link href="#u" class='local'>u</a></code> are the eigenvectors of 
-        <span class="tex2jax_process">$A A^H$</span>
-    . In both cases the corresponding (possibly non-zero) eigenvalues are given by 
-        <code class='verbatim'>s**2</code>
-    .</p>
-
-    
-           
-               
-        <p>If <code><a link href="#a" class='local'>a</a></code> has more than two dimensions, then broadcasting rules apply, as explained in <code>:None:ref:`routines.linalg-broadcasting`</code>. This means that SVD is working in &#34;stacked&#34; mode: it iterates over all indices of the first 
-        <code class='verbatim'>a.ndim - 2</code>
-     dimensions and for each combination SVD is applied to the last two indices. The matrix <code><a link href="#a" class='local'>a</a></code> can be reconstructed from the decomposition with either 
-        <code class='verbatim'>(u * s[..., None, :]) @ vh</code>
-     or 
-        <code class='verbatim'>u @ (s[..., None] * vh)</code>
-    . (The 
-        <code class='verbatim'>@</code>
-     operator can be replaced by the function 
-        <code class='verbatim'>np.matmul</code>
-     for python versions below 3.5.)</p>
-
-    
-           
-               
-        <p>If <code><a link href="#a" class='local'>a</a></code> is a 
-        <code class='verbatim'>matrix</code>
-     object (as opposed to an 
-        <code class='verbatim'>ndarray</code>
-    ), then so are all the return values.</p>
+        <p>Singular Value Decomposition.</p>
 
     
            
@@ -1165,13 +1149,31 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
 
     <h3 id="section-Examples">Examples</h3>
         
-                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">a</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">randn</span><span class="">(</span><span class="mi">9</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">j</span><span class="o">*</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">randn</span><span class="">(</span><span class="mi">9</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">b</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">randn</span><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">7</span><span class="">,</span><span class=""> </span><span class="mi">8</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">j</span><span class="o">*</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><span class="">randn</span><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">7</span><span class="">,</span><span class=""> </span><span class="mi">8</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span>
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">a</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.matlib.randn.html">randn</a><span class="">(</span><span class="mi">9</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">j</span><span class="o">*</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.matlib.randn.html">randn</a><span class="">(</span><span class="mi">9</span><span class="">,</span><span class=""> </span><span class="mi">6</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">b</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.matlib.randn.html">randn</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">7</span><span class="">,</span><span class=""> </span><span class="mi">8</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mi">1</span><span class="">j</span><span class="o">*</span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.random.html">random</a><span class="o">.</span><a class="foo ", href="/p/numpy/1.21.3/api/numpy.matlib.randn.html">randn</a><span class="">(</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">7</span><span class="">,</span><span class=""> </span><span class="mi">8</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">)</span>
 </pre>
             
             
@@ -1266,37 +1268,40 @@ True</pre>
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.svd.html" class='exists'>numpy.linalg.svd</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.diag.html" class='exists'>numpy.diag</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.asmatrix.html" class='exists'>numpy.asmatrix</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ma.extras._covhelper.html" class='exists'>numpy.ma.extras._covhelper</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.dot.html" class='exists'>numpy.dot</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.shape.html" class='exists'>numpy.shape</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.allclose.html" class='exists'>numpy.allclose</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.html" class='exists'>numpy.linalg</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.dot.html" class='exists'>numpy.dot</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.dtype.html" class='exists'>numpy.dtype</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.html" class='exists'>numpy.linalg</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ma.extras._covhelper.html" class='exists'>numpy.ma.extras._covhelper</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.shape.html" class='exists'>numpy.shape</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.asmatrix.html" class='exists'>numpy.asmatrix</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.matlib.randn.html" class='exists'>numpy.matlib.randn</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.svd.html" class='exists'>numpy.linalg.svd</a></code>
         
          
      
@@ -1375,7 +1380,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 12.898979485566356, "label": "numpy.dot", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dot"}, {"id": 2, "val": 19.532562594670797, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dtype"}, {"id": 3, "val": 9.732050807568877, "label": "numpy.asmatrix", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asmatrix"}, {"id": 4, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}, {"id": 5, "val": 9.0, "label": "numpy.linalg.cond", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.cond"}, {"id": 7, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 8, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 9, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 10, "val": 9.0, "label": "numpy.ma.extras._covhelper", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras._covhelper"}, {"id": 11, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 12, "val": 14.70820393249937, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.shape"}], "links": [{"source": 4, "target": 5, "id": 156}, {"source": 2, "target": 12, "id": 437}, {"source": 2, "target": 7, "id": 447}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 12.898979485566356, "label": "numpy.dot", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dot"}, {"id": 2, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 3, "val": 19.6619037896906, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dtype"}, {"id": 4, "val": 11.872983346207416, "label": "numpy.matlib.randn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matlib.randn"}, {"id": 5, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 6, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 7, "val": 9.0, "label": "numpy.ma.extras._covhelper", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras._covhelper"}, {"id": 9, "val": 10.0, "label": "numpy.asmatrix", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asmatrix"}, {"id": 10, "val": 14.70820393249937, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.shape"}, {"id": 11, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 12, "val": 9.0, "label": "numpy.linalg.cond", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.cond"}, {"id": 13, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}], "links": [{"source": 2, "target": 4, "id": 47}, {"source": 3, "target": 10, "id": 413}, {"source": 3, "target": 5, "id": 423}, {"source": 13, "target": 12, "id": 433}]};
 
 (function() {
 
@@ -1503,7 +1508,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 12.898979485566356, "label": "numpy.dot", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dot"}, {"id": 2, "val": 19.532562594670797, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dtype"}, {"id": 3, "val": 9.732050807568877, "label": "numpy.asmatrix", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asmatrix"}, {"id": 4, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}, {"id": 5, "val": 9.0, "label": "numpy.linalg.cond", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.cond"}, {"id": 7, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 8, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 9, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 10, "val": 9.0, "label": "numpy.ma.extras._covhelper", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras._covhelper"}, {"id": 11, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 12, "val": 14.70820393249937, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.shape"}], "links": [{"source": 4, "target": 5, "id": 156}, {"source": 2, "target": 12, "id": 437}, {"source": 2, "target": 7, "id": 447}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 12.898979485566356, "label": "numpy.dot", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dot"}, {"id": 2, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 3, "val": 19.6619037896906, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.dtype"}, {"id": 4, "val": 11.872983346207416, "label": "numpy.matlib.randn", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matlib.randn"}, {"id": 5, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 6, "val": 12.69041575982343, "label": "numpy.diag", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.diag"}, {"id": 7, "val": 9.0, "label": "numpy.ma.extras._covhelper", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras._covhelper"}, {"id": 9, "val": 10.0, "label": "numpy.asmatrix", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.asmatrix"}, {"id": 10, "val": 14.70820393249937, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.shape"}, {"id": 11, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 12, "val": 9.0, "label": "numpy.linalg.cond", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg.cond"}, {"id": 13, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}], "links": [{"source": 2, "target": 4, "id": 47}, {"source": 3, "target": 10, "id": 413}, {"source": 3, "target": 5, "id": 423}, {"source": 13, "target": 12, "id": 433}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

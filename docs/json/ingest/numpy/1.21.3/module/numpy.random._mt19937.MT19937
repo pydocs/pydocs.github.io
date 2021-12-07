@@ -1,0 +1,606 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "lock: threading.Lock",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Lock instance that is shared so that the same bit git generator can be used in multiple Generators without corrupting the state. Code that generates values from a bit generator should hold the bit generator's lock."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "MT19937"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " provides a capsule containing function pointers that produce doubles, and unsigned 32 and 64- bit integers . These are not directly consumable in Python and must be consumed by a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Generator"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or similar object that supports low-level access."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The Python stdlib module \"random\" also contains a Mersenne Twister pseudo-random number generator."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "State and Seeding"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "MT19937"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " state vector consists of a 624-element array of 32-bit unsigned integers plus a single integer value between 0 and 624 that indexes the current position within the main array."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The input seed is processed by "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "SeedSequence",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.random.bit_generator.SeedSequence"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " to fill the whole state. The first element is reset such that only its most significant bit is set."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "Parallel Features"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The preferred way to use a BitGenerator in parallel applications is to use the "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "SeedSequence.spawn",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.21.3",
+                    "kind": "module",
+                    "path": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " method to obtain entropy values, and to use these to generate new BitGenerators:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> from numpy.random import Generator, MT19937, SeedSequence",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> sg = SeedSequence(1234)",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> rg = [Generator(MT19937(s)) for s in sg.spawn(10)]",
+                  "_number": 2,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Another method is to use "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "MT19937.jumped"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " which advances the state as-if "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "2^{128}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " random numbers have been generated (, ). This allows the original sequence to be split so that distinct segments can be used in each worker process. All generators should be chained to ensure that the segments come from the same sequence."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": ">>> from numpy.random import Generator, MT19937, SeedSequence",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> sg = SeedSequence(1234)",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> bit_generator = MT19937(sg)",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> rg = []",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": ">>> for _ in range(10):",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...    rg.append(Generator(bit_generator))",
+                  "_number": 5,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...    # Chain the BitGenerators",
+                  "_number": 6,
+                  "_offset": 0
+                },
+                {
+                  "_line": "...    bit_generator = bit_generator.jumped()",
+                  "_number": 7,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "Compatibility Guarantee"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "MT19937"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " makes a guarantee that a fixed seed and will always produce the same random integer stream."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "seed",
+            "type_": "{None, int, array_like[ints], SeedSequence}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A seed to initialize the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "BitGenerator",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.BitGenerator"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". If None, then fresh, unpredictable entropy will be pulled from the OS. If an "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "int"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "array_like[ints]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is passed, then it will be passed to "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "SeedSequence",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.SeedSequence"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " to derive the initial "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "BitGenerator",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.BitGenerator"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " state. One may also pass in a "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "SeedSequence",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.21.3",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.SeedSequence"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " instance."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Container for the Mersenne Twister pseudo-random number generator."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.SeedSequence"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn"
+    },
+    {
+      "module": "numpy",
+      "version": "1.21.3",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.BitGenerator"
+    }
+  ],
+  "ordered_sections": [
+    "Signature",
+    "Summary",
+    "Parameters",
+    "Attributes",
+    "Notes",
+    "References"
+  ],
+  "item_file": "/numpy/random/_mt19937.cpython-39-darwin.so",
+  "item_line": null,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "numpy.random.MT19937"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.21.3",
+  "signature": "MT19937(seed=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "numpy.random._mt19937.MT19937",
+  "arbitrary": []
+}

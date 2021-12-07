@@ -1,0 +1,1266 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Open multiple files as a single dataset."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "If combine='by_coords' then the function "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "combine",
+                    "_",
+                    "by",
+                    "_",
+                    "coords"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is used to combine the datasets into one before returning the result, and if combine='nested' then "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "combine",
+                    "_",
+                    "nested"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is used. The filepaths must be structured according to which combining function is used, the details of which are given in the documentation for "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "combine",
+                    "_",
+                    "by",
+                    "_",
+                    "coords"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " and "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "combine",
+                    "_",
+                    "nested"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". By default "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "combine='by",
+                    "_",
+                    "coords'"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " will be used. Requires dask to be installed. See documentation for details on dask [1]_. Global attributes from the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "attrs",
+                    "_",
+                    "file"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " are used for the combined dataset."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "paths",
+            "type_": "str or sequence",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Either a string glob in the form "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "\"path/to/my/files/",
+                          "*",
+                          ".nc\""
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or an explicit list of files to open. Paths can be given as strings or as pathlib Paths. If concatenation along more than one dimension is desired, then "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "paths"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " must be a nested list-of-lists (see "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "combine",
+                          "_",
+                          "nested"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " for details). (A string glob will be expanded to a 1-dimensional list.)"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "chunks",
+            "type_": "int or dict, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Dictionary with keys given by dimension names and values given by chunk sizes. In general, these should divide the dimensions of each dataset. If int, chunk each dimension by "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "chunks"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". By default, chunks will be chosen to load entire input files into memory at once. This has a major impact on performance: please see the full documentation for more details [2]_."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "concat_dim",
+            "type_": "str, or list of str, DataArray, Index or None, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Dimensions to concatenate files along.  You only need to provide this argument if "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "combine='by",
+                          "_",
+                          "coords'"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", and if any of the dimensions along which you want to concatenate is not a dimension in the original datasets, e.g., if you want to stack a collection of 2D arrays along a third dimension. Set "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "concat",
+                          "_",
+                          "dim=[...,",
+                          " ",
+                          "None,",
+                          " ",
+                          "...]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " explicitly to disable concatenation along a particular dimension. Default is None, which for a 1D list of filepaths is equivalent to opening the files separately and then merging them with "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "xarray.merge"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "combine",
+            "type_": "{\"by_coords\", \"nested\"}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Whether "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "xarray.combine",
+                          "_",
+                          "by",
+                          "_",
+                          "coords"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "xarray.combine",
+                          "_",
+                          "nested"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is used to combine all the data. Default is to use "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "xarray.combine",
+                          "_",
+                          "by",
+                          "_",
+                          "coords"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "compat",
+            "type_": "{\"identical\", \"equals\", \"broadcast_equals\",               \"no_conflicts\", \"override\"}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "String indicating how to compare variables of the same name for potential conflicts when merging:"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": " * \"broadcast_equals\": all values must be equal when variables are",
+                            "_number": 3,
+                            "_offset": 1
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": "   broadcast against each other to ensure common dimensions.",
+                            "_number": 4,
+                            "_offset": 3
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "* \"broadcast_equals\": all values must be equal when variables are"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "broadcast against each other to ensure common dimensions."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " * \"equals\": all values and dimensions must be the same.  * \"identical\": all values, dimensions and attributes must be the"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "   same."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": " * \"no_conflicts\": only values which are not null in both datasets",
+                            "_number": 8,
+                            "_offset": 1
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": "   must be equal. The returned dataset then contains the combination",
+                            "_number": 9,
+                            "_offset": 3
+                          },
+                          {
+                            "_line": "   of all non-null values.",
+                            "_number": 10,
+                            "_offset": 3
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "* \"no_conflicts\": only values which are not null in both datasets"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "must be equal. The returned dataset then contains the combination of all non-null values."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " * \"override\": skip comparing and pick variable from first dataset"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "preprocess",
+            "type_": "callable, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If provided, call this function on each dataset prior to concatenation. You can find the file-name from which each dataset was loaded in "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "ds.encoding[\"source\"]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "engine",
+            "type_": "{\"netcdf4\", \"scipy\", \"pydap\", \"h5netcdf\", \"pynio\", \"cfgrib\", \"zarr\"},         optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Engine to use when reading files. If not provided, the default engine is chosen based on available dependencies, with a preference for \"netcdf4\"."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lock",
+            "type_": "False or lock-like, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Resource lock to use when reading data from disk. Only relevant when using dask or another form of parallelism. By default, appropriate locks are chosen to safely read and write files with the currently active dask scheduler."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "data_vars",
+            "type_": "{\"minimal\", \"different\", \"all\"} or list of str, optional",
+            "desc": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": "These data variables will be concatenated together:",
+                            "_number": 0,
+                            "_offset": 0
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": "  * \"minimal\": Only data variables in which the dimension already",
+                            "_number": 1,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    appears are included.",
+                            "_number": 2,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "  * \"different\": Data variables which are not equal (ignoring",
+                            "_number": 3,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    attributes) across all datasets are also concatenated (as well as",
+                            "_number": 4,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    all for which dimension already appears). Beware: this option may",
+                            "_number": 5,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    load the data payload of data variables into memory if they are not",
+                            "_number": 6,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    already loaded.",
+                            "_number": 7,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "  * \"all\": All data variables will be concatenated.",
+                            "_number": 8,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "  * list of str: The listed data variables will be concatenated, in",
+                            "_number": 9,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "    addition to the \"minimal\" data variables.",
+                            "_number": 10,
+                            "_offset": 2
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "These data variables will be concatenated together:"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "* \"minimal\": Only data variables in which the dimension already   appears are included. * \"different\": Data variables which are not equal (ignoring   attributes) across all datasets are also concatenated (as well as   all for which dimension already appears). Beware: this option may   load the data payload of data variables into memory if they are not   already loaded. * \"all\": All data variables will be concatenated. * list of str: The listed data variables will be concatenated, in   addition to the \"minimal\" data variables."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "coords",
+            "type_": "{\"minimal\", \"different\", \"all\"} or list of str, optional",
+            "desc": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": "These coordinate variables will be concatenated together:",
+                            "_number": 0,
+                            "_offset": 0
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": " * \"minimal\": Only coordinates in which the dimension already appears",
+                            "_number": 1,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   are included.",
+                            "_number": 2,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": " * \"different\": Coordinates which are not equal (ignoring attributes)",
+                            "_number": 3,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   across all datasets are also concatenated (as well as all for which",
+                            "_number": 4,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   dimension already appears). Beware: this option may load the data",
+                            "_number": 5,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   payload of coordinate variables into memory if they are not already",
+                            "_number": 6,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   loaded.",
+                            "_number": 7,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": " * \"all\": All coordinate variables will be concatenated, except",
+                            "_number": 8,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   those corresponding to other dimensions.",
+                            "_number": 9,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": " * list of str: The listed coordinate variables will be concatenated,",
+                            "_number": 10,
+                            "_offset": 1
+                          },
+                          {
+                            "_line": "   in addition the \"minimal\" coordinates.",
+                            "_number": 11,
+                            "_offset": 1
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "These coordinate variables will be concatenated together:"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "* \"minimal\": Only coordinates in which the dimension already appears   are included. * \"different\": Coordinates which are not equal (ignoring attributes)   across all datasets are also concatenated (as well as all for which   dimension already appears). Beware: this option may load the data   payload of coordinate variables into memory if they are not already   loaded. * \"all\": All coordinate variables will be concatenated, except   those corresponding to other dimensions. * list of str: The listed coordinate variables will be concatenated,   in addition the \"minimal\" coordinates."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "parallel",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If True, the open and preprocess steps of this function will be performed in parallel using "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "dask.delayed"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". Default is False."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "join",
+            "type_": "{\"outer\", \"inner\", \"left\", \"right\", \"exact, \"override\"}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "String indicating how to combine differing indexes (excluding concat_dim) in objects"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "- \"outer\": use the union of object indexes - \"inner\": use the intersection of object indexes - \"left\": use indexes from the first object with each dimension - \"right\": use indexes from the last object with each dimension - \"exact\": instead of aligning, raise "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "ValueError"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " when indexes to be"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "  aligned are not equal"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "lines": {
+                        "_lines": [
+                          {
+                            "_line": "- \"override\": if indexes are of same size, rewrite indexes to be",
+                            "_number": 9,
+                            "_offset": 0
+                          }
+                        ]
+                      },
+                      "wh": {
+                        "_lines": []
+                      },
+                      "ind": {
+                        "_lines": [
+                          {
+                            "_line": "  those of the first object with that dimension. Indexes for the same",
+                            "_number": 10,
+                            "_offset": 2
+                          },
+                          {
+                            "_line": "  dimension must have the same size in all objects.",
+                            "_number": 11,
+                            "_offset": 2
+                          }
+                        ]
+                      },
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "- \"override\": if indexes are of same size, rewrite indexes to be"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "those of the first object with that dimension. Indexes for the same dimension must have the same size in all objects."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "attrs_file",
+            "type_": "str or pathlib.Path, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Path of the file used to read global attributes from. By default global attributes are read from the first file provided, with wildcard matches sorted by filename."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "**kwargs",
+            "type_": "optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Additional arguments passed on to "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "xarray.open_dataset",
+                        "reference": {
+                          "module": "xarray",
+                          "version": "0.17.0",
+                          "kind": "module",
+                          "path": "xarray.backends.api.open_dataset"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "",
+            "type_": "xarray.Dataset",
+            "desc": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "open",
+                    "_",
+                    "mfdataset"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " opens files with read-only access. When you modify values of a Dataset, even one linked to files on disk, only the in-memory copy you are manipulating in xarray is modified: the original file on disk is never touched."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "xarray",
+      "version": "0.17.0",
+      "kind": "module",
+      "path": "xarray.backends.api.open_dataset"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "Notes",
+    "See Also",
+    "References"
+  ],
+  "item_file": "/Users/bussonniermatthias/miniconda3/lib/python3.8/site-packages/xarray/backends/api.py",
+  "item_line": 730,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "xarray.open_mfdataset"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "combine_by_coords",
+        "ref": "xarray.core.combine.combine_by_coords",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "combine_nested",
+        "ref": "xarray.core.combine.combine_nested",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "open_dataset",
+        "ref": "xarray.backends.api.open_dataset",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "0.17.0",
+  "signature": "open_mfdataset(paths, chunks=None, concat_dim=None, compat='no_conflicts', preprocess=None, engine=None, lock=None, data_vars='all', coords='different', combine='by_coords', parallel=False, join='outer', attrs_file=None, **kwargs)",
+  "references": [
+    ".. [1] http://xarray.pydata.org/en/stable/dask.html",
+    ".. [2] http://xarray.pydata.org/en/stable/dask.html#chunking-and-performance"
+  ],
+  "logo": "logo.png",
+  "qa": "xarray.backends.api.open_mfdataset",
+  "arbitrary": []
+}

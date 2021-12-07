@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -761,11 +763,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -793,16 +795,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Estimate a covariance matrix, given data and weights.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -834,6 +831,64 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Assume that the observations are in the columns of the observation array <code><a link href="#m" class='local'>m</a></code> and let 
+        <code class='verbatim'>f = fweights</code>
+     and 
+        <code class='verbatim'>a = aweights</code>
+     for brevity. The steps to compute the weighted covariance are as follows::      </p>
+
+    
+           
+               
+            <pre>&gt;&gt;&gt; m = np.arange(10, dtype=np.float64)
+&gt;&gt;&gt; f = np.arange(10) * 2
+&gt;&gt;&gt; a = np.arange(10) ** 2.
+&gt;&gt;&gt; ddof = 1
+&gt;&gt;&gt; w = f * a
+&gt;&gt;&gt; v1 = np.sum(w)
+&gt;&gt;&gt; v2 = np.sum(w * a)
+&gt;&gt;&gt; m -= np.sum(m * w, axis=None, keepdims=True) / v1
+&gt;&gt;&gt; cov = np.dot(m * w, m.T) * v1 / (v1**2 - ddof * v2)</pre>
+       
+           
+               
+        <p>Note that when 
+        <code class='verbatim'>a == 1</code>
+    , the normalization factor 
+        <code class='verbatim'>v1 / (v1**2 - ddof * v2)</code>
+     goes over to 
+        <code class='verbatim'>1 / (np.sum(f) - ddof)</code>
+     as it should.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -1031,6 +1086,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -1057,97 +1127,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Assume that the observations are in the columns of the observation array <code><a link href="#m" class='local'>m</a></code> and let 
-        <code class='verbatim'>f = fweights</code>
-     and 
-        <code class='verbatim'>a = aweights</code>
-     for brevity. The steps to compute the weighted covariance are as follows::      </p>
-
-    
-           
-               
-            <pre>&gt;&gt;&gt; m = np.arange(10, dtype=np.float64)
-&gt;&gt;&gt; f = np.arange(10) * 2
-&gt;&gt;&gt; a = np.arange(10) ** 2.
-&gt;&gt;&gt; ddof = 1
-&gt;&gt;&gt; w = f * a
-&gt;&gt;&gt; v1 = np.sum(w)
-&gt;&gt;&gt; v2 = np.sum(w * a)
-&gt;&gt;&gt; m -= np.sum(m * w, axis=None, keepdims=True) / v1
-&gt;&gt;&gt; cov = np.dot(m * w, m.T) * v1 / (v1**2 - ddof * v2)</pre>
-       
-           
-               
-        <p>Note that when 
-        <code class='verbatim'>a == 1</code>
-    , the normalization factor 
-        <code class='verbatim'>v1 / (v1**2 - ddof * v2)</code>
-     goes over to 
-        <code class='verbatim'>1 / (np.sum(f) - ddof)</code>
-     as it should.</p>
+        <p>Estimate a covariance matrix, given data and weights.</p>
 
     
            
@@ -1158,6 +1142,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1237,22 +1239,22 @@ array(11.71)</pre>
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM.html" class='exists'>numpy.random._pcg64.PCG64DXSM</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.cov.html" class='exists'>numpy.cov</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.stack.html" class='exists'>numpy.stack</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.float64.html" class='exists'>numpy.float64</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.cov.html" class='exists'>numpy.cov</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM.html" class='exists'>numpy.random._pcg64.PCG64DXSM</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.T.html" class='exists'>numpy.matrixlib.defmatrix.matrix.T</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.float64.html" class='exists'>numpy.float64</a></code>
         
          
      
@@ -1334,7 +1336,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 11.464101615137753, "label": "numpy.matrixlib.defmatrix.matrix.T", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.T"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 3, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 4, "val": 11.16227766016838, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.stack"}, {"id": 5, "val": 8.0, "label": "numpy.ma.extras.cov", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras.cov"}, {"id": 6, "val": 9.732050807568877, "label": "numpy.corrcoef", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.corrcoef"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 7, "target": 4, "id": 307}, {"source": 3, "target": 6, "id": 587}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 4, "val": 8.0, "label": "numpy.ma.extras.cov", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras.cov"}, {"id": 5, "val": 11.464101615137753, "label": "numpy.matrixlib.defmatrix.matrix.T", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.T"}, {"id": 6, "val": 11.16227766016838, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.stack"}, {"id": 7, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 8, "val": 9.732050807568877, "label": "numpy.corrcoef", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.corrcoef"}], "links": [{"source": 1, "target": 6, "id": 300}, {"source": 7, "target": 8, "id": 638}]};
 
 (function() {
 
@@ -1462,7 +1464,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 11.464101615137753, "label": "numpy.matrixlib.defmatrix.matrix.T", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.T"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 3, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 4, "val": 11.16227766016838, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.stack"}, {"id": 5, "val": 8.0, "label": "numpy.ma.extras.cov", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras.cov"}, {"id": 6, "val": 9.732050807568877, "label": "numpy.corrcoef", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.corrcoef"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 7, "target": 4, "id": 307}, {"source": 3, "target": 6, "id": 587}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 10.23606797749979, "label": "numpy.random._pcg64.PCG64DXSM", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._pcg64.PCG64DXSM"}, {"id": 4, "val": 8.0, "label": "numpy.ma.extras.cov", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ma.extras.cov"}, {"id": 5, "val": 11.464101615137753, "label": "numpy.matrixlib.defmatrix.matrix.T", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.T"}, {"id": 6, "val": 11.16227766016838, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.stack"}, {"id": 7, "val": 13.567764362830022, "label": "numpy.float64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.float64"}, {"id": 8, "val": 9.732050807568877, "label": "numpy.corrcoef", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.corrcoef"}], "links": [{"source": 1, "target": 6, "id": 300}, {"source": 7, "target": 8, "id": 638}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

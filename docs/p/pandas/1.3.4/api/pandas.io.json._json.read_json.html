@@ -334,6 +334,7 @@ user-select: none;
                 <a href=pandas>pandas</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -482,11 +483,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -514,16 +515,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Convert a JSON string to pandas object.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -533,6 +529,50 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>Specific to 
+        <code class='verbatim'>orient=&#39;table&#39;</code>
+    , if a <code><a link href="/p/pandas/1.3.4/api/pandas.core.frame.DataFrame.html" class='exists'>DataFrame</a></code>
+         with a literal <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.base.Index.html" class='exists'>Index</a></code>
+         name of <code>:None:None:`index`</code> gets written with <code><a link href="/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json.html" class='exists'>to_json</a></code>
+        , the subsequent read operation will incorrectly set the <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.base.Index.html" class='exists'>Index</a></code>
+         name to 
+        <code class='verbatim'>None</code>
+    . This is because <code>:None:None:`index`</code> is also used by <code>:None:func:`DataFrame.to_json`</code> to denote a missing <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.base.Index.html" class='exists'>Index</a></code>
+         name, and the subsequent <code><a link href="/p/pandas/1.3.4/api/pandas.io.json._json.read_json.html" class='exists'>read_json</a></code>
+         operation cannot distinguish between the two. The same limitation is encountered with a <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.multi.MultiIndex.html" class='exists'>MultiIndex</a></code>
+         and any names beginning with 
+        <code class='verbatim'>&#39;level_&#39;</code>
+    .</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -590,129 +630,9 @@ user-select: none;
     
             
                 
-        <p>- 
-        <code class='verbatim'>&#39;split&#39;</code>
-     : dict like</p>
-
-    
-            
-                
-        <p>  
-        <code class='verbatim'>{index -&gt; [index], columns -&gt; [columns], data -&gt; [values]}</code>
-    </p>
-
-    
-            
-                
-        <p>- 
-        <code class='verbatim'>&#39;records&#39;</code>
-     : list like</p>
-
-    
-            
-                
-        <p>  
-        <code class='verbatim'>[{column -&gt; value}, ... , {column -&gt; value}]</code>
-    </p>
-
-    
-            
-                
-        <p>- 
-        <code class='verbatim'>&#39;index&#39;</code>
-     : dict like 
-        <code class='verbatim'>{index -&gt; {column -&gt; value}}</code>
-     - 
-        <code class='verbatim'>&#39;columns&#39;</code>
-     : dict like 
-        <code class='verbatim'>{column -&gt; {index -&gt; value}}</code>
-     - 
-        <code class='verbatim'>&#39;values&#39;</code>
-     : just the values array</p>
-
-    
-            
-                
-        <p>The allowed and default values depend on the value of the <code><a link href="#typ" class='local'>typ</a></code> parameter.</p>
-
-    
-            
-                
-        <p>* when 
-        <code class='verbatim'>typ == &#39;series&#39;</code>
-    ,</p>
-
-    
-            
-                
-        <p>  - allowed orients are 
-        <code class='verbatim'>{&#39;split&#39;,&#39;records&#39;,&#39;index&#39;}</code>
-       - default is 
-        <code class='verbatim'>&#39;index&#39;</code>
-       - The Series index must be unique for orient 
-        <code class='verbatim'>&#39;index&#39;</code>
-    .</p>
-
-    
-            
-                
-        <p>* when 
-        <code class='verbatim'>typ == &#39;frame&#39;</code>
-    ,</p>
-
-    
-            
-                
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>- allowed orients are ``{&#39;split&#39;,&#39;records&#39;,&#39;index&#39;,</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>&#39;columns&#39;,&#39;values&#39;, &#39;table&#39;}``</p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
+           <ul>
+            </ul>
        
-            
-                
-        <p>  - default is 
-        <code class='verbatim'>&#39;columns&#39;</code>
-       - The DataFrame index must be unique for orients 
-        <code class='verbatim'>&#39;index&#39;</code>
-     and</p>
-
-    
-            
-                
-        <p>    
-        <code class='verbatim'>&#39;columns&#39;</code>
-    .</p>
-
-    
-            
-                
-        <p>  - The DataFrame columns must be unique for orients 
-        <code class='verbatim'>&#39;index&#39;</code>
-    ,</p>
-
-    
-            
-                
-        <p>    
-        <code class='verbatim'>&#39;columns&#39;</code>
-    , and 
-        <code class='verbatim'>&#39;records&#39;</code>
-    .</p>
-
-    
             
         </dd>
        
@@ -756,9 +676,7 @@ user-select: none;
     <div>versionchanged</div>
     
         
-        <p>Not applicable for 
-        <code class='verbatim'>orient=&#39;table&#39;</code>
-    .</p>
+        <p>Not applicable for ``orient= &#39; table &#39; ``. </p>
 
     
     
@@ -794,9 +712,7 @@ user-select: none;
     <div>versionchanged</div>
     
         
-        <p>Not applicable for 
-        <code class='verbatim'>orient=&#39;table&#39;</code>
-    .</p>
+        <p>Not applicable for ``orient= &#39; table &#39; ``. </p>
 
     
     
@@ -833,39 +749,64 @@ user-select: none;
     
             
                 
-        <p>* it ends with 
+           <ul>
+               <li>
+        <p>it ends with 
         <code class='verbatim'>&#39;_at&#39;</code>
     ,</p>
 
-    
+    </li>
+               
+            </ul>
+       
             
                 
-        <p>* it ends with 
+           <ul>
+               <li>
+        <p>it ends with 
         <code class='verbatim'>&#39;_time&#39;</code>
     ,</p>
 
-    
+    </li>
+               
+            </ul>
+       
             
                 
-        <p>* it begins with 
+           <ul>
+               <li>
+        <p>it begins with 
         <code class='verbatim'>&#39;timestamp&#39;</code>
     ,</p>
 
-    
+    </li>
+               
+            </ul>
+       
             
                 
-        <p>* it is 
+           <ul>
+               <li>
+        <p>it is 
         <code class='verbatim'>&#39;modified&#39;</code>
     , or</p>
 
-    
+    </li>
+               
+            </ul>
+       
             
                 
-        <p>* it is 
+           <ul>
+               <li>
+        <p>it is 
         <code class='verbatim'>&#39;date&#39;</code>
     .</p>
 
-    
+    </li>
+               
+            </ul>
+       
             
         </dd>
        
@@ -884,6 +825,11 @@ user-select: none;
                 
             <div class='admonition'>
     <div>deprecated</div>
+    
+        
+        <p>1.0.0 </p>
+
+    
     
 </div>
 
@@ -941,13 +887,19 @@ user-select: none;
         <dd>
             
                 
-        <p>How encoding errors are treated. <code>:None:None:`List of possible values &lt;https://docs.python.org/3/library/codecs.html#error-handlers&gt;`</code>_ .</p>
+        <p>How encoding errors are treated. <code>:None:None:`List of possible values
+&lt;https://docs.python.org/3/library/codecs.html#error-handlers&gt;`</code> .</p>
 
     
             
                 
             <div class='admonition'>
     <div>versionadded</div>
+    
+        
+        <p>1.3.0 </p>
+
+    
     
 </div>
 
@@ -977,7 +929,8 @@ user-select: none;
         <dd>
             
                 
-        <p>Return JsonReader object for iteration. See the <code>:None:None:`line-delimited json docs &lt;https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#line-delimited-json&gt;`</code>_ for more information on 
+        <p>Return JsonReader object for iteration. See the <code>:None:None:`line-delimited json docs
+&lt;https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#line-delimited-json&gt;`</code> for more information on 
         <code class='verbatim'>chunksize</code>
     . This can only be passed if <code>:None:None:`lines=True`</code>. If this is None, the file will be read into memory all at once.</p>
 
@@ -988,9 +941,7 @@ user-select: none;
     <div>versionchanged</div>
     
         
-        <p>
-        <code class='verbatim'>JsonReader</code>
-     is a context manager.</p>
+        <p>``JsonReader`` is a context manager. </p>
 
     
     
@@ -1030,6 +981,11 @@ user-select: none;
             <div class='admonition'>
     <div>versionadded</div>
     
+        
+        <p>1.1 </p>
+
+    
+    
 </div>
 
        
@@ -1060,6 +1016,11 @@ user-select: none;
             <div class='admonition'>
     <div>versionadded</div>
     
+        
+        <p>1.2.0 </p>
+
+    
+    
 </div>
 
        
@@ -1068,6 +1029,21 @@ user-select: none;
        
 
    </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
    
 
 
@@ -1098,76 +1074,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>Specific to 
-        <code class='verbatim'>orient=&#39;table&#39;</code>
-     , if a <code>:None:None:`class:`DataFrame`</code> with a literal <code>:None:None:`class:`Index`</code> name of <code>:None:None:`index`</code> gets written with <code>:None:None:`func:`to_json`</code> , the subsequent read operation will incorrectly set the <code>:None:None:`class:`Index`</code> name to 
-        <code class='verbatim'>None</code>
-     . This is because <code>:None:None:`index`</code> is also used by <code>:None:None:`func:`DataFrame.to_json`</code> to denote a missing <code>:None:None:`class:`Index`</code> name, and the subsequent <code>:None:None:`func:`read_json`</code> operation cannot distinguish between the two. The same limitation is encountered with a <code>:None:None:`class:`MultiIndex`</code> and any names beginning with 
-        <code class='verbatim'>&#39;level_&#39;</code>
-     .</p>
+        <p>Convert a JSON string to pandas object.</p>
 
     
            
@@ -1178,6 +1089,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1266,19 +1195,25 @@ row 2     c     d</pre>
          
          See :
          
-             <code><a link href="/p/pandas/1.3.4/api/pandas.plotting._misc.table.html" class='exists'>pandas.plotting._misc.table</a></code>
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.base.Index.html" class='exists'>pandas.core.indexes.base.Index</a></code>
+        
+         
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.multi.MultiIndex.html" class='exists'>pandas.core.indexes.multi.MultiIndex</a></code>
         
          
              <code><a link href="/p/pandas/1.3.4/api/pandas.io.json._json.read_json.html" class='exists'>pandas.io.json._json.read_json</a></code>
         
          
+             <code><a link href="/p/pandas/1.3.4/api/pandas.plotting._misc.table.html" class='exists'>pandas.plotting._misc.table</a></code>
+        
+         
              <code><a link href="/p/pandas/1.3.4/api/pandas.core.frame.DataFrame.html" class='exists'>pandas.core.frame.DataFrame</a></code>
         
          
-             <code><a link href="/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json.html" class='exists'>pandas.core.generic.NDFrame.to_json</a></code>
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split.html" class='exists'>pandas.core.strings.accessor.StringMethods.split</a></code>
         
          
-             <code><a link href="/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split.html" class='exists'>pandas.core.strings.accessor.StringMethods.split</a></code>
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json.html" class='exists'>pandas.core.generic.NDFrame.to_json</a></code>
         
          
      
@@ -1317,7 +1252,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/pandas/util/_decorators.py </br>
+File: /pandas/io/json/_json.py </br>
 Line: 318 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
@@ -1354,7 +1289,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_json", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json"}, {"id": 3, "val": 10.0, "label": "pandas.plotting._misc.table", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.plotting._misc.table"}, {"id": 4, "val": 11.0, "label": "pandas.core.strings.accessor.StringMethods.split", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split"}, {"id": 5, "val": 22.866068747318508, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}], "links": [{"source": 3, "target": 1, "id": 2}, {"source": 5, "target": 1, "id": 136}, {"source": 4, "target": 1, "id": 230}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 11.0, "label": "pandas.core.strings.accessor.StringMethods.split", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split"}, {"id": 2, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_json", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json"}, {"id": 4, "val": 22.832396974191326, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}, {"id": 5, "val": 15.280109889280517, "label": "pandas.core.indexes.multi.MultiIndex", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.multi.MultiIndex"}, {"id": 6, "val": 16.717797887081346, "label": "pandas.core.indexes.base.Index", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.base.Index"}, {"id": 7, "val": 10.0, "label": "pandas.plotting._misc.table", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.plotting._misc.table"}], "links": [{"source": 7, "target": 2, "id": 132}, {"source": 4, "target": 2, "id": 266}, {"source": 1, "target": 2, "id": 356}]};
 
 (function() {
 
@@ -1482,7 +1417,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_json", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json"}, {"id": 3, "val": 10.0, "label": "pandas.plotting._misc.table", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.plotting._misc.table"}, {"id": 4, "val": 11.0, "label": "pandas.core.strings.accessor.StringMethods.split", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split"}, {"id": 5, "val": 22.866068747318508, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}], "links": [{"source": 3, "target": 1, "id": 2}, {"source": 5, "target": 1, "id": 136}, {"source": 4, "target": 1, "id": 230}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 11.0, "label": "pandas.core.strings.accessor.StringMethods.split", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.strings.accessor.StringMethods.split"}, {"id": 2, "val": 9.414213562373096, "label": "pandas.core.generic.NDFrame.to_json", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.generic.NDFrame.to_json"}, {"id": 4, "val": 22.832396974191326, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}, {"id": 5, "val": 15.280109889280517, "label": "pandas.core.indexes.multi.MultiIndex", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.multi.MultiIndex"}, {"id": 6, "val": 16.717797887081346, "label": "pandas.core.indexes.base.Index", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.base.Index"}, {"id": 7, "val": 10.0, "label": "pandas.plotting._misc.table", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.plotting._misc.table"}], "links": [{"source": 7, "target": 2, "id": 132}, {"source": 4, "target": 2, "id": 266}, {"source": 1, "target": 2, "id": 356}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -420,6 +421,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.extract.html">extract</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.lil.html">lil</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.sparse.spfuncs.html">spfuncs</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.sputils.html">sputils</a>
                             
                             </div>
@@ -478,11 +480,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -510,16 +512,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Find the least-squares solution to a large, sparse, linear system of equations.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -556,6 +553,101 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>LSQR uses an iterative method to approximate the solution.  The number of iterations required to reach a certain accuracy depends strongly on the scaling of the problem.  Poor scaling of the rows or columns of A should therefore be avoided where possible.</p>
+
+    
+           
+               
+        <p>For example, in problem 1 the solution is unaltered by row-scaling.  If a row of A is very small or large compared to the other rows of A, the corresponding row of ( A  b ) should be scaled up or down.</p>
+
+    
+           
+               
+        <p>In problems 1 and 2, the solution x is easily recovered following column-scaling.  Unless better information is known, the nonzero columns of A should be scaled so that they all have the same Euclidean norm (e.g., 1.0).</p>
+
+    
+           
+               
+        <p>In problem 3, there is no freedom to re-scale if damp is nonzero.  However, the value of damp should be assigned only after attention has been paid to the scaling of A.</p>
+
+    
+           
+               
+        <p>The parameter damp is intended to help regularize ill-conditioned systems, by preventing the true solution from being very large.  Another aid to regularization is provided by the parameter acond, which may be used to terminate iterations before the computed solution becomes very large.</p>
+
+    
+           
+               
+        <p>If some initial estimate 
+        <code class='verbatim'>x0</code>
+     is known and if 
+        <code class='verbatim'>damp == 0</code>
+    , one could proceed as follows:</p>
+
+    
+           
+               
+            <pre>1. Compute a residual vector ``r0 = b - A*x0``.
+2. Use LSQR to solve the system  ``A*dx = r0``.
+3. Add the correction dx to obtain a final solution ``x = x0 + dx``.
+</pre>
+
+       
+           
+               
+        <p>This requires that 
+        <code class='verbatim'>x0</code>
+     be available before and after the call to LSQR.  To judge the benefits, suppose LSQR takes k1 iterations to solve A*x = b and k2 iterations to solve A*dx = r0. If x0 is &#34;good&#34;, norm(r0) will be smaller than norm(b). If the same stopping tolerances atol and btol are used for each system, k1 and k2 will be similar, but the final solution x0 + dx should be more accurate.  The only way to reduce the total work is to use a larger stopping tolerance for the second system. If some value btol is suitable for A*x = b, the larger value btol*norm(b)/norm(r0)  should be suitable for A*dx = r0.</p>
+
+    
+           
+               
+        <p>Preconditioning is another way to reduce the number of iterations. If it is possible to solve a related system 
+        <code class='verbatim'>M*x = b</code>
+     efficiently, where M approximates A in some helpful way (e.g. M - A has low rank or its elements are small relative to those of A), LSQR may converge more rapidly on the system 
+        <code class='verbatim'>A*M(inverse)*z =
+b</code>
+    , after which x can be recovered by solving M*x = z.</p>
+
+    
+           
+               
+        <p>If A is symmetric, LSQR should not be used!</p>
+
+    
+           
+               
+        <p>Alternatives are the symmetric conjugate-gradient method (cg) and/or SYMMLQ.  SYMMLQ is an implementation of symmetric cg that applies to any symmetric A and will converge more rapidly than LSQR.  If A is positive definite, there are other implementations of symmetric cg that require slightly less work per iteration than SYMMLQ (but will take the same number of iterations).</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -725,6 +817,21 @@ conlim = zero</code>
        
 
    </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
    
 
 
@@ -913,134 +1020,11 @@ damp^2*I)^{-1}</code>
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>LSQR uses an iterative method to approximate the solution.  The number of iterations required to reach a certain accuracy depends strongly on the scaling of the problem.  Poor scaling of the rows or columns of A should therefore be avoided where possible.</p>
-
-    
-           
-               
-        <p>For example, in problem 1 the solution is unaltered by row-scaling.  If a row of A is very small or large compared to the other rows of A, the corresponding row of ( A  b ) should be scaled up or down.</p>
-
-    
-           
-               
-        <p>In problems 1 and 2, the solution x is easily recovered following column-scaling.  Unless better information is known, the nonzero columns of A should be scaled so that they all have the same Euclidean norm (e.g., 1.0).</p>
-
-    
-           
-               
-        <p>In problem 3, there is no freedom to re-scale if damp is nonzero.  However, the value of damp should be assigned only after attention has been paid to the scaling of A.</p>
-
-    
-           
-               
-        <p>The parameter damp is intended to help regularize ill-conditioned systems, by preventing the true solution from being very large.  Another aid to regularization is provided by the parameter acond, which may be used to terminate iterations before the computed solution becomes very large.</p>
-
-    
-           
-               
-        <p>If some initial estimate 
-        <code class='verbatim'>x0</code>
-     is known and if 
-        <code class='verbatim'>damp == 0</code>
-    , one could proceed as follows:</p>
-
-    
-           
-               
-            <pre>1. Compute a residual vector ``r0 = b - A*x0``.
-2. Use LSQR to solve the system  ``A*dx = r0``.
-3. Add the correction dx to obtain a final solution ``x = x0 + dx``.
-</pre>
-
-       
-           
-               
-        <p>This requires that 
-        <code class='verbatim'>x0</code>
-     be available before and after the call to LSQR.  To judge the benefits, suppose LSQR takes k1 iterations to solve A*x = b and k2 iterations to solve A*dx = r0. If x0 is &#34;good&#34;, norm(r0) will be smaller than norm(b). If the same stopping tolerances atol and btol are used for each system, k1 and k2 will be similar, but the final solution x0 + dx should be more accurate.  The only way to reduce the total work is to use a larger stopping tolerance for the second system. If some value btol is suitable for A*x = b, the larger value btol*norm(b)/norm(r0)  should be suitable for A*dx = r0.</p>
-
-    
-           
-               
-        <p>Preconditioning is another way to reduce the number of iterations. If it is possible to solve a related system 
-        <code class='verbatim'>M*x = b</code>
-     efficiently, where M approximates A in some helpful way (e.g. M - A has low rank or its elements are small relative to those of A), LSQR may converge more rapidly on the system 
-        <code class='verbatim'>A*M(inverse)*z =
-b</code>
-    , after which x can be recovered by solving M*x = z.</p>
-
-    
-           
-               
-        <p>If A is symmetric, LSQR should not be used!</p>
-
-    
-           
-               
-        <p>Alternatives are the symmetric conjugate-gradient method (cg) and/or SYMMLQ.  SYMMLQ is an implementation of symmetric cg that applies to any symmetric A and will converge more rapidly than LSQR.  If A is positive definite, there are other implementations of symmetric cg that require slightly less work per iteration than SYMMLQ (but will take the same number of iterations).</p>
+        <p>Find the least-squares solution to a large, sparse, linear system of equations.</p>
 
     
            
@@ -1051,6 +1035,24 @@ b</code>
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1143,28 +1145,28 @@ array([ 0.00333333, -0.00333333,  0.00333333])</pre>
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix.html" class='exists'>scipy.sparse.csc.csc_matrix</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html" class='exists'>scipy.sparse.linalg.isolve.lsqr.lsqr</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        
+         
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix.html" class='exists'>scipy.sparse.csc.csc_matrix</a></code>
         
          
      
@@ -1240,7 +1242,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 6, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 7, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}, {"id": 8, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 6, "target": 7, "id": 44}, {"source": 1, "target": 2, "id": 515}, {"source": 1, "target": 7, "id": 1128}, {"source": 2, "target": 7, "id": 1889}, {"source": 8, "target": 2, "id": 2433}, {"source": 8, "target": 7, "id": 2658}, {"source": 5, "target": 7, "id": 3170}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 4, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 5, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 8, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}], "links": [{"source": 1, "target": 7, "id": 360}, {"source": 1, "target": 8, "id": 584}, {"source": 7, "target": 8, "id": 1113}, {"source": 3, "target": 8, "id": 2049}, {"source": 4, "target": 8, "id": 2210}, {"source": 6, "target": 7, "id": 2686}, {"source": 6, "target": 8, "id": 3297}]};
 
 (function() {
 
@@ -1368,7 +1370,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 3, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 6, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 7, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}, {"id": 8, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 6, "target": 7, "id": 44}, {"source": 1, "target": 2, "id": 515}, {"source": 1, "target": 7, "id": 1128}, {"source": 2, "target": 7, "id": 1889}, {"source": 8, "target": 2, "id": 2433}, {"source": 8, "target": 7, "id": 2658}, {"source": 5, "target": 7, "id": 3170}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 4, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 5, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 8, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}], "links": [{"source": 1, "target": 7, "id": 360}, {"source": 1, "target": 8, "id": 584}, {"source": 7, "target": 8, "id": 1113}, {"source": 3, "target": 8, "id": 2049}, {"source": 4, "target": 8, "id": 2210}, {"source": 6, "target": 7, "id": 2686}, {"source": 6, "target": 8, "id": 3297}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

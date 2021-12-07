@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -525,11 +526,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -557,16 +558,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Cross-correlate two N-dimensional arrays.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -581,6 +577,88 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The correlation z of two d-dimensional arrays x and y is defined as::      </p>
+
+    
+           
+               
+            <pre>z[...,k,...] = sum[..., i_l, ...] x[..., i_l,...] * conj(y[..., i_l - k,...])</pre>
+       
+           
+               
+        <p>This way, if x and y are 1-D arrays and 
+        <code class='verbatim'>z = correlate(x, y, &#39;full&#39;)</code>
+     then</p>
+
+    
+           
+               
+        <span class="tex2jax_process">$$z [ k] = ( x * y) ( k - N + 1) = \sum_ { l=0}^ { ||x|| - 1}x_l y_ { l - k+N - 1}^ { *} $$</span>
+       
+           
+               
+        <p>for 
+        <span class="tex2jax_process">$k = 0, 1, ..., ||x|| + ||y|| - 2$</span>
+    </p>
+
+    
+           
+               
+        <p>where 
+        <span class="tex2jax_process">$||x||$</span>
+     is the length of 
+        <code class='verbatim'>x</code>
+    , 
+        <span class="tex2jax_process">$N = \max(||x||,||y||)$</span>
+    , and 
+        <span class="tex2jax_process">$y_m$</span>
+     is 0 when m is outside the range of y.</p>
+
+    
+           
+               
+        <p>
+        <code class='verbatim'>method=&#39;fft&#39;</code>
+     only works for numerical arrays as it relies on <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve.html" class='exists'>fftconvolve</a></code>
+        . In certain cases (i.e., arrays of objects or when rounding integers can lose precision), 
+        <code class='verbatim'>method=&#39;direct&#39;</code>
+     is always used.</p>
+
+    
+           
+               
+        <p>When using &#34;same&#34; mode with even-length inputs, the outputs of <code><a link href="#correlate" class='local'>correlate</a></code> and <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d.html" class='exists'>correlate2d</a></code>
+         differ: There is a 1-index offset between them.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -770,6 +848,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -796,121 +889,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>The correlation z of two d-dimensional arrays x and y is defined as::      </p>
-
-    
-           
-               
-            <pre>z[...,k,...] = sum[..., i_l, ...] x[..., i_l,...] * conj(y[..., i_l - k,...])</pre>
-       
-           
-               
-        <p>This way, if x and y are 1-D arrays and 
-        <code class='verbatim'>z = correlate(x, y, &#39;full&#39;)</code>
-     then</p>
-
-    
-           
-               
-        <span class="tex2jax_process">$$z [ k] = ( x * y) ( k - N + 1) = \sum_ { l=0}^ { ||x|| - 1}x_l y_ { l - k+N - 1}^ { *} $$</span>
-       
-           
-               
-        <p>for 
-        <span class="tex2jax_process">$k = 0, 1, ..., ||x|| + ||y|| - 2$</span>
-    </p>
-
-    
-           
-               
-        <p>where 
-        <span class="tex2jax_process">$||x||$</span>
-     is the length of 
-        <code class='verbatim'>x</code>
-    , 
-        <span class="tex2jax_process">$N = \max(||x||,||y||)$</span>
-    , and 
-        <span class="tex2jax_process">$y_m$</span>
-     is 0 when m is outside the range of y.</p>
-
-    
-           
-               
-        <p>
-        <code class='verbatim'>method=&#39;fft&#39;</code>
-     only works for numerical arrays as it relies on <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve.html" class='exists'>fftconvolve</a></code>
-        . In certain cases (i.e., arrays of objects or when rounding integers can lose precision), 
-        <code class='verbatim'>method=&#39;direct&#39;</code>
-     is always used.</p>
-
-    
-           
-               
-        <p>When using &#34;same&#34; mode with even-length inputs, the outputs of <code><a link href="#correlate" class='local'>correlate</a></code> and <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d.html" class='exists'>correlate2d</a></code>
-         differ: There is a 1-index offset between them.</p>
+        <p>Cross-correlate two N-dimensional arrays.</p>
 
     
            
@@ -921,6 +904,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -976,76 +977,10 @@ user-select: none;
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate.html" class='exists'>scipy.signal.signaltools.correlate</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot.html" class='exists'>matplotlib.axes._axes.Axes.plot</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve.html" class='exists'>scipy.signal.signaltools.convolve</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png.html" class='exists'>fig-scipy.signal.signaltools.correlate-2.png</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png.html" class='exists'>fig-scipy.signal.signaltools.correlate-1.png</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d.html" class='exists'>scipy.signal.signaltools.correlate2d</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.amax.html" class='exists'>numpy.amax</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode.html" class='exists'>scipy.signal.signaltools._apply_conv_mode</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_xlabel</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots.html" class='exists'>matplotlib.pyplot.subplots</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins.html" class='exists'>matplotlib.axes._base._AxesBase.margins</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve.html" class='exists'>scipy.signal.signaltools.fftconvolve</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian.html" class='exists'>scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title.html" class='exists'>matplotlib.axes._axes.Axes.set_title</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ufunc.html" class='exists'>numpy.ufunc</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
@@ -1054,13 +989,79 @@ user-select: none;
              <code><a link href="/p/numpy/1.21.3/api/numpy.ones.html" class='exists'>numpy.ones</a></code>
         
          
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots.html" class='exists'>matplotlib.pyplot.subplots</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title.html" class='exists'>matplotlib.axes._axes.Axes.set_title</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.html" class='exists'>matplotlib.pyplot</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel.html" class='exists'>matplotlib.axes._base._AxesBase.set_xlabel</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d.html" class='exists'>scipy.signal.signaltools.correlate2d</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins.html" class='exists'>matplotlib.axes._base._AxesBase.margins</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate.html" class='exists'>scipy.signal.signaltools.correlate</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve.html" class='exists'>scipy.signal.signaltools.convolve</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode.html" class='exists'>scipy.signal.signaltools._apply_conv_mode</a></code>
+        
+         
              <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.axhline.html" class='exists'>matplotlib.axes._axes.Axes.axhline</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.amax.html" class='exists'>numpy.amax</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png.html" class='exists'>fig-scipy.signal.signaltools.correlate-1.png</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png.html" class='exists'>fig-scipy.signal.signaltools.correlate-2.png</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.repeat.html" class='exists'>numpy.repeat</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian.html" class='exists'>scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot.html" class='exists'>matplotlib.axes._axes.Axes.plot</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
         
          
      
@@ -1148,7 +1149,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 10.449489742783179, "label": "numpy.correlate", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.correlate"}, {"id": 2, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 3, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 4, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 5, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-2.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png"}, {"id": 6, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 7, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 8, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.repeat"}, {"id": 9, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 10, "val": 10.64575131106459, "label": "matplotlib.axes._axes.Axes.axhline", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.axhline"}, {"id": 11, "val": 11.464101615137753, "label": "scipy.signal.signaltools._apply_conv_mode", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode"}, {"id": 12, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 13, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 10.449489742783179, "label": "scipy.signal.signaltools.convolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve"}, {"id": 15, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 16, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 17, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 18, "val": 11.16227766016838, "label": "scipy.signal.signaltools.fftconvolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve"}, {"id": 19, "val": 9.414213562373096, "label": "scipy.signal.signaltools.correlate2d", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d"}, {"id": 20, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 22, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 23, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 24, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 25, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.margins", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins"}, {"id": 26, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png"}, {"id": 27, "val": 9.0, "label": "scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian"}, {"id": 28, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 29, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 30, "val": 9.732050807568877, "label": "scipy.signal.signaltools.choose_conv_method", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.choose_conv_method"}, {"id": 31, "val": 11.16227766016838, "label": "numpy.amax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.amax"}], "links": [{"source": 30, "target": 14, "id": 8}, {"source": 14, "target": 30, "id": 9}, {"source": 14, "target": 18, "id": 13}, {"source": 12, "target": 14, "id": 50}, {"source": 12, "target": 19, "id": 52}, {"source": 12, "target": 18, "id": 53}, {"source": 14, "target": 30, "id": 59}, {"source": 14, "target": 18, "id": 63}, {"source": 7, "target": 3, "id": 65}, {"source": 7, "target": 9, "id": 67}, {"source": 7, "target": 30, "id": 108}, {"source": 7, "target": 19, "id": 110}, {"source": 7, "target": 18, "id": 112}, {"source": 9, "target": 7, "id": 503}, {"source": 9, "target": 30, "id": 543}, {"source": 9, "target": 19, "id": 545}, {"source": 9, "target": 18, "id": 547}, {"source": 15, "target": 14, "id": 1169}, {"source": 15, "target": 19, "id": 1172}, {"source": 15, "target": 18, "id": 1173}, {"source": 3, "target": 7, "id": 1270}, {"source": 3, "target": 9, "id": 1271}, {"source": 3, "target": 30, "id": 1319}, {"source": 3, "target": 19, "id": 1321}, {"source": 3, "target": 18, "id": 1323}, {"source": 4, "target": 30, "id": 1536}, {"source": 4, "target": 14, "id": 1538}, {"source": 4, "target": 19, "id": 1541}, {"source": 4, "target": 18, "id": 1544}, {"source": 11, "target": 30, "id": 1611}, {"source": 11, "target": 14, "id": 1612}, {"source": 11, "target": 19, "id": 1615}, {"source": 11, "target": 18, "id": 1616}, {"source": 20, "target": 15, "id": 1631}, {"source": 20, "target": 16, "id": 1632}, {"source": 20, "target": 14, "id": 1654}, {"source": 20, "target": 19, "id": 1657}, {"source": 20, "target": 18, "id": 1658}, {"source": 25, "target": 14, "id": 1666}, {"source": 18, "target": 11, "id": 1670}, {"source": 18, "target": 30, "id": 1673}, {"source": 18, "target": 14, "id": 1674}, {"source": 23, "target": 31, "id": 1679}, {"source": 23, "target": 18, "id": 1896}, {"source": 16, "target": 14, "id": 2097}, {"source": 16, "target": 19, "id": 2100}, {"source": 16, "target": 18, "id": 2101}, {"source": 13, "target": 22, "id": 2587}, {"source": 13, "target": 7, "id": 2676}, {"source": 13, "target": 9, "id": 2677}, {"source": 13, "target": 30, "id": 3130}, {"source": 13, "target": 14, "id": 3131}, {"source": 13, "target": 19, "id": 3134}, {"source": 13, "target": 18, "id": 3136}, {"source": 17, "target": 14, "id": 3568}, {"source": 17, "target": 19, "id": 3571}, {"source": 17, "target": 18, "id": 3572}, {"source": 22, "target": 31, "id": 3578}, {"source": 22, "target": 14, "id": 3913}, {"source": 22, "target": 19, "id": 3916}, {"source": 22, "target": 18, "id": 3918}, {"source": 8, "target": 14, "id": 4342}, {"source": 24, "target": 30, "id": 4678}, {"source": 24, "target": 14, "id": 4680}, {"source": 24, "target": 19, "id": 4683}, {"source": 24, "target": 18, "id": 4686}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "matplotlib.axes._axes.Axes.axhline", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.axhline"}, {"id": 2, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 3, "val": 9.0, "label": "scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian"}, {"id": 4, "val": 9.732050807568877, "label": "scipy.signal.signaltools.choose_conv_method", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.choose_conv_method"}, {"id": 5, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 6, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 7, "val": 9.414213562373096, "label": "scipy.signal.signaltools.correlate2d", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d"}, {"id": 8, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 9, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 10, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 11, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 12, "val": 11.464101615137753, "label": "scipy.signal.signaltools._apply_conv_mode", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode"}, {"id": 13, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 14, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 16, "val": 10.449489742783179, "label": "numpy.correlate", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.correlate"}, {"id": 17, "val": 11.16227766016838, "label": "scipy.signal.signaltools.fftconvolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve"}, {"id": 18, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 19, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-2.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png"}, {"id": 20, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 21, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 22, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 23, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.margins", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins"}, {"id": 24, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.repeat"}, {"id": 25, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 26, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png"}, {"id": 27, "val": 10.449489742783179, "label": "scipy.signal.signaltools.convolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve"}, {"id": 28, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 29, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 30, "val": 11.464101615137753, "label": "numpy.amax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.amax"}, {"id": 31, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}], "links": [{"source": 4, "target": 27, "id": 8}, {"source": 27, "target": 4, "id": 9}, {"source": 27, "target": 17, "id": 13}, {"source": 17, "target": 12, "id": 24}, {"source": 17, "target": 4, "id": 27}, {"source": 17, "target": 27, "id": 28}, {"source": 21, "target": 30, "id": 264}, {"source": 21, "target": 27, "id": 595}, {"source": 21, "target": 7, "id": 598}, {"source": 21, "target": 17, "id": 600}, {"source": 29, "target": 18, "id": 1240}, {"source": 29, "target": 22, "id": 1241}, {"source": 29, "target": 27, "id": 1263}, {"source": 29, "target": 7, "id": 1266}, {"source": 29, "target": 17, "id": 1267}, {"source": 9, "target": 27, "id": 1435}, {"source": 9, "target": 7, "id": 1438}, {"source": 9, "target": 17, "id": 1439}, {"source": 22, "target": 27, "id": 1584}, {"source": 22, "target": 7, "id": 1587}, {"source": 22, "target": 17, "id": 1588}, {"source": 20, "target": 21, "id": 2083}, {"source": 20, "target": 6, "id": 2172}, {"source": 20, "target": 14, "id": 2173}, {"source": 20, "target": 4, "id": 2624}, {"source": 20, "target": 27, "id": 2625}, {"source": 20, "target": 7, "id": 2628}, {"source": 20, "target": 17, "id": 2630}, {"source": 23, "target": 27, "id": 3230}, {"source": 5, "target": 4, "id": 3358}, {"source": 5, "target": 27, "id": 3360}, {"source": 5, "target": 7, "id": 3363}, {"source": 5, "target": 17, "id": 3366}, {"source": 27, "target": 4, "id": 3435}, {"source": 27, "target": 17, "id": 3439}, {"source": 2, "target": 6, "id": 3468}, {"source": 2, "target": 14, "id": 3469}, {"source": 2, "target": 4, "id": 3517}, {"source": 2, "target": 7, "id": 3519}, {"source": 2, "target": 17, "id": 3521}, {"source": 12, "target": 4, "id": 3623}, {"source": 12, "target": 27, "id": 3624}, {"source": 12, "target": 7, "id": 3627}, {"source": 12, "target": 17, "id": 3628}, {"source": 11, "target": 4, "id": 3983}, {"source": 11, "target": 27, "id": 3985}, {"source": 11, "target": 7, "id": 3988}, {"source": 11, "target": 17, "id": 3991}, {"source": 24, "target": 27, "id": 4216}, {"source": 6, "target": 14, "id": 4221}, {"source": 6, "target": 4, "id": 4262}, {"source": 6, "target": 7, "id": 4264}, {"source": 6, "target": 17, "id": 4266}, {"source": 18, "target": 27, "id": 4887}, {"source": 18, "target": 7, "id": 4890}, {"source": 18, "target": 17, "id": 4891}, {"source": 14, "target": 6, "id": 4969}, {"source": 14, "target": 4, "id": 5009}, {"source": 14, "target": 7, "id": 5011}, {"source": 14, "target": 17, "id": 5013}, {"source": 28, "target": 27, "id": 5060}, {"source": 28, "target": 7, "id": 5062}, {"source": 28, "target": 17, "id": 5063}, {"source": 8, "target": 30, "id": 5069}, {"source": 8, "target": 17, "id": 5287}]};
 
 (function() {
 
@@ -1276,7 +1277,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 10.449489742783179, "label": "numpy.correlate", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.correlate"}, {"id": 2, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 3, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 4, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 5, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-2.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png"}, {"id": 6, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}, {"id": 7, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 8, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.repeat"}, {"id": 9, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 10, "val": 10.64575131106459, "label": "matplotlib.axes._axes.Axes.axhline", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.axhline"}, {"id": 11, "val": 11.464101615137753, "label": "scipy.signal.signaltools._apply_conv_mode", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode"}, {"id": 12, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 13, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 10.449489742783179, "label": "scipy.signal.signaltools.convolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve"}, {"id": 15, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 16, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 17, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 18, "val": 11.16227766016838, "label": "scipy.signal.signaltools.fftconvolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve"}, {"id": 19, "val": 9.414213562373096, "label": "scipy.signal.signaltools.correlate2d", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d"}, {"id": 20, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 22, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 23, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 24, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 25, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.margins", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins"}, {"id": 26, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png"}, {"id": 27, "val": 9.0, "label": "scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian"}, {"id": 28, "val": 22.560219778561034, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 29, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 30, "val": 9.732050807568877, "label": "scipy.signal.signaltools.choose_conv_method", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.choose_conv_method"}, {"id": 31, "val": 11.16227766016838, "label": "numpy.amax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.amax"}], "links": [{"source": 30, "target": 14, "id": 8}, {"source": 14, "target": 30, "id": 9}, {"source": 14, "target": 18, "id": 13}, {"source": 12, "target": 14, "id": 50}, {"source": 12, "target": 19, "id": 52}, {"source": 12, "target": 18, "id": 53}, {"source": 14, "target": 30, "id": 59}, {"source": 14, "target": 18, "id": 63}, {"source": 7, "target": 3, "id": 65}, {"source": 7, "target": 9, "id": 67}, {"source": 7, "target": 30, "id": 108}, {"source": 7, "target": 19, "id": 110}, {"source": 7, "target": 18, "id": 112}, {"source": 9, "target": 7, "id": 503}, {"source": 9, "target": 30, "id": 543}, {"source": 9, "target": 19, "id": 545}, {"source": 9, "target": 18, "id": 547}, {"source": 15, "target": 14, "id": 1169}, {"source": 15, "target": 19, "id": 1172}, {"source": 15, "target": 18, "id": 1173}, {"source": 3, "target": 7, "id": 1270}, {"source": 3, "target": 9, "id": 1271}, {"source": 3, "target": 30, "id": 1319}, {"source": 3, "target": 19, "id": 1321}, {"source": 3, "target": 18, "id": 1323}, {"source": 4, "target": 30, "id": 1536}, {"source": 4, "target": 14, "id": 1538}, {"source": 4, "target": 19, "id": 1541}, {"source": 4, "target": 18, "id": 1544}, {"source": 11, "target": 30, "id": 1611}, {"source": 11, "target": 14, "id": 1612}, {"source": 11, "target": 19, "id": 1615}, {"source": 11, "target": 18, "id": 1616}, {"source": 20, "target": 15, "id": 1631}, {"source": 20, "target": 16, "id": 1632}, {"source": 20, "target": 14, "id": 1654}, {"source": 20, "target": 19, "id": 1657}, {"source": 20, "target": 18, "id": 1658}, {"source": 25, "target": 14, "id": 1666}, {"source": 18, "target": 11, "id": 1670}, {"source": 18, "target": 30, "id": 1673}, {"source": 18, "target": 14, "id": 1674}, {"source": 23, "target": 31, "id": 1679}, {"source": 23, "target": 18, "id": 1896}, {"source": 16, "target": 14, "id": 2097}, {"source": 16, "target": 19, "id": 2100}, {"source": 16, "target": 18, "id": 2101}, {"source": 13, "target": 22, "id": 2587}, {"source": 13, "target": 7, "id": 2676}, {"source": 13, "target": 9, "id": 2677}, {"source": 13, "target": 30, "id": 3130}, {"source": 13, "target": 14, "id": 3131}, {"source": 13, "target": 19, "id": 3134}, {"source": 13, "target": 18, "id": 3136}, {"source": 17, "target": 14, "id": 3568}, {"source": 17, "target": 19, "id": 3571}, {"source": 17, "target": 18, "id": 3572}, {"source": 22, "target": 31, "id": 3578}, {"source": 22, "target": 14, "id": 3913}, {"source": 22, "target": 19, "id": 3916}, {"source": 22, "target": 18, "id": 3918}, {"source": 8, "target": 14, "id": 4342}, {"source": 24, "target": 30, "id": 4678}, {"source": 24, "target": 14, "id": 4680}, {"source": 24, "target": 19, "id": 4683}, {"source": 24, "target": 18, "id": 4686}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 10.64575131106459, "label": "matplotlib.axes._axes.Axes.axhline", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.axhline"}, {"id": 2, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 3, "val": 9.0, "label": "scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.optimize._trustregion_constr.minimize_trustregion_constr.LagrangianHessian"}, {"id": 4, "val": 9.732050807568877, "label": "scipy.signal.signaltools.choose_conv_method", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.choose_conv_method"}, {"id": 5, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 6, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 7, "val": 9.414213562373096, "label": "scipy.signal.signaltools.correlate2d", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.correlate2d"}, {"id": 8, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 9, "val": 12.0, "label": "matplotlib.axes._axes.Axes.set_title", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.set_title"}, {"id": 10, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 11, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 12, "val": 11.464101615137753, "label": "scipy.signal.signaltools._apply_conv_mode", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools._apply_conv_mode"}, {"id": 13, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 14, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 16, "val": 10.449489742783179, "label": "numpy.correlate", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.correlate"}, {"id": 17, "val": 11.16227766016838, "label": "scipy.signal.signaltools.fftconvolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.fftconvolve"}, {"id": 18, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 19, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-2.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-2.png"}, {"id": 20, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 21, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 22, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 23, "val": 9.732050807568877, "label": "matplotlib.axes._base._AxesBase.margins", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.margins"}, {"id": 24, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.repeat"}, {"id": 25, "val": 22.966629547095764, "label": "numpy.ufunc", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ufunc"}, {"id": 26, "val": 9.0, "label": "fig-scipy.signal.signaltools.correlate-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal.signaltools.correlate-1.png"}, {"id": 27, "val": 10.449489742783179, "label": "scipy.signal.signaltools.convolve", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve"}, {"id": 28, "val": 13.65685424949238, "label": "matplotlib.axes._axes.Axes.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._axes.Axes.plot"}, {"id": 29, "val": 13.8309518948453, "label": "matplotlib.pyplot.subplots", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.subplots"}, {"id": 30, "val": 11.464101615137753, "label": "numpy.amax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.amax"}, {"id": 31, "val": 11.74165738677394, "label": "matplotlib.axes._base._AxesBase.set_xlabel", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.axes._base._AxesBase.set_xlabel"}], "links": [{"source": 4, "target": 27, "id": 8}, {"source": 27, "target": 4, "id": 9}, {"source": 27, "target": 17, "id": 13}, {"source": 17, "target": 12, "id": 24}, {"source": 17, "target": 4, "id": 27}, {"source": 17, "target": 27, "id": 28}, {"source": 21, "target": 30, "id": 264}, {"source": 21, "target": 27, "id": 595}, {"source": 21, "target": 7, "id": 598}, {"source": 21, "target": 17, "id": 600}, {"source": 29, "target": 18, "id": 1240}, {"source": 29, "target": 22, "id": 1241}, {"source": 29, "target": 27, "id": 1263}, {"source": 29, "target": 7, "id": 1266}, {"source": 29, "target": 17, "id": 1267}, {"source": 9, "target": 27, "id": 1435}, {"source": 9, "target": 7, "id": 1438}, {"source": 9, "target": 17, "id": 1439}, {"source": 22, "target": 27, "id": 1584}, {"source": 22, "target": 7, "id": 1587}, {"source": 22, "target": 17, "id": 1588}, {"source": 20, "target": 21, "id": 2083}, {"source": 20, "target": 6, "id": 2172}, {"source": 20, "target": 14, "id": 2173}, {"source": 20, "target": 4, "id": 2624}, {"source": 20, "target": 27, "id": 2625}, {"source": 20, "target": 7, "id": 2628}, {"source": 20, "target": 17, "id": 2630}, {"source": 23, "target": 27, "id": 3230}, {"source": 5, "target": 4, "id": 3358}, {"source": 5, "target": 27, "id": 3360}, {"source": 5, "target": 7, "id": 3363}, {"source": 5, "target": 17, "id": 3366}, {"source": 27, "target": 4, "id": 3435}, {"source": 27, "target": 17, "id": 3439}, {"source": 2, "target": 6, "id": 3468}, {"source": 2, "target": 14, "id": 3469}, {"source": 2, "target": 4, "id": 3517}, {"source": 2, "target": 7, "id": 3519}, {"source": 2, "target": 17, "id": 3521}, {"source": 12, "target": 4, "id": 3623}, {"source": 12, "target": 27, "id": 3624}, {"source": 12, "target": 7, "id": 3627}, {"source": 12, "target": 17, "id": 3628}, {"source": 11, "target": 4, "id": 3983}, {"source": 11, "target": 27, "id": 3985}, {"source": 11, "target": 7, "id": 3988}, {"source": 11, "target": 17, "id": 3991}, {"source": 24, "target": 27, "id": 4216}, {"source": 6, "target": 14, "id": 4221}, {"source": 6, "target": 4, "id": 4262}, {"source": 6, "target": 7, "id": 4264}, {"source": 6, "target": 17, "id": 4266}, {"source": 18, "target": 27, "id": 4887}, {"source": 18, "target": 7, "id": 4890}, {"source": 18, "target": 17, "id": 4891}, {"source": 14, "target": 6, "id": 4969}, {"source": 14, "target": 4, "id": 5009}, {"source": 14, "target": 7, "id": 5011}, {"source": 14, "target": 17, "id": 5013}, {"source": 28, "target": 27, "id": 5060}, {"source": 28, "target": 7, "id": 5062}, {"source": 28, "target": 17, "id": 5063}, {"source": 8, "target": 30, "id": 5069}, {"source": 8, "target": 17, "id": 5287}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

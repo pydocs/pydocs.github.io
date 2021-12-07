@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -479,13 +480,13 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -513,16 +514,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Solves the continuous-time algebraic Riccati equation (CARE).</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -584,6 +580,83 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The equation is solved by forming the extended hamiltonian matrix pencil, as described in , 
+        <span class="tex2jax_process">$H - \lambda J$</span>
+     given by the block matrices ::      </p>
+
+    
+           
+               
+            <pre>[ A    0    B ]             [ E   0    0 ]
+[-Q  -A^H  -S ] - \lambda * [ 0  E^H   0 ]
+[ S^H B^H   R ]             [ 0   0    0 ]</pre>
+       
+           
+               
+        <p>and using a QZ decomposition method.</p>
+
+    
+           
+               
+        <p>In this algorithm, the fail conditions are linked to the symmetry of the product 
+        <span class="tex2jax_process">$U_2 U_1^{-1}$</span>
+     and condition number of 
+        <span class="tex2jax_process">$U_1$</span>
+    . Here, 
+        <span class="tex2jax_process">$U$</span>
+     is the 2m-by-m matrix that holds the eigenvectors spanning the stable subspace with 2-m rows and partitioned into two m-row matrices. See  and  for more details.</p>
+
+    
+           
+               
+        <p>In order to improve the QZ decomposition accuracy, the pencil goes through a balancing step where the sum of absolute values of 
+        <span class="tex2jax_process">$H$</span>
+     and 
+        <span class="tex2jax_process">$J$</span>
+     entries (after removing the diagonal entries of the sum) is balanced following the recipe given in .</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>0.11.0 </p>
+
+    
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -696,46 +769,6 @@ user-select: none;
 
 
     
-        <h3 id="section-Returns">Returns</h3>
-    
-    
-       <dl>
-           
-            
-                <dt><a id="x">x</a> : (M, M) ndarray</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>Solution to the continuous-time algebraic Riccati equation.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
         <h3 id="section-Raises">Raises</h3>
     
     
@@ -762,94 +795,44 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
 
     
-        <h3 id="section-Notes">Notes</h3>
+        <h3 id="section-Returns">Returns</h3>
     
     
-        <!-- rendering Notes -->
+       <dl>
+           
+            
+                <dt><a id="x">x</a> : (M, M) ndarray</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Solution to the continuous-time algebraic Riccati equation.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
         
            
                
-        <p>The equation is solved by forming the extended hamiltonian matrix pencil, as described in , 
-        <span class="tex2jax_process">$H - \lambda J$</span>
-     given by the block matrices ::      </p>
+        <p>Solves the continuous-time algebraic Riccati equation (CARE).</p>
 
     
-           
-               
-            <pre>[ A    0    B ]             [ E   0    0 ]
-[-Q  -A^H  -S ] - \lambda * [ 0  E^H   0 ]
-[ S^H B^H   R ]             [ 0   0    0 ]</pre>
-       
-           
-               
-        <p>and using a QZ decomposition method.</p>
-
-    
-           
-               
-        <p>In this algorithm, the fail conditions are linked to the symmetry of the product 
-        <span class="tex2jax_process">$U_2 U_1^{-1}$</span>
-     and condition number of 
-        <span class="tex2jax_process">$U_1$</span>
-    . Here, 
-        <span class="tex2jax_process">$U$</span>
-     is the 2m-by-m matrix that holds the eigenvectors spanning the stable subspace with 2-m rows and partitioned into two m-row matrices. See  and  for more details.</p>
-
-    
-           
-               
-        <p>In order to improve the QZ decomposition accuracy, the pencil goes through a balancing step where the sum of absolute values of 
-        <span class="tex2jax_process">$H$</span>
-     and 
-        <span class="tex2jax_process">$J$</span>
-     entries (after removing the diagonal entries of the sum) is balanced following the recipe given in .</p>
-
-    
-           
-               
-            <div class='admonition'>
-    <div>versionadded</div>
-    
-        
-        <p>0.11.0 </p>
-
-    
-    
-</div>
-
-       
            
        
     
@@ -858,6 +841,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -884,25 +885,25 @@ True</pre>
          
          See :
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_continuous_are.html" class='exists'>scipy.linalg._solvers.solve_continuous_are</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.allclose.html" class='exists'>numpy.allclose</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
-        
-         
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_continuous_are.html" class='exists'>scipy.linalg._solvers.solve_continuous_are</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
         
          
      
@@ -978,7 +979,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 6, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 1, "target": 3, "id": 472}, {"source": 7, "target": 3, "id": 2390}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 6, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 7, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}], "links": [{"source": 1, "target": 6, "id": 246}, {"source": 5, "target": 6, "id": 2116}]};
 
 (function() {
 
@@ -1106,7 +1107,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 4, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 6, "val": 15.348469228349535, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 1, "target": 3, "id": 472}, {"source": 7, "target": 3, "id": 2390}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 2, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 3, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 5, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 6, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 7, "val": 16.366600265340757, "label": "numpy.allclose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.allclose"}], "links": [{"source": 1, "target": 6, "id": 246}, {"source": 5, "target": 6, "id": 2116}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

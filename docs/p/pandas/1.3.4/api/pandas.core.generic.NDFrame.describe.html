@@ -334,6 +334,7 @@ user-select: none;
                 <a href=pandas>pandas</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -602,11 +603,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     
 
@@ -633,16 +634,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Generate descriptive statistics.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -651,7 +647,7 @@ user-select: none;
         
            
                
-        <p>Descriptive statistics include those that summarize the central tendency, dispersion and shape of a dataset&#39; s distribution, excluding 
+        <p>Descriptive statistics include those that summarize the central tendency, dispersion and shape of a dataset&#39;s distribution, excluding 
         <code class='verbatim'>NaN</code>
      values.</p>
 
@@ -666,6 +662,103 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>For numeric data, the result&#39;s index will include 
+        <code class='verbatim'>count</code>
+    , 
+        <code class='verbatim'>mean</code>
+    , 
+        <code class='verbatim'>std</code>
+    , 
+        <code class='verbatim'>min</code>
+    , 
+        <code class='verbatim'>max</code>
+     as well as lower, 
+        <code class='verbatim'>50</code>
+     and upper percentiles. By default the lower percentile is 
+        <code class='verbatim'>25</code>
+     and the upper percentile is 
+        <code class='verbatim'>75</code>
+    . The 
+        <code class='verbatim'>50</code>
+     percentile is the same as the median.</p>
+
+    
+           
+               
+        <p>For object data (e.g. strings or timestamps), the result&#39;s index will include 
+        <code class='verbatim'>count</code>
+    , 
+        <code class='verbatim'>unique</code>
+    , 
+        <code class='verbatim'>top</code>
+    , and 
+        <code class='verbatim'>freq</code>
+    . The 
+        <code class='verbatim'>top</code>
+     is the most common value. The 
+        <code class='verbatim'>freq</code>
+     is the most common value&#39;s frequency. Timestamps also include the 
+        <code class='verbatim'>first</code>
+     and 
+        <code class='verbatim'>last</code>
+     items.</p>
+
+    
+           
+               
+        <p>If multiple object values have the highest count, then the 
+        <code class='verbatim'>count</code>
+     and 
+        <code class='verbatim'>top</code>
+     results will be arbitrarily chosen from among those with the highest count.</p>
+
+    
+           
+               
+        <p>For mixed data types provided via a 
+        <code class='verbatim'>DataFrame</code>
+    , the default is to return only an analysis of numeric columns. If the dataframe consists only of object and categorical data without any numeric columns, the default is to return an analysis of both the object and categorical columns. If 
+        <code class='verbatim'>include=&#39;all&#39;</code>
+     is provided as an option, the result will include a union of attributes of each type.</p>
+
+    
+           
+               
+        <p>The <code><a link href="#include" class='local'>include</a></code> and <code><a link href="#exclude" class='local'>exclude</a></code> parameters can be used to limit which columns in a 
+        <code class='verbatim'>DataFrame</code>
+     are analyzed for the output. The parameters are ignored when analyzing a 
+        <code class='verbatim'>Series</code>
+    .</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -704,31 +797,6 @@ user-select: none;
 
     
             
-                
-        <p>- &#39;all&#39; : All columns of the input will be included in the output. - A list-like of dtypes : Limits the results to the</p>
-
-    
-            
-                
-        <p>  provided data types.   To limit the result to numeric types submit   
-        <code class='verbatim'>numpy.number</code>
-    . To limit it instead to object columns submit   the 
-        <code class='verbatim'>numpy.object</code>
-     data type. Strings   can also be used in the style of   
-        <code class='verbatim'>select_dtypes</code>
-     (e.g. 
-        <code class='verbatim'>df.describe(include=[&#39;O&#39;])</code>
-    ). To   select pandas categorical columns, use 
-        <code class='verbatim'>&#39;category&#39;</code>
-    </p>
-
-    
-            
-                
-        <p>- None (default) : The result will include all numeric columns.</p>
-
-    
-            
         </dd>
        
             
@@ -742,41 +810,6 @@ user-select: none;
         <p>A black list of data types to omit from the result. Ignored for 
         <code class='verbatim'>Series</code>
     . Here are the options:</p>
-
-    
-            
-                
-          <!-- deflist -->
-           <dl>
-               
-               <dt>
-        <p>- A list-like of dtypes : Excludes the provided data types</p>
-
-    <dt>
-               <dd>
-
-                       
-        <p>from the result. To exclude numeric types submit 
-        <code class='verbatim'>numpy.number</code>
-    . To exclude object columns submit the data type 
-        <code class='verbatim'>numpy.object</code>
-    . Strings can also be used in the style of 
-        <code class='verbatim'>select_dtypes</code>
-     (e.g. 
-        <code class='verbatim'>df.describe(include=[&#39;O&#39;])</code>
-    ). To exclude pandas categorical columns, use 
-        <code class='verbatim'>&#39;category&#39;</code>
-    </p>
-
-    
-                  
-               <dd>
-                 
-           </dl>
-       
-            
-                
-        <p>- None (default) : The result will exclude nothing.</p>
 
     
             
@@ -798,6 +831,11 @@ user-select: none;
             <div class='admonition'>
     <div>versionadded</div>
     
+        
+        <p>1.1.0 </p>
+
+    
+    
 </div>
 
        
@@ -806,6 +844,21 @@ user-select: none;
        
 
    </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
    
 
 
@@ -836,136 +889,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>For numeric data, the result&#39; s index will include 
-        <code class='verbatim'>count</code>
-     , 
-        <code class='verbatim'>mean</code>
-     , 
-        <code class='verbatim'>std</code>
-     , 
-        <code class='verbatim'>min</code>
-     , 
-        <code class='verbatim'>max</code>
-     as well as lower, 
-        <code class='verbatim'>50</code>
-     and upper percentiles. By default the lower percentile is 
-        <code class='verbatim'>25</code>
-     and the upper percentile is 
-        <code class='verbatim'>75</code>
-     . The 
-        <code class='verbatim'>50</code>
-     percentile is the same as the median.</p>
-
-    
-           
-               
-        <p>For object data ( e.g. strings or timestamps), the result&#39; s index will include 
-        <code class='verbatim'>count</code>
-     , 
-        <code class='verbatim'>unique</code>
-     , 
-        <code class='verbatim'>top</code>
-     , and 
-        <code class='verbatim'>freq</code>
-     . The 
-        <code class='verbatim'>top</code>
-     is the most common value. The 
-        <code class='verbatim'>freq</code>
-     is the most common value&#39; s frequency. Timestamps also include the 
-        <code class='verbatim'>first</code>
-     and 
-        <code class='verbatim'>last</code>
-     items.</p>
-
-    
-           
-               
-        <p>If multiple object values have the highest count, then the 
-        <code class='verbatim'>count</code>
-     and 
-        <code class='verbatim'>top</code>
-     results will be arbitrarily chosen from among those with the highest count.</p>
-
-    
-           
-               
-        <p>For mixed data types provided via a 
-        <code class='verbatim'>DataFrame</code>
-     , the default is to return only an analysis of numeric columns. If the dataframe consists only of object and categorical data without any numeric columns, the default is to return an analysis of both the object and categorical columns. If 
-        <code class='verbatim'>include=&#39;all&#39;</code>
-     is provided as an option, the result will include a union of attributes of each type.</p>
-
-    
-           
-               
-        <p>The <code><a link href="#include" class='local'>include</a></code> and <code><a link href="#exclude" class='local'>exclude</a></code> parameters can be used to limit which columns in a 
-        <code class='verbatim'>DataFrame</code>
-     are analyzed for the output. The parameters are ignored when analyzing a 
-        <code class='verbatim'>Series</code>
-     .</p>
+        <p>Generate descriptive statistics.</p>
 
     
            
@@ -976,6 +904,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1218,10 +1164,7 @@ max            NaN      3.0</pre>
              <code><a link href="/p/numpy/1.21.3/api/numpy.number.html" class='exists'>numpy.number</a></code>
         
          
-             <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.category.html" class='exists'>pandas.core.indexes.category</a></code>
-        
-         
-             <code><a link href="/p/pandas/1.3.4/api/pandas.core.describe.html" class='exists'>pandas.core.describe</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.datetime64.html" class='exists'>numpy.datetime64</a></code>
         
          
              <code><a link href="/p/pandas/1.3.4/api/pandas.core.frame.DataFrame.html" class='exists'>pandas.core.frame.DataFrame</a></code>
@@ -1230,13 +1173,16 @@ max            NaN      3.0</pre>
              <code><a link href="/p/pandas/1.3.4/api/pandas.core.series.Series.html" class='exists'>pandas.core.series.Series</a></code>
         
          
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical.html" class='exists'>pandas.core.arrays.categorical.Categorical</a></code>
+        
+         
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.indexes.category.html" class='exists'>pandas.core.indexes.category</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.datetime64.html" class='exists'>numpy.datetime64</a></code>
-        
-         
-             <code><a link href="/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical.html" class='exists'>pandas.core.arrays.categorical.Categorical</a></code>
+             <code><a link href="/p/pandas/1.3.4/api/pandas.core.describe.html" class='exists'>pandas.core.describe</a></code>
         
          
      
@@ -1264,7 +1210,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/pandas/core/generic.py </br>
+File: /pandas/core/generic.py </br>
 Line: 9775 </br>
 type: &lt;class &#39;function&#39;&gt; </br>
 Commit: </br>
@@ -1301,7 +1247,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 23.329709716755893, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 2, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 12.582575694955839, "label": "numpy.datetime64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.datetime64"}, {"id": 4, "val": 11.872983346207416, "label": "pandas.core.indexes.category", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.category"}, {"id": 5, "val": 9.732050807568877, "label": "numpy.number", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.number"}, {"id": 6, "val": 9.732050807568877, "label": "pandas.core.describe", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.describe"}, {"id": 7, "val": 22.866068747318508, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}, {"id": 8, "val": 13.8309518948453, "label": "pandas.core.arrays.categorical.Categorical", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical"}], "links": [{"source": 2, "target": 8, "id": 996}, {"source": 2, "target": 7, "id": 1037}, {"source": 2, "target": 1, "id": 1134}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 11.872983346207416, "label": "pandas.core.indexes.category", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.category"}, {"id": 2, "val": 9.732050807568877, "label": "pandas.core.describe", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.describe"}, {"id": 3, "val": 9.732050807568877, "label": "numpy.number", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.number"}, {"id": 4, "val": 13.65685424949238, "label": "pandas.core.arrays.categorical.Categorical", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical"}, {"id": 5, "val": 23.13274595042156, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 12.582575694955839, "label": "numpy.datetime64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.datetime64"}, {"id": 8, "val": 22.832396974191326, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}], "links": [{"source": 6, "target": 4, "id": 1044}, {"source": 6, "target": 8, "id": 1084}, {"source": 6, "target": 5, "id": 1181}]};
 
 (function() {
 
@@ -1429,7 +1375,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 23.329709716755893, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 2, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 3, "val": 12.582575694955839, "label": "numpy.datetime64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.datetime64"}, {"id": 4, "val": 11.872983346207416, "label": "pandas.core.indexes.category", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.category"}, {"id": 5, "val": 9.732050807568877, "label": "numpy.number", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.number"}, {"id": 6, "val": 9.732050807568877, "label": "pandas.core.describe", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.describe"}, {"id": 7, "val": 22.866068747318508, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}, {"id": 8, "val": 13.8309518948453, "label": "pandas.core.arrays.categorical.Categorical", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical"}], "links": [{"source": 2, "target": 8, "id": 996}, {"source": 2, "target": 7, "id": 1037}, {"source": 2, "target": 1, "id": 1134}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 11.872983346207416, "label": "pandas.core.indexes.category", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.indexes.category"}, {"id": 2, "val": 9.732050807568877, "label": "pandas.core.describe", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.describe"}, {"id": 3, "val": 9.732050807568877, "label": "numpy.number", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.number"}, {"id": 4, "val": 13.65685424949238, "label": "pandas.core.arrays.categorical.Categorical", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.arrays.categorical.Categorical"}, {"id": 5, "val": 23.13274595042156, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.series.Series"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 7, "val": 12.582575694955839, "label": "numpy.datetime64", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.datetime64"}, {"id": 8, "val": 22.832396974191326, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.3.4/api/pandas.core.frame.DataFrame"}], "links": [{"source": 6, "target": 4, "id": 1044}, {"source": 6, "target": 8, "id": 1084}, {"source": 6, "target": 5, "id": 1181}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

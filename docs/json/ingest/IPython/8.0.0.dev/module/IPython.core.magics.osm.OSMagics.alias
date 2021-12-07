@@ -1,0 +1,355 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "'%alias alias_name cmd' defines 'alias_name' as an alias for 'cmd'"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Then, typing 'alias_name params' will execute the system command 'cmd params' (from your underlying operating system)."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Aliases have lower precedence than magic functions and Python normal variables, so if 'foo' is both a Python variable and an alias, the alias can not be executed until 'del foo' removes the Python variable."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "You can use the %l specifier in an alias definition to represent the whole line when the alias is called.  For example::    "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "In [2]: alias bracket echo \"Input in brackets: <%l>\"",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [3]: bracket hello world",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": "Input in brackets: <hello world>",
+                  "_number": 2,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "You can also define aliases with parameters using %s specifiers (one per parameter)::    "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "In [1]: alias parts echo first %s second %s",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [2]: %parts A B",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": "first A second B",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [3]: %parts A",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": "Incorrect number of arguments: 2 expected.",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": "parts is an alias to: 'echo first %s second %s'",
+                  "_number": 5,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Note that %l and %s are mutually exclusive.  You can only use one or the other in your aliases."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Aliases expand Python variables just like system calls using ! or !! do: all expressions prefixed with '$' get expanded.  For details of the semantic rules, see PEP-215: http://www.python.org/peps/pep-0215.html.  This is the library used by IPython for variable expansion.  If you want to access a true shell variable, an extra $ is necessary to prevent its expansion by IPython::    "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "In [6]: alias show echo",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [7]: PATH='A Python string'",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [8]: show $PATH",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": "A Python string",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": "In [9]: show $$PATH",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": "/usr/local/lf9560/bin:/usr/local/intel/compiler70/ia32/bin:...",
+                  "_number": 5,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "You can use the alias facility to access all of $PATH.  See the %rehashx function, which automatically creates aliases for the contents of your $PATH."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "If called with no parameters, %alias prints the current alias table for your system.  For posix systems, the default aliases are 'cat', 'cp', 'mv', 'rm', 'rmdir', and 'mkdir', and other platform-specific aliases are added.  For windows-based systems, the default aliases are 'copy', 'ddir', 'echo', 'ls', 'ldir', 'mkdir', 'ren', and 'rmdir'."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "You can see the definition of alias by adding a question mark in the end::    "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "In [1]: cat?",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "Repr: <alias cat for 'cat'>",
+                  "_number": 1,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Define an alias for a system command."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/dev/ipython/IPython/core/magics/osm.py",
+  "item_line": 93,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "IPython.core.magics.OSMagics.alias"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "8.0.0.dev",
+  "signature": "alias(self, parameter_s='')",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "IPython.core.magics.osm.OSMagics.alias",
+  "arbitrary": []
+}

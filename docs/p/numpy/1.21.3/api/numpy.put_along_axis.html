@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -761,9 +763,9 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
-
     <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -791,16 +793,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Put values into the destination array by matching 1d index and data slices.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -835,6 +832,64 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>This is equivalent to (but faster than) the following use of <code><a link href="/p/numpy/1.21.3/api/numpy.ndindex.html" class='exists'>ndindex</a></code>
+         and <code>:None:None:`s_`</code>, which sets each of 
+        <code class='verbatim'>ii</code>
+     and 
+        <code class='verbatim'>kk</code>
+     to a tuple of indices::      </p>
+
+    
+           
+               
+            <pre>Ni, M, Nk = a.shape[:axis], a.shape[axis], a.shape[axis+1:]
+J = indices.shape[axis]  # Need not equal M
+
+for ii in ndindex(Ni):
+    for kk in ndindex(Nk):
+        a_1d       = a      [ii + s_[:,] + kk]
+        indices_1d = indices[ii + s_[:,] + kk]
+        values_1d  = values [ii + s_[:,] + kk]
+        for j in range(J):
+            a_1d[indices_1d[j]] = values_1d[j]</pre>
+       
+           
+               
+        <p>Equivalently, eliminating the inner loop, the last two lines would be::              </p>
+
+    
+           
+               
+            <pre>a_1d[indices_1d] = values_1d</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -915,15 +970,6 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
        
    
 
@@ -939,75 +985,13 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>This is equivalent to (but faster than) the following use of <code><a link href="/p/numpy/1.21.3/api/numpy.ndindex.html" class='exists'>ndindex</a></code>
-         and <code>:None:None:`s_`</code>, which sets each of 
-        <code class='verbatim'>ii</code>
-     and 
-        <code class='verbatim'>kk</code>
-     to a tuple of indices::      </p>
+        <p>Put values into the destination array by matching 1d index and data slices.</p>
 
     
-           
-               
-            <pre>Ni, M, Nk = a.shape[:axis], a.shape[axis], a.shape[axis+1:]
-J = indices.shape[axis]  # Need not equal M
-
-for ii in ndindex(Ni):
-    for kk in ndindex(Nk):
-        a_1d       = a      [ii + s_[:,] + kk]
-        indices_1d = indices[ii + s_[:,] + kk]
-        values_1d  = values [ii + s_[:,] + kk]
-        for j in range(J):
-            a_1d[indices_1d[j]] = values_1d[j]</pre>
-       
-           
-               
-        <p>Equivalently, eliminating the inner loop, the last two lines would be::              </p>
-
-    
-           
-               
-            <pre>a_1d[indices_1d] = values_1d</pre>
-       
            
        
     
@@ -1016,6 +1000,24 @@ for ii in ndindex(Ni):
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1058,22 +1060,22 @@ array([[10, 99, 20],
              <code><a link href="/p/numpy/1.21.3/api/numpy.argsort.html" class='exists'>numpy.argsort</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.argpartition.html" class='exists'>numpy.argpartition</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.expand_dims.html" class='exists'>numpy.expand_dims</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.put_along_axis.html" class='exists'>numpy.put_along_axis</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.argmax.html" class='exists'>numpy.argmax</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.ndindex.html" class='exists'>numpy.ndindex</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.array.html" class='exists'>numpy.array</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.argmax.html" class='exists'>numpy.argmax</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.argpartition.html" class='exists'>numpy.argpartition</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.put_along_axis.html" class='exists'>numpy.put_along_axis</a></code>
         
          
      
@@ -1149,7 +1151,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "numpy.argpartition", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argpartition"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.expand_dims", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.expand_dims"}, {"id": 3, "val": 11.16227766016838, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argmax"}, {"id": 5, "val": 10.449489742783179, "label": "numpy.ndindex", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndindex"}, {"id": 6, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argsort"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 2, "target": 3, "id": 13}, {"source": 7, "target": 3, "id": 39}, {"source": 7, "target": 1, "id": 41}, {"source": 7, "target": 6, "id": 42}, {"source": 7, "target": 2, "id": 108}]};
+var canvas_graph = {"nodes": [{"id": 2, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 10.449489742783179, "label": "numpy.ndindex", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndindex"}, {"id": 4, "val": 9.732050807568877, "label": "numpy.argpartition", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argpartition"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.expand_dims", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.expand_dims"}, {"id": 6, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argsort"}, {"id": 7, "val": 11.3166247903554, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argmax"}], "links": [{"source": 2, "target": 7, "id": 17}, {"source": 2, "target": 4, "id": 19}, {"source": 2, "target": 6, "id": 20}, {"source": 2, "target": 5, "id": 86}, {"source": 5, "target": 7, "id": 611}]};
 
 (function() {
 
@@ -1277,7 +1279,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "numpy.argpartition", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argpartition"}, {"id": 2, "val": 10.23606797749979, "label": "numpy.expand_dims", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.expand_dims"}, {"id": 3, "val": 11.16227766016838, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argmax"}, {"id": 5, "val": 10.449489742783179, "label": "numpy.ndindex", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndindex"}, {"id": 6, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argsort"}, {"id": 7, "val": 31.57965224510319, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}], "links": [{"source": 2, "target": 3, "id": 13}, {"source": 7, "target": 3, "id": 39}, {"source": 7, "target": 1, "id": 41}, {"source": 7, "target": 6, "id": 42}, {"source": 7, "target": 2, "id": 108}]};
+    var svg_graph = {"nodes": [{"id": 2, "val": 32.392621835300936, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.array"}, {"id": 3, "val": 10.449489742783179, "label": "numpy.ndindex", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndindex"}, {"id": 4, "val": 9.732050807568877, "label": "numpy.argpartition", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argpartition"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.expand_dims", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.expand_dims"}, {"id": 6, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argsort"}, {"id": 7, "val": 11.3166247903554, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.argmax"}], "links": [{"source": 2, "target": 7, "id": 17}, {"source": 2, "target": 4, "id": 19}, {"source": 2, "target": 6, "id": 20}, {"source": 2, "target": 5, "id": 86}, {"source": 5, "target": 7, "id": 611}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

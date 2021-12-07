@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -420,6 +421,7 @@ user-select: none;
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.extract.html">extract</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.lil.html">lil</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html">linalg</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.sparse.spfuncs.html">spfuncs</a>
                             <a href="/p/scipy/1.7.1/api/scipy.sparse.sputils.html">sputils</a>
                             
                             </div>
@@ -478,11 +480,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -510,16 +512,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -534,6 +531,111 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>If both 
+        <code class='verbatim'>retLambdaHistory</code>
+     and 
+        <code class='verbatim'>retResidualNormsHistory</code>
+     are True, the return tuple has the following format 
+        <code class='verbatim'>(lambda, V, lambda history, residual norms history)</code>
+    .</p>
+
+    
+           
+               
+        <p>In the following 
+        <code class='verbatim'>n</code>
+     denotes the matrix size and 
+        <code class='verbatim'>m</code>
+     the number of required eigenvalues (smallest or largest).</p>
+
+    
+           
+               
+        <p>The LOBPCG code internally solves eigenproblems of the size 
+        <code class='verbatim'>3m</code>
+     on every iteration by calling the &#34;standard&#34; dense eigensolver, so if 
+        <code class='verbatim'>m</code>
+     is not small enough compared to 
+        <code class='verbatim'>n</code>
+    , it does not make sense to call the LOBPCG code, but rather one should use the &#34;standard&#34; eigensolver, e.g. numpy or scipy function in this case. If one calls the LOBPCG algorithm for 
+        <code class='verbatim'>5m &gt; n</code>
+    , it will most likely break internally, so the code tries to call the standard function instead.</p>
+
+    
+           
+               
+        <p>It is not that 
+        <code class='verbatim'>n</code>
+     should be large for the LOBPCG to work, but rather the ratio 
+        <code class='verbatim'>n / m</code>
+     should be large. It you call LOBPCG with 
+        <code class='verbatim'>m=1</code>
+     and 
+        <code class='verbatim'>n=10</code>
+    , it works though 
+        <code class='verbatim'>n</code>
+     is small. The method is intended for extremely large 
+        <code class='verbatim'>n / m</code>
+     .</p>
+
+    
+           
+               
+        <p>The convergence speed depends basically on two factors:</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>How well relatively separated the seeking eigenvalues are from the rest    of the eigenvalues. One can try to vary 
+        <code class='verbatim'>m</code>
+     to make this better.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+           <ol>
+               <li>
+        <p>How well conditioned the problem is. This can be changed by using proper    preconditioning. For example, a rod vibration test problem (under tests    directory) is ill-conditioned for large 
+        <code class='verbatim'>n</code>
+    , so convergence will be    slow, unless efficient preconditioning is used. For this specific    problem, a good simple preconditioner function would be a linear solve    for <code><a link href="#A" class='local'>A</a></code>, which is easy to code since A is tridiagonal.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -718,6 +820,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -790,146 +907,13 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>If both 
-        <code class='verbatim'>retLambdaHistory</code>
-     and 
-        <code class='verbatim'>retResidualNormsHistory</code>
-     are True, the return tuple has the following format 
-        <code class='verbatim'>(lambda, V, lambda history, residual norms history)</code>
-    .</p>
+        <p>Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)</p>
 
     
-           
-               
-        <p>In the following 
-        <code class='verbatim'>n</code>
-     denotes the matrix size and 
-        <code class='verbatim'>m</code>
-     the number of required eigenvalues (smallest or largest).</p>
-
-    
-           
-               
-        <p>The LOBPCG code internally solves eigenproblems of the size 
-        <code class='verbatim'>3m</code>
-     on every iteration by calling the &#34;standard&#34; dense eigensolver, so if 
-        <code class='verbatim'>m</code>
-     is not small enough compared to 
-        <code class='verbatim'>n</code>
-    , it does not make sense to call the LOBPCG code, but rather one should use the &#34;standard&#34; eigensolver, e.g. numpy or scipy function in this case. If one calls the LOBPCG algorithm for 
-        <code class='verbatim'>5m &gt; n</code>
-    , it will most likely break internally, so the code tries to call the standard function instead.</p>
-
-    
-           
-               
-        <p>It is not that 
-        <code class='verbatim'>n</code>
-     should be large for the LOBPCG to work, but rather the ratio 
-        <code class='verbatim'>n / m</code>
-     should be large. It you call LOBPCG with 
-        <code class='verbatim'>m=1</code>
-     and 
-        <code class='verbatim'>n=10</code>
-    , it works though 
-        <code class='verbatim'>n</code>
-     is small. The method is intended for extremely large 
-        <code class='verbatim'>n / m</code>
-     .</p>
-
-    
-           
-               
-        <p>The convergence speed depends basically on two factors:</p>
-
-    
-           
-               
-           <ol>
-               <li>
-        <p>How well relatively separated the seeking eigenvalues are from the rest    of the eigenvalues. One can try to vary 
-        <code class='verbatim'>m</code>
-     to make this better.</p>
-
-    </li>
-               
-            </ol>
-       
-           
-               
-           <ol>
-               <li>
-        <p>How well conditioned the problem is. This can be changed by using proper    preconditioning. For example, a rod vibration test problem (under tests    directory) is ill-conditioned for large 
-        <code class='verbatim'>n</code>
-    , so convergence will be    slow, unless efficient preconditioning is used. For this specific    problem, a good simple preconditioner function would be a linear solve    for <code><a link href="#A" class='local'>A</a></code>, which is easy to code since A is tridiagonal.</p>
-
-    </li>
-               
-            </ol>
-       
            
        
     
@@ -938,6 +922,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1059,40 +1061,13 @@ array([4., 5., 6.])</pre>
              <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.eigen.lobpcg.lobpcg.lobpcg.html" class='exists'>scipy.sparse.linalg.eigen.lobpcg.lobpcg.lobpcg</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.eye.html" class='exists'>scipy.sparse.construct.eye</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.random.html" class='exists'>scipy.sparse.construct.random</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code.html" class='exists'>scipy.integrate._ode.ode.get_return_code</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags.html" class='exists'>scipy.sparse.construct.spdiags</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times.html" class='exists'>scipy.signal.ltisys._default_response_times</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.html" class='exists'>scipy.sparse.linalg</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.html" class='exists'>scipy.sparse.linalg.interface.LinearOperator</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat.html" class='exists'>scipy.sparse.linalg.interface.LinearOperator.matmat</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.arange.html" class='exists'>numpy.arange</a></code>
@@ -1101,10 +1076,37 @@ array([4., 5., 6.])</pre>
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times.html" class='exists'>scipy.signal.ltisys._default_response_times</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random.html" class='exists'>numpy.random</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.random.html" class='exists'>scipy.sparse.construct.random</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags.html" class='exists'>scipy.sparse.construct.spdiags</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.eye.html" class='exists'>scipy.sparse.construct.eye</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code.html" class='exists'>scipy.integrate._ode.ode.get_return_code</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.Generator.html" class='exists'>numpy.random._generator.Generator</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat.html" class='exists'>scipy.sparse.linalg.interface.LinearOperator.matmat</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.random._generator.default_rng.html" class='exists'>numpy.random._generator.default_rng</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.html" class='exists'>scipy.sparse.linalg.interface.LinearOperator</a></code>
         
          
      
@@ -1180,7 +1182,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.sparse.linalg.interface.LinearOperator", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 9.0, "label": "scipy.sparse.linalg.interface.LinearOperator.matmat", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat"}, {"id": 5, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 6, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 7, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 8, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 9, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 10, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 11, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 12, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 13, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 14, "val": 9.732050807568877, "label": "scipy.sparse.construct.spdiags", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags"}, {"id": 16, "val": 9.414213562373096, "label": "scipy.sparse.construct.eye", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.eye"}, {"id": 17, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}], "links": [{"source": 12, "target": 16, "id": 18}, {"source": 12, "target": 7, "id": 23}, {"source": 12, "target": 14, "id": 24}, {"source": 12, "target": 2, "id": 78}, {"source": 1, "target": 7, "id": 154}, {"source": 1, "target": 2, "id": 156}, {"source": 13, "target": 9, "id": 159}, {"source": 13, "target": 17, "id": 161}, {"source": 13, "target": 7, "id": 220}, {"source": 17, "target": 13, "id": 235}, {"source": 17, "target": 7, "id": 293}, {"source": 8, "target": 7, "id": 391}, {"source": 8, "target": 2, "id": 393}, {"source": 9, "target": 13, "id": 423}, {"source": 9, "target": 17, "id": 424}, {"source": 9, "target": 7, "id": 490}, {"source": 6, "target": 2, "id": 658}, {"source": 3, "target": 5, "id": 1363}, {"source": 3, "target": 13, "id": 1452}, {"source": 3, "target": 17, "id": 1453}, {"source": 3, "target": 16, "id": 1969}, {"source": 3, "target": 7, "id": 1971}, {"source": 3, "target": 14, "id": 1972}, {"source": 3, "target": 2, "id": 1998}, {"source": 5, "target": 7, "id": 2732}, {"source": 5, "target": 14, "id": 2733}, {"source": 11, "target": 16, "id": 3449}, {"source": 11, "target": 7, "id": 3454}, {"source": 11, "target": 14, "id": 3455}, {"source": 11, "target": 2, "id": 3509}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 2, "val": 9.0, "label": "scipy.sparse.linalg.interface.LinearOperator.matmat", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat"}, {"id": 4, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 5, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 6, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 7, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 8, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 9, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 10, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 11, "val": 9.732050807568877, "label": "scipy.sparse.linalg.interface.LinearOperator", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator"}, {"id": 12, "val": 9.414213562373096, "label": "scipy.sparse.construct.eye", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.eye"}, {"id": 13, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 15, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 16, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 17, "val": 9.732050807568877, "label": "scipy.sparse.construct.spdiags", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags"}], "links": [{"source": 10, "target": 11, "id": 108}, {"source": 14, "target": 6, "id": 513}, {"source": 14, "target": 17, "id": 514}, {"source": 8, "target": 12, "id": 1043}, {"source": 8, "target": 6, "id": 1048}, {"source": 8, "target": 17, "id": 1049}, {"source": 8, "target": 11, "id": 1103}, {"source": 13, "target": 14, "id": 1821}, {"source": 13, "target": 1, "id": 1910}, {"source": 13, "target": 9, "id": 1911}, {"source": 13, "target": 12, "id": 2425}, {"source": 13, "target": 6, "id": 2427}, {"source": 13, "target": 17, "id": 2428}, {"source": 13, "target": 11, "id": 2454}, {"source": 4, "target": 6, "id": 3039}, {"source": 4, "target": 11, "id": 3041}, {"source": 5, "target": 1, "id": 3073}, {"source": 5, "target": 9, "id": 3074}, {"source": 5, "target": 6, "id": 3140}, {"source": 7, "target": 12, "id": 3661}, {"source": 7, "target": 6, "id": 3666}, {"source": 7, "target": 17, "id": 3667}, {"source": 7, "target": 11, "id": 3721}, {"source": 16, "target": 6, "id": 3855}, {"source": 16, "target": 11, "id": 3857}, {"source": 1, "target": 9, "id": 3861}, {"source": 1, "target": 6, "id": 3920}, {"source": 9, "target": 1, "id": 3933}, {"source": 9, "target": 6, "id": 3991}]};
 
 (function() {
 
@@ -1308,7 +1310,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 2, "val": 9.732050807568877, "label": "scipy.sparse.linalg.interface.LinearOperator", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator"}, {"id": 3, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 4, "val": 9.0, "label": "scipy.sparse.linalg.interface.LinearOperator.matmat", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat"}, {"id": 5, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 6, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 7, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 8, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 9, "val": 20.409673645990857, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 10, "val": 24.673332000533065, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 11, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 12, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 13, "val": 16.42614977317636, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 14, "val": 9.732050807568877, "label": "scipy.sparse.construct.spdiags", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags"}, {"id": 16, "val": 9.414213562373096, "label": "scipy.sparse.construct.eye", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.eye"}, {"id": 17, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}], "links": [{"source": 12, "target": 16, "id": 18}, {"source": 12, "target": 7, "id": 23}, {"source": 12, "target": 14, "id": 24}, {"source": 12, "target": 2, "id": 78}, {"source": 1, "target": 7, "id": 154}, {"source": 1, "target": 2, "id": 156}, {"source": 13, "target": 9, "id": 159}, {"source": 13, "target": 17, "id": 161}, {"source": 13, "target": 7, "id": 220}, {"source": 17, "target": 13, "id": 235}, {"source": 17, "target": 7, "id": 293}, {"source": 8, "target": 7, "id": 391}, {"source": 8, "target": 2, "id": 393}, {"source": 9, "target": 13, "id": 423}, {"source": 9, "target": 17, "id": 424}, {"source": 9, "target": 7, "id": 490}, {"source": 6, "target": 2, "id": 658}, {"source": 3, "target": 5, "id": 1363}, {"source": 3, "target": 13, "id": 1452}, {"source": 3, "target": 17, "id": 1453}, {"source": 3, "target": 16, "id": 1969}, {"source": 3, "target": 7, "id": 1971}, {"source": 3, "target": 14, "id": 1972}, {"source": 3, "target": 2, "id": 1998}, {"source": 5, "target": 7, "id": 2732}, {"source": 5, "target": 14, "id": 2733}, {"source": 11, "target": 16, "id": 3449}, {"source": 11, "target": 7, "id": 3454}, {"source": 11, "target": 14, "id": 3455}, {"source": 11, "target": 2, "id": 3509}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.random._generator.Generator", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.Generator"}, {"id": 2, "val": 9.0, "label": "scipy.sparse.linalg.interface.LinearOperator.matmat", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.matmat"}, {"id": 4, "val": 17.74679434480896, "label": "scipy.signal.ltisys._default_response_times", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys._default_response_times"}, {"id": 5, "val": 21.2664991614216, "label": "numpy.random", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random"}, {"id": 6, "val": 13.196152422706632, "label": "scipy.sparse.construct.random", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.random"}, {"id": 7, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 8, "val": 17.0, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse"}, {"id": 9, "val": 16.366600265340757, "label": "numpy.random._generator.default_rng", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.random._generator.default_rng"}, {"id": 10, "val": 18.63014581273465, "label": "scipy.sparse.linalg", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg"}, {"id": 11, "val": 9.732050807568877, "label": "scipy.sparse.linalg.interface.LinearOperator", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator"}, {"id": 12, "val": 9.414213562373096, "label": "scipy.sparse.construct.eye", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.eye"}, {"id": 13, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 14, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 15, "val": 25.0, "label": "numpy.arange", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.arange"}, {"id": 16, "val": 14.855654600401044, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 17, "val": 9.732050807568877, "label": "scipy.sparse.construct.spdiags", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags"}], "links": [{"source": 10, "target": 11, "id": 108}, {"source": 14, "target": 6, "id": 513}, {"source": 14, "target": 17, "id": 514}, {"source": 8, "target": 12, "id": 1043}, {"source": 8, "target": 6, "id": 1048}, {"source": 8, "target": 17, "id": 1049}, {"source": 8, "target": 11, "id": 1103}, {"source": 13, "target": 14, "id": 1821}, {"source": 13, "target": 1, "id": 1910}, {"source": 13, "target": 9, "id": 1911}, {"source": 13, "target": 12, "id": 2425}, {"source": 13, "target": 6, "id": 2427}, {"source": 13, "target": 17, "id": 2428}, {"source": 13, "target": 11, "id": 2454}, {"source": 4, "target": 6, "id": 3039}, {"source": 4, "target": 11, "id": 3041}, {"source": 5, "target": 1, "id": 3073}, {"source": 5, "target": 9, "id": 3074}, {"source": 5, "target": 6, "id": 3140}, {"source": 7, "target": 12, "id": 3661}, {"source": 7, "target": 6, "id": 3666}, {"source": 7, "target": 17, "id": 3667}, {"source": 7, "target": 11, "id": 3721}, {"source": 16, "target": 6, "id": 3855}, {"source": 16, "target": 11, "id": 3857}, {"source": 1, "target": 9, "id": 3861}, {"source": 1, "target": 6, "id": 3920}, {"source": 9, "target": 1, "id": 3933}, {"source": 9, "target": 6, "id": 3991}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

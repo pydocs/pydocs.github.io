@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -493,11 +494,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     
 
@@ -524,16 +525,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Minimize a function with variables subject to bounds, using gradient information in a truncated Newton algorithm. This method wraps a C implementation of the algorithm.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -543,6 +539,74 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The underlying algorithm is truncated Newton, also called Newton Conjugate-Gradient. This method differs from scipy.optimize.fmin_ncg in that</p>
+
+    
+           
+               
+           <ol>
+               <li>
+        <p>it wraps a C implementation of the algorithm</p>
+
+    </li>
+               
+               <li>
+        <p>it allows each variable to be given an upper and lower bound.</p>
+
+    </li>
+               
+            </ol>
+       
+           
+               
+        <p>The algorithm incorporates the bound constraints by determining the descent direction as in an unconstrained truncated Newton, but never taking a step-size large enough to leave the space of feasible x&#39;s. The algorithm keeps track of a set of currently active constraints, and ignores them when computing the minimum allowable step size. (The x&#39;s associated with the active constraint are kept fixed.) If the maximum allowable step size is zero then a new constraint is added. At the end of each iteration one of the constraints may be deemed no longer active and removed. A constraint is considered no longer active is if it is currently active but the gradient for that variable points inward from the constraint. The specific constraint removed is the one associated with the variable of largest index whose constraint is no longer active.</p>
+
+    
+           
+               
+        <p>Return codes are defined as follows::      </p>
+
+    
+           
+               
+            <pre>-1 : Infeasible (lower bound &gt; upper bound)
+ 0 : Local minimum reached (|pg| ~= 0)
+ 1 : Converged (|f_n-f_(n-1)| ~= 0)
+ 2 : Converged (|x_n-x_(n-1)| ~= 0)
+ 3 : Max. number of function evaluations reached
+ 4 : Linear search failed
+ 5 : All lower bounds are equal to the upper bounds
+ 6 : Unable to progress
+ 7 : User requested end of minimization</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -904,6 +968,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -958,109 +1037,13 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>The underlying algorithm is truncated Newton, also called Newton Conjugate-Gradient. This method differs from scipy.optimize.fmin_ncg in that</p>
+        <p>Minimize a function with variables subject to bounds, using gradient information in a truncated Newton algorithm. This method wraps a C implementation of the algorithm.</p>
 
     
-           
-               
-           <ol>
-               <li>
-        <p>it wraps a C implementation of the algorithm</p>
-
-    </li>
-               
-               <li>
-        <p>it allows each variable to be given an upper and lower bound.</p>
-
-    </li>
-               
-            </ol>
-       
-           
-               
-        <p>The algorithm incorporates the bound constraints by determining the descent direction as in an unconstrained truncated Newton, but never taking a step-size large enough to leave the space of feasible x&#39;s. The algorithm keeps track of a set of currently active constraints, and ignores them when computing the minimum allowable step size. (The x&#39;s associated with the active constraint are kept fixed.) If the maximum allowable step size is zero then a new constraint is added. At the end of each iteration one of the constraints may be deemed no longer active and removed. A constraint is considered no longer active is if it is currently active but the gradient for that variable points inward from the constraint. The specific constraint removed is the one associated with the variable of largest index whose constraint is no longer active.</p>
-
-    
-           
-               
-        <p>Return codes are defined as follows::      </p>
-
-    
-           
-               
-            <pre>-1 : Infeasible (lower bound &gt; upper bound)
- 0 : Local minimum reached (|pg| ~= 0)
- 1 : Converged (|f_n-f_(n-1)| ~= 0)
- 2 : Converged (|x_n-x_(n-1)| ~= 0)
- 3 : Max. number of function evaluations reached
- 4 : Linear search failed
- 5 : All lower bounds are equal to the upper bounds
- 6 : Unable to progress
- 7 : User requested end of minimization</pre>
-       
            
        
     
@@ -1069,6 +1052,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 

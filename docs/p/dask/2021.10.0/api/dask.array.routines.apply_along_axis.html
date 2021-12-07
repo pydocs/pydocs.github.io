@@ -334,6 +334,7 @@ user-select: none;
                 <a href=dask>dask</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -549,11 +550,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -581,16 +582,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Apply a function to 1-D slices along the given axis.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -617,6 +613,77 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>If either of <code>:None:None:`dtype`</code> or <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.shape.html" class='exists'>shape</a></code>
+         are not provided, Dask attempts to determine them by calling <code><a link href="#func1d" class='local'>func1d</a></code> on a dummy array. This may produce incorrect values for <code>:None:None:`dtype`</code> or <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.shape.html" class='exists'>shape</a></code>
+        , so we recommend providing them.</p>
+
+    
+           
+               
+        <p>Execute <code>:None:None:`func1d(a, *args, **kwargs)`</code> where <code><a link href="#func1d" class='local'>func1d</a></code> operates on 1-D arrays and <code>:None:None:`a`</code> is a 1-D slice of <code><a link href="#arr" class='local'>arr</a></code> along <code><a link href="#axis" class='local'>axis</a></code>.</p>
+
+    
+           
+               
+        <p>This is equivalent to (but faster than) the following use of <code>:None:None:`ndindex`</code> and <code>:None:None:`s_`</code>, which sets each of 
+        <code class='verbatim'>ii</code>
+    , 
+        <code class='verbatim'>jj</code>
+    , and 
+        <code class='verbatim'>kk</code>
+     to a tuple of indices::      </p>
+
+    
+           
+               
+            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
+for ii in ndindex(Ni):
+    for kk in ndindex(Nk):
+        f = func1d(arr[ii + s_[:,] + kk])
+        Nj = f.shape
+        for jj in ndindex(Nj):
+            out[ii + jj + kk] = f[jj]</pre>
+       
+           
+               
+        <p>Equivalently, eliminating the inner loop, this can be expressed as::      </p>
+
+    
+           
+               
+            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
+for ii in ndindex(Ni):
+    for kk in ndindex(Nk):
+        out[ii + s_[...,] + kk] = func1d(arr[ii + s_[:,] + kk])</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -714,6 +781,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -740,112 +822,13 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>If either of <code>:None:None:`dtype`</code> or <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.shape.html" class='exists'>shape</a></code>
-         are not provided, Dask attempts to determine them by calling <code><a link href="#func1d" class='local'>func1d</a></code> on a dummy array. This may produce incorrect values for <code>:None:None:`dtype`</code> or <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.shape.html" class='exists'>shape</a></code>
-        , so we recommend providing them.</p>
+        <p>Apply a function to 1-D slices along the given axis.</p>
 
     
-           
-               
-        <p>Execute <code>:None:None:`func1d(a, *args, **kwargs)`</code> where <code><a link href="#func1d" class='local'>func1d</a></code> operates on 1-D arrays and <code>:None:None:`a`</code> is a 1-D slice of <code><a link href="#arr" class='local'>arr</a></code> along <code><a link href="#axis" class='local'>axis</a></code>.</p>
-
-    
-           
-               
-        <p>This is equivalent to (but faster than) the following use of <code>:None:None:`ndindex`</code> and <code>:None:None:`s_`</code>, which sets each of 
-        <code class='verbatim'>ii</code>
-    , 
-        <code class='verbatim'>jj</code>
-    , and 
-        <code class='verbatim'>kk</code>
-     to a tuple of indices::      </p>
-
-    
-           
-               
-            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
-for ii in ndindex(Ni):
-    for kk in ndindex(Nk):
-        f = func1d(arr[ii + s_[:,] + kk])
-        Nj = f.shape
-        for jj in ndindex(Nj):
-            out[ii + jj + kk] = f[jj]</pre>
-       
-           
-               
-        <p>Equivalently, eliminating the inner loop, this can be expressed as::      </p>
-
-    
-           
-               
-            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
-for ii in ndindex(Ni):
-    for kk in ndindex(Nk):
-        out[ii + s_[...,] + kk] = func1d(arr[ii + s_[:,] + kk])</pre>
-       
            
        
     
@@ -854,6 +837,24 @@ for ii in ndindex(Ni):
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -906,6 +907,15 @@ array([[[1, 0, 0],
          
          See :
          
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.ufunc.log10.html" class='exists'>dask.array.ufunc.log10</a></code>
+        
+         
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.html" class='exists'>dask.array</a></code>
+        
+         
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis.html" class='exists'>dask.array.routines.apply_along_axis</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.apply_along_axis.html" class='exists'>numpy.apply_along_axis</a></code>
         
          
@@ -916,15 +926,6 @@ array([[[1, 0, 0],
         
          
              <code><a link href="/p/dask/2021.10.0/api/dask.array.core.map_blocks.html" class='exists'>dask.array.core.map_blocks</a></code>
-        
-         
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.html" class='exists'>dask.array</a></code>
-        
-         
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis.html" class='exists'>dask.array.routines.apply_along_axis</a></code>
-        
-         
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.ufunc.log10.html" class='exists'>dask.array.ufunc.log10</a></code>
         
          
      
@@ -1003,7 +1004,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "dask.array.routines.take", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.take"}, {"id": 2, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 3, "val": 13.385164807134505, "label": "dask.array.routines.shape", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.shape"}, {"id": 4, "val": 10.449489742783179, "label": "dask.array.creation.diag", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.diag"}, {"id": 6, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 7, "val": 10.0, "label": "numpy.apply_along_axis", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.apply_along_axis"}, {"id": 8, "val": 10.449489742783179, "label": "dask.array.core.map_blocks", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.map_blocks"}], "links": [{"source": 6, "target": 8, "id": 64}, {"source": 6, "target": 3, "id": 132}, {"source": 6, "target": 1, "id": 135}, {"source": 2, "target": 8, "id": 194}, {"source": 2, "target": 3, "id": 290}, {"source": 2, "target": 1, "id": 293}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 3, "val": 10.449489742783179, "label": "dask.array.core.map_blocks", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.map_blocks"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 5, "val": 13.385164807134505, "label": "dask.array.routines.shape", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.shape"}, {"id": 6, "val": 10.0, "label": "numpy.apply_along_axis", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.apply_along_axis"}, {"id": 7, "val": 10.449489742783179, "label": "dask.array.creation.diag", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.diag"}, {"id": 8, "val": 9.0, "label": "dask.array.routines.take", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.take"}], "links": [{"source": 4, "target": 3, "id": 11}, {"source": 4, "target": 5, "id": 107}, {"source": 4, "target": 8, "id": 110}, {"source": 1, "target": 3, "id": 185}, {"source": 1, "target": 5, "id": 253}, {"source": 1, "target": 8, "id": 256}]};
 
 (function() {
 
@@ -1131,7 +1132,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "dask.array.routines.take", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.take"}, {"id": 2, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 3, "val": 13.385164807134505, "label": "dask.array.routines.shape", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.shape"}, {"id": 4, "val": 10.449489742783179, "label": "dask.array.creation.diag", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.diag"}, {"id": 6, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 7, "val": 10.0, "label": "numpy.apply_along_axis", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.apply_along_axis"}, {"id": 8, "val": 10.449489742783179, "label": "dask.array.core.map_blocks", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.map_blocks"}], "links": [{"source": 6, "target": 8, "id": 64}, {"source": 6, "target": 3, "id": 132}, {"source": 6, "target": 1, "id": 135}, {"source": 2, "target": 8, "id": 194}, {"source": 2, "target": 3, "id": 290}, {"source": 2, "target": 1, "id": 293}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 3, "val": 10.449489742783179, "label": "dask.array.core.map_blocks", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.core.map_blocks"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 5, "val": 13.385164807134505, "label": "dask.array.routines.shape", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.shape"}, {"id": 6, "val": 10.0, "label": "numpy.apply_along_axis", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.apply_along_axis"}, {"id": 7, "val": 10.449489742783179, "label": "dask.array.creation.diag", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.diag"}, {"id": 8, "val": 9.0, "label": "dask.array.routines.take", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.take"}], "links": [{"source": 4, "target": 3, "id": 11}, {"source": 4, "target": 5, "id": 107}, {"source": 4, "target": 8, "id": 110}, {"source": 1, "target": 3, "id": 185}, {"source": 1, "target": 5, "id": 253}, {"source": 1, "target": 8, "id": 256}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

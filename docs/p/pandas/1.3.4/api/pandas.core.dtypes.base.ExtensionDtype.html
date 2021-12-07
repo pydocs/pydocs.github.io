@@ -334,6 +334,7 @@ user-select: none;
                 <a href=pandas>pandas</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -542,16 +543,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>A custom data type, to be paired with an ExtensionArray.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -561,75 +557,6 @@ user-select: none;
            
        
     
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
 
 
     
@@ -646,7 +573,172 @@ user-select: none;
         
            
                
-        <p>Parsing not NotImplemented for this section.</p>
+        <p>The interface includes the following abstract methods that must be implemented by subclasses:</p>
+
+    
+           
+               
+           <ul>
+               <li>
+        <p>type</p>
+
+    </li>
+               
+               <li>
+        <p>name</p>
+
+    </li>
+               
+               <li>
+        <p>construct_array_type</p>
+
+    </li>
+               
+            </ul>
+       
+           
+               
+        <p>The following attributes and methods influence the behavior of the dtype in pandas operations</p>
+
+    
+           
+               
+           <ul>
+               <li>
+        <p>_is_numeric</p>
+
+    </li>
+               
+               <li>
+        <p>_is_boolean</p>
+
+    </li>
+               
+               <li>
+        <p>_get_common_dtype</p>
+
+    </li>
+               
+            </ul>
+       
+           
+               
+        <p>The <code>:None:None:`na_value`</code> class attribute can be used to set the default NA value for this type. <code>:None:attr:`numpy.nan`</code> is used by default.</p>
+
+    
+           
+               
+        <p>ExtensionDtypes are required to be hashable. The base class provides a default implementation, which relies on the 
+        <code class='verbatim'>_metadata</code>
+     class attribute. 
+        <code class='verbatim'>_metadata</code>
+     should be a tuple containing the strings that define your data type. For example, with 
+        <code class='verbatim'>PeriodDtype</code>
+     that&#39;s the 
+        <code class='verbatim'>freq</code>
+     attribute.</p>
+
+    
+           
+               
+        <p><b>If you have a parametrized dtype you should set the ``_metadata``
+class property</b>.</p>
+
+    
+           
+               
+        <p>Ideally, the attributes in 
+        <code class='verbatim'>_metadata</code>
+     will match the parameters to your 
+        <code class='verbatim'>ExtensionDtype.__init__</code>
+     (if any). If any of the attributes in 
+        <code class='verbatim'>_metadata</code>
+     don&#39;t implement the standard 
+        <code class='verbatim'>__eq__</code>
+     or 
+        <code class='verbatim'>__hash__</code>
+    , the default implementations here will not work.</p>
+
+    
+           
+               
+        <p>For interaction with Apache Arrow (pyarrow), a 
+        <code class='verbatim'>__from_arrow__</code>
+     method can be implemented: this method receives a pyarrow Array or ChunkedArray as only argument and is expected to return the appropriate pandas ExtensionArray for this dtype and the passed values::      </p>
+
+    
+           
+               
+            <pre>class ExtensionDtype:
+
+    def __from_arrow__(
+        self, array: Union[pyarrow.Array, pyarrow.ChunkedArray]
+    ) -&gt; ExtensionArray:
+        ...</pre>
+       
+           
+               
+        <p>This class does not inherit from &#39;abc.ABCMeta&#39; for performance reasons. Methods and properties required by the interface raise 
+        <code class='verbatim'>pandas.errors.AbstractMethodError</code>
+     and no 
+        <code class='verbatim'>register</code>
+     method is provided for registering virtual subclasses.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>A custom data type, to be paired with an ExtensionArray.</p>
 
     
            
@@ -657,6 +749,24 @@ user-select: none;
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -701,7 +811,7 @@ they belong to, and scaled with the number of references pointing them</p>
 
 To Be Done: </br>
 
-File: /Users/bussonniermatthias/miniconda3-intel/envs/papyri/lib/python3.9/site-packages/pandas/core/dtypes/base.py </br>
+File: /pandas/core/dtypes/base.py </br>
 Line: 35 </br>
 type: &lt;class &#39;type&#39;&gt; </br>
 Commit: </br>

@@ -334,6 +334,7 @@ user-select: none;
                 <a href=numpy>numpy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -586,6 +587,7 @@ user-select: none;
                             <a href="/p/numpy/1.21.3/api/numpy.lookfor.html">lookfor</a>
                             <a href="/p/numpy/1.21.3/api/numpy.ma.html">ma</a>
                             <a href="/p/numpy/1.21.3/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.21.3/api/numpy.matlib.html">matlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrix.html">matrix</a>
                             <a href="/p/numpy/1.21.3/api/numpy.matrixlib.html">matrixlib</a>
                             <a href="/p/numpy/1.21.3/api/numpy.maximum_sctype.html">maximum_sctype</a>
@@ -797,11 +799,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -829,16 +831,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Return matrix rank of array using SVD method</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -866,6 +863,58 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The default threshold to detect rank deficiency is a test on the magnitude of the singular values of <code><a link href="#M" class='local'>M</a></code>.  By default, we identify singular values less than 
+        <code class='verbatim'>S.max() * max(M.shape) * eps</code>
+     as indicating rank deficiency (with the symbols defined above). This is the algorithm MATLAB uses [1].  It also appears in <em>Numerical recipes</em> in the discussion of SVD solutions for linear least squares [2].</p>
+
+    
+           
+               
+        <p>This default threshold is designed to detect rank deficiency accounting for the numerical errors of the SVD computation.  Imagine that there is a column in <code><a link href="#M" class='local'>M</a></code> that is an exact (in floating point) linear combination of other columns in <code><a link href="#M" class='local'>M</a></code>. Computing the SVD on <code><a link href="#M" class='local'>M</a></code> will not produce a singular value exactly equal to 0 in general: any difference of the smallest SVD value from 0 will be caused by numerical imprecision in the calculation of the SVD. Our threshold for small SVD values takes this numerical imprecision into account, and the default threshold will detect such numerical rank deficiency.  The threshold may declare a matrix <code><a link href="#M" class='local'>M</a></code> rank deficient even if the linear combination of some columns of <code><a link href="#M" class='local'>M</a></code> is not exactly equal to another column of <code><a link href="#M" class='local'>M</a></code> but only numerically very close to another column of <code><a link href="#M" class='local'>M</a></code>.</p>
+
+    
+           
+               
+        <p>We chose our default threshold because it is in wide use.  Other thresholds are possible.  For example, elsewhere in the 2007 edition of <em>Numerical
+recipes</em> there is an alternative threshold of 
+        <code class='verbatim'>S.max() *
+np.finfo(M.dtype).eps / 2. * np.sqrt(m + n + 1.)</code>
+    . The authors describe this threshold as being based on &#34;expected roundoff error&#34; (p 71).</p>
+
+    
+           
+               
+        <p>The thresholds above deal with floating point roundoff error in the calculation of the SVD.  However, you may have more information about the sources of error in <code><a link href="#M" class='local'>M</a></code> that would make you consider other tolerance values to detect <em>effective</em> rank deficiency.  The most useful measure of the tolerance depends on the operations you intend to use on your matrix.  For example, if your data come from uncertain measurements with uncertainties greater than floating point epsilon, choosing a tolerance near that uncertainty may be preferable.  The tolerance may be absolute if the uncertainties are absolute rather than relative.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -956,6 +1005,21 @@ user-select: none;
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -982,91 +1046,11 @@ user-select: none;
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>The default threshold to detect rank deficiency is a test on the magnitude of the singular values of <code><a link href="#M" class='local'>M</a></code>.  By default, we identify singular values less than 
-        <code class='verbatim'>S.max() * max(M.shape) * eps</code>
-     as indicating rank deficiency (with the symbols defined above). This is the algorithm MATLAB uses [1].  It also appears in <em>Numerical recipes</em> in the discussion of SVD solutions for linear least squares [2].</p>
-
-    
-           
-               
-        <p>This default threshold is designed to detect rank deficiency accounting for the numerical errors of the SVD computation.  Imagine that there is a column in <code><a link href="#M" class='local'>M</a></code> that is an exact (in floating point) linear combination of other columns in <code><a link href="#M" class='local'>M</a></code>. Computing the SVD on <code><a link href="#M" class='local'>M</a></code> will not produce a singular value exactly equal to 0 in general: any difference of the smallest SVD value from 0 will be caused by numerical imprecision in the calculation of the SVD. Our threshold for small SVD values takes this numerical imprecision into account, and the default threshold will detect such numerical rank deficiency.  The threshold may declare a matrix <code><a link href="#M" class='local'>M</a></code> rank deficient even if the linear combination of some columns of <code><a link href="#M" class='local'>M</a></code> is not exactly equal to another column of <code><a link href="#M" class='local'>M</a></code> but only numerically very close to another column of <code><a link href="#M" class='local'>M</a></code>.</p>
-
-    
-           
-               
-        <p>We chose our default threshold because it is in wide use.  Other thresholds are possible.  For example, elsewhere in the 2007 edition of <em>Numerical
-recipes</em> there is an alternative threshold of 
-        <code class='verbatim'>S.max() *
-np.finfo(M.dtype).eps / 2. * np.sqrt(m + n + 1.)</code>
-    . The authors describe this threshold as being based on &#34;expected roundoff error&#34; (p 71).</p>
-
-    
-           
-               
-        <p>The thresholds above deal with floating point roundoff error in the calculation of the SVD.  However, you may have more information about the sources of error in <code><a link href="#M" class='local'>M</a></code> that would make you consider other tolerance values to detect <em>effective</em> rank deficiency.  The most useful measure of the tolerance depends on the operations you intend to use on your matrix.  For example, if your data come from uncertain measurements with uncertainties greater than floating point epsilon, choosing a tolerance near that uncertainty may be preferable.  The tolerance may be absolute if the uncertainties are absolute rather than relative.</p>
+        <p>Return matrix rank of array using SVD method</p>
 
     
            
@@ -1077,6 +1061,24 @@ np.finfo(M.dtype).eps / 2. * np.sqrt(m + n + 1.)</code>
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -1105,28 +1107,28 @@ np.finfo(M.dtype).eps / 2. * np.sqrt(m + n + 1.)</code>
          
          See :
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.eye.html" class='exists'>numpy.eye</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.matrix_rank.html" class='exists'>numpy.linalg.matrix_rank</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I.html" class='exists'>numpy.matrixlib.defmatrix.matrix.I</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose.html" class='exists'>numpy.testing._private.utils.import_nose</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ones.html" class='exists'>numpy.ones</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.html" class='exists'>numpy.linalg</a></code>
         
          
+             <code><a link href="/p/numpy/1.21.3/api/numpy.zeros.html" class='exists'>numpy.zeros</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.21.3/api/numpy.eye.html" class='exists'>numpy.eye</a></code>
+        
+         
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I.html" class='exists'>numpy.matrixlib.defmatrix.matrix.I</a></code>
-        
-         
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ones.html" class='exists'>numpy.ones</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.linalg.matrix_rank.html" class='exists'>numpy.linalg.matrix_rank</a></code>
         
          
      
@@ -1202,7 +1204,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}, {"id": 3, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.matrixlib.defmatrix.matrix.I", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I"}, {"id": 5, "val": 22.07124727947029, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 6, "val": 14.70820393249937, "label": "numpy.eye", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.eye"}, {"id": 8, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}], "links": []};
+var canvas_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 2, "val": 22.317821063276355, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 3, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 4, "val": 14.782329983125269, "label": "numpy.eye", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.eye"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.matrixlib.defmatrix.matrix.I", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 8, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}], "links": []};
 
 (function() {
 
@@ -1330,7 +1332,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 2, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}, {"id": 3, "val": 15.14142842854285, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 4, "val": 10.23606797749979, "label": "numpy.matrixlib.defmatrix.matrix.I", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I"}, {"id": 5, "val": 22.07124727947029, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 6, "val": 14.70820393249937, "label": "numpy.eye", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.eye"}, {"id": 8, "val": 19.747340124470732, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}], "links": []};
+    var svg_graph = {"nodes": [{"id": 1, "val": 16.366600265340757, "label": "numpy.ones", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ones"}, {"id": 2, "val": 22.317821063276355, "label": "numpy.testing._private.utils.import_nose", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.testing._private.utils.import_nose"}, {"id": 3, "val": 22.212670403551897, "label": "numpy.zeros", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.zeros"}, {"id": 4, "val": 14.782329983125269, "label": "numpy.eye", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.eye"}, {"id": 5, "val": 10.23606797749979, "label": "numpy.matrixlib.defmatrix.matrix.I", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.matrixlib.defmatrix.matrix.I"}, {"id": 6, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 8, "val": 13.477225575051662, "label": "numpy.linalg", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linalg"}], "links": []};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

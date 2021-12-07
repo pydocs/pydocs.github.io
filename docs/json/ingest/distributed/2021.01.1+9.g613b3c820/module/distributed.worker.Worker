@@ -1,0 +1,2207 @@
+{
+  "_content": {
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Worker node in a Dask distributed cluster"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Workers perform two functions:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "1.  **Serve data** from a local dictionary 2.  **Perform computation** on that data and on data from peers"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Workers keep the scheduler informed of their data and use that scheduler to gather data from other workers when necessary to perform a computation."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "You can start a worker with the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "dask-worker"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " command line application::"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "    $ dask-worker scheduler-ip:port",
+                  "_number": 10,
+                  "_offset": 4
+                },
+                {
+                  "_line": "",
+                  "_number": 11,
+                  "_offset": 4
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Use the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "--help"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " flag to see more options::"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "    $ dask-worker --help",
+                  "_number": 14,
+                  "_offset": 4
+                },
+                {
+                  "_line": "",
+                  "_number": 15,
+                  "_offset": 4
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The rest of this docstring is about the internal state the the worker uses to manage and track internal computations."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "**State**"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "**Informational State**"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "These attributes don't change significantly during execution."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **nthreads:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "int"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Number of nthreads used by this worker process"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **executor:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "concurrent.futures.ThreadPoolExecutor"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Executor used to perform computation     This can also be the string \"offload\" in which case this uses the same     thread pool used for offloading communications.  This results in the     same thread being used for deserialization and computation."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **local_directory:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "path"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Path on local machine to store temporary files"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **scheduler:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "rpc"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Location of scheduler.  See "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    ".ip/.port"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " attributes."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **name:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "string"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Alias"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **services:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{str",
+                    ":",
+                    " ",
+                    "Server}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Auxiliary web servers running on this worker"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **service_ports:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{str",
+                    ":",
+                    " ",
+                    "port}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ": * **total_out_connections**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The maximum number of concurrent outgoing requests for data"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **total_in_connections**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The maximum number of concurrent incoming requests for data"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **total_comm_nbytes**: "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "int"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " * **batched_stream**: `"
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "BatchedSend",
+                  "reference": {
+                    "module": "distributed",
+                    "version": "2021.01.1+9.g613b3c820",
+                    "kind": "module",
+                    "path": "distributed.batched.BatchedSend"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    A batched stream along which we communicate to the scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **log**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "[(message)]"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    A structured and queryable log.  See `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "Worker.story"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "**Volatile State**"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "These attributes track the progress of tasks that this worker is trying to complete.  In the descriptions below a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "key"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is the name of a task that we want to compute and "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "dep"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is the name of a piece of dependent data that we want to collect from others."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **tasks**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{key",
+                    ":",
+                    " ",
+                    "TaskState}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The tasks currently executing on this worker (and any dependencies of those tasks)"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **data:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{key",
+                    ":",
+                    " ",
+                    "object}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Prefer using the **host** attribute instead of this, unless     memory_limit and at least one of memory_target_fraction or     memory_spill_fraction values are defined, in that case, this attribute     is a zict.Buffer, from which information on LRU cache can be queried."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **data.memory:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{key",
+                    ":",
+                    " ",
+                    "object}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Dictionary mapping keys to actual values stored in memory. Only     available if condition for **data** being a zict.Buffer is met."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **data.disk:** "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "{key",
+                    ":",
+                    " ",
+                    "object}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    Dictionary mapping keys to actual values stored on disk. Only     available if condition for **data** being a zict.Buffer is met."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "DefList",
+          "data": {
+            "children": [
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "* **data_needed**: deque(keys)",
+                      "_number": 71,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    The keys whose data we still lack, arranged in a deque",
+                      "_number": 72,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "* **data_needed**: deque(keys)"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "The keys whose data we still lack, arranged in a deque"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              },
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "* **ready**: [keys]",
+                      "_number": 73,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    Keys that are ready to run.  Stored in a LIFO stack",
+                      "_number": 74,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "* **ready**: [keys]"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "Keys that are ready to run.  Stored in a LIFO stack"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              },
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "* **constrained**: [keys]",
+                      "_number": 75,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    Keys for which we have the data to run, but are waiting on abstract",
+                      "_number": 76,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    resources like GPUs.  Stored in a FIFO deque",
+                      "_number": 77,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "* **constrained**: [keys]"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "Keys for which we have the data to run, but are waiting on abstract resources like GPUs.  Stored in a FIFO deque"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **executing_count**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    A count of tasks currently executing on this worker"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "DefList",
+          "data": {
+            "children": [
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "* **executed_count**: int",
+                      "_number": 80,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    A number of tasks that this worker has run in its lifetime",
+                      "_number": 81,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "* **executed_count**: int"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "A number of tasks that this worker has run in its lifetime"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              },
+              {
+                "lines": {
+                  "_lines": [
+                    {
+                      "_line": "* **long_running**: {keys}",
+                      "_number": 82,
+                      "_offset": 0
+                    }
+                  ]
+                },
+                "wh": {
+                  "_lines": []
+                },
+                "ind": {
+                  "_lines": [
+                    {
+                      "_line": "    A set of keys of tasks that are running and have started their own",
+                      "_number": 83,
+                      "_offset": 4
+                    },
+                    {
+                      "_line": "    long-running clients.",
+                      "_number": 84,
+                      "_offset": 4
+                    }
+                  ]
+                },
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "* **long_running**: {keys}"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "A set of keys of tasks that are running and have started their own long-running clients."
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **has_what**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{worker",
+                    ":",
+                    " ",
+                    "{deps}}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The data that we care about that we think a worker has"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **pending_data_per_worker**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{worker",
+                    ":",
+                    " ",
+                    "[dep]}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The data on each worker that we still want, prioritized as a deque"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **in_flight_tasks**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    A count of the number of tasks that are coming to us in current     peer-to-peer connections"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **in_flight_workers**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{worker",
+                    ":",
+                    " ",
+                    "{task}}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The workers from which we are currently gathering data and the     dependencies we expect from those connections"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **comm_bytes**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The total number of bytes in flight"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **threads**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{key",
+                    ":",
+                    " ",
+                    "int}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The ID of the thread on which the task ran"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **active_threads**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "{int",
+                    ":",
+                    " ",
+                    "key}"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    The keys currently running on active threads"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "* **waiting_for_data_count**: `"
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": [
+                    "int"
+                  ],
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "`"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "    A count of how many tasks are currently waiting for data"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "scheduler_ip: str",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "scheduler_port: int",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "ip: str, optional",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "data: MutableMapping, type, None",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The object to use for storage, builds a disk-backed LRU dict by default"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "nthreads: int, optional",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "loop: tornado.ioloop.IOLoop",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "local_directory: str, optional",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Directory where we place local resources"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "name: str, optional",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "memory_limit: int, float, string",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Number of bytes of memory that this worker should use. Set to zero for no limit.  Set to 'auto' to calculate as system.MEMORY_LIMIT * min(1, nthreads / total_cores) Use strings or numbers like 5GB or 5e9"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "memory_target_fraction: float",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Fraction of memory to try to stay beneath"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "memory_spill_fraction: float",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Fraction of memory at which we start spilling to disk"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "memory_pause_fraction: float",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Fraction of memory at which we stop running new tasks"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "executor: concurrent.futures.Executor",
+            "type_": "",
+            "desc": []
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "resources: dict",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Resources that this worker has like `"
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": [
+                          "{'GPU'",
+                          ":",
+                          " ",
+                          "2}"
+                        ],
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "`"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "nanny: str",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Address on which to contact nanny, if it exists"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lifetime: str",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Amount of time like \"1 hour\" after which we gracefully shut down the worker. This defaults to None, meaning no explicit shutdown time."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lifetime_stagger: str",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Amount of time like \"5 minutes\" to stagger the lifetime value The actual lifetime will be selected uniformly at random between lifetime +/- lifetime_stagger"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lifetime_restart: bool",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Whether or not to restart a worker after it has reached its lifetime Default False"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "distributed",
+      "version": "2021.01.1+9.g613b3c820",
+      "kind": "module",
+      "path": "distributed.batched.BatchedSend"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Examples",
+    "See Also"
+  ],
+  "item_file": "/Users/bussonniermatthias/dev/distributed/distributed/worker.py",
+  "item_line": 186,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "distributed.Worker"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Use the command line to start a worker::"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    $ dask-scheduler",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "    Start scheduler at 127.0.0.1:8786",
+                    "_number": 1,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "$ dask-scheduler Start scheduler at 127.0.0.1:8786"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "DefList",
+        "data": {
+          "children": [
+            {
+              "lines": {
+                "_lines": [
+                  {
+                    "_line": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__",
+                    "_number": 0,
+                    "_offset": 0
+                  }
+                ]
+              },
+              "wh": {
+                "_lines": []
+              },
+              "ind": {
+                "_lines": [
+                  {
+                    "_line": "    $ dask-worker 127.0.0.1:8786",
+                    "_number": 0,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "    Start worker at:               127.0.0.1:1234",
+                    "_number": 1,
+                    "_offset": 4
+                  },
+                  {
+                    "_line": "    Registered with scheduler at:  127.0.0.1:8786",
+                    "_number": 2,
+                    "_offset": 4
+                  }
+                ]
+              },
+              "dt": {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": ":: workaround numpyoc summary/ext summary bug in take2::Line.__init__"
+                    }
+                  }
+                ],
+                "inner": []
+              },
+              "dd": [
+                {
+                  "type": "Paragraph",
+                  "data": {
+                    "inline": [
+                      {
+                        "type": "Words",
+                        "data": {
+                          "value": "$ dask-worker 127.0.0.1:8786 Start worker at:               127.0.0.1:1234 Registered with scheduler at:  127.0.0.1:8786"
+                        }
+                      }
+                    ],
+                    "inner": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "distributed.nanny.Nanny",
+        "ref": "distributed.nanny.Nanny",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "distributed.scheduler.Scheduler",
+        "ref": "distributed.scheduler.Scheduler",
+        "exists": true
+      },
+      "descriptions": [],
+      "type": null
+    }
+  ],
+  "version": "2021.01.1+9.g613b3c820",
+  "signature": "Worker(scheduler_ip=None, scheduler_port=None, scheduler_file=None, ncores=None, nthreads=None, loop=None, local_dir=None, local_directory=None, services=None, service_ports=None, service_kwargs=None, name=None, reconnect=True, memory_limit='auto', executor=None, resources=None, silence_logs=None, death_timeout=None, preload=None, preload_argv=None, security=None, contact_address=None, memory_monitor_interval='200ms', extensions=None, metrics={}, startup_information={}, data=None, interface=None, host=None, port=None, protocol=None, dashboard_address=None, dashboard=False, http_prefix='/', nanny=None, plugins=(), low_level_profiler=False, validate=None, profile_cycle_interval=None, lifetime=None, lifetime_stagger=None, lifetime_restart=None, **kwargs)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "distributed.worker.Worker",
+  "arbitrary": []
+}

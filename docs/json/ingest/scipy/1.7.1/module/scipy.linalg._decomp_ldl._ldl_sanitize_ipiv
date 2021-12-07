@@ -1,0 +1,299 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Since FORTRAN uses 1-indexing and LAPACK uses different start points for upper and lower formats there are certain offsets in the indices used below."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Let's assume a result where the matrix is 6x6 and there are two 2x2 and two 1x1 blocks reported by the routine. To ease the coding efforts, we still populate a 6-sized array and fill zeros as the following ::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "pivots = [2, 0, 2, 0, 1, 1]",
+                  "_number": 0,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This denotes a diagonal matrix of the form ::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "lines": {
+              "_lines": [
+                {
+                  "_line": "[x x        ]",
+                  "_number": 0,
+                  "_offset": 0
+                },
+                {
+                  "_line": "[x x        ]",
+                  "_number": 1,
+                  "_offset": 0
+                },
+                {
+                  "_line": "[    x x    ]",
+                  "_number": 2,
+                  "_offset": 0
+                },
+                {
+                  "_line": "[    x x    ]",
+                  "_number": 3,
+                  "_offset": 0
+                },
+                {
+                  "_line": "[        x  ]",
+                  "_number": 4,
+                  "_offset": 0
+                },
+                {
+                  "_line": "[          x]",
+                  "_number": 5,
+                  "_offset": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "In other words, we write 2 when the 2x2 block is first encountered and automatically write 0 to the next entry and skip the next spin of the loop. Thus, a separate counter or array appends to keep track of block sizes are avoided. If needed, zeros can be filtered out later without losing the block structure."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "a",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The permutation array ipiv returned by LAPACK"
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "lower",
+            "type_": "bool, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The switch to select whether upper or lower triangle is chosen in the LAPACK call."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "swap_",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The array that defines the row/column swap operations. For example, if row two is swapped with row four, the result is [0, 3, 2, 3]."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "pivots",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The array that defines the block diagonal structure as given above."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This helper function takes the rather strangely encoded permutation array returned by the LAPACK routines ?(HE/SY)TRF and converts it into regularized permutation and diagonal pivot size format."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns"
+  ],
+  "item_file": "/scipy/linalg/_decomp_ldl.py",
+  "item_line": 157,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "scipy.signal.lti_conversion.linalg._decomp_ldl._ldl_sanitize_ipiv"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.7.1",
+  "signature": "_ldl_sanitize_ipiv(a, lower=True)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "scipy.linalg._decomp_ldl._ldl_sanitize_ipiv",
+  "arbitrary": []
+}

@@ -334,6 +334,7 @@ user-select: none;
                 <a href=scipy>scipy</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -495,17 +496,17 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
-    <a href="#section-Parameters">Parameters</a>
+    <a href="#section-Notes">Notes</a>
 
-    <a href="#section-Returns">Returns</a>
+    <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Raises">Raises</a>
 
-    <a href="#section-Warns">Warns</a>
-
-    <a href="#section-Notes">Notes</a>
+    <a href="#section-Returns">Returns</a>
 
     <a href="#section-Warnings">Warnings</a>
+
+    <a href="#section-Warns">Warns</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -533,16 +534,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Calculate the width of each peak in a signal.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -557,6 +553,76 @@ user-select: none;
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>The basic algorithm to calculate a peak&#39;s width is as follows:</p>
+
+    
+           
+               
+           <ul>
+               <li>
+        <p>Calculate the evaluation height <code>:None:math:`h_{eval}`</code> with the formula   <code>:None:math:`h_{eval} = h_{Peak} - P \cdot R`</code>, where <code>:None:math:`h_{Peak}`</code> is the   height of the peak itself, <code>:None:math:`P`</code> is the peak&#39;s prominence and   <code>:None:math:`R`</code> a positive ratio specified with the argument <code>:None:None:`rel_height`</code>.</p>
+
+    </li>
+               
+               <li>
+        <p>Draw a horizontal line at the evaluation height to both sides, starting at   the peak&#39;s current vertical position until the lines either intersect a   slope, the signal border or cross the vertical position of the peak&#39;s   base (see <code>:None:None:`peak_prominences`</code> for an definition). For the first case,   intersection with the signal, the true intersection point is estimated   with linear interpolation.</p>
+
+    </li>
+               
+               <li>
+        <p>Calculate the width as the horizontal distance between the chosen   endpoints on both sides. As a consequence of this the maximal possible   width for each peak is the horizontal distance between its bases.</p>
+
+    </li>
+               
+            </ul>
+       
+           
+               
+        <p>As shown above to calculate a peak&#39;s width its prominence and bases must be known. You can supply these yourself with the argument <code><a link href="#prominence_data" class='local'>prominence_data</a></code>. Otherwise, they are internally calculated (see <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences.html" class='exists'>peak_prominences</a></code>
+        ).</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>1.1.0 </p>
+
+    
+    
+</div>
+
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -643,6 +709,39 @@ user-select: none;
 
 
     
+        <h3 id="section-Raises">Raises</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>ValueError</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If <code><a link href="#prominence_data" class='local'>prominence_data</a></code> is supplied but doesn&#39;t satisfy the condition 
+        <code class='verbatim'>0 &lt;= left_base &lt;= peak &lt;= right_base &lt; x.shape[0]</code>
+     for each peak, has the wrong dtype, is not C-contiguous or does not have the same shape.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -697,43 +796,23 @@ user-select: none;
 
     
     
-       <dl>
+        <!-- rendering Summary -->
+        
            
+               
+        <p>Calculate the width of each peak in a signal.</p>
 
-   </pre>
-   
+    
+           
+       
+    
 
 
+    
+        <h3 id="section-Warnings">Warnings</h3>
     
     
        
-   
-
-
-    
-        <h3 id="section-Raises">Raises</h3>
-    
-    
-       <dl>
-           
-            
-                <dt>ValueError</dt>
-            
-        </dl>
-
-        <dd>
-            
-                
-        <p>If <code><a link href="#prominence_data" class='local'>prominence_data</a></code> is supplied but doesn&#39;t satisfy the condition 
-        <code class='verbatim'>0 &lt;= left_base &lt;= peak &lt;= right_base &lt; x.shape[0]</code>
-     for each peak, has the wrong dtype, is not C-contiguous or does not have the same shape.</p>
-
-    
-            
-        </dd>
-       
-
-   </pre>
    
 
 
@@ -768,84 +847,6 @@ user-select: none;
            
 
    </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
-        
-           
-               
-        <p>The basic algorithm to calculate a peak&#39;s width is as follows:</p>
-
-    
-           
-               
-           <ul>
-               <li>
-        <p>Calculate the evaluation height <code>:None:math:`h_{eval}`</code> with the formula   <code>:None:math:`h_{eval} = h_{Peak} - P \cdot R`</code>, where <code>:None:math:`h_{Peak}`</code> is the   height of the peak itself, <code>:None:math:`P`</code> is the peak&#39;s prominence and   <code>:None:math:`R`</code> a positive ratio specified with the argument <code>:None:None:`rel_height`</code>.</p>
-
-    </li>
-               
-               <li>
-        <p>Draw a horizontal line at the evaluation height to both sides, starting at   the peak&#39;s current vertical position until the lines either intersect a   slope, the signal border or cross the vertical position of the peak&#39;s   base (see <code>:None:None:`peak_prominences`</code> for an definition). For the first case,   intersection with the signal, the true intersection point is estimated   with linear interpolation.</p>
-
-    </li>
-               
-               <li>
-        <p>Calculate the width as the horizontal distance between the chosen   endpoints on both sides. As a consequence of this the maximal possible   width for each peak is the horizontal distance between its bases.</p>
-
-    </li>
-               
-            </ul>
-       
-           
-               
-        <p>As shown above to calculate a peak&#39;s width its prominence and bases must be known. You can supply these yourself with the argument <code><a link href="#prominence_data" class='local'>prominence_data</a></code>. Otherwise, they are internally calculated (see <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences.html" class='exists'>peak_prominences</a></code>
-        ).</p>
-
-    
-           
-               
-            <div class='admonition'>
-    <div>versionadded</div>
-    
-        
-        <p>1.1.0 </p>
-
-    
-    
-</div>
-
-       
-           
-       
-    
-
-
-    
-        <h3 id="section-Warnings">Warnings</h3>
-    
-    
-       
    
 
 
@@ -906,31 +907,16 @@ array([181.9396084 ,  72.99284945,  61.28657872, 373.84622694,
          
          See :
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines.html" class='exists'>matplotlib.pyplot.hlines</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences.html" class='exists'>scipy.signal._peak_finding.peak_prominences</a></code>
-        
-         
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
-        
-         
              <code><a link href="/p/scipy/1.7.1/api/scipy.signal.waveforms.chirp.html" class='exists'>scipy.signal.waveforms.chirp</a></code>
         
          
-             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot.html" class='exists'>matplotlib.pyplot.plot</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
+             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_widths.html" class='exists'>scipy.signal._peak_finding.peak_widths</a></code>
-        
-         
-             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks.html" class='exists'>scipy.signal._peak_finding.find_peaks</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.show.html" class='exists'>matplotlib.pyplot.show</a></code>
         
          
              <code><a link href="/p/numpy/1.21.3/api/numpy.linspace.html" class='exists'>numpy.linspace</a></code>
@@ -942,13 +928,28 @@ array([181.9396084 ,  72.99284945,  61.28657872, 373.84622694,
              <code><a link href="/p/numpy/1.21.3/api/numpy.html" class='exists'>numpy</a></code>
         
          
-             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png.html" class='exists'>fig-scipy.signal._peak_finding.peak_widths-1.png</a></code>
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines.html" class='exists'>matplotlib.pyplot.hlines</a></code>
         
          
-             <code><a link href="/p/numpy/1.21.3/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences.html" class='exists'>scipy.signal._peak_finding.peak_prominences</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal.html" class='exists'>scipy.signal</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks.html" class='exists'>scipy.signal._peak_finding.find_peaks</a></code>
         
          
              <code><a link href="/p/scipy/1.7.1/api/scipy.html" class='exists'>scipy</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png.html" class='exists'>fig-scipy.signal._peak_finding.peak_widths-1.png</a></code>
+        
+         
+             <code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_widths.html" class='exists'>scipy.signal._peak_finding.peak_widths</a></code>
+        
+         
+             <code><a link href="/p/matplotlib/3.5.0/api/matplotlib.html" class='exists'>matplotlib</a></code>
         
          
      
@@ -1039,7 +1040,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "matplotlib.pyplot.hlines", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines"}, {"id": 2, "val": 9.414213562373096, "label": "scipy.signal._peak_finding._arg_wlen_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_wlen_as_expected"}, {"id": 3, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 4, "val": 10.64575131106459, "label": "scipy.signal._peak_finding.find_peaks", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks"}, {"id": 5, "val": 20.767145334803704, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 7, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 8, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 9, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 10, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 11, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 12, "val": 10.0, "label": "scipy.signal.waveforms.chirp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.waveforms.chirp"}, {"id": 13, "val": 9.0, "label": "fig-scipy.signal._peak_finding.peak_widths-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png"}, {"id": 14, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 15, "val": 8.0, "label": "scipy.signal._peak_finding._arg_x_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_x_as_expected"}, {"id": 16, "val": 8.0, "label": "scipy.signal._peak_finding._arg_peaks_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_peaks_as_expected"}, {"id": 17, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 18, "val": 8.0, "label": "scipy.signal._peak_finding_utils._peak_widths", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding_utils._peak_widths"}, {"id": 19, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}], "links": [{"source": 2, "target": 8, "id": 1}, {"source": 4, "target": 15, "id": 2}, {"source": 4, "target": 8, "id": 7}, {"source": 17, "target": 5, "id": 27}, {"source": 17, "target": 4, "id": 66}, {"source": 17, "target": 8, "id": 67}, {"source": 17, "target": 12, "id": 119}, {"source": 1, "target": 4, "id": 159}, {"source": 8, "target": 16, "id": 161}, {"source": 8, "target": 2, "id": 162}, {"source": 8, "target": 15, "id": 163}, {"source": 8, "target": 4, "id": 164}, {"source": 8, "target": 18, "id": 168}, {"source": 19, "target": 5, "id": 185}, {"source": 19, "target": 4, "id": 236}, {"source": 19, "target": 8, "id": 237}, {"source": 19, "target": 12, "id": 294}, {"source": 10, "target": 5, "id": 796}, {"source": 10, "target": 4, "id": 848}, {"source": 10, "target": 8, "id": 849}, {"source": 10, "target": 12, "id": 945}, {"source": 3, "target": 4, "id": 1025}, {"source": 3, "target": 8, "id": 1027}, {"source": 3, "target": 12, "id": 1157}, {"source": 4, "target": 15, "id": 1198}, {"source": 4, "target": 8, "id": 1203}, {"source": 5, "target": 4, "id": 1274}, {"source": 5, "target": 8, "id": 1275}, {"source": 5, "target": 12, "id": 1315}, {"source": 9, "target": 5, "id": 1385}, {"source": 9, "target": 4, "id": 1436}, {"source": 9, "target": 8, "id": 1437}, {"source": 9, "target": 12, "id": 1533}, {"source": 7, "target": 11, "id": 1998}, {"source": 7, "target": 4, "id": 2471}, {"source": 7, "target": 8, "id": 2473}, {"source": 7, "target": 12, "id": 2570}, {"source": 11, "target": 4, "id": 3234}, {"source": 11, "target": 8, "id": 3236}, {"source": 11, "target": 12, "id": 3339}, {"source": 14, "target": 4, "id": 3908}, {"source": 14, "target": 8, "id": 3910}, {"source": 14, "target": 12, "id": 4040}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 21.038404810405297, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 2, "val": 8.0, "label": "scipy.signal._peak_finding._arg_peaks_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_peaks_as_expected"}, {"id": 3, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 4, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.signal._peak_finding._arg_wlen_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_wlen_as_expected"}, {"id": 6, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 7, "val": 9.732050807568877, "label": "matplotlib.pyplot.hlines", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines"}, {"id": 9, "val": 10.0, "label": "scipy.signal.waveforms.chirp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.waveforms.chirp"}, {"id": 10, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 11, "val": 8.0, "label": "scipy.signal._peak_finding._arg_x_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_x_as_expected"}, {"id": 12, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 13, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 14, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 15, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 16, "val": 9.0, "label": "fig-scipy.signal._peak_finding.peak_widths-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png"}, {"id": 17, "val": 10.64575131106459, "label": "scipy.signal._peak_finding.find_peaks", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks"}, {"id": 18, "val": 8.0, "label": "scipy.signal._peak_finding_utils._peak_widths", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding_utils._peak_widths"}, {"id": 19, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}], "links": [{"source": 5, "target": 14, "id": 1}, {"source": 17, "target": 11, "id": 2}, {"source": 17, "target": 14, "id": 7}, {"source": 19, "target": 1, "id": 31}, {"source": 19, "target": 17, "id": 70}, {"source": 19, "target": 14, "id": 71}, {"source": 19, "target": 9, "id": 123}, {"source": 13, "target": 17, "id": 427}, {"source": 13, "target": 14, "id": 429}, {"source": 13, "target": 9, "id": 532}, {"source": 6, "target": 1, "id": 1093}, {"source": 6, "target": 17, "id": 1144}, {"source": 6, "target": 14, "id": 1145}, {"source": 6, "target": 9, "id": 1202}, {"source": 1, "target": 17, "id": 1299}, {"source": 1, "target": 14, "id": 1300}, {"source": 1, "target": 9, "id": 1340}, {"source": 15, "target": 1, "id": 1418}, {"source": 15, "target": 17, "id": 1469}, {"source": 15, "target": 14, "id": 1470}, {"source": 15, "target": 9, "id": 1566}, {"source": 12, "target": 13, "id": 2040}, {"source": 12, "target": 17, "id": 2511}, {"source": 12, "target": 14, "id": 2513}, {"source": 12, "target": 9, "id": 2610}, {"source": 7, "target": 17, "id": 3171}, {"source": 14, "target": 2, "id": 3173}, {"source": 14, "target": 5, "id": 3174}, {"source": 14, "target": 11, "id": 3175}, {"source": 14, "target": 17, "id": 3176}, {"source": 14, "target": 18, "id": 3180}, {"source": 3, "target": 17, "id": 3209}, {"source": 3, "target": 14, "id": 3211}, {"source": 3, "target": 9, "id": 3341}, {"source": 17, "target": 11, "id": 3379}, {"source": 17, "target": 14, "id": 3384}, {"source": 4, "target": 17, "id": 3621}, {"source": 4, "target": 14, "id": 3623}, {"source": 4, "target": 9, "id": 3753}, {"source": 10, "target": 1, "id": 4425}, {"source": 10, "target": 17, "id": 4477}, {"source": 10, "target": 14, "id": 4478}, {"source": 10, "target": 9, "id": 4574}]};
 
 (function() {
 
@@ -1167,7 +1168,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "matplotlib.pyplot.hlines", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines"}, {"id": 2, "val": 9.414213562373096, "label": "scipy.signal._peak_finding._arg_wlen_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_wlen_as_expected"}, {"id": 3, "val": 22.0, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 4, "val": 10.64575131106459, "label": "scipy.signal._peak_finding.find_peaks", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks"}, {"id": 5, "val": 20.767145334803704, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 7, "val": 45.26929030716845, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 8, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 9, "val": 22.62873883832779, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 10, "val": 33.92296279363144, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 11, "val": 34.47640458974745, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 12, "val": 10.0, "label": "scipy.signal.waveforms.chirp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.waveforms.chirp"}, {"id": 13, "val": 9.0, "label": "fig-scipy.signal._peak_finding.peak_widths-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png"}, {"id": 14, "val": 31.515952032609693, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 15, "val": 8.0, "label": "scipy.signal._peak_finding._arg_x_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_x_as_expected"}, {"id": 16, "val": 8.0, "label": "scipy.signal._peak_finding._arg_peaks_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_peaks_as_expected"}, {"id": 17, "val": 19.9582607431014, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}, {"id": 18, "val": 8.0, "label": "scipy.signal._peak_finding_utils._peak_widths", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding_utils._peak_widths"}, {"id": 19, "val": 20.288205727444506, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}], "links": [{"source": 2, "target": 8, "id": 1}, {"source": 4, "target": 15, "id": 2}, {"source": 4, "target": 8, "id": 7}, {"source": 17, "target": 5, "id": 27}, {"source": 17, "target": 4, "id": 66}, {"source": 17, "target": 8, "id": 67}, {"source": 17, "target": 12, "id": 119}, {"source": 1, "target": 4, "id": 159}, {"source": 8, "target": 16, "id": 161}, {"source": 8, "target": 2, "id": 162}, {"source": 8, "target": 15, "id": 163}, {"source": 8, "target": 4, "id": 164}, {"source": 8, "target": 18, "id": 168}, {"source": 19, "target": 5, "id": 185}, {"source": 19, "target": 4, "id": 236}, {"source": 19, "target": 8, "id": 237}, {"source": 19, "target": 12, "id": 294}, {"source": 10, "target": 5, "id": 796}, {"source": 10, "target": 4, "id": 848}, {"source": 10, "target": 8, "id": 849}, {"source": 10, "target": 12, "id": 945}, {"source": 3, "target": 4, "id": 1025}, {"source": 3, "target": 8, "id": 1027}, {"source": 3, "target": 12, "id": 1157}, {"source": 4, "target": 15, "id": 1198}, {"source": 4, "target": 8, "id": 1203}, {"source": 5, "target": 4, "id": 1274}, {"source": 5, "target": 8, "id": 1275}, {"source": 5, "target": 12, "id": 1315}, {"source": 9, "target": 5, "id": 1385}, {"source": 9, "target": 4, "id": 1436}, {"source": 9, "target": 8, "id": 1437}, {"source": 9, "target": 12, "id": 1533}, {"source": 7, "target": 11, "id": 1998}, {"source": 7, "target": 4, "id": 2471}, {"source": 7, "target": 8, "id": 2473}, {"source": 7, "target": 12, "id": 2570}, {"source": 11, "target": 4, "id": 3234}, {"source": 11, "target": 8, "id": 3236}, {"source": 11, "target": 12, "id": 3339}, {"source": 14, "target": 4, "id": 3908}, {"source": 14, "target": 8, "id": 3910}, {"source": 14, "target": 12, "id": 4040}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 21.038404810405297, "label": "numpy.linspace", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.linspace"}, {"id": 2, "val": 8.0, "label": "scipy.signal._peak_finding._arg_peaks_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_peaks_as_expected"}, {"id": 3, "val": 22.07124727947029, "label": "scipy.signal", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal"}, {"id": 4, "val": 31.643180835073778, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy"}, {"id": 5, "val": 9.414213562373096, "label": "scipy.signal._peak_finding._arg_wlen_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_wlen_as_expected"}, {"id": 6, "val": 20.36931687685298, "label": "matplotlib.pyplot.show", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.show"}, {"id": 7, "val": 9.732050807568877, "label": "matplotlib.pyplot.hlines", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.hlines"}, {"id": 9, "val": 10.0, "label": "scipy.signal.waveforms.chirp", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.waveforms.chirp"}, {"id": 10, "val": 34.01922366251537, "label": "matplotlib", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib"}, {"id": 11, "val": 8.0, "label": "scipy.signal._peak_finding._arg_x_as_expected", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding._arg_x_as_expected"}, {"id": 12, "val": 47.395431207184416, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy"}, {"id": 13, "val": 38.232432915661946, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.21.3/api/numpy.ndarray"}, {"id": 14, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 15, "val": 22.7648230602334, "label": "matplotlib.pyplot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot"}, {"id": 16, "val": 9.0, "label": "fig-scipy.signal._peak_finding.peak_widths-1.png", "mod": "fig-scipy", "url": "/p/scipy/1.7.1/api/fig-scipy.signal._peak_finding.peak_widths-1.png"}, {"id": 17, "val": 10.64575131106459, "label": "scipy.signal._peak_finding.find_peaks", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.find_peaks"}, {"id": 18, "val": 8.0, "label": "scipy.signal._peak_finding_utils._peak_widths", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding_utils._peak_widths"}, {"id": 19, "val": 20.0, "label": "matplotlib.pyplot.plot", "mod": "matplotlib", "url": "/p/matplotlib/3.5.0/api/matplotlib.pyplot.plot"}], "links": [{"source": 5, "target": 14, "id": 1}, {"source": 17, "target": 11, "id": 2}, {"source": 17, "target": 14, "id": 7}, {"source": 19, "target": 1, "id": 31}, {"source": 19, "target": 17, "id": 70}, {"source": 19, "target": 14, "id": 71}, {"source": 19, "target": 9, "id": 123}, {"source": 13, "target": 17, "id": 427}, {"source": 13, "target": 14, "id": 429}, {"source": 13, "target": 9, "id": 532}, {"source": 6, "target": 1, "id": 1093}, {"source": 6, "target": 17, "id": 1144}, {"source": 6, "target": 14, "id": 1145}, {"source": 6, "target": 9, "id": 1202}, {"source": 1, "target": 17, "id": 1299}, {"source": 1, "target": 14, "id": 1300}, {"source": 1, "target": 9, "id": 1340}, {"source": 15, "target": 1, "id": 1418}, {"source": 15, "target": 17, "id": 1469}, {"source": 15, "target": 14, "id": 1470}, {"source": 15, "target": 9, "id": 1566}, {"source": 12, "target": 13, "id": 2040}, {"source": 12, "target": 17, "id": 2511}, {"source": 12, "target": 14, "id": 2513}, {"source": 12, "target": 9, "id": 2610}, {"source": 7, "target": 17, "id": 3171}, {"source": 14, "target": 2, "id": 3173}, {"source": 14, "target": 5, "id": 3174}, {"source": 14, "target": 11, "id": 3175}, {"source": 14, "target": 17, "id": 3176}, {"source": 14, "target": 18, "id": 3180}, {"source": 3, "target": 17, "id": 3209}, {"source": 3, "target": 14, "id": 3211}, {"source": 3, "target": 9, "id": 3341}, {"source": 17, "target": 11, "id": 3379}, {"source": 17, "target": 14, "id": 3384}, {"source": 4, "target": 17, "id": 3621}, {"source": 4, "target": 14, "id": 3623}, {"source": 4, "target": 9, "id": 3753}, {"source": 10, "target": 1, "id": 4425}, {"source": 10, "target": 17, "id": 4477}, {"source": 10, "target": 14, "id": 4478}, {"source": 10, "target": 9, "id": 4574}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});

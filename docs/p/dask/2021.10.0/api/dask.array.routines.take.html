@@ -334,6 +334,7 @@ user-select: none;
                 <a href=dask>dask</a>&nbsp;/&nbsp;
                     <div class="dropdown-content">
                             <a href="/p/IPython/8.0.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
                             <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
                             <a href="/p/distributed/2021.01.1+9.g613b3c820/api/distributed.html">distributed</a>
                             <a href="/p/matplotlib/3.5.0/api/matplotlib.html">matplotlib</a>
@@ -549,11 +550,11 @@ user-select: none;
     <hr/>
     <a>Narrative Docs</a>
     <hr/>
+    <a href="#section-Notes">Notes</a>
+
     <a href="#section-Parameters">Parameters</a>
 
     <a href="#section-Returns">Returns</a>
-
-    <a href="#section-Notes">Notes</a>
 
     <a href="#section-backrefs">BackRef</a>
     
@@ -581,16 +582,11 @@ user-select: none;
 
     
     
-        <!-- rendering Summary -->
-        
+       <dl>
            
-               
-        <p>Take elements from an array along an axis.</p>
 
-    
-           
-       
-    
+   </pre>
+   
 
 
     
@@ -639,6 +635,55 @@ for ii in ndindex(Ni):
            
        
     
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>By eliminating the inner loop in the description above, and using <code>:None:None:`s_`</code> to build simple slice objects, <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.take.html" class='exists'>take</a></code>
+         can be expressed  in terms of applying fancy indexing to each 1-d slice::      </p>
+
+    
+           
+               
+            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
+for ii in ndindex(Ni):
+    for kk in ndindex(Nj):
+        out[ii + s_[...,] + kk] = a[ii + s_[:,] + kk][indices]</pre>
+       
+           
+               
+        <p>For this reason, it is equivalent to (but faster than) the following use of <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis.html" class='exists'>apply_along_axis</a></code>
+              </p>
+
+    
+           
+               
+            <pre>out = np.apply_along_axis(lambda a_1d: a_1d[indices], axis, a)</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
 
 
     
@@ -766,6 +811,21 @@ for ii in ndindex(Ni):
 
 
     
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
         <h3 id="section-Returns">Returns</h3>
     
     
@@ -792,90 +852,13 @@ for ii in ndindex(Ni):
 
     
     
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       <dl>
-           
-
-   </pre>
-   
-
-
-    
-    
-       
-   
-
-
-    
-        <h3 id="section-Notes">Notes</h3>
-    
-    
-        <!-- rendering Notes -->
+        <!-- rendering Summary -->
         
            
                
-        <p>By eliminating the inner loop in the description above, and using <code>:None:None:`s_`</code> to build simple slice objects, <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.take.html" class='exists'>take</a></code>
-         can be expressed  in terms of applying fancy indexing to each 1-d slice::      </p>
+        <p>Take elements from an array along an axis.</p>
 
     
-           
-               
-            <pre>Ni, Nk = a.shape[:axis], a.shape[axis+1:]
-for ii in ndindex(Ni):
-    for kk in ndindex(Nj):
-        out[ii + s_[...,] + kk] = a[ii + s_[:,] + kk][indices]</pre>
-       
-           
-               
-        <p>For this reason, it is equivalent to (but faster than) the following use of <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis.html" class='exists'>apply_along_axis</a></code>
-              </p>
-
-    
-           
-               
-            <pre>out = np.apply_along_axis(lambda a_1d: a_1d[indices], axis, a)</pre>
-       
            
        
     
@@ -884,6 +867,24 @@ for ii in ndindex(Ni):
     
     
        
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
    
 
 
@@ -908,7 +909,8 @@ array([4, 3, 6])</pre>
             
          
                 
-        <p>If <code><a link href="#indices" class='local'>indices</a></code> is not one dimensional, the output also has these dimensions.</p>
+        <p>If <code><a link href="/p/dask/2021.10.0/api/dask.array.creation.indices.html" class='exists'>indices</a></code>
+         is not one dimensional, the output also has these dimensions.</p>
 
     
             
@@ -922,12 +924,6 @@ array([[4, 3],
          
          See :
          
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.take.html" class='exists'>dask.array.routines.take</a></code>
-        
-         
-             <code><a link href="/p/dask/2021.10.0/api/dask.array.creation.indices.html" class='exists'>dask.array.creation.indices</a></code>
-        
-         
              <code><a link href="/p/dask/2021.10.0/api/dask.array.html" class='exists'>dask.array</a></code>
         
          
@@ -935,6 +931,12 @@ array([[4, 3],
         
          
              <code><a link href="/p/dask/2021.10.0/api/dask.array.ufunc.log10.html" class='exists'>dask.array.ufunc.log10</a></code>
+        
+         
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.routines.take.html" class='exists'>dask.array.routines.take</a></code>
+        
+         
+             <code><a link href="/p/dask/2021.10.0/api/dask.array.creation.indices.html" class='exists'>dask.array.creation.indices</a></code>
         
          
      
@@ -1010,7 +1012,7 @@ var canvas_simulation = d3.forceSimulation()
     .force("y", d3.forceY().strength(0.2));
 
 
-var canvas_graph = {"nodes": [{"id": 2, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 3, "val": 10.0, "label": "dask.array.creation.indices", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.indices"}, {"id": 4, "val": 9.414213562373096, "label": "dask.array.routines.apply_along_axis", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis"}, {"id": 5, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}], "links": [{"source": 5, "target": 4, "id": 68}, {"source": 2, "target": 4, "id": 223}]};
+var canvas_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 2, "val": 9.414213562373096, "label": "dask.array.routines.apply_along_axis", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis"}, {"id": 3, "val": 10.0, "label": "dask.array.creation.indices", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.indices"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}], "links": [{"source": 1, "target": 2, "id": 63}, {"source": 4, "target": 2, "id": 218}]};
 
 (function() {
 
@@ -1138,7 +1140,7 @@ function drawNode(d) {
 
 
 
-    var svg_graph = {"nodes": [{"id": 2, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}, {"id": 3, "val": 10.0, "label": "dask.array.creation.indices", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.indices"}, {"id": 4, "val": 9.414213562373096, "label": "dask.array.routines.apply_along_axis", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis"}, {"id": 5, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}], "links": [{"source": 5, "target": 4, "id": 68}, {"source": 2, "target": 4, "id": 223}]};
+    var svg_graph = {"nodes": [{"id": 1, "val": 19.6619037896906, "label": "dask.array", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array"}, {"id": 2, "val": 9.414213562373096, "label": "dask.array.routines.apply_along_axis", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.routines.apply_along_axis"}, {"id": 3, "val": 10.0, "label": "dask.array.creation.indices", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.creation.indices"}, {"id": 4, "val": 20.884098726725128, "label": "dask.array.ufunc.log10", "mod": "dask", "url": "/p/dask/2021.10.0/api/dask.array.ufunc.log10"}], "links": [{"source": 1, "target": 2, "id": 63}, {"source": 4, "target": 2, "id": 218}]};
     (function (error, graph) {
             if (error) throw error;
         graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
