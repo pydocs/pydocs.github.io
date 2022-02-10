@@ -228,13 +228,13 @@
       "module": "distributed",
       "version": "2021.10.0",
       "kind": "module",
-      "path": "distributed.profile"
+      "path": "distributed.client"
     },
     {
       "module": "distributed",
       "version": "2021.10.0",
       "kind": "module",
-      "path": "distributed.client"
+      "path": "distributed.profile"
     }
   ],
   "ordered_sections": [

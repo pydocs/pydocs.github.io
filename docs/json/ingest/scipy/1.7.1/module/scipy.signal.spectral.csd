@@ -934,25 +934,7 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.signal.filter_design.butter"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
       "path": "scipy.signal.windows.windows.get_window"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
-      "path": "numpy.random._generator.Generator"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy.signal.spectral.csd"
     },
     {
       "module": "matplotlib",
@@ -964,7 +946,7 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.random"
+      "path": "numpy.arange"
     },
     {
       "module": "numpy",
@@ -973,46 +955,10 @@
       "path": "numpy.ndarray"
     },
     {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy.signal"
-    },
-    {
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
       "path": "matplotlib.pyplot.semilogy"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy._lib._util.rng_integers"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
-      "path": "numpy.arange"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.1",
-      "kind": "module",
-      "path": "matplotlib.pyplot.ylabel"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy.signal.signaltools.lfilter"
     },
     {
       "module": "matplotlib",
@@ -1024,13 +970,37 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy"
+      "path": "numpy.random._generator.default_rng"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal.spectral.csd"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "assets",
+      "path": "fig-scipy.signal.spectral.csd-0.png"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal.signaltools.lfilter"
     },
     {
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.ufunc"
+      "path": "numpy.random"
+    },
+    {
+      "module": "matplotlib",
+      "version": "3.5.1",
+      "kind": "module",
+      "path": "matplotlib"
     },
     {
       "module": "matplotlib",
@@ -1042,13 +1012,49 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.random._generator.default_rng"
+      "path": "numpy.random._generator.Generator"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy"
     },
     {
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib"
+      "path": "matplotlib.pyplot.ylabel"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal.filter_design.butter"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy._lib._util.rng_integers"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.ufunc"
     }
   ],
   "ordered_sections": [
@@ -1367,7 +1373,7 @@
             }
           ],
           "out": "",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -2722,7 +2728,7 @@
             }
           ],
           "out": "",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -3306,7 +3312,13 @@
             }
           ],
           "out": "",
-          "ce_status": "compiled"
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Fig",
+        "data": {
+          "value": "fig-scipy.signal.spectral.csd-0.png"
         }
       }
     ],

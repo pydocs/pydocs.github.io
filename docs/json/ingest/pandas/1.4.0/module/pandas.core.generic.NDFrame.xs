@@ -308,6 +308,12 @@
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
+      "path": "pandas.core.generic.NDFrame.xs"
+    },
+    {
+      "module": "pandas",
+      "version": "1.4.0",
+      "kind": "module",
       "path": "pandas.core.frame.DataFrame.set_index"
     },
     {
@@ -315,12 +321,6 @@
       "version": "1.4.0",
       "kind": "module",
       "path": "pandas.core.strings.accessor.StringMethods.cat"
-    },
-    {
-      "module": "pandas",
-      "version": "1.4.0",
-      "kind": "module",
-      "path": "pandas.core.generic.NDFrame.xs"
     }
   ],
   "ordered_sections": [

@@ -344,13 +344,13 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.eye"
+      "path": "numpy.dtype"
     },
     {
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.dtype"
+      "path": "numpy.eye"
     }
   ],
   "ordered_sections": [

@@ -163,12 +163,6 @@
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
-      "path": "pandas.compat._optional.import_optional_dependency"
-    },
-    {
-      "module": "pandas",
-      "version": "1.4.0",
-      "kind": "module",
       "path": "pandas._libs.tslibs.timestamps.Timestamp"
     },
     {
@@ -176,6 +170,12 @@
       "version": "1.4.0",
       "kind": "module",
       "path": "pandas._libs.tslibs.nattype.NaTType"
+    },
+    {
+      "module": "pandas",
+      "version": "1.4.0",
+      "kind": "module",
+      "path": "pandas.compat._optional.import_optional_dependency"
     }
   ],
   "ordered_sections": [

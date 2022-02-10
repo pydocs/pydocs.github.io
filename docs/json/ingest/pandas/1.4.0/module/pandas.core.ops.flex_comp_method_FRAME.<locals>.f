@@ -459,13 +459,13 @@
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
-      "path": "pandas.errors.IntCastingNaNError"
+      "path": "pandas.core.series.Series"
     },
     {
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
-      "path": "pandas.core.series.Series"
+      "path": "pandas.errors.IntCastingNaNError"
     }
   ],
   "ordered_sections": [

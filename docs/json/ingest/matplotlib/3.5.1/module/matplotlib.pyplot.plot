@@ -2156,10 +2156,10 @@
   },
   "refs": [
     {
-      "module": "pandas",
-      "version": "1.4.0",
+      "module": "matplotlib",
+      "version": "3.5.1",
       "kind": "module",
-      "path": "pandas.core.frame.DataFrame"
+      "path": "matplotlib._enums.JoinStyle"
     },
     {
       "module": "matplotlib",
@@ -2171,13 +2171,7 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib._enums.JoinStyle"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.1",
-      "kind": "module",
-      "path": "matplotlib.lines.Line2D"
+      "path": "matplotlib.figure.Figure"
     },
     {
       "module": "matplotlib",
@@ -2189,7 +2183,13 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.path.Path"
+      "path": "matplotlib.lines.Line2D"
+    },
+    {
+      "module": "pandas",
+      "version": "1.4.0",
+      "kind": "module",
+      "path": "pandas.core.frame.DataFrame"
     },
     {
       "module": "matplotlib",
@@ -2201,7 +2201,7 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.figure.Figure"
+      "path": "matplotlib.path.Path"
     }
   ],
   "ordered_sections": [

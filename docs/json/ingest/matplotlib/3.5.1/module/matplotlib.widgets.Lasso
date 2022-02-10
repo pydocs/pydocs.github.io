@@ -283,7 +283,7 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.widgets.Lasso"
+      "path": "matplotlib.path.Path.contains_point"
     },
     {
       "module": "matplotlib",
@@ -295,7 +295,7 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.path.Path.contains_point"
+      "path": "matplotlib.widgets.Lasso"
     }
   ],
   "ordered_sections": [

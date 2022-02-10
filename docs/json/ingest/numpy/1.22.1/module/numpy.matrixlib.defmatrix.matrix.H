@@ -177,12 +177,6 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.reshape"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
       "path": "numpy.matrix"
     },
     {
@@ -190,6 +184,12 @@
       "version": "1.22.1",
       "kind": "module",
       "path": "numpy.arange"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.reshape"
     }
   ],
   "ordered_sections": [

@@ -128,13 +128,13 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.pyplot.viridis"
+      "path": "matplotlib.pyplot.clim"
     },
     {
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.pyplot.clim"
+      "path": "matplotlib.pyplot.viridis"
     }
   ],
   "ordered_sections": [

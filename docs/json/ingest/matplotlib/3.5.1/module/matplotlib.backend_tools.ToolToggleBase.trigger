@@ -133,13 +133,13 @@
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.backend_bases.ToolContainerBase._tool_toggled_cbk"
+      "path": "matplotlib.backend_tools.ToolToggleBase.enable"
     },
     {
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.backend_tools.ToolToggleBase.enable"
+      "path": "matplotlib.backend_bases.ToolContainerBase._tool_toggled_cbk"
     },
     {
       "module": "matplotlib",

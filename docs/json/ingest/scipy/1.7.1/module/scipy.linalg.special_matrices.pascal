@@ -299,6 +299,12 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
+      "path": "scipy"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
       "path": "scipy.sparse.linalg"
     },
     {
@@ -311,19 +317,13 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.special"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
       "path": "scipy.special._basic.comb"
     },
     {
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy"
+      "path": "scipy.special"
     }
   ],
   "ordered_sections": [
@@ -487,7 +487,7 @@
             }
           ],
           "out": "array([[ 1,  1,  1,  1],\n       [ 1,  2,  3,  4],\n       [ 1,  3,  6, 10],\n       [ 1,  4, 10, 20]], dtype=uint64)",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -583,7 +583,7 @@
             }
           ],
           "out": "array([[1, 0, 0, 0],\n       [1, 1, 0, 0],\n       [1, 2, 1, 0],\n       [1, 3, 3, 1]], dtype=uint64)",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -686,7 +686,7 @@
             }
           ],
           "out": "25477612258980856902730428600",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -889,7 +889,7 @@
             }
           ],
           "out": "25477612258980856902730428600",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       }
     ],

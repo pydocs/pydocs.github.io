@@ -106,7 +106,7 @@
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
-      "path": "pandas._libs.tslibs.nattype.NaTType"
+      "path": "pandas._libs.tslibs.timestamps.Timestamp"
     },
     {
       "module": "pandas",
@@ -118,7 +118,7 @@
       "module": "pandas",
       "version": "1.4.0",
       "kind": "module",
-      "path": "pandas._libs.tslibs.timestamps.Timestamp"
+      "path": "pandas._libs.tslibs.nattype.NaTType"
     }
   ],
   "ordered_sections": [

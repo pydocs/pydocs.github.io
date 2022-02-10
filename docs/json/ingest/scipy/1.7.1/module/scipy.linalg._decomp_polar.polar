@@ -649,16 +649,16 @@
   },
   "refs": [
     {
-      "module": "scipy",
-      "version": "1.7.1",
+      "module": "numpy",
+      "version": "1.22.1",
       "kind": "module",
-      "path": "scipy.sparse.linalg"
+      "path": "numpy.array"
     },
     {
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.linalg._decomp_polar.polar"
+      "path": "scipy"
     },
     {
       "module": "numpy",
@@ -670,19 +670,19 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.array"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
       "path": "numpy"
     },
     {
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy"
+      "path": "scipy.linalg._decomp_polar.polar"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.sparse.linalg"
     }
   ],
   "ordered_sections": [
@@ -1137,7 +1137,7 @@
             }
           ],
           "out": "array([[ 0.85749293, -0.51449576],\n       [ 0.51449576,  0.85749293]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1153,7 +1153,7 @@
             }
           ],
           "out": "array([[ 1.88648444,  1.2004901 ],\n       [ 1.2004901 ,  3.94446746]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1541,7 +1541,7 @@
             }
           ],
           "out": "array([[-0.21196618, -0.42393237,  0.88054056],\n       [ 0.39378971,  0.78757942,  0.4739708 ]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1557,7 +1557,7 @@
             }
           ],
           "out": "array([[ 0.48470147,  0.96940295,  1.15122648],\n       [ 0.96940295,  1.9388059 ,  2.30245295],\n       [ 1.15122648,  2.30245295,  3.65696431]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1622,7 +1622,7 @@
             }
           ],
           "out": "array([[ 0.5,  1. ,  2. ],\n       [ 1.5,  3. ,  4. ]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1701,7 +1701,7 @@
             }
           ],
           "out": "array([[  1.00000000e+00,  -2.07353665e-17],\n       [ -2.07353665e-17,   1.00000000e+00]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1891,7 +1891,7 @@
             }
           ],
           "out": "array([[-0.21196618,  0.39378971],\n       [-0.42393237,  0.78757942],\n       [ 0.88054056,  0.4739708 ]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1907,7 +1907,7 @@
             }
           ],
           "out": "array([[ 1.23116567,  1.93241587],\n       [ 1.93241587,  4.84930602]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -1972,7 +1972,7 @@
             }
           ],
           "out": "array([[ 0.5,  1.5],\n       [ 1. ,  3. ],\n       [ 2. ,  4. ]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       },
       {
@@ -2051,7 +2051,7 @@
             }
           ],
           "out": "array([[  1.00000000e+00,  -1.26363763e-16],\n       [ -1.26363763e-16,   1.00000000e+00]])",
-          "ce_status": "compiled"
+          "ce_status": "execed"
         }
       }
     ],

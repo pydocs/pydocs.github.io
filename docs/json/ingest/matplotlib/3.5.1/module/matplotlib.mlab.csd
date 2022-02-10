@@ -989,31 +989,7 @@
       "module": "numpy",
       "version": "1.22.1",
       "kind": "module",
-      "path": "numpy.bartlett"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.1",
-      "kind": "module",
-      "path": "matplotlib.mlab.detrend_none"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
       "path": "numpy.blackman"
-    },
-    {
-      "module": "numpy",
-      "version": "1.22.1",
-      "kind": "module",
-      "path": "numpy.hamming"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.1",
-      "kind": "module",
-      "path": "matplotlib.mlab.detrend_mean"
     },
     {
       "module": "matplotlib",
@@ -1034,10 +1010,34 @@
       "path": "matplotlib.mlab.window_hanning"
     },
     {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.hamming"
+    },
+    {
       "module": "matplotlib",
       "version": "3.5.1",
       "kind": "module",
       "path": "matplotlib.mlab.window_none"
+    },
+    {
+      "module": "matplotlib",
+      "version": "3.5.1",
+      "kind": "module",
+      "path": "matplotlib.mlab.detrend_mean"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.bartlett"
+    },
+    {
+      "module": "matplotlib",
+      "version": "3.5.1",
+      "kind": "module",
+      "path": "matplotlib.mlab.detrend_none"
     }
   ],
   "ordered_sections": [
