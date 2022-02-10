@@ -1,0 +1,1124 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "lock: threading.Lock",
+            "type_": "",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Lock instance that is shared so that the same bit git generator can be used in multiple Generators without corrupting the state. Code that generates values from a bit generator should hold the bit generator's lock."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Philox is a 64-bit PRNG that uses a counter-based design based on weaker (and faster) versions of cryptographic functions . Instances using different values of the key produce independent sequences.  Philox has a period of "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "2^{256} - 1"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " and supports arbitrary advancing and jumping the sequence in increments of "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "2^{128}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". These features allow multiple non-overlapping sequences to be generated."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Philox"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " provides a capsule containing function pointers that produce doubles, and unsigned 32 and 64- bit integers. These are not directly consumable in Python and must be consumed by a "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Generator"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or similar object that supports low-level access."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "State and Seeding"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Philox"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " state vector consists of a 256-bit value encoded as a 4-element uint64 array and a 128-bit value encoded as a 2-element uint64 array. The former is a counter which is incremented by 1 for every 4 64-bit randoms produced. The second is a key which determined the sequence produced. Using different keys produces independent sequences."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The input "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "seed"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is processed by "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "SeedSequence",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random.bit_generator.SeedSequence"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " to generate the key. The counter is set to 0."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Alternately, one can omit the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "seed"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " parameter and set the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "key"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " and "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "counter"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " directly."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "Parallel Features"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The preferred way to use a BitGenerator in parallel applications is to use the "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "SeedSequence.spawn",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " method to obtain entropy values, and to use these to generate new BitGenerators:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": ">>> from numpy.random import Generator, Philox, SeedSequence\n>>> sg = SeedSequence(1234)\n>>> rg = [Generator(Philox(s)) for s in sg.spawn(10)]"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Philox"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can be used in parallel applications by calling the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "jumped"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " method  to advances the state as-if "
+                }
+              },
+              {
+                "type": "Math",
+                "data": {
+                  "value": [
+                    "2^{128}"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " random numbers have been generated. Alternatively, "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "advance"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can be used to advance the counter for any positive step in [0, 2**256). When using "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "jumped"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", all generators should be chained to ensure that the segments come from the same sequence."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": ">>> from numpy.random import Generator, Philox\n>>> bit_generator = Philox(1234)\n>>> rg = []\n>>> for _ in range(10):\n...    rg.append(Generator(bit_generator))\n...    bit_generator = bit_generator.jumped()"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Alternatively, "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Philox"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can be used in parallel applications by using a sequence of distinct keys where each instance uses different key."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": ">>> key = 2**96 + 2**33 + 2**17 + 2**9\n>>> rg = [Generator(Philox(key=key+i)) for i in range(10)]"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "Compatibility Guarantee"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Philox"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " makes a guarantee that a fixed "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "seed"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " will always produce the same random integer stream."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "seed",
+            "type_": "{None, int, array_like[ints], SeedSequence}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "A seed to initialize the "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "BitGenerator",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.22.1",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.BitGenerator"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ". If None, then fresh, unpredictable entropy will be pulled from the OS. If an "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "int"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " or "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "array_like[ints]"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is passed, then it will be passed to "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "SeedSequence",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.22.1",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.SeedSequence"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " to derive the initial "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "BitGenerator",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.22.1",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.BitGenerator"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " state. One may also pass in a "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "SeedSequence",
+                        "reference": {
+                          "module": "numpy",
+                          "version": "1.22.1",
+                          "kind": "module",
+                          "path": "numpy.random.bit_generator.SeedSequence"
+                        },
+                        "kind": "module",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " instance."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "counter",
+            "type_": "{None, int, array_like}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Counter to use in the Philox state. Can be either a Python int (long in 2.x) in [0, 2**256) or a 4-element uint64 array. If not provided, the RNG is initialized at 0."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "key",
+            "type_": "{None, int, array_like}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Key to use in the Philox state.  Unlike "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "seed"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": ", the value in key is directly set. Can be either a Python int in [0, 2**128) or a 2-element uint64 array. "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "key",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "key"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " and "
+                      }
+                    },
+                    {
+                      "type": "Verbatim",
+                      "data": {
+                        "value": [
+                          "seed"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " cannot both be used."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Container for the Philox (4x64) pseudo-random number generator."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.ISpawnableSeedSequence.spawn"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.SeedSequence"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random._generator.Generator"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random._philox.Philox"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random.bit_generator.BitGenerator"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy"
+    }
+  ],
+  "ordered_sections": [
+    "Signature",
+    "Summary",
+    "Parameters",
+    "Attributes",
+    "Notes",
+    "Examples",
+    "References"
+  ],
+  "item_file": "/numpy/random/_philox.cpython-39-darwin.so",
+  "item_line": null,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "numpy.random.Philox"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "from"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "numpy",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "nn",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "random",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "kn",
+              "link": {
+                "type": "str",
+                "data": "import"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Generator",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random._generator.Generator"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Philox",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random._philox.Philox"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "rg"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Generator",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random._generator.Generator"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "Philox",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.random._philox.Philox"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1234"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "rg"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "standard_normal"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "0.123  # random",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.22.1",
+  "signature": "Philox(seed=None, counter=None, key=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "numpy.random._philox.Philox",
+  "arbitrary": []
+}

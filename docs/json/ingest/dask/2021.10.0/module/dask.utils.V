@@ -23,20 +23,7 @@
         {
           "type": "BlockVerbatim",
           "data": {
-            "lines": {
-              "_lines": [
-                {
-                  "_line": "T = TypeVar('T')  # Can be anything",
-                  "_number": 0,
-                  "_offset": 0
-                },
-                {
-                  "_line": "A = TypeVar('A', str, bytes)  # Must be str or bytes",
-                  "_number": 1,
-                  "_offset": 0
-                }
-              ]
-            }
+            "value": "T = TypeVar('T')  # Can be anything\nA = TypeVar('A', str, bytes)  # Must be str or bytes"
           }
         },
         {

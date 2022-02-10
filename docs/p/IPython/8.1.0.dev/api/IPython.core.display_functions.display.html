@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .graph{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              height: 42px;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+              
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline-block;
+              padding: 10px;
+              padding-left: 1rem;
+
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+          }
+          .admonition > div {
+            background-color: rgba(0, 123, 255, 0.1);
+            position: relative;
+            margin: 0 -1rem;
+            padding: 0.4rem 0.1rem 0.4rem 1.5rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+          .note {color: #7d77d2}
+          .warning {color: #af7b1a}
+          .error {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+nav  a {
+    color: #606c76;
+    text-decoration: none;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+            <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
+                            <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.10.0/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.5.1/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.html">numpy</a>
+                            <a href="/p/pandas/1.4.0/api/pandas.html">pandas</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.17.2/api/skimage.html">skimage</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.1.0.dev/api/IPython.html'>8.1.0.dev</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.html">8.1.0.dev</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.1.0.dev/api/IPython.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.1.0.dev/api/IPython.html">API</a>
+                        <a href="/p/IPython/8.1.0.dev/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='IPython.html'>IPython</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='IPython.core.html'>core</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.html">core</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.display.html">display</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.embed_kernel.html">embed_kernel</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.extensions.html">extensions</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.lib.html">lib</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.paths.html">paths</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.start_ipython.html">start_ipython</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.start_kernel.html">start_kernel</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.terminal.html">terminal</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.testing.html">testing</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.utils.html">utils</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='IPython.core.display_functions.html'>display_functions</a>.
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.alias.html">alias</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.application.html">application</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.async_helpers.html">async_helpers</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.autocall.html">autocall</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.builtin_trap.html">builtin_trap</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.compilerop.html">compilerop</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.completer.html">completer</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.crashhandler.html">crashhandler</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.debugger.html">debugger</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display.html">display</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.html">display_functions</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_trap.html">display_trap</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.displayhook.html">displayhook</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.displaypub.html">displaypub</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.error.html">error</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.events.html">events</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.excolors.html">excolors</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.extensions.html">extensions</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.formatters.html">formatters</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.getipython.html">getipython</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.history.html">history</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.hooks.html">hooks</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.inputtransformer2.html">inputtransformer2</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.interactiveshell.html">interactiveshell</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.latex_symbols.html">latex_symbols</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.logger.html">logger</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.macro.html">macro</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.magic.html">magic</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.magic_arguments.html">magic_arguments</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.magics.html">magics</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.oinspect.html">oinspect</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.page.html">page</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.payload.html">payload</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.prefilter.html">prefilter</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.profiledir.html">profiledir</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.pylabtools.html">pylabtools</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.release.html">release</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.shellapp.html">shellapp</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.splitinput.html">splitinput</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.ultratb.html">ultratb</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.usage.html">usage</a>
+                            
+                            </div>
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='IPython.core.display_functions.display.html'>display</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.DisplayHandle.html">DisplayHandle</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions._merge.html">_merge</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions._new_id.html">_new_id</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.clear_output.html">clear_output</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.display.html">display</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.publish_display_data.html">publish_display_data</a>
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.update_display.html">update_display</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/IPython/8.1.0.dev/img/logo.png"/>
+    
+    <a href="#">Library: IPython</a>
+    <a href="#">Version: 8.1.0.dev</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>display(*objs, include=None, exclude=None, metadata=None, transient=None, display_id=None, raw=False, clear=False, **kwargs)</code>
+
+
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+               
+        <p>By default all representations will be computed and sent to the frontends. Frontends can decide which representation is used and how.</p>
+
+    
+           
+               
+        <p>In terminal IPython this will be similar to using <code>:None:func:`print`</code>, for use in richer frontends see Jupyter notebook examples with rich display logic.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>In Python, objects can declare their textual representation using the <code>:None:None:`__repr__`</code> method. IPython expands on this idea and allows objects to declare other, rich representations including:</p>
+
+    
+           
+               
+            <pre>- HTML
+- JSON
+- PNG
+- JPEG
+- SVG
+- LaTeX
+</pre>
+
+       
+           
+               
+        <p>A single object can declare some or all of these representations; all are handled by IPython&#39;s display system.</p>
+
+    
+           
+               
+        <p>The main idea of the first approach is that you have to implement special display methods when you define your class, one for each representation you want to use. Here is a list of the names of the special methods and the values they must return:</p>
+
+    
+           
+               
+            <pre>- `_repr_html_`: return raw HTML as a string, or a tuple (see below).
+- `_repr_json_`: return a JSONable dict, or a tuple (see below).
+- `_repr_jpeg_`: return raw JPEG data, or a tuple (see below).
+- `_repr_png_`: return raw PNG data, or a tuple (see below).
+- `_repr_svg_`: return raw SVG data as a string, or a tuple (see below).
+- `_repr_latex_`: return LaTeX commands in a string surrounded by &#34;$&#34;,
+                  or a tuple (see below).
+- `_repr_mimebundle_`: return a full mimebundle containing the mapping
+                       from all mimetypes to data.
+                       Use this for any mime-type not listed above.
+</pre>
+
+       
+           
+               
+        <p>The above functions may also return the object&#39;s metadata alonside the data.  If the metadata is available, the functions will return a tuple containing the data and metadata, in that order.  If there is no metadata available, then the functions will return the data only.</p>
+
+    
+           
+               
+        <p>When you are directly writing your own classes, you can adapt them for display in IPython by following the above approach. But in practice, you often need to work with existing classes that you can&#39;t easily modify.</p>
+
+    
+           
+               
+        <p>You can refer to the documentation on integrating with the display system in order to register custom formatters for already existing types (<code>:None:ref:`integrating_rich_display`</code>).</p>
+
+    
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>5.4 display available without import </p>
+
+    
+    
+</div>
+
+       
+           
+               
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>6.1 display available without import </p>
+
+    
+    
+</div>
+
+       
+           
+               
+        <p>Since IPython 5.4 and 6.1 <code><a link href="/p/IPython/8.1.0.dev/api/IPython.display.html" class='exists'>display</a></code>
+         is automatically made available to the user without import. If you are using display in a document that might be used in a pure python context or with older version of IPython, use the following import at the top of your file::      </p>
+
+    
+           
+               
+            <pre>from IPython.display import display</pre>
+       
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="*objs">*objs</a> : object</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The Python objects to display.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="raw">raw</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Are the objects to be displayed already mimetype-keyed dicts of raw display data, or Python objects that need to be formatted before display? [default: False]</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="include">include</a> : list, tuple or set, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A list of format type strings (MIME types) to include in the format data dict. If this is set <em>only</em> the format types included in this list will be computed.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="exclude">exclude</a> : list, tuple or set, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A list of format type strings (MIME types) to exclude in the format data dict. If this is set all format types will be computed, except for those included in this argument.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="metadata">metadata</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A dictionary of metadata to associate with the output. mime-type keys in this dictionary will be associated with the individual representation formats, if they exist.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="transient">transient</a> : dict, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>A dictionary of transient data to associate with the output. Data in this dict should not be persisted to files (e.g. notebooks).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="display_id">display_id</a> : str, bool optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Set an id for the display. This id can be used for updating this display area later via update_display. If given as 
+        <code class='verbatim'>True</code>
+    , generate a new <code><a link href="#display_id" class='local'>display_id</a></code></p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="clear">clear</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Should the output area be cleared before displaying anything? If True, this will wait for additional output before clearing. [default: False]</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="**kwargs">**kwargs</a> : additional keyword-args, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Additional keyword-arguments are passed through to the display publisher.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt>handle: DisplayHandle</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Returns a handle on updatable displays for use with <code><a link href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.update_display.html" class='exists'>update_display</a></code>
+        , if <code><a link href="#display_id" class='local'>display_id</a></code> is given. Returns <code>:None:any:`None`</code> if no <code><a link href="#display_id" class='local'>display_id</a></code> is given (default).</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Display a Python object in all frontends.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo k", href="/p/IPython/8.1.0.dev/api/IPython.core.magic.magics_class.html">class</a><span class=""> </span><span class="nc">Json</span><span class="">(</span><span class="nb">object</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">def</span><span class=""> </span><span class="fm">__init__</span><span class="">(</span><span class="bp">self</span><span class="">,</span><span class=""> </span><span class="">json</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="bp">self</span><span class="o">.</span><span class="">json</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">json</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">def</span><span class=""> </span><span class="nf">_repr_pretty_</span><span class="">(</span><span class="bp">self</span><span class="">,</span><span class=""> </span><span class="">pp</span><span class="">,</span><span class=""> </span><span class="">cycle</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="kn">import</span><span class=""> </span><span class="nn">json</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="">pp</span><span class="o">.</span><span class="">text</span><span class="">(</span><span class="">json</span><span class="o">.</span><span class="">dumps</span><span class="">(</span><span class="bp">self</span><span class="o">.</span><span class="">json</span><span class="">,</span><span class=""> </span><span class="">indent</span><span class="o">=</span><span class="mi">2</span><span class="">)</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">def</span><span class=""> </span><span class="fm">__repr__</span><span class="">(</span><span class="bp">self</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">        </span><span class="k">return</span><span class=""> </span><span class="nb">str</span><span class="">(</span><span class="bp">self</span><span class="o">.</span><span class="">json</span><span class="">)</span>
+...</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">d</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">Json</span><span class="">(</span><span class="">{</span><span class="mi">1</span><span class="">:</span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">:</span><span class=""> </span><span class="">{</span><span class="mi">4</span><span class="">:</span><span class="mi">5</span><span class="">}</span><span class="">}</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="nb">print</span><span class="">(</span><span class="">d</span><span class="">)</span>
+{1: 2, 3: {4: 5}}</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/IPython/8.1.0.dev/api/IPython.display.html">display</a><span class="">(</span><span class="">d</span><span class="">)</span>
+{
+  &#34;1&#34;: 2,
+  &#34;3&#34;: {
+    &#34;4&#34;: 5
+  }
+}</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">int_formatter</span><span class="">(</span><span class="">integer</span><span class="">,</span><span class=""> </span><span class="">pp</span><span class="">,</span><span class=""> </span><span class="">cycle</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="">pp</span><span class="o">.</span><span class="">text</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">I</span><span class="s1">&#39;</span><span class="o">*</span><span class="">integer</span><span class="">)</span>
+</pre>
+            
+            
+         
+                <span class='error'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="">plain</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">get_ipython</span><span class="">(</span><span class="">)</span><span class="o">.</span><span class="">display_formatter</span><span class="o">.</span><a class="foo ", href="/p/IPython/8.1.0.dev/api/IPython.core.formatters.html">formatters</a><span class="">[</span><span class="s1">&#39;</span><span class="s1">text/plain</span><span class="s1">&#39;</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">plain</span><span class="o">.</span><span class="">for_type</span><span class="">(</span><span class="nb">int</span><span class="">,</span><span class=""> </span><span class="">int_formatter</span><span class="">)</span>
+&lt;function _repr_pprint at 0x...&gt;</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo ", href="/p/IPython/8.1.0.dev/api/IPython.display.html">display</a><span class="">(</span><span class="mi">7</span><span class="o">-</span><span class="mi">5</span><span class="">)</span>
+II</pre>
+            
+            
+         
+                <span class='error'>This example is valid syntax, but raise an exception at execution</span><pre class='highlight exception_in_exec'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">del</span><span class=""> </span><span class="">plain</span><span class="o">.</span><span class="">type_printers</span><span class="">[</span><span class="nb">int</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo ", href="/p/IPython/8.1.0.dev/api/IPython.display.html">display</a><span class="">(</span><span class="mi">7</span><span class="o">-</span><span class="mi">5</span><span class="">)</span>
+2</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/IPython/8.1.0.dev/api/IPython.core.formatters.html" class='exists'>IPython.core.formatters</a></code>
+        
+         
+             <code><a link href="/p/IPython/8.1.0.dev/api/IPython.core.magic.magics_class.html" class='exists'>IPython.core.magic.magics_class</a></code>
+        
+         
+             <code><a link href="/p/IPython/8.1.0.dev/api/IPython.display.html" class='exists'>IPython.display</a></code>
+        
+         
+             <code><a link href="/p/IPython/8.1.0.dev/api/IPython.core.display_functions.update_display.html" class='exists'>IPython.core.display_functions.update_display</a></code>
+        
+         
+     
+    
+
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: /dev/ipython/IPython/core/display_functions.py </br>
+Line: 105 </br>
+type: &lt;class &#39;function&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.magic.magics_class"}, {"id": 2, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.display"}, {"id": 3, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.formatters"}, {"id": 4, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.display_functions.update_display"}], "links": []};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 9.0, "label": "IPython.core.magic.magics_class", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.magic.magics_class"}, {"id": 2, "val": 9.0, "label": "IPython.display", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.display"}, {"id": 3, "val": 9.0, "label": "IPython.core.formatters", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.formatters"}, {"id": 4, "val": 9.0, "label": "IPython.core.display_functions.update_display", "mod": "IPython", "url": "/p/IPython/8.1.0.dev/api/IPython.core.display_functions.update_display"}], "links": []};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>

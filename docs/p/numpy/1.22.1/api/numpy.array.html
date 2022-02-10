@@ -1,0 +1,3124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+<style>
+body{
+    font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    color: #606c76;
+    font-weight: 350;
+    line-height: 1.6;
+    max-width: 1000px;
+    margin-left:0;
+
+}
+          .graph{border: 1px gray solid;}
+          .foo:hover{text-decoration:underline}
+          .foo{font-weight:bold; color:#4e4e4e}
+          .exists{font-weight:bold; color:#4e4e4e;text-decoration:none;}
+          .local{font-weight:bold; color:#1e6f04;text-decoration:none;}
+          .exists:hover{text-decoration:underline;color:black}
+          .missing,.missing:hover{color:darkred;text-decoration:none;font-weight:normal}
+          .signature {font-size:100%; margin-bottom: 2rem; display: block; border:none; background-color: #FFFFFF;
+              font-weight:600;}
+          h1, h2, h3 {color: #4e4e4e; font-weight:400;
+              margin-bottom: 1rem;border-bottom: 1px solid var(--nc-bg-3);
+          }
+          pre{border-radius:0;
+              padding:0.6rem;
+          border-left: 3px solid #AAA}
+          dt {font-weight: 400;}
+
+          header{
+              box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+              
+              padding-top:0rem;
+              padding-bottom:0rem;
+              z-index: 2;
+              padding-left: 0;
+              position: fixed;
+              top: 30px;
+              left:0; 
+              width: 100%;
+              height: 42px;
+              backdrop-filter: blur(5px);
+              background-color: rgba(255, 255, 255, .15);
+          }
+          dd::before {
+            content: '';
+          }
+          header > brand, header>:first-child {
+              border-right: 1px solid #ccc;
+              border-left: 1px solid #ccc;
+              padding: 16px;
+              padding-top: 0.5rem;
+              padding-bottom: 0.5rem;
+              display: inline-block; 
+              width: 167px;
+              
+
+          }
+          brand > a {color:#606c76}
+          brand > i {
+              padding-right: 0.5rem;
+
+        }
+          nav{display:inline-block;
+              padding: 10px;
+              padding-left: 1rem;
+
+          }
+
+          dd {
+              margin-left: 1rem;
+              border-left:  solid #ddd;
+              padding-left: 1rem;
+          }
+          summary > h2 { display: inline }
+
+          .sidenav {
+                height: 100%; /* Full-height: remove this if you want "auto" height */
+                width: 200px; /* Set the width of the sidebar */
+                position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+                z-index: 1; /* Stay on top */
+                top: 0; /* Stay at the top */
+                left: 0;
+                background-color: var(--nc-bg-1);; /* Black */
+                border-right: thin solid #ccc;
+                overflow-x: hidden; /* Disable horizontal scroll */
+                padding-top: 3rem;
+ 
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                
+          }
+
+          .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            color: #818181;
+            display: block;
+          }
+          .sidenav img {
+              width: 160px;
+              padding-left:20px;
+              padding-right:20px;
+              border-bottom: solid thin #DDD; 
+              padding-bottom: .5rem;
+              max-width: 100%;
+          }
+          .sidenav i {
+              font-size: 100;
+              padding-left: 3.5rem;
+              padding-right: 3.5rem;
+              padding-bottom: .5rem;
+              border-bottom: solid thin #DDD; 
+
+          }
+          .container {
+              padding-left: 210px;
+              
+              padding-top: 30px;
+
+          }
+
+          ::selection {
+	/* Set background color for selected text */
+                background: #59b4fd;
+                color: var(--nc-ac-tx);
+          }
+
+          img {max-width: 40%;}
+
+          pre.highlight.execed, .admonition {
+            border-left: 3px solid #0070f3;
+          }
+          .admonition {
+            padding-left: 1em;
+          }
+          .admonition > div {
+            background-color: rgba(0, 123, 255, 0.1);
+            position: relative;
+            margin: 0 -1rem;
+            padding: 0.4rem 0.1rem 0.4rem 1.5rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+          .note {color: #7d77d2}
+          .warning {color: #af7b1a}
+          .error {color: #f44336}
+          pre.highlight.compiled {
+            border-left: 3px solid #7d77d2;
+          }
+          pre.highlight.syntax_error, pre.highlight.exception_in_exec {
+            border-left: 3px solid #f44336;
+          }
+
+        /* Dropdown Button */
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: -4px;
+}
+
+nav  a {
+    color: #606c76;
+    text-decoration: none;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;
+    max-height: 80vh;
+    overflow: scroll;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {}
+
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #ffffff; }
+.highlight .c { color: #888888 } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { color: #008800; font-weight: bold } /* Keyword */
+.highlight .ch { color: #888888 } /* Comment.Hashbang */
+.highlight .cm { color: #888888 } /* Comment.Multiline */
+.highlight .cp { color: #cc0000; font-weight: bold } /* Comment.Preproc */
+.highlight .cpf { color: #888888 } /* Comment.PreprocFile */
+.highlight .c1 { color: #888888 } /* Comment.Single */
+.highlight .cs { color: #cc0000; font-weight: bold; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #333333 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #666666 } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008800 } /* Keyword.Pseudo */
+.highlight .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #888888; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #0000DD; font-weight: bold } /* Literal.Number */
+.highlight .s { color: #dd2200; background-color: #fff0f0 } /* Literal.String */
+.highlight .na { color: #336699 } /* Name.Attribute */
+.highlight .nb { color: #003388 } /* Name.Builtin */
+.highlight .nc { color: #bb0066; font-weight: bold } /* Name.Class */
+.highlight .no { color: #003366; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #555555 } /* Name.Decorator */
+.highlight .ne { color: #bb0066; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0066bb; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #336699; font-style: italic } /* Name.Label */
+.highlight .nn { color: #bb0066; font-weight: bold } /* Name.Namespace */
+.highlight .py { color: #336699; font-weight: bold } /* Name.Property */
+.highlight .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #336699 } /* Name.Variable */
+.highlight .ow { color: #008800 } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #0000DD; font-weight: bold } /* Literal.Number.Bin */
+.highlight .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
+.highlight .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
+.highlight .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
+.highlight .mo { color: #0000DD; font-weight: bold } /* Literal.Number.Oct */
+.highlight .sa { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Affix */
+.highlight .sb { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Backtick */
+.highlight .sc { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Char */
+.highlight .dl { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Doc */
+.highlight .s2 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Double */
+.highlight .se { color: #0044dd; background-color: #fff0f0 } /* Literal.String.Escape */
+.highlight .sh { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Heredoc */
+.highlight .si { color: #3333bb; background-color: #fff0f0 } /* Literal.String.Interpol */
+.highlight .sx { color: #22bb22; background-color: #f0fff0 } /* Literal.String.Other */
+.highlight .sr { color: #008800; background-color: #fff0ff } /* Literal.String.Regex */
+.highlight .s1 { color: #dd2200; background-color: #fff0f0 } /* Literal.String.Single */
+.highlight .ss { color: #aa6600; background-color: #fff0f0 } /* Literal.String.Symbol */
+.highlight .bp { color: #003388 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0066bb; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #336699 } /* Name.Variable.Class */
+.highlight .vg { color: #dd7700 } /* Name.Variable.Global */
+.highlight .vi { color: #3333bb } /* Name.Variable.Instance */
+.highlight .vm { color: #336699 } /* Name.Variable.Magic */
+.highlight .il { color: #0000DD; font-weight: bold } /* Literal.Number.Integer.Long */
+
+.nsl {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+
+.block_directive{
+
+    border-left: thin solid var(--nc-lk-1);
+    padding-bottom: 8px;
+    padding-left: 12px;
+}
+
+.block_directive.head{
+
+    border: thin solid var(--nc-lk-1);
+}
+
+
+.block_directive > p{
+    margin-left: 2em;
+    margin-top: 1em;
+}
+.head {
+    font-family: monospace;
+    color: var(--nc-lk-1);
+}
+</style>
+</head>
+<body class="tex2jax_ignore">
+    <header>
+            <brand><i class="fab fa-python"></i><a href='/'>Home</a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/IPython/8.1.0.dev/api/IPython.html">IPython</a>
+                            <a href="/p/astropy/5.0/api/astropy.html">astropy</a>
+                            <a href="/p/dask/2021.10.0/api/dask.html">dask</a>
+                            <a href="/p/distributed/2021.10.0/api/distributed.html">distributed</a>
+                            <a href="/p/matplotlib/3.5.1/api/matplotlib.html">matplotlib</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.html">numpy</a>
+                            <a href="/p/pandas/1.4.0/api/pandas.html">pandas</a>
+                            <a href="/p/papyri/0.0.8/api/papyri.html">papyri</a>
+                            <a href="/p/scipy/1.7.1/api/scipy.html">scipy</a>
+                            <a href="/p/skimage/0.17.2/api/skimage.html">skimage</a>
+                            
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.1/api/numpy.html'>1.22.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                            <a href="/p/numpy/1.22.1/api/numpy.html">1.22.1</a>
+                            
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.1/api/numpy.html'>api</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.1/api/numpy.html">API</a>
+                        <a href="/p/numpy/1.22.1/gallery">Gallery</a>
+                     </div>
+                </div>
+
+            
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='numpy.html'>numpy</a>.
+                        
+                        
+                    </div>
+                
+                
+                    <div class="dropdown">
+                        
+                            <a class="dropbtn" href='numpy.array.html'>array</a>
+                        
+                        
+                            <div class="dropdown-content">
+                            <a href="/p/numpy/1.22.1/api/numpy.ComplexWarning.html">ComplexWarning</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.DataSource.html">DataSource</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.MachAr.html">MachAr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ModuleDeprecationWarning.html">ModuleDeprecationWarning</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.RankWarning.html">RankWarning</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.VisibleDeprecationWarning.html">VisibleDeprecationWarning</a>
+                            <a href="/p/numpy/1.22.1/api/numpy._CopyMode.html">_CopyMode</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.__config__.html">__config__</a>
+                            <a href="/p/numpy/1.22.1/api/numpy._distributor_init.html">_distributor_init</a>
+                            <a href="/p/numpy/1.22.1/api/numpy._globals.html">_globals</a>
+                            <a href="/p/numpy/1.22.1/api/numpy._pytesttester.html">_pytesttester</a>
+                            <a href="/p/numpy/1.22.1/api/numpy._version.html">_version</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.alen.html">alen</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.all.html">all</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.allclose.html">allclose</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.alltrue.html">alltrue</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.amax.html">amax</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.amin.html">amin</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.angle.html">angle</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.any.html">any</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.append.html">append</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.apply_along_axis.html">apply_along_axis</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.apply_over_axes.html">apply_over_axes</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.arange.html">arange</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.argmax.html">argmax</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.argmin.html">argmin</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.argpartition.html">argpartition</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.argsort.html">argsort</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.argwhere.html">argwhere</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.around.html">around</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array.html">array</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array2string.html">array2string</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array_equal.html">array_equal</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array_equiv.html">array_equiv</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array_repr.html">array_repr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array_split.html">array_split</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.array_str.html">array_str</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asanyarray.html">asanyarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asarray.html">asarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asarray_chkfinite.html">asarray_chkfinite</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ascontiguousarray.html">ascontiguousarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asfarray.html">asfarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asfortranarray.html">asfortranarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asmatrix.html">asmatrix</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.asscalar.html">asscalar</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.atleast_1d.html">atleast_1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.atleast_2d.html">atleast_2d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.atleast_3d.html">atleast_3d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.average.html">average</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.bartlett.html">bartlett</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.base_repr.html">base_repr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.binary_repr.html">binary_repr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.bincount.html">bincount</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.blackman.html">blackman</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.block.html">block</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.bmat.html">bmat</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.bool_.html">bool_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.broadcast.html">broadcast</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.broadcast_arrays.html">broadcast_arrays</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.broadcast_shapes.html">broadcast_shapes</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.broadcast_to.html">broadcast_to</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.busday_count.html">busday_count</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.busday_offset.html">busday_offset</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.busdaycalendar.html">busdaycalendar</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.bytes_.html">bytes_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.can_cast.html">can_cast</a>
+                            <a href="/p/?/?/api/numpy.char.html">char</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.character.html">character</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.chararray.html">chararray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.choose.html">choose</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.clip.html">clip</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.clongdouble.html">clongdouble</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.column_stack.html">column_stack</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.common_type.html">common_type</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.compat.html">compat</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.complex128.html">complex128</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.complex64.html">complex64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.complexfloating.html">complexfloating</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.compress.html">compress</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.concatenate.html">concatenate</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.convolve.html">convolve</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.copy.html">copy</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.copyto.html">copyto</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.core.html">core</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.corrcoef.html">corrcoef</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.correlate.html">correlate</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.count_nonzero.html">count_nonzero</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.cov.html">cov</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.cross.html">cross</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ctypeslib.html">ctypeslib</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.cumprod.html">cumprod</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.cumproduct.html">cumproduct</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.cumsum.html">cumsum</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.datetime64.html">datetime64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.datetime_as_string.html">datetime_as_string</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.datetime_data.html">datetime_data</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.delete.html">delete</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diag.html">diag</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diag_indices.html">diag_indices</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diag_indices_from.html">diag_indices_from</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diagflat.html">diagflat</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diagonal.html">diagonal</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.diff.html">diff</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.digitize.html">digitize</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.distutils.html">distutils</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.dot.html">dot</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.dsplit.html">dsplit</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.dstack.html">dstack</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.dtype.html">dtype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ediff1d.html">ediff1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.einsum.html">einsum</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.einsum_path.html">einsum_path</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.empty.html">empty</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.empty_like.html">empty_like</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.errstate.html">errstate</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.expand_dims.html">expand_dims</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.extract.html">extract</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.eye.html">eye</a>
+                            <a href="/p/?/?/api/numpy.fft.html">fft</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fill_diagonal.html">fill_diagonal</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.find_common_type.html">find_common_type</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.finfo.html">finfo</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fix.html">fix</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.flatiter.html">flatiter</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.flatnonzero.html">flatnonzero</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.flexible.html">flexible</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.flip.html">flip</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fliplr.html">fliplr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.flipud.html">flipud</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.float16.html">float16</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.float32.html">float32</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.float64.html">float64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.floating.html">floating</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.format_float_positional.html">format_float_positional</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.format_float_scientific.html">format_float_scientific</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.format_parser.html">format_parser</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.frombuffer.html">frombuffer</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fromfile.html">fromfile</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fromfunction.html">fromfunction</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fromiter.html">fromiter</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.frompyfunc.html">frompyfunc</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fromregex.html">fromregex</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.fromstring.html">fromstring</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.full.html">full</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.full_like.html">full_like</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.generic.html">generic</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.genfromtxt.html">genfromtxt</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.geomspace.html">geomspace</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.get_printoptions.html">get_printoptions</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.getbufsize.html">getbufsize</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.geterr.html">geterr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.geterrcall.html">geterrcall</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.geterrobj.html">geterrobj</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.gradient.html">gradient</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.hamming.html">hamming</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.hanning.html">hanning</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.histogram.html">histogram</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.histogram2d.html">histogram2d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.histogram_bin_edges.html">histogram_bin_edges</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.histogramdd.html">histogramdd</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.hsplit.html">hsplit</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.hstack.html">hstack</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.i0.html">i0</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.identity.html">identity</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.iinfo.html">iinfo</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.imag.html">imag</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.in1d.html">in1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.indices.html">indices</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.inexact.html">inexact</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.info.html">info</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.inner.html">inner</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.insert.html">insert</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.int16.html">int16</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.int32.html">int32</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.int64.html">int64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.int8.html">int8</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.integer.html">integer</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.interp.html">interp</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.intersect1d.html">intersect1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.is_busday.html">is_busday</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isclose.html">isclose</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.iscomplex.html">iscomplex</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.iscomplexobj.html">iscomplexobj</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isfortran.html">isfortran</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isin.html">isin</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isneginf.html">isneginf</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isposinf.html">isposinf</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isreal.html">isreal</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.isrealobj.html">isrealobj</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.issctype.html">issctype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.issubclass_.html">issubclass_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.issubdtype.html">issubdtype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.issubsctype.html">issubsctype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.iterable.html">iterable</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ix_.html">ix_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.kaiser.html">kaiser</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.kron.html">kron</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.lexsort.html">lexsort</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.lib.html">lib</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.linalg.html">linalg</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.linspace.html">linspace</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.load.html">load</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.loadtxt.html">loadtxt</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.logspace.html">logspace</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.longdouble.html">longdouble</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.longlong.html">longlong</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.lookfor.html">lookfor</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ma.html">ma</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.mask_indices.html">mask_indices</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.matrix.html">matrix</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.matrixlib.html">matrixlib</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.maximum_sctype.html">maximum_sctype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.may_share_memory.html">may_share_memory</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.mean.html">mean</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.median.html">median</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.memmap.html">memmap</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.meshgrid.html">meshgrid</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.min_scalar_type.html">min_scalar_type</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.mintypecode.html">mintypecode</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.moveaxis.html">moveaxis</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.msort.html">msort</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nan_to_num.html">nan_to_num</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanargmax.html">nanargmax</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanargmin.html">nanargmin</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nancumprod.html">nancumprod</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nancumsum.html">nancumsum</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanmax.html">nanmax</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanmean.html">nanmean</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanmedian.html">nanmedian</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanmin.html">nanmin</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanpercentile.html">nanpercentile</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanprod.html">nanprod</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanquantile.html">nanquantile</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanstd.html">nanstd</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nansum.html">nansum</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nanvar.html">nanvar</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ndarray.html">ndarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ndenumerate.html">ndenumerate</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ndim.html">ndim</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ndindex.html">ndindex</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nditer.html">nditer</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nested_iters.html">nested_iters</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.nonzero.html">nonzero</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.number.html">number</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.obj2sctype.html">obj2sctype</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.object_.html">object_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ones.html">ones</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ones_like.html">ones_like</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.outer.html">outer</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.packbits.html">packbits</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.pad.html">pad</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.partition.html">partition</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.piecewise.html">piecewise</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.place.html">place</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.poly.html">poly</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.poly1d.html">poly1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polyadd.html">polyadd</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polyder.html">polyder</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polydiv.html">polydiv</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polyfit.html">polyfit</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polyint.html">polyint</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polymul.html">polymul</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polynomial.html">polynomial</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polysub.html">polysub</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.polyval.html">polyval</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.printoptions.html">printoptions</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.prod.html">prod</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.product.html">product</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.promote_types.html">promote_types</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ptp.html">ptp</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.put.html">put</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.put_along_axis.html">put_along_axis</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.putmask.html">putmask</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.quantile.html">quantile</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.random.html">random</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ravel.html">ravel</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ravel_multi_index.html">ravel_multi_index</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.real.html">real</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.real_if_close.html">real_if_close</a>
+                            <a href="/p/?/?/api/numpy.rec.html">rec</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.recarray.html">recarray</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.record.html">record</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.repeat.html">repeat</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.require.html">require</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.reshape.html">reshape</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.resize.html">resize</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.result_type.html">result_type</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.roll.html">roll</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.roots.html">roots</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.rot90.html">rot90</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.round_.html">round_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.save.html">save</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.savetxt.html">savetxt</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.savez.html">savez</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.savez_compressed.html">savez_compressed</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sctype2char.html">sctype2char</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.searchsorted.html">searchsorted</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.select.html">select</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.set_numeric_ops.html">set_numeric_ops</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.set_printoptions.html">set_printoptions</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.setbufsize.html">setbufsize</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.setdiff1d.html">setdiff1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.seterr.html">seterr</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.seterrcall.html">seterrcall</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.seterrobj.html">seterrobj</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.setxor1d.html">setxor1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.shape.html">shape</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.shares_memory.html">shares_memory</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.signedinteger.html">signedinteger</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sinc.html">sinc</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.size.html">size</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sometrue.html">sometrue</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sort.html">sort</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sort_complex.html">sort_complex</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.source.html">source</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.split.html">split</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.squeeze.html">squeeze</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.stack.html">stack</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.std.html">std</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.str_.html">str_</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.sum.html">sum</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.swapaxes.html">swapaxes</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.take.html">take</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.take_along_axis.html">take_along_axis</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tensordot.html">tensordot</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.testing.html">testing</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tile.html">tile</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.timedelta64.html">timedelta64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.trace.html">trace</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.transpose.html">transpose</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.trapz.html">trapz</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tri.html">tri</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tril.html">tril</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tril_indices.html">tril_indices</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.tril_indices_from.html">tril_indices_from</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.trim_zeros.html">trim_zeros</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.triu.html">triu</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.triu_indices.html">triu_indices</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.triu_indices_from.html">triu_indices_from</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.typename.html">typename</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.typing.html">typing</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ufunc.html">ufunc</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.uint16.html">uint16</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.uint32.html">uint32</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.uint64.html">uint64</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.uint8.html">uint8</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.ulonglong.html">ulonglong</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.union1d.html">union1d</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.unique.html">unique</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.unpackbits.html">unpackbits</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.unravel_index.html">unravel_index</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.unsignedinteger.html">unsignedinteger</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.unwrap.html">unwrap</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.vander.html">vander</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.var.html">var</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.vdot.html">vdot</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.vectorize.html">vectorize</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.version.html">version</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.void.html">void</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.vsplit.html">vsplit</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.vstack.html">vstack</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.where.html">where</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.zeros.html">zeros</a>
+                            <a href="/p/numpy/1.22.1/api/numpy.zeros_like.html">zeros_like</a>
+                            
+                            </div>
+                        
+                    </div>
+                </nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+    
+        <img src="/p/numpy/1.22.1/img/logo.png"/>
+    
+    <a href="#">Library: numpy</a>
+    <a href="#">Version: 1.22.1</a>
+    <a href="#">Authors:</a>
+    <a href="#">PyPI:</a>
+    <a href="#">Source</a>
+    <a href="#">Homepage</a>
+    <a href="#">Fundings</a>
+    <a href="#">Stars</a>
+    <a href="#">Forks</a>
+    <a href="#">Related</a>
+    <hr/>
+    <a>Narrative Docs</a>
+    <hr/>
+    <a href="#section-Notes">Notes</a>
+
+    <a href="#section-Parameters">Parameters</a>
+
+    <a href="#section-Returns">Returns</a>
+
+    <a href="#section-backrefs">BackRef</a>
+    
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <code class='signature'>array(object, dtype=None, *, copy=True, order=&#39;K&#39;, subok=False, ndmin=0, like=None)</code>
+
+
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Extended Summary -->
+        
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Notes">Notes</h3>
+    
+    
+        <!-- rendering Notes -->
+        
+           
+               
+        <p>When order is &#39;A&#39; and <code><a link href="#object" class='local'>object</a></code> is an array in neither &#39;C&#39; nor &#39;F&#39; order, and a copy is forced by a change in dtype, then the order of the result is not necessarily &#39;C&#39; as expected. This is likely a bug.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+        <h3 id="section-Parameters">Parameters</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="object">object</a> : array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>An array, any object exposing the array interface, an object whose __array__ method returns an array, or any (nested) sequence. If object is a scalar, a 0-dimensional array containing object is returned.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="dtype">dtype</a> : data-type, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>The desired data-type for the array.  If not given, then the type will be determined as the minimum type required to hold the objects in the sequence.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="copy">copy</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If true (default), then the object is copied.  Otherwise, a copy will only be made if __array__ returns a copy, if obj is a nested sequence, or if a copy is needed to satisfy any of the other requirements (<code><a link href="#dtype" class='local'>dtype</a></code>, <code><a link href="#order" class='local'>order</a></code>, etc.).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="order">order</a> : {&#39;K&#39;, &#39;A&#39;, &#39;C&#39;, &#39;F&#39;}, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Specify the memory layout of the array. If object is not an array, the newly created array will be in C order (row major) unless &#39;F&#39; is specified, in which case it will be in Fortran order (column major). If object is an array the following holds.</p>
+
+    
+            
+                
+        <p>===== ========= =================================================== order  no copy                     copy=True ===== ========= =================================================== &#39;K&#39;   unchanged F &amp; C order preserved, otherwise most similar order &#39;A&#39;   unchanged F order if input is F and not C, otherwise C order &#39;C&#39;   C order   C order &#39;F&#39;   F order   F order ===== ========= ===================================================</p>
+
+    
+            
+                
+        <p>When 
+        <code class='verbatim'>copy=False</code>
+     and a copy is made for other reasons, the result is the same as if 
+        <code class='verbatim'>copy=True</code>
+    , with some exceptions for &#39;A&#39;, see the Notes section. The default order is &#39;K&#39;.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="subok">subok</a> : bool, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>If True, then sub-classes will be passed-through, otherwise the returned array will be forced to be a base-class array (default).</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="ndmin">ndmin</a> : int, optional</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Specifies the minimum number of dimensions that the resulting array should have.  Ones will be pre-pended to the shape as needed to meet this requirement.</p>
+
+    
+            
+        </dd>
+       
+            
+                <dt><a id="like">like</a> : array_like</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>Reference object to allow the creation of arrays which are not NumPy arrays. If an array-like passed in as 
+        <code class='verbatim'>like</code>
+     supports the 
+        <code class='verbatim'>__array_function__</code>
+     protocol, the result will be defined by it. In this case, it ensures the creation of an array object compatible with that passed in via this argument.</p>
+
+    
+            
+                
+            <div class='admonition'>
+    <div>versionadded</div>
+    
+        
+        <p>1.20.0 </p>
+
+    
+    
+</div>
+
+       
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       
+   
+
+
+    
+        <h3 id="section-Returns">Returns</h3>
+    
+    
+       <dl>
+           
+            
+                <dt><a id="out">out</a> : ndarray</dt>
+            
+        </dl>
+
+        <dd>
+            
+                
+        <p>An array object satisfying the specified requirements.</p>
+
+    
+            
+        </dd>
+       
+
+   </pre>
+   
+
+
+    
+    
+        <!-- rendering Summary -->
+        
+           
+               
+        <p>Create an array.</p>
+
+    
+           
+       
+    
+
+
+    
+    
+       
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+    
+    
+       <dl>
+           
+
+   </pre>
+   
+
+
+
+    <h3 id="section-Examples">Examples</h3>
+        
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">)</span>
+array([1, 2, 3])</pre>
+            
+            
+         
+                
+        <p>Upcasting:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mf">3.0</span><span class="">]</span><span class="">)</span>
+array([ 1.,  2.,  3.])</pre>
+            
+            
+         
+                
+        <p>More than one dimension:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">3</span><span class="">,</span><span class=""> </span><span class="mi">4</span><span class="">]</span><span class="">]</span><span class="">)</span>
+array([[1, 2],
+       [3, 4]])</pre>
+            
+            
+         
+                
+        <p>Minimum dimensions 2:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">ndmin</span><span class="o">=</span><span class="mi">2</span><span class="">)</span>
+array([[1, 2, 3]])</pre>
+            
+            
+         
+                
+        <p>Type provided:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mi">1</span><span class="">,</span><span class=""> </span><span class="mi">2</span><span class="">,</span><span class=""> </span><span class="mi">3</span><span class="">]</span><span class="">,</span><span class=""> </span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.dtype.html">dtype</a><span class="o">=</span><span class="nb">complex</span><span class="">)</span>
+array([ 1.+0.j,  2.+0.j,  3.+0.j])</pre>
+            
+            
+         
+                
+        <p>Data-type consisting of more than one element:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span><span class=""> </span><span class="o">=</span><span class=""> </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="">(</span><span class="mi">1</span><span class="">,</span><span class="mi">2</span><span class="">)</span><span class="">,</span><span class="">(</span><span class="mi">3</span><span class="">,</span><span class="mi">4</span><span class="">)</span><span class="">]</span><span class="">,</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.dtype.html">dtype</a><span class="o">=</span><span class="">[</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span><span class="">,</span><span class="s1">&#39;</span><span class="s1">&lt;i4</span><span class="s1">&#39;</span><span class="">)</span><span class="">,</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">b</span><span class="s1">&#39;</span><span class="">,</span><span class="s1">&#39;</span><span class="s1">&lt;i4</span><span class="s1">&#39;</span><span class="">)</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">[</span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span><span class="">]</span>
+array([1, 3])</pre>
+            
+            
+         
+                
+        <p>Creating an array from sub-classes:</p>
+
+    
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">np</span><span class="o">.</span><span class="">mat</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">1 2; 3 4</span><span class="s1">&#39;</span><span class="">)</span><span class="">)</span>
+array([[1, 2],
+       [3, 4]])</pre>
+            
+            
+         
+                <pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">np</span><span class="o">.</span><a class="foo ", href="/p/numpy/1.22.1/api/numpy.array.html">array</a><span class="">(</span><span class="">np</span><span class="o">.</span><span class="">mat</span><span class="">(</span><span class="s1">&#39;</span><span class="s1">1 2; 3 4</span><span class="s1">&#39;</span><span class="">)</span><span class="">,</span><span class=""> </span><span class="">subok</span><span class="o">=</span><span class="kc">True</span><span class="">)</span>
+matrix([[1, 2],
+        [3, 4]])</pre>
+            
+            
+         
+         See :
+         
+             <code><a link href="/p/numpy/1.22.1/api/numpy.dtype.html" class='exists'>numpy.dtype</a></code>
+        
+         
+             <code><a link href="/p/numpy/1.22.1/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        
+         
+     
+    
+
+
+    <h3 id='section-backrefs'>Back References</h3>
+    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
+
+    
+    
+        
+         <h4>dask</h4>
+         
+         <dl>
+         
+             <dd><code><a link href="/p/dask/2021.10.0/api/dask.base.persist.html" class='exists'>dask.base.persist</a></code>
+        </dd>
+        
+         </dl>
+         
+    
+         <h4>numpy</h4>
+         
+        <details>
+        <summary>302 Elements</summary>
+         <dl>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.all.html" class='exists'>numpy.all</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.any.html" class='exists'>numpy.any</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.apply_along_axis.html" class='exists'>numpy.apply_along_axis</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.argmax.html" class='exists'>numpy.argmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.argmin.html" class='exists'>numpy.argmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.argpartition.html" class='exists'>numpy.argpartition</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.argsort.html" class='exists'>numpy.argsort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.array.html" class='exists'>numpy.array</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.array2string.html" class='exists'>numpy.array2string</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.array_equal.html" class='exists'>numpy.array_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.array_repr.html" class='exists'>numpy.array_repr</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.asanyarray.html" class='exists'>numpy.asanyarray</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.asarray.html" class='exists'>numpy.asarray</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.asmatrix.html" class='exists'>numpy.asmatrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.asscalar.html" class='exists'>numpy.asscalar</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.bincount.html" class='exists'>numpy.bincount</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.block.html" class='exists'>numpy.block</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.broadcast.html" class='exists'>numpy.broadcast</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.broadcast_arrays.html" class='exists'>numpy.broadcast_arrays</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.broadcast_to.html" class='exists'>numpy.broadcast_to</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.can_cast.html" class='exists'>numpy.can_cast</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.capitalize.html" class='exists'>numpy.char.capitalize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.count.html" class='exists'>numpy.char.count</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.decode.html" class='exists'>numpy.char.decode</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.endswith.html" class='exists'>numpy.char.endswith</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.lower.html" class='exists'>numpy.char.lower</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.lstrip.html" class='exists'>numpy.char.lstrip</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.rstrip.html" class='exists'>numpy.char.rstrip</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.strip.html" class='exists'>numpy.char.strip</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.swapcase.html" class='exists'>numpy.char.swapcase</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.title.html" class='exists'>numpy.char.title</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.char.upper.html" class='exists'>numpy.char.upper</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.choose.html" class='exists'>numpy.choose</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.column_stack.html" class='exists'>numpy.column_stack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.common_type.html" class='exists'>numpy.common_type</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.compress.html" class='exists'>numpy.compress</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.concatenate.html" class='exists'>numpy.concatenate</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.copy.html" class='exists'>numpy.copy</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.bincount.html" class='exists'>numpy.core._multiarray_umath.bincount</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.can_cast.html" class='exists'>numpy.core._multiarray_umath.can_cast</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.compare_chararrays.html" class='exists'>numpy.core._multiarray_umath.compare_chararrays</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.concatenate.html" class='exists'>numpy.core._multiarray_umath.concatenate</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.empty_like.html" class='exists'>numpy.core._multiarray_umath.empty_like</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.inner.html" class='exists'>numpy.core._multiarray_umath.inner</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.lexsort.html" class='exists'>numpy.core._multiarray_umath.lexsort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.packbits.html" class='exists'>numpy.core._multiarray_umath.packbits</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.ravel_multi_index.html" class='exists'>numpy.core._multiarray_umath.ravel_multi_index</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.shares_memory.html" class='exists'>numpy.core._multiarray_umath.shares_memory</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.unpackbits.html" class='exists'>numpy.core._multiarray_umath.unpackbits</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.vdot.html" class='exists'>numpy.core._multiarray_umath.vdot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core._multiarray_umath.where.html" class='exists'>numpy.core._multiarray_umath.where</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core.arrayprint.array2string.html" class='exists'>numpy.core.arrayprint.array2string</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core.arrayprint.dtype_is_implied.html" class='exists'>numpy.core.arrayprint.dtype_is_implied</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core.fromnumeric.ndim.html" class='exists'>numpy.core.fromnumeric.ndim</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.core.fromnumeric.size.html" class='exists'>numpy.core.fromnumeric.size</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.count_nonzero.html" class='exists'>numpy.count_nonzero</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.cov.html" class='exists'>numpy.cov</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.cross.html" class='exists'>numpy.cross</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ctypeslib.ndpointer.html" class='exists'>numpy.ctypeslib.ndpointer</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.cumprod.html" class='exists'>numpy.cumprod</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.cumsum.html" class='exists'>numpy.cumsum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.datetime_data.html" class='exists'>numpy.datetime_data</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.delete.html" class='exists'>numpy.delete</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.diff.html" class='exists'>numpy.diff</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.digitize.html" class='exists'>numpy.digitize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.dsplit.html" class='exists'>numpy.dsplit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.dstack.html" class='exists'>numpy.dstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ediff1d.html" class='exists'>numpy.ediff1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.empty_like.html" class='exists'>numpy.empty_like</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.expand_dims.html" class='exists'>numpy.expand_dims</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.fft.fftfreq.html" class='exists'>numpy.fft.fftfreq</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.fft.hfft.html" class='exists'>numpy.fft.hfft</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.fft.ihfft.html" class='exists'>numpy.fft.ihfft</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.fft.rfftfreq.html" class='exists'>numpy.fft.rfftfreq</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.frompyfunc.html" class='exists'>numpy.frompyfunc</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.geterrcall.html" class='exists'>numpy.geterrcall</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.gradient.html" class='exists'>numpy.gradient</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.histogram_bin_edges.html" class='exists'>numpy.histogram_bin_edges</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.hsplit.html" class='exists'>numpy.hsplit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.hstack.html" class='exists'>numpy.hstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.imag.html" class='exists'>numpy.imag</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.in1d.html" class='exists'>numpy.in1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.inner.html" class='exists'>numpy.inner</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.insert.html" class='exists'>numpy.insert</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.intersect1d.html" class='exists'>numpy.intersect1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.isfortran.html" class='exists'>numpy.isfortran</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.isin.html" class='exists'>numpy.isin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.isneginf.html" class='exists'>numpy.isneginf</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.isposinf.html" class='exists'>numpy.isposinf</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.isreal.html" class='exists'>numpy.isreal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.issubdtype.html" class='exists'>numpy.issubdtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.issubsctype.html" class='exists'>numpy.issubsctype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.kron.html" class='exists'>numpy.kron</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.lexsort.html" class='exists'>numpy.lexsort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.lib.index_tricks.CClass.html" class='exists'>numpy.lib.index_tricks.CClass</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.lib.index_tricks.IndexExpression.html" class='exists'>numpy.lib.index_tricks.IndexExpression</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.lib.index_tricks.RClass.html" class='exists'>numpy.lib.index_tricks.RClass</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.lib.scimath._tocomplex.html" class='exists'>numpy.lib.scimath._tocomplex</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.cholesky.html" class='exists'>numpy.linalg.cholesky</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.cond.html" class='exists'>numpy.linalg.cond</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.det.html" class='exists'>numpy.linalg.det</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.eig.html" class='exists'>numpy.linalg.eig</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.eigh.html" class='exists'>numpy.linalg.eigh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.eigvals.html" class='exists'>numpy.linalg.eigvals</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.eigvalsh.html" class='exists'>numpy.linalg.eigvalsh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.inv.html" class='exists'>numpy.linalg.inv</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.lstsq.html" class='exists'>numpy.linalg.lstsq</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.matrix_power.html" class='exists'>numpy.linalg.matrix_power</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.norm.html" class='exists'>numpy.linalg.norm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.qr.html" class='exists'>numpy.linalg.qr</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.slogdet.html" class='exists'>numpy.linalg.slogdet</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.linalg.solve.html" class='exists'>numpy.linalg.solve</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.load.html" class='exists'>numpy.load</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.all.html" class='exists'>numpy.ma.core.MaskedArray.all</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.anom.html" class='exists'>numpy.ma.core.MaskedArray.anom</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.argmin.html" class='exists'>numpy.ma.core.MaskedArray.argmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.argsort.html" class='exists'>numpy.ma.core.MaskedArray.argsort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.compress.html" class='exists'>numpy.ma.core.MaskedArray.compress</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.compressed.html" class='exists'>numpy.ma.core.MaskedArray.compressed</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.cumsum.html" class='exists'>numpy.ma.core.MaskedArray.cumsum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.filled.html" class='exists'>numpy.ma.core.MaskedArray.filled</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.ids.html" class='exists'>numpy.ma.core.MaskedArray.ids</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.imag.html" class='exists'>numpy.ma.core.MaskedArray.imag</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.iscontiguous.html" class='exists'>numpy.ma.core.MaskedArray.iscontiguous</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.mean.html" class='exists'>numpy.ma.core.MaskedArray.mean</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.mini.html" class='exists'>numpy.ma.core.MaskedArray.mini</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.nonzero.html" class='exists'>numpy.ma.core.MaskedArray.nonzero</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.put.html" class='exists'>numpy.ma.core.MaskedArray.put</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.ravel.html" class='exists'>numpy.ma.core.MaskedArray.ravel</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.real.html" class='exists'>numpy.ma.core.MaskedArray.real</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.reshape.html" class='exists'>numpy.ma.core.MaskedArray.reshape</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.shrink_mask.html" class='exists'>numpy.ma.core.MaskedArray.shrink_mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.sort.html" class='exists'>numpy.ma.core.MaskedArray.sort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.sum.html" class='exists'>numpy.ma.core.MaskedArray.sum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.tobytes.html" class='exists'>numpy.ma.core.MaskedArray.tobytes</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.toflex.html" class='exists'>numpy.ma.core.MaskedArray.toflex</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.tolist.html" class='exists'>numpy.ma.core.MaskedArray.tolist</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedArray.var.html" class='exists'>numpy.ma.core.MaskedArray.var</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedIterator.html" class='exists'>numpy.ma.core.MaskedIterator</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.MaskedIterator.__next__.html" class='exists'>numpy.ma.core.MaskedIterator.__next__</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core._arraymethod.&lt;locals&gt;.wrapped_method.html" class='exists'>numpy.ma.core._arraymethod.&lt;locals&gt;.wrapped_method</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.absolute.html" class='exists'>numpy.ma.core.absolute</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.all.html" class='exists'>numpy.ma.core.all</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.allclose.html" class='exists'>numpy.ma.core.allclose</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.allequal.html" class='exists'>numpy.ma.core.allequal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.anom.html" class='exists'>numpy.ma.core.anom</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.arcsinh.html" class='exists'>numpy.ma.core.arcsinh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.arctan2.html" class='exists'>numpy.ma.core.arctan2</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.argmin.html" class='exists'>numpy.ma.core.argmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.argsort.html" class='exists'>numpy.ma.core.argsort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.bitwise_and.html" class='exists'>numpy.ma.core.bitwise_and</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.bitwise_or.html" class='exists'>numpy.ma.core.bitwise_or</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.bitwise_xor.html" class='exists'>numpy.ma.core.bitwise_xor</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.ceil.html" class='exists'>numpy.ma.core.ceil</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.choose.html" class='exists'>numpy.ma.core.choose</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.common_fill_value.html" class='exists'>numpy.ma.core.common_fill_value</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.compress.html" class='exists'>numpy.ma.core.compress</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.cos.html" class='exists'>numpy.ma.core.cos</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.cumsum.html" class='exists'>numpy.ma.core.cumsum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.default_fill_value.html" class='exists'>numpy.ma.core.default_fill_value</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.dot.html" class='exists'>numpy.ma.core.dot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.equal.html" class='exists'>numpy.ma.core.equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.filled.html" class='exists'>numpy.ma.core.filled</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.fix_invalid.html" class='exists'>numpy.ma.core.fix_invalid</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.flatten_mask.html" class='exists'>numpy.ma.core.flatten_mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.flatten_structured_array.html" class='exists'>numpy.ma.core.flatten_structured_array</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.floor.html" class='exists'>numpy.ma.core.floor</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.floor_divide.html" class='exists'>numpy.ma.core.floor_divide</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.fromflex.html" class='exists'>numpy.ma.core.fromflex</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.greater.html" class='exists'>numpy.ma.core.greater</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.greater_equal.html" class='exists'>numpy.ma.core.greater_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.ids.html" class='exists'>numpy.ma.core.ids</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.inner.html" class='exists'>numpy.ma.core.inner</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.is_mask.html" class='exists'>numpy.ma.core.is_mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.less.html" class='exists'>numpy.ma.core.less</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.less_equal.html" class='exists'>numpy.ma.core.less_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.log2.html" class='exists'>numpy.ma.core.log2</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.logical_and.html" class='exists'>numpy.ma.core.logical_and</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.logical_or.html" class='exists'>numpy.ma.core.logical_or</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.make_mask.html" class='exists'>numpy.ma.core.make_mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.masked_object.html" class='exists'>numpy.ma.core.masked_object</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.masked_values.html" class='exists'>numpy.ma.core.masked_values</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.maximum_fill_value.html" class='exists'>numpy.ma.core.maximum_fill_value</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.mean.html" class='exists'>numpy.ma.core.mean</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.minimum_fill_value.html" class='exists'>numpy.ma.core.minimum_fill_value</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.ndim.html" class='exists'>numpy.ma.core.ndim</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.negative.html" class='exists'>numpy.ma.core.negative</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.nonzero.html" class='exists'>numpy.ma.core.nonzero</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.not_equal.html" class='exists'>numpy.ma.core.not_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.outer.html" class='exists'>numpy.ma.core.outer</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.ravel.html" class='exists'>numpy.ma.core.ravel</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.resize.html" class='exists'>numpy.ma.core.resize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.shape.html" class='exists'>numpy.ma.core.shape</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.shrink_mask.html" class='exists'>numpy.ma.core.shrink_mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.sin.html" class='exists'>numpy.ma.core.sin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.sinh.html" class='exists'>numpy.ma.core.sinh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.size.html" class='exists'>numpy.ma.core.size</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.sum.html" class='exists'>numpy.ma.core.sum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.tan.html" class='exists'>numpy.ma.core.tan</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.tanh.html" class='exists'>numpy.ma.core.tanh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.var.html" class='exists'>numpy.ma.core.var</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.core.where.html" class='exists'>numpy.ma.core.where</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.apply_along_axis.html" class='exists'>numpy.ma.extras.apply_along_axis</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.average.html" class='exists'>numpy.ma.extras.average</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.column_stack.html" class='exists'>numpy.ma.extras.column_stack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.compress_rowcols.html" class='exists'>numpy.ma.extras.compress_rowcols</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.count_masked.html" class='exists'>numpy.ma.extras.count_masked</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.dstack.html" class='exists'>numpy.ma.extras.dstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.flatnotmasked_contiguous.html" class='exists'>numpy.ma.extras.flatnotmasked_contiguous</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.flatnotmasked_edges.html" class='exists'>numpy.ma.extras.flatnotmasked_edges</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.hsplit.html" class='exists'>numpy.ma.extras.hsplit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.hstack.html" class='exists'>numpy.ma.extras.hstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.intersect1d.html" class='exists'>numpy.ma.extras.intersect1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.median.html" class='exists'>numpy.ma.extras.median</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.mr_class.html" class='exists'>numpy.ma.extras.mr_class</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.notmasked_contiguous.html" class='exists'>numpy.ma.extras.notmasked_contiguous</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.notmasked_edges.html" class='exists'>numpy.ma.extras.notmasked_edges</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.polyfit.html" class='exists'>numpy.ma.extras.polyfit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.setdiff1d.html" class='exists'>numpy.ma.extras.setdiff1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.stack.html" class='exists'>numpy.ma.extras.stack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.vander.html" class='exists'>numpy.ma.extras.vander</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ma.extras.vstack.html" class='exists'>numpy.ma.extras.vstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.may_share_memory.html" class='exists'>numpy.may_share_memory</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.mean.html" class='exists'>numpy.mean</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.median.html" class='exists'>numpy.median</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.mintypecode.html" class='exists'>numpy.mintypecode</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nan_to_num.html" class='exists'>numpy.nan_to_num</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanargmax.html" class='exists'>numpy.nanargmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanargmin.html" class='exists'>numpy.nanargmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nancumprod.html" class='exists'>numpy.nancumprod</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nancumsum.html" class='exists'>numpy.nancumsum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanmax.html" class='exists'>numpy.nanmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanmean.html" class='exists'>numpy.nanmean</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanmedian.html" class='exists'>numpy.nanmedian</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanmin.html" class='exists'>numpy.nanmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanpercentile.html" class='exists'>numpy.nanpercentile</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanprod.html" class='exists'>numpy.nanprod</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanquantile.html" class='exists'>numpy.nanquantile</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanstd.html" class='exists'>numpy.nanstd</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nansum.html" class='exists'>numpy.nansum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nanvar.html" class='exists'>numpy.nanvar</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ndarray.html" class='exists'>numpy.ndarray</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ndenumerate.html" class='exists'>numpy.ndenumerate</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ndim.html" class='exists'>numpy.ndim</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.nonzero.html" class='exists'>numpy.nonzero</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.obj2sctype.html" class='exists'>numpy.obj2sctype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.outer.html" class='exists'>numpy.outer</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.packbits.html" class='exists'>numpy.packbits</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.partition.html" class='exists'>numpy.partition</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.poly.html" class='exists'>numpy.poly</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.polydiv.html" class='exists'>numpy.polydiv</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.polyfit.html" class='exists'>numpy.polyfit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.polynomial.hermite.hermvander.html" class='exists'>numpy.polynomial.hermite.hermvander</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.polynomial.hermite_e.hermevander.html" class='exists'>numpy.polynomial.hermite_e.hermevander</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.polynomial.laguerre.lagvander.html" class='exists'>numpy.polynomial.laguerre.lagvander</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.printoptions.html" class='exists'>numpy.printoptions</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.prod.html" class='exists'>numpy.prod</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ptp.html" class='exists'>numpy.ptp</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.put_along_axis.html" class='exists'>numpy.put_along_axis</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.quantile.html" class='exists'>numpy.quantile</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.random.bit_generator._coerce_to_uint32_array.html" class='exists'>numpy.random.bit_generator._coerce_to_uint32_array</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ravel.html" class='exists'>numpy.ravel</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.ravel_multi_index.html" class='exists'>numpy.ravel_multi_index</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.real.html" class='exists'>numpy.real</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.rec.array.html" class='exists'>numpy.rec.array</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.rec.fromarrays.html" class='exists'>numpy.rec.fromarrays</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.recarray.html" class='exists'>numpy.recarray</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.repeat.html" class='exists'>numpy.repeat</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.reshape.html" class='exists'>numpy.reshape</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.resize.html" class='exists'>numpy.resize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.rot90.html" class='exists'>numpy.rot90</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.save.html" class='exists'>numpy.save</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.sctype2char.html" class='exists'>numpy.sctype2char</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.set_printoptions.html" class='exists'>numpy.set_printoptions</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.setdiff1d.html" class='exists'>numpy.setdiff1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.seterrcall.html" class='exists'>numpy.seterrcall</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.setxor1d.html" class='exists'>numpy.setxor1d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.shape.html" class='exists'>numpy.shape</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.shares_memory.html" class='exists'>numpy.shares_memory</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.size.html" class='exists'>numpy.size</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.sort.html" class='exists'>numpy.sort</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.source.html" class='exists'>numpy.source</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.squeeze.html" class='exists'>numpy.squeeze</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.stack.html" class='exists'>numpy.stack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.std.html" class='exists'>numpy.std</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.swapaxes.html" class='exists'>numpy.swapaxes</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.take.html" class='exists'>numpy.take</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.take_along_axis.html" class='exists'>numpy.take_along_axis</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.tensordot.html" class='exists'>numpy.tensordot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.testing._private.utils.assert_almost_equal.html" class='exists'>numpy.testing._private.utils.assert_almost_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.testing._private.utils.assert_array_almost_equal_nulp.html" class='exists'>numpy.testing._private.utils.assert_array_almost_equal_nulp</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.testing._private.utils.assert_equal.html" class='exists'>numpy.testing._private.utils.assert_equal</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.tile.html" class='exists'>numpy.tile</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.trim_zeros.html" class='exists'>numpy.trim_zeros</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.unique.html" class='exists'>numpy.unique</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.unpackbits.html" class='exists'>numpy.unpackbits</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.vander.html" class='exists'>numpy.vander</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.var.html" class='exists'>numpy.var</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.vdot.html" class='exists'>numpy.vdot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.vsplit.html" class='exists'>numpy.vsplit</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.vstack.html" class='exists'>numpy.vstack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/numpy/1.22.1/api/numpy.where.html" class='exists'>numpy.where</a></code>
+        </dd>
+        
+         </dl>
+        </details>
+        
+    
+         <h4>pandas</h4>
+         
+        <details>
+        <summary>53 Elements</summary>
+         <dl>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas._libs.lib.is_list_like.html" class='exists'>pandas._libs.lib.is_list_like</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas._libs.lib.item_from_zerodim.html" class='exists'>pandas._libs.lib.item_from_zerodim</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas._libs.tslibs.parsing.concat_date_cols.html" class='exists'>pandas._libs.tslibs.parsing.concat_date_cols</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.algorithms.take.html" class='exists'>pandas.core.algorithms.take</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.arrays.categorical.recode_for_categories.html" class='exists'>pandas.core.arrays.categorical.recode_for_categories</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.arrays.datetimes.DatetimeArray.tz_localize.html" class='exists'>pandas.core.arrays.datetimes.DatetimeArray.tz_localize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_any_int_dtype.html" class='exists'>pandas.core.dtypes.common.is_any_int_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_bool_dtype.html" class='exists'>pandas.core.dtypes.common.is_bool_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_complex_dtype.html" class='exists'>pandas.core.dtypes.common.is_complex_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_datetime64_any_dtype.html" class='exists'>pandas.core.dtypes.common.is_datetime64_any_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_datetime64_dtype.html" class='exists'>pandas.core.dtypes.common.is_datetime64_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_datetime64_ns_dtype.html" class='exists'>pandas.core.dtypes.common.is_datetime64_ns_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_datetime_or_timedelta_dtype.html" class='exists'>pandas.core.dtypes.common.is_datetime_or_timedelta_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_datetimelike_v_numeric.html" class='exists'>pandas.core.dtypes.common.is_datetimelike_v_numeric</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_extension_array_dtype.html" class='exists'>pandas.core.dtypes.common.is_extension_array_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_extension_type.html" class='exists'>pandas.core.dtypes.common.is_extension_type</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_float_dtype.html" class='exists'>pandas.core.dtypes.common.is_float_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_int64_dtype.html" class='exists'>pandas.core.dtypes.common.is_int64_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_integer_dtype.html" class='exists'>pandas.core.dtypes.common.is_integer_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_numeric_dtype.html" class='exists'>pandas.core.dtypes.common.is_numeric_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_numeric_v_string_like.html" class='exists'>pandas.core.dtypes.common.is_numeric_v_string_like</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_object_dtype.html" class='exists'>pandas.core.dtypes.common.is_object_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_signed_integer_dtype.html" class='exists'>pandas.core.dtypes.common.is_signed_integer_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_sparse.html" class='exists'>pandas.core.dtypes.common.is_sparse</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_string_dtype.html" class='exists'>pandas.core.dtypes.common.is_string_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_timedelta64_ns_dtype.html" class='exists'>pandas.core.dtypes.common.is_timedelta64_ns_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.is_unsigned_integer_dtype.html" class='exists'>pandas.core.dtypes.common.is_unsigned_integer_dtype</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.common.needs_i8_conversion.html" class='exists'>pandas.core.dtypes.common.needs_i8_conversion</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.inference.is_array_like.html" class='exists'>pandas.core.dtypes.inference.is_array_like</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.missing.array_equivalent.html" class='exists'>pandas.core.dtypes.missing.array_equivalent</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.missing.isna.html" class='exists'>pandas.core.dtypes.missing.isna</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.dtypes.missing.notna.html" class='exists'>pandas.core.dtypes.missing.notna</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.frame.DataFrame.html" class='exists'>pandas.core.frame.DataFrame</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.frame.DataFrame.dot.html" class='exists'>pandas.core.frame.DataFrame.dot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.frame.DataFrame.quantile.html" class='exists'>pandas.core.frame.DataFrame.quantile</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.generic.NDFrame.filter.html" class='exists'>pandas.core.generic.NDFrame.filter</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.generic.NDFrame.tz_localize.html" class='exists'>pandas.core.generic.NDFrame.tz_localize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.indexers.utils.check_array_indexer.html" class='exists'>pandas.core.indexers.utils.check_array_indexer</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.indexers.utils.validate_indices.html" class='exists'>pandas.core.indexers.utils.validate_indices</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.indexes.datetimes.DatetimeIndex.tz_localize.html" class='exists'>pandas.core.indexes.datetimes.DatetimeIndex.tz_localize</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.nanops.nanargmax.html" class='exists'>pandas.core.nanops.nanargmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.nanops.nanargmin.html" class='exists'>pandas.core.nanops.nanargmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.ops.missing.mask_zero_div_zero.html" class='exists'>pandas.core.ops.missing.mask_zero_div_zero</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.reshape.merge._factorize_keys.html" class='exists'>pandas.core.reshape.merge._factorize_keys</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.reshape.pivot.crosstab.html" class='exists'>pandas.core.reshape.pivot.crosstab</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.reshape.reshape._reorder_for_extension_array_stack.html" class='exists'>pandas.core.reshape.reshape._reorder_for_extension_array_stack</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.reshape.tile.cut.html" class='exists'>pandas.core.reshape.tile.cut</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.series.Series.html" class='exists'>pandas.core.series.Series</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.series.Series.__array__.html" class='exists'>pandas.core.series.Series.__array__</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.series.Series.dot.html" class='exists'>pandas.core.series.Series.dot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.series.Series.reset_index.html" class='exists'>pandas.core.series.Series.reset_index</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.series.Series.sort_index.html" class='exists'>pandas.core.series.Series.sort_index</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/pandas/1.4.0/api/pandas.core.window.rolling.Rolling.corr.html" class='exists'>pandas.core.window.rolling.Rolling.corr</a></code>
+        </dd>
+        
+         </dl>
+        </details>
+        
+    
+         <h4>scipy</h4>
+         
+        <details>
+        <summary>131 Elements</summary>
+         <dl>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy._lib._util._lazywhere.html" class='exists'>scipy._lib._util._lazywhere</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.fft._basic.ihfft.html" class='exists'>scipy.fft._basic.ihfft</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.dct.html" class='exists'>scipy.fft._realtransforms.dct</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.fft._realtransforms.idct.html" class='exists'>scipy.fft._realtransforms.idct</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.interpolate._bsplines.make_interp_spline.html" class='exists'>scipy.interpolate._bsplines.make_interp_spline</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.interpolate.interpolate.PPoly.solve.html" class='exists'>scipy.interpolate.interpolate.PPoly.solve</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.interpolate.interpolate.RegularGridInterpolator.html" class='exists'>scipy.interpolate.interpolate.RegularGridInterpolator</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.interpolate.interpolate.interpn.html" class='exists'>scipy.interpolate.interpolate.interpn</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._decomp_ldl.ldl.html" class='exists'>scipy.linalg._decomp_ldl.ldl</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._decomp_polar.polar.html" class='exists'>scipy.linalg._decomp_polar.polar</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._decomp_qz.ordqz.html" class='exists'>scipy.linalg._decomp_qz.ordqz</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._decomp_update.qr_delete.html" class='exists'>scipy.linalg._decomp_update.qr_delete</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._decomp_update.qr_update.html" class='exists'>scipy.linalg._decomp_update.qr_update</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._expm_frechet.expm_cond.html" class='exists'>scipy.linalg._expm_frechet.expm_cond</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._matfuncs_sqrtm.sqrtm.html" class='exists'>scipy.linalg._matfuncs_sqrtm.sqrtm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._procrustes.orthogonal_procrustes.html" class='exists'>scipy.linalg._procrustes.orthogonal_procrustes</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_continuous_are.html" class='exists'>scipy.linalg._solvers.solve_continuous_are</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_continuous_lyapunov.html" class='exists'>scipy.linalg._solvers.solve_continuous_lyapunov</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_discrete_are.html" class='exists'>scipy.linalg._solvers.solve_discrete_are</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_discrete_lyapunov.html" class='exists'>scipy.linalg._solvers.solve_discrete_lyapunov</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg._solvers.solve_sylvester.html" class='exists'>scipy.linalg._solvers.solve_sylvester</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.det.html" class='exists'>scipy.linalg.basic.det</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.inv.html" class='exists'>scipy.linalg.basic.inv</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.lstsq.html" class='exists'>scipy.linalg.basic.lstsq</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.matrix_balance.html" class='exists'>scipy.linalg.basic.matrix_balance</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.solve.html" class='exists'>scipy.linalg.basic.solve</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.basic.solve_circulant.html" class='exists'>scipy.linalg.basic.solve_circulant</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.cdf2rdf.html" class='exists'>scipy.linalg.decomp.cdf2rdf</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eig.html" class='exists'>scipy.linalg.decomp.eig</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eig_banded.html" class='exists'>scipy.linalg.decomp.eig_banded</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigh.html" class='exists'>scipy.linalg.decomp.eigh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigvals.html" class='exists'>scipy.linalg.decomp.eigvals</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigvals_banded.html" class='exists'>scipy.linalg.decomp.eigvals_banded</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.eigvalsh.html" class='exists'>scipy.linalg.decomp.eigvalsh</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp.hessenberg.html" class='exists'>scipy.linalg.decomp.hessenberg</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_cholesky.cho_factor.html" class='exists'>scipy.linalg.decomp_cholesky.cho_factor</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_cholesky.cho_solve.html" class='exists'>scipy.linalg.decomp_cholesky.cho_solve</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_cholesky.cho_solve_banded.html" class='exists'>scipy.linalg.decomp_cholesky.cho_solve_banded</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_cholesky.cholesky.html" class='exists'>scipy.linalg.decomp_cholesky.cholesky</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_cholesky.cholesky_banded.html" class='exists'>scipy.linalg.decomp_cholesky.cholesky_banded</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_lu.lu.html" class='exists'>scipy.linalg.decomp_lu.lu</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_lu.lu_factor.html" class='exists'>scipy.linalg.decomp_lu.lu_factor</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_lu.lu_solve.html" class='exists'>scipy.linalg.decomp_lu.lu_solve</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_qr.qr_multiply.html" class='exists'>scipy.linalg.decomp_qr.qr_multiply</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_schur.rsf2csf.html" class='exists'>scipy.linalg.decomp_schur.rsf2csf</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_schur.schur.html" class='exists'>scipy.linalg.decomp_schur.schur</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.diagsvd.html" class='exists'>scipy.linalg.decomp_svd.diagsvd</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.null_space.html" class='exists'>scipy.linalg.decomp_svd.null_space</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.orth.html" class='exists'>scipy.linalg.decomp_svd.orth</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.decomp_svd.svdvals.html" class='exists'>scipy.linalg.decomp_svd.svdvals</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.coshm.html" class='exists'>scipy.linalg.matfuncs.coshm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.cosm.html" class='exists'>scipy.linalg.matfuncs.cosm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.expm.html" class='exists'>scipy.linalg.matfuncs.expm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.fractional_matrix_power.html" class='exists'>scipy.linalg.matfuncs.fractional_matrix_power</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.funm.html" class='exists'>scipy.linalg.matfuncs.funm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.khatri_rao.html" class='exists'>scipy.linalg.matfuncs.khatri_rao</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.logm.html" class='exists'>scipy.linalg.matfuncs.logm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.sinhm.html" class='exists'>scipy.linalg.matfuncs.sinhm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.sinm.html" class='exists'>scipy.linalg.matfuncs.sinm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.tanhm.html" class='exists'>scipy.linalg.matfuncs.tanhm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.matfuncs.tanm.html" class='exists'>scipy.linalg.matfuncs.tanm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.special_matrices.convolution_matrix.html" class='exists'>scipy.linalg.special_matrices.convolution_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.special_matrices.dft.html" class='exists'>scipy.linalg.special_matrices.dft</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.linalg.special_matrices.kron.html" class='exists'>scipy.linalg.special_matrices.kron</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._basinhopping.basinhopping.html" class='exists'>scipy.optimize._basinhopping.basinhopping</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._differentialevolution.differential_evolution.html" class='exists'>scipy.optimize._differentialevolution.differential_evolution</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._lsap.linear_sum_assignment.html" class='exists'>scipy.optimize._lsap.linear_sum_assignment</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._nnls.nnls.html" class='exists'>scipy.optimize._nnls.nnls</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff.approx_derivative.html" class='exists'>scipy.optimize._numdiff.approx_derivative</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._numdiff.check_derivative.html" class='exists'>scipy.optimize._numdiff.check_derivative</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._qap.quadratic_assignment.html" class='exists'>scipy.optimize._qap.quadratic_assignment</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize._root.root.html" class='exists'>scipy.optimize._root.root</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize.linesearch.line_search_wolfe2.html" class='exists'>scipy.optimize.linesearch.line_search_wolfe2</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.optimize.minpack.fixed_point.html" class='exists'>scipy.optimize.minpack.fixed_point</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._arraytools.const_ext.html" class='exists'>scipy.signal._arraytools.const_ext</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._arraytools.even_ext.html" class='exists'>scipy.signal._arraytools.even_ext</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._arraytools.odd_ext.html" class='exists'>scipy.signal._arraytools.odd_ext</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._arraytools.zero_ext.html" class='exists'>scipy.signal._arraytools.zero_ext</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding._boolrelextrema.html" class='exists'>scipy.signal._peak_finding._boolrelextrema</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.argrelextrema.html" class='exists'>scipy.signal._peak_finding.argrelextrema</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.argrelmax.html" class='exists'>scipy.signal._peak_finding.argrelmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.argrelmin.html" class='exists'>scipy.signal._peak_finding.argrelmin</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences.html" class='exists'>scipy.signal._peak_finding.peak_prominences</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._savitzky_golay.savgol_coeffs.html" class='exists'>scipy.signal._savitzky_golay.savgol_coeffs</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal._savitzky_golay.savgol_filter.html" class='exists'>scipy.signal._savitzky_golay.savgol_filter</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.bsplines.gauss_spline.html" class='exists'>scipy.signal.bsplines.gauss_spline</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear.html" class='exists'>scipy.signal.filter_design.bilinear</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.bilinear_zpk.html" class='exists'>scipy.signal.filter_design.bilinear_zpk</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.filter_design.zpk2sos.html" class='exists'>scipy.signal.filter_design.zpk2sos</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.lti_conversion.cont2discrete.html" class='exists'>scipy.signal.lti_conversion.cont2discrete</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.StateSpace.html" class='exists'>scipy.signal.ltisys.StateSpace</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.StateSpaceContinuous.html" class='exists'>scipy.signal.ltisys.StateSpaceContinuous</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.StateSpaceDiscrete.html" class='exists'>scipy.signal.ltisys.StateSpaceDiscrete</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.lsim.html" class='exists'>scipy.signal.ltisys.lsim</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.lsim2.html" class='exists'>scipy.signal.ltisys.lsim2</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.ltisys.place_poles.html" class='exists'>scipy.signal.ltisys.place_poles</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.convolve2d.html" class='exists'>scipy.signal.signaltools.convolve2d</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.signal.signaltools.lfilter_zi.html" class='exists'>scipy.signal.signaltools.lfilter_zi</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse._matrix_io.load_npz.html" class='exists'>scipy.sparse._matrix_io.load_npz</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse._matrix_io.save_npz.html" class='exists'>scipy.sparse._matrix_io.save_npz</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.base.spmatrix.dot.html" class='exists'>scipy.sparse.base.spmatrix.dot</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.bsr.bsr_matrix.html" class='exists'>scipy.sparse.bsr.bsr_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.kron.html" class='exists'>scipy.sparse.construct.kron</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.construct.spdiags.html" class='exists'>scipy.sparse.construct.spdiags</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.coo.coo_matrix.html" class='exists'>scipy.sparse.coo.coo_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.coo.coo_matrix.tocsc.html" class='exists'>scipy.sparse.coo.coo_matrix.tocsc</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.coo.coo_matrix.tocsr.html" class='exists'>scipy.sparse.coo.coo_matrix.tocsr</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix.html" class='exists'>scipy.sparse.csc.csc_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.construct_dist_matrix.html" class='exists'>scipy.sparse.csgraph._tools.construct_dist_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csgraph._tools.reconstruct_path.html" class='exists'>scipy.sparse.csgraph._tools.reconstruct_path</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.csr.csr_matrix.html" class='exists'>scipy.sparse.csr.csr_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.dia.dia_matrix.html" class='exists'>scipy.sparse.dia.dia_matrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg._expm_multiply.expm_multiply.html" class='exists'>scipy.sparse.linalg._expm_multiply.expm_multiply</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.dsolve.linsolve.factorized.html" class='exists'>scipy.sparse.linalg.dsolve.linsolve.factorized</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.dsolve.linsolve.spilu.html" class='exists'>scipy.sparse.linalg.dsolve.linsolve.spilu</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.dsolve.linsolve.splu.html" class='exists'>scipy.sparse.linalg.dsolve.linsolve.splu</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.dsolve.linsolve.spsolve_triangular.html" class='exists'>scipy.sparse.linalg.dsolve.linsolve.spsolve_triangular</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.LinearOperator.html" class='exists'>scipy.sparse.linalg.interface.LinearOperator</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.interface.aslinearoperator.html" class='exists'>scipy.sparse.linalg.interface.aslinearoperator</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.isolve.lgmres.lgmres.html" class='exists'>scipy.sparse.linalg.isolve.lgmres.lgmres</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.isolve.lsmr.lsmr.html" class='exists'>scipy.sparse.linalg.isolve.lsmr.lsmr</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.sparse.linalg.isolve.lsqr.lsqr.html" class='exists'>scipy.sparse.linalg.isolve.lsqr.lsqr</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.spatial._geometric_slerp.geometric_slerp.html" class='exists'>scipy.spatial._geometric_slerp.geometric_slerp</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.spatial._procrustes.procrustes.html" class='exists'>scipy.spatial._procrustes.procrustes</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.spatial.distance.directed_hausdorff.html" class='exists'>scipy.spatial.distance.directed_hausdorff</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.spatial.distance.jensenshannon.html" class='exists'>scipy.spatial.distance.jensenshannon</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.special._basic.comb.html" class='exists'>scipy.special._basic.comb</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.special._basic.factorial.html" class='exists'>scipy.special._basic.factorial</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.special._basic.perm.html" class='exists'>scipy.special._basic.perm</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.special._logsumexp.log_softmax.html" class='exists'>scipy.special._logsumexp.log_softmax</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/scipy/1.7.1/api/scipy.special._logsumexp.softmax.html" class='exists'>scipy.special._logsumexp.softmax</a></code>
+        </dd>
+        
+         </dl>
+        </details>
+        
+    
+         <h4>skimage</h4>
+         
+        <details>
+        <summary>39 Elements</summary>
+         <dl>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.draw._polygon2mask.polygon2mask.html" class='exists'>skimage.draw._polygon2mask.polygon2mask</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.draw.draw.polygon.html" class='exists'>skimage.draw.draw.polygon</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.draw.draw_nd._round_safe.html" class='exists'>skimage.draw.draw_nd._round_safe</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.exposure.exposure.rescale_intensity.html" class='exists'>skimage.exposure.exposure.rescale_intensity</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.feature.texture.greycomatrix.html" class='exists'>skimage.feature.texture.greycomatrix</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters._rank_order.rank_order.html" class='exists'>skimage.filters._rank_order.rank_order</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters.rank.bilateral.pop_bilateral.html" class='exists'>skimage.filters.rank.bilateral.pop_bilateral</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters.rank.generic.pop.html" class='exists'>skimage.filters.rank.generic.pop</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters.rank.generic.sum.html" class='exists'>skimage.filters.rank.generic.sum</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters.rank.generic.threshold.html" class='exists'>skimage.filters.rank.generic.threshold</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.filters.thresholding.apply_hysteresis_threshold.html" class='exists'>skimage.filters.thresholding.apply_hysteresis_threshold</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.graph.mcp.route_through_array.html" class='exists'>skimage.graph.mcp.route_through_array</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.measure._label.label.html" class='exists'>skimage.measure._label.label</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.measure._moments.moments_coords.html" class='exists'>skimage.measure._moments.moments_coords</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.measure._moments.moments_coords_central.html" class='exists'>skimage.measure._moments.moments_coords_central</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.measure.fit.LineModelND.html" class='exists'>skimage.measure.fit.LineModelND</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.measure.profile.profile_line.html" class='exists'>skimage.measure.profile.profile_line</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey._invert_selem.html" class='exists'>skimage.morphology.grey._invert_selem</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.black_tophat.html" class='exists'>skimage.morphology.grey.black_tophat</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.closing.html" class='exists'>skimage.morphology.grey.closing</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.dilation.html" class='exists'>skimage.morphology.grey.dilation</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.erosion.html" class='exists'>skimage.morphology.grey.erosion</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.opening.html" class='exists'>skimage.morphology.grey.opening</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.grey.white_tophat.html" class='exists'>skimage.morphology.grey.white_tophat</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.max_tree.max_tree.html" class='exists'>skimage.morphology.max_tree.max_tree</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.misc.remove_small_holes.html" class='exists'>skimage.morphology.misc.remove_small_holes</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.morphology.misc.remove_small_objects.html" class='exists'>skimage.morphology.misc.remove_small_objects</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.restoration.uft.ir2tf.html" class='exists'>skimage.restoration.uft.ir2tf</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.restoration.uft.laplacian.html" class='exists'>skimage.restoration.uft.laplacian</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.segmentation._clear_border.clear_border.html" class='exists'>skimage.segmentation._clear_border.clear_border</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.segmentation._join.join_segmentations.html" class='exists'>skimage.segmentation._join.join_segmentations</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.segmentation._join.relabel_sequential.html" class='exists'>skimage.segmentation._join.relabel_sequential</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.segmentation.active_contour_model.active_contour.html" class='exists'>skimage.segmentation.active_contour_model.active_contour</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.segmentation.boundaries.find_boundaries.html" class='exists'>skimage.segmentation.boundaries.find_boundaries</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.transform._geometric.estimate_transform.html" class='exists'>skimage.transform._geometric.estimate_transform</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.transform._warps.warp.html" class='exists'>skimage.transform._warps.warp</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.transform._warps.warp_coords.html" class='exists'>skimage.transform._warps.warp_coords</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.util._invert.invert.html" class='exists'>skimage.util._invert.invert</a></code>
+        </dd>
+        
+            <dd><code><a link href="/p/skimage/0.17.2/api/skimage.util.unique.unique_rows.html" class='exists'>skimage.util.unique.unique_rows</a></code>
+        </dd>
+        
+         </dl>
+        </details>
+        
+    
+    
+
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+
+<hr>
+
+To Be Done: </br>
+
+File: None </br>
+Line: None </br>
+type: &lt;class &#39;builtin_function_or_method&#39;&gt; </br>
+Commit: </br>
+Tag: </br>
+Link to the right github gitalab repository, file and line (maybe range?)</br>
+</div>
+
+
+    
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+        <style type="text/css">
+        .node {}
+
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; }
+    </style>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d"),
+    width = canvas.width,
+    height = canvas.height;
+var searchRadius = 40;
+
+
+
+var color = d3.scaleOrdinal()
+    .range(d3.schemeCategory10);
+
+var canvas_simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink().distance(30).strength(0.1).iterations(1).id(function(d) { return d.id; }))
+    .force("x", d3.forceX().strength(0.1))
+    .force("y", d3.forceY().strength(0.2));
+
+
+var canvas_graph = {"nodes": [{"id": 1, "val": 30.93468988235943, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ndarray"}, {"id": 2, "val": 10.82842712474619, "label": "scipy.sparse.coo.coo_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.coo.coo_matrix"}, {"id": 3, "val": 11.0, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.linalg.lstsq"}, {"id": 4, "val": 13.0, "label": "numpy.all", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.all"}, {"id": 5, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argsort"}, {"id": 6, "val": 10.64575131106459, "label": "numpy.linalg.inv", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.linalg.inv"}, {"id": 7, "val": 10.64575131106459, "label": "numpy.inner", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.inner"}, {"id": 8, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.repeat"}, {"id": 9, "val": 11.0, "label": "scipy.spatial.distance.directed_hausdorff", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.spatial.distance.directed_hausdorff"}, {"id": 10, "val": 14.244997998398398, "label": "scipy.sparse.csr.csr_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csr.csr_matrix"}, {"id": 11, "val": 10.64575131106459, "label": "skimage.measure._label.label", "mod": "skimage", "url": "/p/skimage/0.17.2/api/skimage.measure._label.label"}, {"id": 12, "val": 12.0, "label": "numpy.where", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.where"}, {"id": 13, "val": 13.385164807134505, "label": "numpy.ma.core._arraymethod.<locals>.wrapped_method", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core._arraymethod.<locals>.wrapped_method"}, {"id": 14, "val": 11.3166247903554, "label": "numpy.copy", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.copy"}, {"id": 15, "val": 23.1657508881031, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.4.0/api/pandas.core.frame.DataFrame"}, {"id": 16, "val": 23.427248620541512, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.4.0/api/pandas.core.series.Series"}, {"id": 17, "val": 11.3166247903554, "label": "numpy.array_equal", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.array_equal"}, {"id": 18, "val": 10.64575131106459, "label": "numpy.argmin", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argmin"}, {"id": 19, "val": 11.0, "label": "numpy.resize", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.resize"}, {"id": 20, "val": 10.82842712474619, "label": "numpy.swapaxes", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.swapaxes"}, {"id": 21, "val": 11.872983346207416, "label": "skimage.transform._warps.warp", "mod": "skimage", "url": "/p/skimage/0.17.2/api/skimage.transform._warps.warp"}, {"id": 22, "val": 10.82842712474619, "label": "numpy.squeeze", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.squeeze"}, {"id": 23, "val": 12.242640687119284, "label": "numpy.size", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.size"}, {"id": 24, "val": 18.392304845413264, "label": "numpy.reshape", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.reshape"}, {"id": 25, "val": 10.82842712474619, "label": "numpy.outer", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.outer"}, {"id": 26, "val": 11.74165738677394, "label": "numpy.sort", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.sort"}, {"id": 27, "val": 11.16227766016838, "label": "numpy.std", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.std"}, {"id": 28, "val": 19.489125293076057, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.dtype"}, {"id": 29, "val": 11.872983346207416, "label": "numpy.set_printoptions", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.set_printoptions"}, {"id": 30, "val": 11.16227766016838, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argmax"}, {"id": 31, "val": 11.0, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.stack"}, {"id": 32, "val": 10.82842712474619, "label": "numpy.ma.core.sin", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core.sin"}, {"id": 33, "val": 10.64575131106459, "label": "numpy.ma.core.cos", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core.cos"}, {"id": 34, "val": 11.0, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.recarray"}, {"id": 35, "val": 10.64575131106459, "label": "numpy.ravel", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ravel"}, {"id": 36, "val": 14.855654600401044, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.shape"}, {"id": 37, "val": 10.64575131106459, "label": "numpy.ndim", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ndim"}, {"id": 38, "val": 11.3166247903554, "label": "numpy.concatenate", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.concatenate"}, {"id": 39, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 40, "val": 11.16227766016838, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.asarray"}, {"id": 41, "val": 10.64575131106459, "label": "numpy.var", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.var"}, {"id": 42, "val": 10.64575131106459, "label": "numpy.nonzero", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.nonzero"}, {"id": 43, "val": 12.69041575982343, "label": "numpy.mean", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.mean"}, {"id": 45, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}, {"id": 46, "val": 11.74165738677394, "label": "scipy.signal.ltisys.StateSpace", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys.StateSpace"}, {"id": 47, "val": 10.82842712474619, "label": "numpy.block", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.block"}], "links": [{"source": 4, "target": 29, "id": 20}, {"source": 38, "target": 47, "id": 667}, {"source": 14, "target": 17, "id": 679}, {"source": 13, "target": 42, "id": 877}, {"source": 13, "target": 12, "id": 885}, {"source": 1, "target": 4, "id": 1018}, {"source": 1, "target": 40, "id": 1022}, {"source": 1, "target": 43, "id": 1049}, {"source": 1, "target": 27, "id": 1062}, {"source": 1, "target": 41, "id": 1064}, {"source": 1, "target": 15, "id": 1072}, {"source": 1, "target": 16, "id": 1083}, {"source": 1, "target": 39, "id": 1235}, {"source": 1, "target": 46, "id": 1268}, {"source": 1, "target": 2, "id": 1318}, {"source": 1, "target": 45, "id": 1321}, {"source": 1, "target": 10, "id": 1326}, {"source": 1, "target": 9, "id": 1342}, {"source": 1, "target": 11, "id": 1453}, {"source": 1, "target": 21, "id": 1518}, {"source": 34, "target": 40, "id": 1617}, {"source": 24, "target": 30, "id": 1638}, {"source": 24, "target": 18, "id": 1639}, {"source": 24, "target": 7, "id": 1664}, {"source": 24, "target": 35, "id": 1723}, {"source": 24, "target": 19, "id": 1726}, {"source": 36, "target": 30, "id": 1780}, {"source": 36, "target": 18, "id": 1781}, {"source": 36, "target": 5, "id": 1782}, {"source": 36, "target": 7, "id": 1795}, {"source": 36, "target": 1, "id": 1816}, {"source": 36, "target": 22, "id": 1820}, {"source": 36, "target": 31, "id": 1821}, {"source": 26, "target": 5, "id": 1847}, {"source": 22, "target": 30, "id": 1864}, {"source": 22, "target": 18, "id": 1865}, {"source": 20, "target": 35, "id": 1896}, {"source": 12, "target": 4, "id": 1946}, {"source": 12, "target": 27, "id": 1955}, {"source": 12, "target": 41, "id": 1957}, {"source": 16, "target": 15, "id": 2285}, {"source": 28, "target": 5, "id": 2865}, {"source": 28, "target": 40, "id": 2868}, {"source": 28, "target": 14, "id": 2876}, {"source": 28, "target": 33, "id": 2931}, {"source": 28, "target": 43, "id": 2959}, {"source": 28, "target": 1, "id": 2962}, {"source": 28, "target": 25, "id": 2966}, {"source": 28, "target": 34, "id": 2974}, {"source": 28, "target": 36, "id": 2977}, {"source": 28, "target": 26, "id": 2979}, {"source": 28, "target": 27, "id": 2980}, {"source": 28, "target": 41, "id": 2986}]};
+
+(function() {
+
+  var pages = d3.nest()
+      .key(function(d) { return d.mod; })
+      .entries(canvas_graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var c = color.domain(pages.map(function(d) { return d.key; }));
+
+    
+
+  canvas_simulation
+      .nodes(canvas_graph.nodes)
+      .on("tick", ticked);
+
+  canvas_simulation.force("link")
+      .links(canvas_graph.links);
+
+  d3.select(canvas)
+      .on("mousemove", mousemoved)
+      .call(d3.drag()
+          .container(canvas)
+          .subject(dragsubject)
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+  function ticked() {
+    context.clearRect(0, 0, width, height);
+    context.save();
+    context.translate(width / 2, height / 2);
+
+    context.beginPath();
+    canvas_graph.links.forEach(drawLink);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+    var margin = 10; 
+    
+    pages.forEach(function(page) {
+      context.beginPath();
+      page.values.forEach(drawNode);
+      context.fillStyle = color(page.key);
+      context.fill();
+    });
+
+    context.restore();
+
+  }
+
+  function dragsubject() {
+    return canvas_simulation.find(d3.event.x - width / 2, d3.event.y - height / 2, searchRadius);
+  }
+
+  function mousemoved() {
+    var a = this.parentNode, m = d3.mouse(this), d = canvas_simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
+    //a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
+    a.setAttribute("title", d.label );
+  }
+})();
+
+function dragstarted() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0.3).restart();
+  d3.event.subject.fx = d3.event.subject.x;
+  d3.event.subject.fy = d3.event.subject.y;
+}
+
+function dragged() {
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
+}
+
+function dragended() {
+  if (!d3.event.active) canvas_simulation.alphaTarget(0);
+  d3.event.subject.fx = null;
+  d3.event.subject.fy = null;
+}
+
+function drawLink(d) {
+  context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.target.x, d.target.y);
+   //context.moveTo(d.x + 3, d.y);
+  //context.arc((d.target.x*9+d.source.x)/10, (d.target.y*9+d.source.y)/10, 2, 0, 2 * Math.PI);
+}
+
+function drawNode(d) {
+  context.moveTo(d.x + 5, d.y);
+  context.arc(d.x, d.y, d.val, 0, 2 * Math.PI);
+}
+
+</script>
+<script type="text/javascript">
+    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var svg = d3.select("svg");
+    var width = svg.attr("width");
+    var height = svg.attr("height");
+    var node;
+    var link;
+
+    // syle for arrow head in the svg...
+    svg.append('defs').append('marker')
+        .attrs({'id':'arrowhead',
+            'viewBox':'-0 -5 10 10',
+            'refX':13,
+            'refY':0,
+            'orient':'auto',
+            'markerWidth':13,
+            'markerHeight':13,
+            'xoverflow':'visible'})
+        .append('svg:path')
+        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+        .attr('fill', '#999')
+        .style('stroke','none');
+
+
+    var svg_simulation = d3.forceSimulation()
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("link", d3.forceLink().distance(80).strength(0.01).iterations(10).id(function(d) { return d.id; }))
+        .force("x", d3.forceX(width/2).strength(0.04))
+        .force("y", d3.forceY(height/2).strength(0.06));
+
+
+
+
+
+    var svg_graph = {"nodes": [{"id": 1, "val": 30.93468988235943, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ndarray"}, {"id": 2, "val": 10.82842712474619, "label": "scipy.sparse.coo.coo_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.coo.coo_matrix"}, {"id": 3, "val": 11.0, "label": "numpy.linalg.lstsq", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.linalg.lstsq"}, {"id": 4, "val": 13.0, "label": "numpy.all", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.all"}, {"id": 5, "val": 11.464101615137753, "label": "numpy.argsort", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argsort"}, {"id": 6, "val": 10.64575131106459, "label": "numpy.linalg.inv", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.linalg.inv"}, {"id": 7, "val": 10.64575131106459, "label": "numpy.inner", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.inner"}, {"id": 8, "val": 11.16227766016838, "label": "numpy.repeat", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.repeat"}, {"id": 9, "val": 11.0, "label": "scipy.spatial.distance.directed_hausdorff", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.spatial.distance.directed_hausdorff"}, {"id": 10, "val": 14.244997998398398, "label": "scipy.sparse.csr.csr_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csr.csr_matrix"}, {"id": 11, "val": 10.64575131106459, "label": "skimage.measure._label.label", "mod": "skimage", "url": "/p/skimage/0.17.2/api/skimage.measure._label.label"}, {"id": 12, "val": 12.0, "label": "numpy.where", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.where"}, {"id": 13, "val": 13.385164807134505, "label": "numpy.ma.core._arraymethod.<locals>.wrapped_method", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core._arraymethod.<locals>.wrapped_method"}, {"id": 14, "val": 11.3166247903554, "label": "numpy.copy", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.copy"}, {"id": 15, "val": 23.1657508881031, "label": "pandas.core.frame.DataFrame", "mod": "pandas", "url": "/p/pandas/1.4.0/api/pandas.core.frame.DataFrame"}, {"id": 16, "val": 23.427248620541512, "label": "pandas.core.series.Series", "mod": "pandas", "url": "/p/pandas/1.4.0/api/pandas.core.series.Series"}, {"id": 17, "val": 11.3166247903554, "label": "numpy.array_equal", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.array_equal"}, {"id": 18, "val": 10.64575131106459, "label": "numpy.argmin", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argmin"}, {"id": 19, "val": 11.0, "label": "numpy.resize", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.resize"}, {"id": 20, "val": 10.82842712474619, "label": "numpy.swapaxes", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.swapaxes"}, {"id": 21, "val": 11.872983346207416, "label": "skimage.transform._warps.warp", "mod": "skimage", "url": "/p/skimage/0.17.2/api/skimage.transform._warps.warp"}, {"id": 22, "val": 10.82842712474619, "label": "numpy.squeeze", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.squeeze"}, {"id": 23, "val": 12.242640687119284, "label": "numpy.size", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.size"}, {"id": 24, "val": 18.392304845413264, "label": "numpy.reshape", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.reshape"}, {"id": 25, "val": 10.82842712474619, "label": "numpy.outer", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.outer"}, {"id": 26, "val": 11.74165738677394, "label": "numpy.sort", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.sort"}, {"id": 27, "val": 11.16227766016838, "label": "numpy.std", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.std"}, {"id": 28, "val": 19.489125293076057, "label": "numpy.dtype", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.dtype"}, {"id": 29, "val": 11.872983346207416, "label": "numpy.set_printoptions", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.set_printoptions"}, {"id": 30, "val": 11.16227766016838, "label": "numpy.argmax", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.argmax"}, {"id": 31, "val": 11.0, "label": "numpy.stack", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.stack"}, {"id": 32, "val": 10.82842712474619, "label": "numpy.ma.core.sin", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core.sin"}, {"id": 33, "val": 10.64575131106459, "label": "numpy.ma.core.cos", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ma.core.cos"}, {"id": 34, "val": 11.0, "label": "numpy.recarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.recarray"}, {"id": 35, "val": 10.64575131106459, "label": "numpy.ravel", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ravel"}, {"id": 36, "val": 14.855654600401044, "label": "numpy.shape", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.shape"}, {"id": 37, "val": 10.64575131106459, "label": "numpy.ndim", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.ndim"}, {"id": 38, "val": 11.3166247903554, "label": "numpy.concatenate", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.concatenate"}, {"id": 39, "val": 10.82842712474619, "label": "scipy.signal._peak_finding.peak_prominences", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal._peak_finding.peak_prominences"}, {"id": 40, "val": 11.16227766016838, "label": "numpy.asarray", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.asarray"}, {"id": 41, "val": 10.64575131106459, "label": "numpy.var", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.var"}, {"id": 42, "val": 10.64575131106459, "label": "numpy.nonzero", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.nonzero"}, {"id": 43, "val": 12.69041575982343, "label": "numpy.mean", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.mean"}, {"id": 45, "val": 12.0, "label": "scipy.sparse.csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.sparse.csc.csc_matrix"}, {"id": 46, "val": 11.74165738677394, "label": "scipy.signal.ltisys.StateSpace", "mod": "scipy", "url": "/p/scipy/1.7.1/api/scipy.signal.ltisys.StateSpace"}, {"id": 47, "val": 10.82842712474619, "label": "numpy.block", "mod": "numpy", "url": "/p/numpy/1.22.1/api/numpy.block"}], "links": [{"source": 4, "target": 29, "id": 20}, {"source": 38, "target": 47, "id": 667}, {"source": 14, "target": 17, "id": 679}, {"source": 13, "target": 42, "id": 877}, {"source": 13, "target": 12, "id": 885}, {"source": 1, "target": 4, "id": 1018}, {"source": 1, "target": 40, "id": 1022}, {"source": 1, "target": 43, "id": 1049}, {"source": 1, "target": 27, "id": 1062}, {"source": 1, "target": 41, "id": 1064}, {"source": 1, "target": 15, "id": 1072}, {"source": 1, "target": 16, "id": 1083}, {"source": 1, "target": 39, "id": 1235}, {"source": 1, "target": 46, "id": 1268}, {"source": 1, "target": 2, "id": 1318}, {"source": 1, "target": 45, "id": 1321}, {"source": 1, "target": 10, "id": 1326}, {"source": 1, "target": 9, "id": 1342}, {"source": 1, "target": 11, "id": 1453}, {"source": 1, "target": 21, "id": 1518}, {"source": 34, "target": 40, "id": 1617}, {"source": 24, "target": 30, "id": 1638}, {"source": 24, "target": 18, "id": 1639}, {"source": 24, "target": 7, "id": 1664}, {"source": 24, "target": 35, "id": 1723}, {"source": 24, "target": 19, "id": 1726}, {"source": 36, "target": 30, "id": 1780}, {"source": 36, "target": 18, "id": 1781}, {"source": 36, "target": 5, "id": 1782}, {"source": 36, "target": 7, "id": 1795}, {"source": 36, "target": 1, "id": 1816}, {"source": 36, "target": 22, "id": 1820}, {"source": 36, "target": 31, "id": 1821}, {"source": 26, "target": 5, "id": 1847}, {"source": 22, "target": 30, "id": 1864}, {"source": 22, "target": 18, "id": 1865}, {"source": 20, "target": 35, "id": 1896}, {"source": 12, "target": 4, "id": 1946}, {"source": 12, "target": 27, "id": 1955}, {"source": 12, "target": 41, "id": 1957}, {"source": 16, "target": 15, "id": 2285}, {"source": 28, "target": 5, "id": 2865}, {"source": 28, "target": 40, "id": 2868}, {"source": 28, "target": 14, "id": 2876}, {"source": 28, "target": 33, "id": 2931}, {"source": 28, "target": 43, "id": 2959}, {"source": 28, "target": 1, "id": 2962}, {"source": 28, "target": 25, "id": 2966}, {"source": 28, "target": 34, "id": 2974}, {"source": 28, "target": 36, "id": 2977}, {"source": 28, "target": 26, "id": 2979}, {"source": 28, "target": 27, "id": 2980}, {"source": 28, "target": 41, "id": 2986}]};
+    (function (error, graph) {
+            if (error) throw error;
+        graph.nodes.forEach(function(d) { d.x = width*Math.random(); d.y = height*Math.random()});
+        update(graph.links, graph.nodes);
+        })(null, svg_graph);
+
+    var edgelabels;
+
+    function update(links, nodes) {
+        link = svg.selectAll(".link")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)');
+
+        //link.append("title")
+        //    .text(function (d) {return d.type;});
+
+        edgepaths = svg.selectAll(".edgepath")
+            .data(links)
+            .enter()
+            .append('path')
+            .attrs({
+                'class': 'edgepath',
+                'fill-opacity': 0,
+                'stroke-opacity': 0,
+                'id': function (d, i) {return 'edgepath' + i}
+            })
+            .style("pointer-events", "none");
+
+        edgelabels = svg.selectAll(".edgelabel")
+            .data(links)
+            .enter()
+            .append('text')
+            .style("pointer-events", "none")
+            .attrs({
+                'class': 'edgelabel',
+                'id': function (d, i) {return 'edgelabel' + i},
+                'font-size': 10,
+                'fill': '#aaa'
+            });
+
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {return '#edgepath' + i})
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .attr("startOffset", "50%")
+            .text(function (d) {return d.type});
+
+        node = svg.selectAll(".node")
+            .data(nodes)
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended)
+            );
+
+        node.append("a")
+                .attr("xlink:href", function(node){return node.url})
+            .append("circle")
+                .attr("r", function(node){return node.val})
+                .style("fill", function (d, i) {return colors(d.mod);})
+                .style("stroke", "#FFF")
+
+        node.append("title")
+            .text(function (d) {return d.label;});
+
+        node.append("text")
+                //.attr("dx", function(node){return node.val+1})
+                .attr("dy", +10)
+                .attr("opacity", "0.5")
+            .text(function (d) {arr = d.label.split('.'); return arr[arr.length-1]});
+
+        svg_simulation
+            .nodes(nodes)
+            .on("tick", ticked);
+
+        svg_simulation.force("link")
+                .links(links)
+
+    }
+
+    function ticked() {
+        link
+            .attr("x1", function (d) {return d.source.x;})
+            .attr("y1", function (d) {return d.source.y;})
+            .attr("x2", function (d) {return d.target.x;})
+            .attr("y2", function (d) {return d.target.y;});
+
+        node
+            .attr("transform", function (d) {return "translate(" + d.x + ", " + d.y + ")";});
+
+        edgepaths.attr('d', function (d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
+
+        edgelabels.attr('transform', function (d) {
+            if (d.target.x < d.source.x) {
+                var bbox = this.getBBox();
+
+                rx = bbox.x + bbox.width / 2;
+                ry = bbox.y + bbox.height / 2;
+                return 'rotate(180 ' + rx + ' ' + ry + ')';
+            }
+            else {
+                return 'rotate(0)';
+            }
+        });
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0.3).restart()
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    function dragended(d) {
+        if (!d3.event.active) svg_simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+</script>
+
+
+
+
+</div>
+</body>
+</html>

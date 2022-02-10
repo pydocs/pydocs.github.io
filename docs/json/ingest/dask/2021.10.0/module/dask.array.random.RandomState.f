@@ -423,6 +423,12 @@
       "module": "dask",
       "version": "2021.10.0",
       "kind": "module",
+      "path": "dask.array.random"
+    },
+    {
+      "module": "dask",
+      "version": "2021.10.0",
+      "kind": "module",
       "path": "dask.array.ufunc.log10"
     },
     {
@@ -430,12 +436,6 @@
       "version": "2021.10.0",
       "kind": "module",
       "path": "dask.array.random.RandomState.f"
-    },
-    {
-      "module": "dask",
-      "version": "2021.10.0",
-      "kind": "module",
-      "path": "dask.array.random"
     }
   ],
   "ordered_sections": [
@@ -777,7 +777,7 @@
             }
           ],
           "out": "",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -894,7 +894,7 @@
             }
           ],
           "out": "7.61988120985 # random",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {

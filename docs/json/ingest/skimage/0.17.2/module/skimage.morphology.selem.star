@@ -19,9 +19,7 @@
               {
                 "type": "Directive",
                 "data": {
-                  "value": [
-                    "2*a + 1"
-                  ],
+                  "value": "2*a + 1",
                   "domain": null,
                   "role": null
                 }
@@ -96,9 +94,7 @@
                     {
                       "type": "Directive",
                       "data": {
-                        "value": [
-                          "2*a + 1 + 2*floor(a / 2)"
-                        ],
+                        "value": "2*a + 1 + 2*floor(a / 2)",
                         "domain": null,
                         "role": null
                       }

@@ -1,0 +1,1455 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "When axis is not None, this function does the same thing as \"fancy\" indexing (indexing arrays using arrays); however, it can be easier to use if you need elements along a given axis. A call such as "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "np.take(arr, indices, axis=3)"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " is equivalent to "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "arr[:,:,:,indices,...]"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Explained without fancy indexing, this is equivalent to the following use of "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "ndindex",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.ndindex"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", which sets each of "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ii"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "jj"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", and "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "kk"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " to a tuple of indices::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": "Ni, Nk = a.shape[:axis], a.shape[axis+1:]\nNj = indices.shape\nfor ii in ndindex(Ni):\n    for jj in ndindex(Nj):\n        for kk in ndindex(Nk):\n            out[ii + jj + kk] = a[ii + (indices[jj],) + kk]"
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "By eliminating the inner loop in the description above, and using "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "s_",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " to build simple slice objects, "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "take",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.take"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " can be expressed  in terms of applying fancy indexing to each 1-d slice::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": "Ni, Nk = a.shape[:axis], a.shape[axis+1:]\nfor ii in ndindex(Ni):\n    for kk in ndindex(Nj):\n        out[ii + s_[...,] + kk] = a[ii + s_[:,] + kk][indices]"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "For this reason, it is equivalent to (but faster than) the following use of "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "apply_along_axis",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.apply_along_axis"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": "out = np.apply_along_axis(lambda a_1d: a_1d[indices], axis, a)"
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "a",
+            "type_": "array_like (Ni..., M, Nk...)",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The source array."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "indices",
+            "type_": "array_like (Nj...)",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The indices of the values to extract."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionadded",
+                  "title": "TODO",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "1.8.0 "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Also allow scalars for indices."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "axis",
+            "type_": "int, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The axis over which to select values. By default, the flattened input array is used."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "out",
+            "type_": "ndarray, optional (Ni..., Nj..., Nk...)",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "If provided, the result will be placed in this array. It should be of the appropriate shape and dtype. Note that "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "out",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "out"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is always buffered if "
+                      }
+                    },
+                    {
+                      "type": "Directive",
+                      "data": {
+                        "value": "mode='raise'",
+                        "domain": null,
+                        "role": null
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "; use other modes for better performance."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "mode",
+            "type_": "{'raise', 'wrap', 'clip'}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Specifies how out-of-bounds indices will behave."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "BulletList",
+                "data": {
+                  "value": [
+                    {
+                      "type": "Paragraph",
+                      "data": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "'raise' -- raise an error (default)"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      }
+                    },
+                    {
+                      "type": "Paragraph",
+                      "data": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "'wrap' -- wrap around"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      }
+                    },
+                    {
+                      "type": "Paragraph",
+                      "data": {
+                        "inline": [
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": "'clip' -- clip to the range"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "'clip' mode means that all indices that are too large are replaced by the index that addresses the last element along that axis. Note that this disables indexing with negative numbers."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "out",
+            "type_": "ndarray (Ni..., Nj..., Nk...)",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "The returned array has the same type as "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "a",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "a"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Take elements from an array along an axis."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.take"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.indices"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.array"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.apply_along_axis"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.ndindex"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary",
+    "Parameters",
+    "Returns",
+    "See Also",
+    "Notes",
+    "Examples"
+  ],
+  "item_file": "/numpy/core/fromnumeric.py",
+  "item_line": 93,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "numpy.take"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "4"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "5"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "7"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "6"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "8"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "indices",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.indices"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "4"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "take",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.take"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "indices",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.indices"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "array([4, 3, 6])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "In this example if "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "a",
+                "reference": {
+                  "module": null,
+                  "version": null,
+                  "kind": "local",
+                  "path": "a"
+                },
+                "kind": "local",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " is an ndarray, \"fancy\" indexing can be used."
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "indices",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.indices"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            }
+          ],
+          "out": "array([4, 3, 6])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "If "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "indices",
+                "reference": {
+                  "module": "numpy",
+                  "version": "1.22.1",
+                  "kind": "module",
+                  "path": "numpy.indices"
+                },
+                "kind": "module",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " is not one dimensional, the output also has these dimensions."
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "take",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.take"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "2"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            }
+          ],
+          "out": "array([[4, 3],\n       [5, 7]])",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "compress",
+        "ref": "numpy.compress",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Take elements using a boolean mask"
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "ndarray.take",
+        "ref": null,
+        "exists": null
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "equivalent method"
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "take_along_axis",
+        "ref": "numpy.take_along_axis",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Take elements by matching the array and the index arrays"
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    }
+  ],
+  "version": "1.22.1",
+  "signature": "take(a, indices, axis=None, out=None, mode='raise')",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "numpy.take",
+  "arbitrary": []
+}

@@ -177,9 +177,7 @@
                     {
                       "type": "Directive",
                       "data": {
-                        "value": [
-                          "scipy.special.comb"
-                        ],
+                        "value": "scipy.special.comb",
                         "domain": null,
                         "role": null
                       }
@@ -193,9 +191,7 @@
                     {
                       "type": "Directive",
                       "data": {
-                        "value": [
-                          "exact=False"
-                        ],
+                        "value": "exact=False",
                         "domain": null,
                         "role": null
                       }
@@ -209,9 +205,7 @@
                     {
                       "type": "Directive",
                       "data": {
-                        "value": [
-                          "exact=True"
-                        ],
+                        "value": "exact=True",
                         "domain": null,
                         "role": null
                       }
@@ -305,13 +299,13 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.linalg.special_matrices.pascal"
+      "path": "scipy.sparse.linalg"
     },
     {
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.sparse.linalg"
+      "path": "scipy.linalg.special_matrices.pascal"
     },
     {
       "module": "scipy",
@@ -493,7 +487,7 @@
             }
           ],
           "out": "array([[ 1,  1,  1,  1],\n       [ 1,  2,  3,  4],\n       [ 1,  3,  6, 10],\n       [ 1,  4, 10, 20]], dtype=uint64)",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -589,7 +583,7 @@
             }
           ],
           "out": "array([[1, 0, 0, 0],\n       [1, 1, 0, 0],\n       [1, 2, 1, 0],\n       [1, 3, 3, 1]], dtype=uint64)",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -692,7 +686,7 @@
             }
           ],
           "out": "25477612258980856902730428600",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -895,7 +889,7 @@
             }
           ],
           "out": "25477612258980856902730428600",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       }
     ],

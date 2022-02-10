@@ -224,17 +224,17 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
+      "path": "scipy.sparse"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
       "path": "scipy.sparse.construct.eye"
     },
     {
       "module": "numpy",
-      "version": "1.21.3",
-      "kind": "module",
-      "path": "numpy.signedinteger"
-    },
-    {
-      "module": "numpy",
-      "version": "1.21.3",
+      "version": "1.22.1",
       "kind": "module",
       "path": "numpy"
     },
@@ -245,10 +245,10 @@
       "path": "scipy"
     },
     {
-      "module": "scipy",
-      "version": "1.7.1",
+      "module": "numpy",
+      "version": "1.22.1",
       "kind": "module",
-      "path": "scipy.sparse"
+      "path": "numpy.signedinteger"
     }
   ],
   "ordered_sections": [
@@ -437,7 +437,7 @@
             }
           ],
           "out": "array([[ 1.,  0.,  0.],\n       [ 0.,  1.,  0.],\n       [ 0.,  0.,  1.]])",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -535,7 +535,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -559,7 +559,7 @@
                   "value": "int8",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.signedinteger"
                   },
@@ -577,7 +577,7 @@
             }
           ],
           "out": "<3x3 sparse matrix of type '<class 'numpy.int8'>'\n    with 3 stored elements (1 diagonals) in DIAgonal format>",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       }
     ],

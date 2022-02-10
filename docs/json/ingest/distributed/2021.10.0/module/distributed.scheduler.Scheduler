@@ -1,0 +1,945 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The scheduler tracks the current state of workers, data, and computations. The scheduler listens for events and responds by controlling workers appropriately.  It continuously tries to use the workers to execute an ever growing dask graph."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "All events are handled quickly, in linear time with respect to their input (which is often of constant size) and generally within a millisecond.  To accomplish this the scheduler tracks a lot of state.  Every operation maintains the consistency of this state."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The scheduler communicates with the outside world through Comm objects. It maintains a consistent and valid view of the world even when listening to several clients at once."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "A Scheduler is typically started either with the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "dask-scheduler"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " executable::       "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": "$ dask-scheduler\nScheduler started at 127.0.0.1:8786"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Or within a LocalCluster a Client starts up without connection information::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": ">>> c = Client()  # doctest: +SKIP\n>>> c.cluster.scheduler  # doctest: +SKIP\nScheduler(...)"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Users typically do not interact with the scheduler directly but rather with the client object "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "Client"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Strong",
+                "data": {
+                  "content": {
+                    "value": "State"
+                  }
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The scheduler contains the following state variables.  Each variable is listed along with what it stores and a brief description."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "tasks:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{task key: TaskState}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Tasks currently known to the scheduler"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "unrunnable:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{TaskState}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Tasks in the \"no-worker\" state"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "workers:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{worker key: WorkerState}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Workers currently connected to the scheduler"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "idle:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{WorkerState}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": ":"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Set of workers that are not fully utilized"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "saturated:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{WorkerState}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": ":"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Set of workers that are not over-utilized"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "host_info:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{hostname: dict}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": ":"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Information about each worker host"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "clients:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{client key: ClientState}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Clients currently connected to the scheduler"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "BulletList",
+          "data": {
+            "value": [
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "services:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{str: port}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": ":"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Other services running on this scheduler, like Bokeh"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "loop:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "IOLoop"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": ":"
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "The running Tornado IOLoop"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "client_comms:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{client key: Comm}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "For each client, a Comm object used to receive task requests and     report task status updates."
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "stream_comms:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{worker key: Comm}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "For each worker, a Comm object from which we both accept stimuli and     report results"
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "DefList",
+                "data": {
+                  "children": [
+                    {
+                      "dt": {
+                        "inline": [
+                          {
+                            "type": "Strong",
+                            "data": {
+                              "content": {
+                                "value": "task_duration:"
+                              }
+                            }
+                          },
+                          {
+                            "type": "Words",
+                            "data": {
+                              "value": " "
+                            }
+                          },
+                          {
+                            "type": "Verbatim",
+                            "data": {
+                              "value": [
+                                "{key-prefix: time}"
+                              ]
+                            }
+                          }
+                        ],
+                        "inner": []
+                      },
+                      "dd": [
+                        {
+                          "type": "Paragraph",
+                          "data": {
+                            "inline": [
+                              {
+                                "type": "Words",
+                                "data": {
+                                  "value": "Time we expect certain functions to take, e.g. "
+                                }
+                              },
+                              {
+                                "type": "Verbatim",
+                                "data": {
+                                  "value": [
+                                    "{'sum': 0.25}"
+                                  ]
+                                }
+                              }
+                            ],
+                            "inner": []
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Dynamic distributed task scheduler"
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/distributed/scheduler.py",
+  "item_line": 3501,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "distributed.Scheduler"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "2021.10.0",
+  "signature": "Scheduler(loop=None, delete_interval='500ms', synchronize_worker_interval='60s', services=None, service_kwargs=None, allowed_failures=None, extensions=None, validate=None, scheduler_file=None, security=None, worker_ttl=None, idle_timeout=None, interface=None, host=None, port=0, protocol=None, dashboard_address=None, dashboard=None, http_prefix='/', preload=None, preload_argv=(), plugins=(), **kwargs)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "distributed.scheduler.Scheduler",
+  "arbitrary": []
+}

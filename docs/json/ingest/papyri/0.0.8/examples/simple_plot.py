@@ -26,7 +26,7 @@
                 "value": "matplotlib",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib"
                 },
@@ -102,7 +102,7 @@
                 "value": "matplotlib",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib"
                 },
@@ -126,7 +126,7 @@
                 "value": "pyplot",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib.pyplot"
                 },
@@ -164,7 +164,7 @@
                 "value": "plt",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib.pyplot"
                 },
@@ -202,7 +202,7 @@
                 "value": "numpy",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy"
                 },
@@ -240,7 +240,7 @@
                 "value": "np",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy"
                 },
@@ -327,7 +327,7 @@
                 "value": "plt",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib.pyplot"
                 },
@@ -351,7 +351,7 @@
                 "value": "subplots",
                 "reference": {
                   "module": "matplotlib",
-                  "version": "3.5.0",
+                  "version": "3.5.1",
                   "kind": "module",
                   "path": "matplotlib.pyplot.subplots"
                 },
@@ -424,7 +424,7 @@
                 "value": "np",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy"
                 },
@@ -448,7 +448,7 @@
                 "value": "arange",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy.arange"
                 },
@@ -591,7 +591,7 @@
                 "value": "np",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy"
                 },
@@ -615,7 +615,7 @@
                 "value": "sin",
                 "reference": {
                   "module": "numpy",
-                  "version": "1.21.3",
+                  "version": "1.22.1",
                   "kind": "module",
                   "path": "numpy.ufunc"
                 },

@@ -1,0 +1,429 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "This class implements the special methods for almost all of Python's builtin operators defined in the "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "operator",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " module, including comparisons ("
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "=="
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    ">"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", etc.) and arithmetic ("
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "+"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "*"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "-"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", etc.), by deferring to the "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "__array_ufunc__"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " method, which subclasses must implement."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "It is useful for writing classes that do not inherit from "
+                }
+              },
+              {
+                "type": "Link",
+                "data": {
+                  "value": "numpy.ndarray",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", but that should support arithmetic and numpy universal functions like arrays as described in "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "A Mechanism for Overriding Ufuncs\n<https://numpy.org/neps/nep-0013-ufunc-overrides.html>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": "."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "As an trivial example, consider this implementation of an "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ArrayLike"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " class that simply wraps a NumPy array and ensures that the result of any arithmetic operation is also an "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ArrayLike"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " object::      "
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockVerbatim",
+          "data": {
+            "value": "class ArrayLike(np.lib.mixins.NDArrayOperatorsMixin):\n    def __init__(self, value):\n        self.value = np.asarray(value)\n\n    # One might also consider adding the built-in list type to this\n    # list, to support operations like np.add(array_like, list)\n    _HANDLED_TYPES = (np.ndarray, numbers.Number)\n\n    def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):\n        out = kwargs.get('out', ())\n        for x in inputs + out:\n            # Only support operations with instances of _HANDLED_TYPES.\n            # Use ArrayLike instead of type(self) for isinstance to\n            # allow subclasses that don't override __array_ufunc__ to\n            # handle ArrayLike objects.\n            if not isinstance(x, self._HANDLED_TYPES + (ArrayLike,)):\n                return NotImplemented\n\n        # Defer to the implementation of the ufunc on unwrapped values.\n        inputs = tuple(x.value if isinstance(x, ArrayLike) else x\n                       for x in inputs)\n        if out:\n            kwargs['out'] = tuple(\n                x.value if isinstance(x, ArrayLike) else x\n                for x in out)\n        result = getattr(ufunc, method)(*inputs, **kwargs)\n\n        if type(result) is tuple:\n            # multiple return values\n            return tuple(type(self)(x) for x in result)\n        elif method == 'at':\n            # no return value\n            return None\n        else:\n            # one return value\n            return type(self)(result)\n\n    def __repr__(self):\n        return '%s(%r)' % (type(self).__name__, self.value)"
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "In interactions between "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ArrayLike"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " objects and numbers or numpy arrays, the result is always another "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ArrayLike"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ":"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockQuote",
+          "data": {
+            "value": [
+              ">>> x = ArrayLike([1, 2, 3])",
+              ">>> x - 1",
+              "ArrayLike(array([0, 1, 2]))",
+              ">>> 1 - x",
+              "ArrayLike(array([ 0, -1, -2]))",
+              ">>> np.arange(3) - x",
+              "ArrayLike(array([-1, -1, -1]))",
+              ">>> x - np.arange(3)",
+              "ArrayLike(array([1, 1, 1]))"
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Note that unlike "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "numpy.ndarray"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ", "
+                }
+              },
+              {
+                "type": "Verbatim",
+                "data": {
+                  "value": [
+                    "ArrayLike"
+                  ]
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " does not allow operations with arbitrary, unrecognized types. This ensures that interactions with ArrayLike preserve a well-defined casting hierarchy."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionadded",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "1.13 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Mixin defining all operator special methods using __array_ufunc__."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.ndarray"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Extended Summary"
+  ],
+  "item_file": "/numpy/lib/mixins.py",
+  "item_line": 59,
+  "item_type": "<class 'type'>",
+  "aliases": [
+    "numpy.lib.mixins.NDArrayOperatorsMixin"
+  ],
+  "example_section_data": {
+    "children": [],
+    "title": null
+  },
+  "see_also": [],
+  "version": "1.22.1",
+  "signature": "NDArrayOperatorsMixin()",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "numpy.lib.mixins.NDArrayOperatorsMixin",
+  "arbitrary": []
+}

@@ -495,9 +495,7 @@
                     {
                       "type": "Directive",
                       "data": {
-                        "value": [
-                          "type"
-                        ],
+                        "value": "type",
                         "domain": null,
                         "role": null
                       }
@@ -935,56 +933,8 @@
     {
       "module": "scipy",
       "version": "1.7.1",
-      "kind": "assets",
-      "path": "fig-scipy.signal.spectral.csd-1.png"
-    },
-    {
-      "module": "numpy",
-      "version": "1.21.3",
-      "kind": "module",
-      "path": "numpy.ufunc"
-    },
-    {
-      "module": "numpy",
-      "version": "1.21.3",
-      "kind": "module",
-      "path": "numpy.ndarray"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.0",
-      "kind": "module",
-      "path": "matplotlib.pyplot.xlabel"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
-      "kind": "module",
-      "path": "scipy.signal.signaltools.lfilter"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.0",
-      "kind": "module",
-      "path": "matplotlib.pyplot.show"
-    },
-    {
-      "module": "scipy",
-      "version": "1.7.1",
       "kind": "module",
       "path": "scipy.signal.filter_design.butter"
-    },
-    {
-      "module": "matplotlib",
-      "version": "3.5.0",
-      "kind": "module",
-      "path": "matplotlib.pyplot"
-    },
-    {
-      "module": "numpy",
-      "version": "1.21.3",
-      "kind": "module",
-      "path": "numpy"
     },
     {
       "module": "scipy",
@@ -993,16 +943,34 @@
       "path": "scipy.signal.windows.windows.get_window"
     },
     {
-      "module": "matplotlib",
-      "version": "3.5.0",
+      "module": "numpy",
+      "version": "1.22.1",
       "kind": "module",
-      "path": "matplotlib.pyplot.semilogy"
+      "path": "numpy.random._generator.Generator"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy.signal.spectral.csd"
     },
     {
       "module": "matplotlib",
-      "version": "3.5.0",
+      "version": "3.5.1",
       "kind": "module",
-      "path": "matplotlib.pyplot.ylabel"
+      "path": "matplotlib.pyplot"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.random"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.ndarray"
     },
     {
       "module": "scipy",
@@ -1011,10 +979,28 @@
       "path": "scipy.signal"
     },
     {
-      "module": "numpy",
-      "version": "1.21.3",
+      "module": "matplotlib",
+      "version": "3.5.1",
       "kind": "module",
-      "path": "numpy.random"
+      "path": "matplotlib.pyplot.semilogy"
+    },
+    {
+      "module": "scipy",
+      "version": "1.7.1",
+      "kind": "module",
+      "path": "scipy._lib._util.rng_integers"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.arange"
+    },
+    {
+      "module": "matplotlib",
+      "version": "3.5.1",
+      "kind": "module",
+      "path": "matplotlib.pyplot.ylabel"
     },
     {
       "module": "scipy",
@@ -1026,31 +1012,43 @@
       "module": "scipy",
       "version": "1.7.1",
       "kind": "module",
-      "path": "scipy.signal.spectral.csd"
+      "path": "scipy.signal.signaltools.lfilter"
     },
     {
-      "module": "numpy",
-      "version": "1.21.3",
+      "module": "matplotlib",
+      "version": "3.5.1",
       "kind": "module",
-      "path": "numpy.random._generator.Generator"
+      "path": "matplotlib.pyplot.xlabel"
     },
     {
       "module": "numpy",
-      "version": "1.21.3",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.ufunc"
+    },
+    {
+      "module": "matplotlib",
+      "version": "3.5.1",
+      "kind": "module",
+      "path": "matplotlib.pyplot.show"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
       "kind": "module",
       "path": "numpy.random._generator.default_rng"
     },
     {
       "module": "matplotlib",
-      "version": "3.5.0",
+      "version": "3.5.1",
       "kind": "module",
       "path": "matplotlib"
-    },
-    {
-      "module": "numpy",
-      "version": "1.21.3",
-      "kind": "module",
-      "path": "numpy.arange"
     }
   ],
   "ordered_sections": [
@@ -1172,7 +1170,7 @@
                   "value": "matplotlib",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib"
                   },
@@ -1196,7 +1194,7 @@
                   "value": "pyplot",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -1234,7 +1232,7 @@
                   "value": "plt",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -1258,7 +1256,7 @@
                   "value": "rng",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.random._generator.Generator"
                   },
@@ -1296,7 +1294,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -1320,7 +1318,7 @@
                   "value": "random",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.random"
                   },
@@ -1344,7 +1342,7 @@
                   "value": "default_rng",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.random._generator.default_rng"
                   },
@@ -1369,7 +1367,7 @@
             }
           ],
           "out": "",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -1692,7 +1690,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -1716,7 +1714,7 @@
                   "value": "arange",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.arange"
                   },
@@ -1784,8 +1782,18 @@
             {
               "type": "",
               "link": {
-                "type": "str",
-                "data": "b"
+                "type": "Link",
+                "data": {
+                  "value": "b",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
               }
             },
             {
@@ -1990,10 +1998,10 @@
                 "data": {
                   "value": "rng",
                   "reference": {
-                    "module": "numpy",
-                    "version": "1.21.3",
+                    "module": "scipy",
+                    "version": "1.7.1",
                     "kind": "module",
-                    "path": "numpy.random._generator.Generator"
+                    "path": "scipy._lib._util.rng_integers"
                   },
                   "kind": "module",
                   "exists": true
@@ -2043,7 +2051,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -2067,7 +2075,7 @@
                   "value": "sqrt",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.ufunc"
                   },
@@ -2239,8 +2247,18 @@
             {
               "type": "",
               "link": {
-                "type": "str",
-                "data": "b"
+                "type": "Link",
+                "data": {
+                  "value": "b",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.ndarray"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
               }
             },
             {
@@ -2356,7 +2374,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -2380,7 +2398,7 @@
                   "value": "sin",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.ufunc"
                   },
@@ -2418,7 +2436,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -2486,18 +2504,8 @@
             {
               "type": "",
               "link": {
-                "type": "Link",
-                "data": {
-                  "value": "y",
-                  "reference": {
-                    "module": "numpy",
-                    "version": "1.21.3",
-                    "kind": "module",
-                    "path": "numpy.ndarray"
-                  },
-                  "kind": "module",
-                  "exists": true
-                }
+                "type": "str",
+                "data": "y"
               }
             },
             {
@@ -2535,10 +2543,10 @@
                 "data": {
                   "value": "rng",
                   "reference": {
-                    "module": "numpy",
-                    "version": "1.21.3",
+                    "module": "scipy",
+                    "version": "1.7.1",
                     "kind": "module",
-                    "path": "numpy.random._generator.Generator"
+                    "path": "scipy._lib._util.rng_integers"
                   },
                   "kind": "module",
                   "exists": true
@@ -2602,7 +2610,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -2626,7 +2634,7 @@
                   "value": "sqrt",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.ufunc"
                   },
@@ -2714,7 +2722,7 @@
             }
           ],
           "out": "",
-          "ce_status": "execed"
+          "ce_status": "compiled"
         }
       },
       {
@@ -2738,18 +2746,8 @@
             {
               "type": "",
               "link": {
-                "type": "Link",
-                "data": {
-                  "value": "f",
-                  "reference": {
-                    "module": "numpy",
-                    "version": "1.21.3",
-                    "kind": "module",
-                    "path": "numpy.ndarray"
-                  },
-                  "kind": "module",
-                  "exists": true
-                }
+                "type": "str",
+                "data": "f"
               }
             },
             {
@@ -2948,7 +2946,7 @@
                   "value": "plt",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -2972,7 +2970,7 @@
                   "value": "semilogy",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot.semilogy"
                   },
@@ -2991,18 +2989,8 @@
             {
               "type": "",
               "link": {
-                "type": "Link",
-                "data": {
-                  "value": "f",
-                  "reference": {
-                    "module": "numpy",
-                    "version": "1.21.3",
-                    "kind": "module",
-                    "path": "numpy.ndarray"
-                  },
-                  "kind": "module",
-                  "exists": true
-                }
+                "type": "str",
+                "data": "f"
               }
             },
             {
@@ -3027,7 +3015,7 @@
                   "value": "np",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy"
                   },
@@ -3051,7 +3039,7 @@
                   "value": "abs",
                   "reference": {
                     "module": "numpy",
-                    "version": "1.21.3",
+                    "version": "1.22.1",
                     "kind": "module",
                     "path": "numpy.ufunc"
                   },
@@ -3103,7 +3091,7 @@
                   "value": "plt",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -3127,7 +3115,7 @@
                   "value": "xlabel",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot.xlabel"
                   },
@@ -3186,7 +3174,7 @@
                   "value": "plt",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -3210,7 +3198,7 @@
                   "value": "ylabel",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot.ylabel"
                   },
@@ -3269,7 +3257,7 @@
                   "value": "plt",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot"
                   },
@@ -3293,7 +3281,7 @@
                   "value": "show",
                   "reference": {
                     "module": "matplotlib",
-                    "version": "3.5.0",
+                    "version": "3.5.1",
                     "kind": "module",
                     "path": "matplotlib.pyplot.show"
                   },
@@ -3318,13 +3306,7 @@
             }
           ],
           "out": "",
-          "ce_status": "execed"
-        }
-      },
-      {
-        "type": "Fig",
-        "data": {
-          "value": "fig-scipy.signal.spectral.csd-1.png"
+          "ce_status": "compiled"
         }
       }
     ],

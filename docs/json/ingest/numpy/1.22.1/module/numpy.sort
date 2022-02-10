@@ -1,0 +1,2282 @@
+{
+  "_content": {
+    "Attributes": {
+      "children": [],
+      "title": null
+    },
+    "Extended Summary": {
+      "children": [],
+      "title": null
+    },
+    "Methods": {
+      "children": [],
+      "title": null
+    },
+    "Notes": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The various sorting algorithms are characterized by their average speed, worst case performance, work space size, and whether they are stable. A stable sort keeps items with the same key in the same relative order. The four algorithms implemented in NumPy have the following properties:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "DefList",
+          "data": {
+            "children": [
+              {
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "=========== ======= ============= ============ ========"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "kind      speed   worst case    work space   stable"
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              },
+              {
+                "dt": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "=========== ======= ============= ============ ======== 'quicksort'    1     O(n^2)            0          no 'heapsort'     3     O(n*log(n))       0          no 'mergesort'    2     O(n*log(n))      ~n/2        yes 'timsort'      2     O(n*log(n))      ~n/2        yes =========== ======= ============= ============ ========  .. note:: The datatype determines which of 'mergesort' or 'timsort'"
+                      }
+                    }
+                  ],
+                  "inner": []
+                },
+                "dd": [
+                  {
+                    "type": "Paragraph",
+                    "data": {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "is actually used, even if 'mergesort' is specified. User selection    at a finer scale is not currently available."
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "All the sort algorithms make temporary copies of the data when sorting along any but the last axis.  Consequently, sorting along the last axis is faster and uses less space than sorting along any other axis."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "The sort order for complex numbers is lexicographic. If both the real and imaginary parts are non-nan then the order is determined by the real parts except when they are equal, in which case the order is determined by the imaginary parts."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Previous to numpy 1.4.0 sorting real and complex arrays containing nan values led to undefined behaviour. In numpy versions >= 1.4.0 nan values are sorted to the end. The extended sort order is:"
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "BlockQuote",
+          "data": {
+            "value": [
+              "* Real: [R, nan]",
+              "* Complex: [R + Rj, R + nanj, nan + Rj, nan + nanj]"
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "where R is a non-nan real value. Complex values with the same nan placements are sorted according to the non-nan part if it exists. Non-nan values are sorted as before."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionadded",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "1.12.0 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "quicksort has been changed to "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "introsort <https://en.wikipedia.org/wiki/Introsort>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". When sorting does not make enough progress it switches to "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "heapsort <https://en.wikipedia.org/wiki/Heapsort>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". This implementation makes quicksort O(n*log(n)) in the worst case."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "'stable' automatically chooses the best stable sorting algorithm for the data type being sorted. It, along with 'mergesort' is currently mapped to "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "timsort <https://en.wikipedia.org/wiki/Timsort>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " or "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "radix sort <https://en.wikipedia.org/wiki/Radix_sort>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": " depending on the data type. API forward compatibility currently limits the ability to select the implementation and it is hardwired for the different data types."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionadded",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "1.17.0 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Timsort is added for better performance on already or nearly sorted data. On random data timsort is almost identical to mergesort. It is now used for stable sort while quicksort is still the default sort if none is chosen. For timsort details, refer to "
+                }
+              },
+              {
+                "type": "Directive",
+                "data": {
+                  "value": "CPython listsort.txt <https://github.com/python/cpython/blob/3.7/Objects/listsort.txt>",
+                  "domain": null,
+                  "role": null
+                }
+              },
+              {
+                "type": "Words",
+                "data": {
+                  "value": ". 'mergesort' and 'stable' are mapped to radix sort for integer data types. Radix sort is an O(n) sort instead of O(n log n)."
+                }
+              }
+            ],
+            "inner": []
+          }
+        },
+        {
+          "type": "Admonition",
+          "data": {
+            "kind": "versionchanged",
+            "title": "TODO",
+            "children": [
+              {
+                "inline": [
+                  {
+                    "type": "Words",
+                    "data": {
+                      "value": "1.18.0 "
+                    }
+                  }
+                ],
+                "inner": []
+              }
+            ]
+          }
+        },
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "NaT now sorts to the end of arrays for consistency with NaN."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Other Parameters": {
+      "children": [],
+      "title": null
+    },
+    "Parameters": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "a",
+            "type_": "array_like",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Array to be sorted."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "axis",
+            "type_": "int or None, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Axis along which to sort. If None, the array is flattened before sorting. The default is -1, which sorts along the last axis."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "kind",
+            "type_": "{'quicksort', 'mergesort', 'heapsort', 'stable'}, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Sorting algorithm. The default is 'quicksort'. Note that both 'stable' and 'mergesort' use timsort or radix sort under the covers and, in general, the actual implementation will vary with data type. The 'mergesort' option is retained for backwards compatibility."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              },
+              {
+                "type": "Admonition",
+                "data": {
+                  "kind": "versionchanged",
+                  "title": "1.15.0.",
+                  "children": [
+                    {
+                      "inline": [
+                        {
+                          "type": "Words",
+                          "data": {
+                            "value": "The ' stable ' option was added. "
+                          }
+                        }
+                      ],
+                      "inner": []
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Param",
+          "data": {
+            "param": "order",
+            "type_": "str or list of str, optional",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "When "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "a",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "a"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": " is an array with fields defined, this argument specifies which fields to compare first, second, etc.  A single field can be specified as a string, and not all fields need be specified, but unspecified fields will still be used, in the order in which they come up in the dtype, to break ties."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Raises": {
+      "children": [],
+      "title": null
+    },
+    "Receives": {
+      "children": [],
+      "title": null
+    },
+    "Returns": {
+      "children": [
+        {
+          "type": "Param",
+          "data": {
+            "param": "sorted_array",
+            "type_": "ndarray",
+            "desc": [
+              {
+                "type": "Paragraph",
+                "data": {
+                  "inline": [
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "Array of the same type and shape as "
+                      }
+                    },
+                    {
+                      "type": "Link",
+                      "data": {
+                        "value": "a",
+                        "reference": {
+                          "module": null,
+                          "version": null,
+                          "kind": "local",
+                          "path": "a"
+                        },
+                        "kind": "local",
+                        "exists": true
+                      }
+                    },
+                    {
+                      "type": "Words",
+                      "data": {
+                        "value": "."
+                      }
+                    }
+                  ],
+                  "inner": []
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "title": null
+    },
+    "Summary": {
+      "children": [
+        {
+          "type": "Paragraph",
+          "data": {
+            "inline": [
+              {
+                "type": "Words",
+                "data": {
+                  "value": "Return a sorted copy of an array."
+                }
+              }
+            ],
+            "inner": []
+          }
+        }
+      ],
+      "title": null
+    },
+    "Warnings": {
+      "children": [],
+      "title": null
+    },
+    "Warns": {
+      "children": [],
+      "title": null
+    },
+    "Yields": {
+      "children": [],
+      "title": null
+    }
+  },
+  "refs": [
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.sort"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.dtype"
+    },
+    {
+      "module": "numpy",
+      "version": "1.22.1",
+      "kind": "module",
+      "path": "numpy.array"
+    }
+  ],
+  "ordered_sections": [
+    "Summary",
+    "Parameters",
+    "Returns",
+    "See Also",
+    "Notes",
+    "Examples"
+  ],
+  "item_file": "/numpy/core/fromnumeric.py",
+  "item_line": 852,
+  "item_type": "<class 'function'>",
+  "aliases": [
+    "numpy.sort"
+  ],
+  "example_section_data": {
+    "children": [
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "4"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "3"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "1"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sort",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.sort"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# sort along the last axis"
+              }
+            }
+          ],
+          "out": "array([[1, 4],\n       [1, 3]])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sort",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.sort"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "axis"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "kc",
+              "link": {
+                "type": "str",
+                "data": "None"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "     "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# sort the flattened array"
+              }
+            }
+          ],
+          "out": "array([1, 1, 3, 4])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sort",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.sort"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "axis"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "0"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "        "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# sort along the first axis"
+              }
+            }
+          ],
+          "out": "array([[1, 1],\n       [3, 4]])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Use the "
+              }
+            },
+            {
+              "type": "Link",
+              "data": {
+                "value": "order",
+                "reference": {
+                  "module": null,
+                  "version": null,
+                  "kind": "local",
+                  "path": "order"
+                },
+                "kind": "local",
+                "exists": true
+              }
+            },
+            {
+              "type": "Words",
+              "data": {
+                "value": " keyword to specify a field to use when sorting a structured array:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "dtype",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.dtype"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "name"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "S10"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "height"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "float"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "age"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "nb",
+              "link": {
+                "type": "str",
+                "data": "int"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "values"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "Arthur"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "1.8"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "41"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "Lancelot"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "1.9"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "38"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "          "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "Galahad"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mf",
+              "link": {
+                "type": "str",
+                "data": "1.7"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "mi",
+              "link": {
+                "type": "str",
+                "data": "38"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "array",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.array"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "values"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "dtype",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.dtype"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "dtype",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.dtype"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "       "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# create a structured array"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "\n"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sort",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.sort"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "order"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "height"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "                        "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +SKIP"
+              }
+            }
+          ],
+          "out": "array([('Galahad', 1.7, 38), ('Arthur', 1.8, 41),\n       ('Lancelot', 1.8999999999999999, 38)],\n      dtype=[('name', '|S10'), ('height', '<f8'), ('age', '<i4')])",
+          "ce_status": "execed"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "data": {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Sort by age, then height if ages are equal:"
+              }
+            }
+          ],
+          "inner": []
+        }
+      },
+      {
+        "type": "Code2",
+        "data": {
+          "entries": [
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "np"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "."
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "Link",
+                "data": {
+                  "value": "sort",
+                  "reference": {
+                    "module": "numpy",
+                    "version": "1.22.1",
+                    "kind": "module",
+                    "path": "numpy.sort"
+                  },
+                  "kind": "module",
+                  "exists": true
+                }
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "("
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "a"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "order"
+              }
+            },
+            {
+              "type": "o",
+              "link": {
+                "type": "str",
+                "data": "="
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "["
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "age"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ","
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": " "
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "height"
+              }
+            },
+            {
+              "type": "s1",
+              "link": {
+                "type": "str",
+                "data": "'"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "]"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": ")"
+              }
+            },
+            {
+              "type": "",
+              "link": {
+                "type": "str",
+                "data": "               "
+              }
+            },
+            {
+              "type": "c1",
+              "link": {
+                "type": "str",
+                "data": "# doctest: +SKIP"
+              }
+            }
+          ],
+          "out": "array([('Galahad', 1.7, 38), ('Lancelot', 1.8999999999999999, 38),\n       ('Arthur', 1.8, 41)],\n      dtype=[('name', '|S10'), ('height', '<f8'), ('age', '<i4')])",
+          "ce_status": "execed"
+        }
+      }
+    ],
+    "title": null
+  },
+  "see_also": [
+    {
+      "name": {
+        "name": "argsort",
+        "ref": "numpy.argsort",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Indirect sort."
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "lexsort",
+        "ref": "numpy.lexsort",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Indirect stable sort on multiple keys."
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "ndarray.sort",
+        "ref": null,
+        "exists": null
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Method to sort an array in-place."
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "partition",
+        "ref": "numpy.partition",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Partial sort."
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    },
+    {
+      "name": {
+        "name": "searchsorted",
+        "ref": "numpy.searchsorted",
+        "exists": true
+      },
+      "descriptions": [
+        {
+          "inline": [
+            {
+              "type": "Words",
+              "data": {
+                "value": "Find elements in a sorted array."
+              }
+            }
+          ],
+          "inner": []
+        }
+      ],
+      "type": null
+    }
+  ],
+  "version": "1.22.1",
+  "signature": "sort(a, axis=-1, kind=None, order=None)",
+  "references": null,
+  "logo": "logo.png",
+  "qa": "numpy.sort",
+  "arbitrary": []
+}
