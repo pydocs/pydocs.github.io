@@ -1,0 +1,42 @@
+Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚‚Ù¹‚ƒÙ§xãLike dict.update, this method takes a graph as input, adding the graph's nodes and edges to this graph. It can also take two inputs: edges and nodes. Finally it can take either edges or nodes. To specify only nodes the keyword Ù¢„enodesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.nodesfmoduleõÙ§n must be used.€Ù¹‚Ù§xµThe collections of edges and nodes are treated similarly to the add_edges_from/add_nodes_from methods. When iterated, they should yield 2-tuples (u, v) or 3-tuples (u, v, datadict).€ögMethodsÙ¯‚€öeNotesÙ¯‚†Ù¹‚Ù§xûIt you want to update the graph using an adjacency structure it is straightforward to obtain the edges/nodes from adjacency. The following examples provide common cases, your adjacency may be slightly different and require tweaks of these examples::  €ÙÀx£>>> # dict-of-set/list/tuple
+>>> adj = {1: {2, 3}, 2: {1, 3}, 3: {1, 2}}
+>>> e = [(u, v) for u, nbrs in adj.items() for v in nbrs]
+>>> G.update(edges=e, nodes=adj)ÙÀy>>> DG = nx.DiGraph()
+>>> # dict-of-dict-of-attribute
+>>> adj = {1: {2: 1.3, 3: 0.7}, 2: {1: 1.4}, 3: {1: 0.7}}
+>>> e = [
+...     (u, v, {"weight": d})
+...     for u, nbrs in adj.items()
+...     for v, d in nbrs.items()
+... ]
+>>> DG.update(edges=e, nodes=adj)ÙÀxô>>> # dict-of-dict-of-dict
+>>> adj = {1: {2: {"weight": 1.3}, 3: {"color": 0.7, "weight": 1.2}}}
+>>> e = [
+...     (u, v, {"weight": d})
+...     for u, nbrs in adj.items()
+...     for v, d in nbrs.items()
+... ]
+>>> DG.update(edges=e, nodes=adj)ÙÀx‹>>> # predecessor adjacency (dict-of-set)
+>>> pred = {1: {2, 3}, 2: {3}, 3: {3}}
+>>> e = [(v, u) for u, nbrs in pred.items() for v in nbrs]ÙÀyq>>> # MultiGraph dict-of-dict-of-dict-of-attribute
+>>> MDG = nx.MultiDiGraph()
+>>> adj = {
+...     1: {2: {0: {"weight": 1.3}, 1: {"weight": 1.2}}},
+...     3: {2: {0: {"weight": 0.7}}},
+... }
+>>> e = [
+...     (u, v, ekey, d)
+...     for u, nbrs in adj.items()
+...     for v, keydict in nbrs.items()
+...     for ekey, d in keydict.items()
+... ]
+>>> MDG.update(edges=e)öpOther ParametersÙ¯‚€öjParametersÙ¯‚‚Ù°ƒeedgesx*Graph object, collection of edges, or NoneÙ¹‚…Ù§xGThe first parameter can be a graph or some edges. If it has attributes Ù¢„enodesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.nodesfmoduleõÙ§e and Ù¢„eedgesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.edgesfmoduleõÙ§y/, then it is taken to be a Graph-like object and those attributes are used as collections of nodes and edges to be added to the graph. If the first parameter does not have those attributes, it is treated as a collection of edges and added to the graph. If the first argument is None, no edges are added.€Ù°ƒenodesxcollection of nodes, or NoneÙ¹‚‡Ù§xhThe second parameter is treated as a collection of nodes to be added to the graph unless it is None. If Ù£ƒmedges is NoneööÙ§e and Ù£ƒmnodes is NoneööÙ§xA an exception is raised. If the first parameter is a Graph, then Ù¢„enodesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.nodesfmoduleõÙ§l is ignored.€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚€ögSummaryÙ¯‚Ù¹‚Ù§x3Update the graph using nodes/edges/graphs as input.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö†gSummarypExtended SummaryjParametershExampleseNoteshSee Alsoxnetworkx/classes/graph.py!r<class 'function'>unetworkx.Graph.updateÙ¯‚Ù´ƒ˜{Ù±‚`aGÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`bnxÙ±‚aoa.Ù±‚`Ù¢„jpath_graphÙ „hnetworkxm2.7.2rc1.dev0fmodulex&networkx.generators.classic.path_graphfmoduleõÙ±‚`a(Ù±‚bmia5Ù±‚`a)Ù±‚`a
+Ù±‚`aGÙ±‚aoa.Ù±‚`Ù¢„fupdateÙ „hnetworkxm2.7.2rc1.dev0fmodulex#networkx.classes.graph.Graph.updatefmoduleõÙ±‚`a(Ù±‚`bnxÙ±‚aoa.Ù±‚`Ù¢„ncomplete_graphÙ „hnetworkxm2.7.2rc1.dev0fmodulex*networkx.generators.classic.complete_graphfmoduleõÙ±‚`a(Ù±‚bnbÙ¢„erangeÙ „hnetworkxm2.7.2rc1.dev0fmodulex3networkx.utils.misc.PythonRandomInterface.randrangefmoduleõÙ±‚`a(Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚bmib10Ù±‚`a)Ù±‚`a)Ù±‚`a)Ù±‚`a
+Ù±‚bkndfromÙ±‚`a Ù±‚bnniitertoolsÙ±‚`a Ù±‚bknfimportÙ±‚`a Ù±‚`lcombinationsÙ±‚`a
+Ù±‚`Ù¢„eedgesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.edgesfmoduleõÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`a(Ù±‚`a
+Ù±‚`d    Ù±‚`a(Ù±‚`auÙ±‚`a,Ù±‚`a Ù±‚`avÙ±‚`a,Ù±‚`a Ù±‚`a{Ù±‚bs2a"Ù±‚bs2epowerÙ±‚bs2a"Ù±‚`a:Ù±‚`a Ù±‚`auÙ±‚`a Ù±‚aoa*Ù±‚`a Ù±‚`avÙ±‚`a}Ù±‚`a)Ù±‚`a
+Ù±‚`d    Ù±‚akcforÙ±‚`a Ù±‚`auÙ±‚`a,Ù±‚`a Ù±‚`avÙ±‚`a Ù±‚bowbinÙ±‚`a Ù±‚`lcombinationsÙ±‚`a(Ù±‚bnbÙ¢„erangeÙ „hnetworkxm2.7.2rc1.dev0fmodulex3networkx.utils.misc.PythonRandomInterface.randrangefmoduleõÙ±‚`a(Ù±‚bmib10Ù±‚`a,Ù±‚`a Ù±‚bmib20Ù±‚`a)Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a)Ù±‚`a
+Ù±‚`d    Ù±‚akbifÙ±‚`a Ù±‚`auÙ±‚`a Ù±‚aoa*Ù±‚`a Ù±‚`avÙ±‚`a Ù±‚aoa<Ù±‚`a Ù±‚bmic225Ù±‚`a
+Ù±‚`a)Ù±‚`a
+Ù±‚`Ù¢„enodesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.nodesfmoduleõÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`a[Ù±‚bmid1000Ù±‚`a]Ù±‚`b  Ù±‚bc1x # for singleton, use a containerÙ±‚`a
+Ù±‚`aGÙ±‚aoa.Ù±‚`Ù¢„fupdateÙ „hnetworkxm2.7.2rc1.dev0fmodulex#networkx.classes.graph.Graph.updatefmoduleõÙ±‚`a(Ù±‚`Ù¢„eedgesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.edgesfmoduleõÙ±‚`a,Ù±‚`a Ù±‚`Ù¢„enodesÙ „hnetworkxm2.7.2rc1.dev0fmodulexnetworkx.classes.function.nodesfmoduleõÙ±‚`a)`fexecedö‚Ù¼ƒÙ»ƒnadd_edges_fromx+networkx.classes.graph.Graph.add_edges_fromõÙ¹‚Ù§xadd multiple edges to a graph€öÙ¼ƒÙ»ƒnadd_nodes_fromx+networkx.classes.graph.Graph.add_nodes_fromõÙ¹‚Ù§xadd multiple nodes to a graph€öm2.7.2rc1.dev0Ù«x$update(self, edges=None, nodes=None)öx#networkx.classes.graph.Graph.update€

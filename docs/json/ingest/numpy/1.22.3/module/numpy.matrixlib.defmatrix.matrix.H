@@ -1,0 +1,7 @@
+Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚Ù¹‚…Ù§nEquivalent to Ù¡rnp.transpose(self)Ù§d if Ù£ƒdselfööÙ§p is real-valued.€ögMethodsÙ¯‚€öeNotesÙ¯‚€öpOther ParametersÙ¯‚€öjParametersÙ¯‚Ù°ƒdNone`€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚Ù°ƒcretmmatrix objectÙ¹‚‚Ù§xcomplex conjugate transpose of Ù£ƒdselföö€ögSummaryÙ¯‚Ù¹‚ƒÙ§x-Returns the (complex) conjugate transpose of Ù£ƒdselfööÙ§a.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö…gSummarypExtended SummaryjParametersgReturnshExamplesx/numpy/matrixlib/defmatrix.pyÈr<class 'function'>qnumpy.matrix.getHÙ¯‚‚Ù´ƒ˜(Ù±‚`axÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„fmatrixÙ „enumpyf1.22.3fmodulelnumpy.matrixfmoduleõÙ±‚`a(Ù±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„farangeÙ „enumpyf1.22.3fmodulelnumpy.arangefmoduleõÙ±‚`a(Ù±‚bmib12Ù±‚`a)Ù±‚aoa.Ù±‚`Ù¢„greshapeÙ „enumpyf1.22.3fmodulemnumpy.reshapefmoduleõÙ±‚`a(Ù±‚`a(Ù±‚bmia3Ù±‚`a,Ù±‚bmia4Ù±‚`a)Ù±‚`a)Ù±‚`a)Ù±‚`a
+Ù±‚`azÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`axÙ±‚`a Ù±‚aoa-Ù±‚`a Ù±‚bmia1Ù±‚`ajÙ±‚aoa*Ù±‚`axÙ±‚`a;Ù±‚`a Ù±‚`azx¢matrix([[  0. +0.j,   1. -1.j,   2. -2.j,   3. -3.j],
+        [  4. -4.j,   5. -5.j,   6. -6.j,   7. -7.j],
+        [  8. -8.j,   9. -9.j,  10.-10.j,  11.-11.j]])fexecedÙ´ƒ…Ù±‚`azÙ±‚aoa.Ù±‚`dgetHÙ±‚`a(Ù±‚`a)x matrix([[ 0. -0.j,  4. +4.j,  8. +8.j],
+        [ 1. +1.j,  5. +5.j,  9. +9.j],
+        [ 2. +2.j,  6. +6.j, 10.+10.j],
+        [ 3. +3.j,  7. +7.j, 11.+11.j]])fexecedö€f1.22.3Ù«gH(self)öx"numpy.matrixlib.defmatrix.matrix.H€

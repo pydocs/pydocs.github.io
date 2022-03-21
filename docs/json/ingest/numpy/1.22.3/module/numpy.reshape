@@ -1,0 +1,31 @@
+Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚€ögMethodsÙ¯‚€öeNotesÙ¯‚†Ù¹‚Ù§x×It is not always possible to change the shape of an array without copying the data. If you want an error to be raised when the data is copied, you should assign the new shape to the shape attribute of the array::   €ÙÀyv>>> a = np.zeros((10, 2))
+
+# A transpose makes the array non-contiguous
+>>> b = a.T
+
+# Taking a view makes it possible to modify the shape without modifying
+# the initial object.
+>>> c = b.view()
+>>> c.shape = (20)
+Traceback (most recent call last):
+   ...
+AttributeError: Incompatible shape for in-place modification. Use
+`.reshape()` to make a copy with the desired shape.Ù¹‚‰Ù§dThe Ù¢„eorderÙ „ööelocaleorderelocalõÙ§x+ keyword gives the index ordering both for Ù¨Ù§hfetchingÙ§q the values from Ù¢„aaÙ „ööelocalaaelocalõÙ§k, and then Ù¨Ù§gplacingÙ§xL the values into the output array. For example, let's say you have an array:€ÙÀxX>>> a = np.arange(6).reshape((3, 2))
+>>> a
+array([[0, 1],
+       [2, 3],
+       [4, 5]])Ù¹‚Ù§xßYou can think of reshaping as first raveling the array (using the given index order), then inserting the elements from the raveled array into the new array using the same kind of index ordering as was used for the raveling.€ÙÀy>>> np.reshape(a, (2, 3)) # C-like index ordering
+array([[0, 1, 2],
+       [3, 4, 5]])
+>>> np.reshape(np.ravel(a), (2, 3)) # equivalent to C ravel then C reshape
+array([[0, 1, 2],
+       [3, 4, 5]])
+>>> np.reshape(a, (2, 3), order='F') # Fortran-like index ordering
+array([[0, 4, 3],
+       [2, 1, 5]])
+>>> np.reshape(np.ravel(a, order='F'), (2, 3), order='F')
+array([[0, 4, 3],
+       [2, 1, 5]])öpOther ParametersÙ¯‚€öjParametersÙ¯‚ƒÙ°ƒaajarray_likeÙ¹‚Ù§uArray to be reshaped.€Ù°ƒhnewshapetint or tuple of intsÙ¹‚Ù§xøThe new shape should be compatible with the original shape. If an integer, then the result will be a 1-D array of that length. One shape dimension can be -1. In this case, the value is inferred from the length of the array and remaining dimensions.€Ù°ƒeorderx{'C', 'F', 'A'}, optionalÙ¹‚‡Ù§uRead the elements of Ù¢„aaÙ „ööelocalaaelocalõÙ§y^ using this index order, and place the elements into the reshaped array using this index order.  'C' means to read / write the elements using C-like index order, with the last axis index changing fastest, back to the first axis index changing slowest. 'F' means to read / write the elements using Fortran-like index order, with the first index changing fastest, and the last index changing slowest. Note that the 'C' and 'F' options take no account of the memory layout of the underlying array, and only refer to the order of indexing. 'A' means to read / write the elements in Fortran-like index order if Ù¢„aaÙ „ööelocalaaelocalõÙ§l is Fortran Ù¨Ù§jcontiguousÙ§x# in memory, C-like order otherwise.€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚Ù°ƒnreshaped_arraygndarrayÙ¹‚ƒÙ§xmThis will be a new view object if possible; otherwise, it will be a copy.  Note there is no guarantee of the Ù¨Ù§mmemory layoutÙ§x3 (C- or Fortran- contiguous) of the returned array.€ögSummaryÙ¯‚Ù¹‚Ù§x8Gives a new shape to an array without changing its data.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö†gSummaryjParametersgReturnshSee AlsoeNoteshExamplesx/numpy/core/fromnumeric.pyÆr<class 'function'>mnumpy.reshapeÙ¯‚ƒÙ´ƒ˜%Ù±‚`aaÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„earrayÙ „enumpyf1.22.3fmoduleknumpy.arrayfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚`a[Ù±‚bmia1Ù±‚`a,Ù±‚bmia2Ù±‚`a,Ù±‚bmia3Ù±‚`a]Ù±‚`a,Ù±‚`a Ù±‚`a[Ù±‚bmia4Ù±‚`a,Ù±‚bmiÙ¢„a5Ù „enumpyf1.22.3fmoduletnumpy.typing._256BitfmoduleõÙ±‚`a,Ù±‚bmia6Ù±‚`a]Ù±‚`a]Ù±‚`a)Ù±‚`a
+Ù±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„greshapeÙ „enumpyf1.22.3fmodulemnumpy.reshapefmoduleõÙ±‚`a(Ù±‚`aaÙ±‚`a,Ù±‚`a Ù±‚bmia6Ù±‚`a)xarray([1, 2, 3, 4, 5, 6])fexecedÙ´ƒÙ±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„greshapeÙ „enumpyf1.22.3fmodulemnumpy.reshapefmoduleõÙ±‚`a(Ù±‚`aaÙ±‚`a,Ù±‚`a Ù±‚bmia6Ù±‚`a,Ù±‚`a Ù±‚`eorderÙ±‚aoa=Ù±‚bs1a'Ù±‚bs1aFÙ±‚bs1a'Ù±‚`a)xarray([1, 4, 2, 5, 3, 6])fexecedÙ´ƒÙ±‚`bnpÙ±‚aoa.Ù±‚`Ù¢„greshapeÙ „enumpyf1.22.3fmodulemnumpy.reshapefmoduleõÙ±‚`a(Ù±‚`aaÙ±‚`a,Ù±‚`a Ù±‚`a(Ù±‚bmia3Ù±‚`a,Ù±‚aoa-Ù±‚bmia1Ù±‚`a)Ù±‚`a)Ù±‚`g       Ù±‚bc1x+# the unspecified value is inferred to be 2x-array([[1, 2],
+       [3, 4],
+       [5, 6]])fexecedöÙ¼ƒÙ»ƒondarray.reshapeööÙ¹‚Ù§rEquivalent method.€öf1.22.3Ù«xreshape(a, newshape, order='C')ömnumpy.reshape€

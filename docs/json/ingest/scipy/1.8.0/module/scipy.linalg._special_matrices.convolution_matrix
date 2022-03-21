@@ -1,0 +1,43 @@
+Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚Ù¹‚Ù§xkConstructs the Toeplitz matrix representing one-dimensional convolution .  See the notes below for details.€ögMethodsÙ¯‚€öeNotesÙ¯‚‘Ù¹‚Ù§pThe code::      €ÙÀx"A = convolution_matrix(a, n, mode)Ù¹‚‹Ù§xcreates a Toeplitz matrix Ù¢„aAÙ „ööelocalaAelocalõÙ§k such that Ù¡eA @ vÙ§x is equivalent to using Ù¡tconvolve(a, v, mode)Ù§x!.  The returned array always has Ù¢„anÙ „ööelocalanelocalõÙ§x7 columns.  The number of rows depends on the specified Ù¢„dmodeÙ „ööelocaldmodeelocalõÙ§u, as explained above.€Ù¹‚ƒÙ§x+In the default 'full' mode, the entries of Ù¢„aAÙ „ööelocalaAelocalõÙ§u are given by::      €ÙÀx.A[i, j] == (a[i-j] if (0 <= (i-j) < m) else 0)Ù¹‚…Ù§fwhere Ù¡jm = len(a)Ù§x,.  Suppose, for example, the input array is Ù¡i[x, y, z]Ù§x..  The convolution matrix has the form::      €ÙÀx–[x, 0, 0, ..., 0, 0]
+[y, x, 0, ..., 0, 0]
+[z, y, x, ..., 0, 0]
+...
+[0, 0, 0, ..., x, 0]
+[0, 0, 0, ..., y, x]
+[0, 0, 0, ..., z, y]
+[0, 0, 0, ..., 0, z]Ù¹‚ƒÙ§x In 'valid' mode, the entries of Ù¢„aAÙ „ööelocalaAelocalõÙ§u are given by::      €ÙÀx6A[i, j] == (a[i-j+m-1] if (0 <= (i-j+m-1) < m) else 0)Ù¹‚…Ù§xsThis corresponds to a matrix whose rows are the subset of those from the 'full' case where all the coefficients in Ù¢„aaÙ „ööelocalaaelocalõÙ§x& are contained in the row.  For input Ù¡i[x, y, z]Ù§x, this array looks like::      €ÙÀx·[z, y, x, 0, 0, ..., 0, 0, 0]
+[0, z, y, x, 0, ..., 0, 0, 0]
+[0, 0, z, y, x, ..., 0, 0, 0]
+...
+[0, 0, 0, 0, 0, ..., x, 0, 0]
+[0, 0, 0, 0, 0, ..., y, x, 0]
+[0, 0, 0, 0, 0, ..., z, y, x]Ù¹‚ƒÙ§x#In the 'same' mode, the entries of Ù¢„aAÙ „ööelocalaAelocalõÙ§u are given by::      €ÙÀxCd = (m - 1) // 2
+A[i, j] == (a[i-j+d] if (0 <= (i-j+d) < m) else 0)Ù¹‚‰Ù§xNThe typical application of the 'same' mode is when one has a signal of length Ù¢„anÙ „ööelocalanelocalõÙ§g (with Ù¢„anÙ „ööelocalanelocalõÙ§n greater than Ù¡flen(a)Ù§xG), and the desired output is a filtered signal that is still of length Ù¢„anÙ „ööelocalanelocalõÙ§a.€Ù¹‚ƒÙ§jFor input Ù¡i[x, y, z]Ù§x, this array looks like::      €ÙÀxÀ[y, x, 0, 0, ..., 0, 0, 0]
+[z, y, x, 0, ..., 0, 0, 0]
+[0, z, y, x, ..., 0, 0, 0]
+[0, 0, z, y, ..., 0, 0, 0]
+...
+[0, 0, 0, 0, ..., y, x, 0]
+[0, 0, 0, 0, ..., z, y, x]
+[0, 0, 0, 0, ..., 0, z, y]ÙÆƒlversionaddeddTODOÙ¹‚Ù§f1.5.0 €öpOther ParametersÙ¯‚€öjParametersÙ¯‚ƒÙ°ƒaao(m,) array_likeÙ¹‚Ù§xThe 1-D array to convolve.€Ù°ƒancintÙ¹‚‡Ù§xfThe number of columns in the resulting matrix.  It gives the length of the input to be convolved with Ù¢„aaÙ „ööelocalaaelocalõÙ§x&.  This is analogous to the length of Ù£ƒavööÙ§d in Ù¡tnumpy.convolve(a, v)Ù§a.€Ù°ƒdmodecstrÙ¹‚‡Ù§uThis is analogous to Ù¢„dmodeÙ „ööelocaldmodeelocalõÙ§d in Ù¡xnumpy.convolve(v, a, mode)Ù§xA. It must be one of ('full', 'valid', 'same'). See below for how Ù¢„dmodeÙ „ööelocaldmodeelocalõÙ§x$ determines the shape of the result.€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚Ù°ƒaAn(k, n) ndarray‚Ù¹‚…Ù§x'The convolution matrix whose row count Ù£ƒakööÙ§l depends on Ù¢„dmodeÙ „ööelocaldmodeelocalõÙ§f      €ÙÀx»=======  =========================
+ mode    k
+=======  =========================
+'full'   m + n -1
+'same'   max(m, n)
+'valid'  max(m, n) - min(m, n) + 1
+=======  =========================ögSummaryÙ¯‚Ù¹‚Ù§xConstruct a convolution matrix.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€öˆgSummarypExtended SummaryjParametersgReturnshSee AlsoeNotesjReferenceshExamplesx"/scipy/linalg/_special_matrices.py«r<class 'function'>x6scipy.signal._lti_conversion.linalg.convolution_matrixÙ¯‚ˆÙ´ƒ˜(Ù±‚bkndfromÙ±‚`a Ù±‚bnnÙ¢„escipyÙ „escipye1.8.0fmoduleescipyfmoduleõÙ±‚bnna.Ù±‚bnnÙ¢„flinalgÙ „escipye1.8.0fmodulelscipy.linalgfmoduleõÙ±‚`a Ù±‚bknfimportÙ±‚`a Ù±‚`Ù¢„rconvolution_matrixÙ „escipye1.8.0fmodulex1scipy.linalg._special_matrices.convolution_matrixfmoduleõÙ±‚`a
+Ù±‚`aAÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`Ù¢„rconvolution_matrixÙ „escipye1.8.0fmodulex1scipy.linalg._special_matrices.convolution_matrixfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚aoa-Ù±‚bmia1Ù±‚`a,Ù±‚`a Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚aoa-Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a Ù±‚bmia5Ù±‚`a,Ù±‚`a Ù±‚`dmodeÙ±‚aoa=Ù±‚bs1a'Ù±‚bs1dsameÙ±‚bs1a'Ù±‚`a)Ù±‚`a
+Ù±‚`Ù¢„aAÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõx‘array([[ 4, -1,  0,  0,  0],
+       [-2,  4, -1,  0,  0],
+       [ 0, -2,  4, -1,  0],
+       [ 0,  0, -2,  4, -1],
+       [ 0,  0,  0, -2,  4]])fexecedÙ¹‚…Ù§xCompare multiplication by Ù¢„aAÙ „ööelocalaAelocalõÙ§q with the use of Ù¢„nnumpy.convolveÙ „enumpya*capinnumpy.convolvefmoduleõÙ§a.€Ù´ƒ˜Ù±‚`Ù¢„axÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`Ù¢„bnpÙ „enumpyf1.22.3fmoduleenumpyfmoduleõÙ±‚aoa.Ù±‚`Ù¢„earrayÙ „enumpyf1.22.3fmoduleknumpy.arrayfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚bmia1Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a,Ù±‚`a Ù±‚bmia0Ù±‚`a,Ù±‚`a Ù±‚aoa-Ù±‚bmia3Ù±‚`a,Ù±‚`a Ù±‚bmfc0.5Ù±‚`a]Ù±‚`a)Ù±‚`a
+Ù±‚`Ù¢„aAÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõÙ±‚`a Ù±‚aoa@Ù±‚`a Ù±‚`Ù¢„axÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõx*array([  2. ,   6. ,  -1. , -12.5,   8. ])fexecedÙ¹‚ƒÙ§lVerify that Ù¡eA @ xÙ§x? produced the same result as applying the convolution function.€Ù´ƒ˜Ù±‚`Ù¢„bnpÙ „enumpyf1.22.3fmoduleenumpyfmoduleõÙ±‚aoa.Ù±‚`Ù¢„hconvolveÙ „enumpyf1.22.3fmodulennumpy.convolvefmoduleõÙ±‚`a(Ù±‚`a[Ù±‚aoa-Ù±‚bmia1Ù±‚`a,Ù±‚`a Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚aoa-Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a Ù±‚`Ù¢„axÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõÙ±‚`a,Ù±‚`a Ù±‚`dmodeÙ±‚aoa=Ù±‚bs1a'Ù±‚bs1dsameÙ±‚bs1a'Ù±‚`a)x*array([  2. ,   6. ,  -1. , -12.5,   8. ])fexecedÙ¹‚‡Ù§xFor comparison to the case Ù¡kmode='same'Ù§x0 shown above, here are the matrices produced by Ù¡kmode='full'Ù§e and Ù¡lmode='valid'Ù§x$ for the same coefficients and size.€Ù´ƒ˜Ù±‚`Ù¢„rconvolution_matrixÙ „escipye1.8.0fmodulex1scipy.linalg._special_matrices.convolution_matrixfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚aoa-Ù±‚bmia1Ù±‚`a,Ù±‚`a Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚aoa-Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a Ù±‚bmia5Ù±‚`a,Ù±‚`a Ù±‚`dmodeÙ±‚aoa=Ù±‚bs1a'Ù±‚bs1dfullÙ±‚bs1a'Ù±‚`a)xËarray([[-1,  0,  0,  0,  0],
+       [ 4, -1,  0,  0,  0],
+       [-2,  4, -1,  0,  0],
+       [ 0, -2,  4, -1,  0],
+       [ 0,  0, -2,  4, -1],
+       [ 0,  0,  0, -2,  4],
+       [ 0,  0,  0,  0, -2]])fexecedÙ´ƒ˜Ù±‚`Ù¢„rconvolution_matrixÙ „escipye1.8.0fmodulex1scipy.linalg._special_matrices.convolution_matrixfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚aoa-Ù±‚bmia1Ù±‚`a,Ù±‚`a Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚aoa-Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a Ù±‚bmia5Ù±‚`a,Ù±‚`a Ù±‚`dmodeÙ±‚aoa=Ù±‚bs1a'Ù±‚bs1evalidÙ±‚bs1a'Ù±‚`a)xWarray([[-2,  4, -1,  0,  0],
+       [ 0, -2,  4, -1,  0],
+       [ 0,  0, -2,  4, -1]])fexecedöÙ¼ƒÙ»ƒhtoeplitzx'scipy.linalg._special_matrices.toeplitzõÙ¹‚Ù§oToeplitz matrix€öe1.8.0Ù«x%convolution_matrix(a, n, mode='full')öx1scipy.linalg._special_matrices.convolution_matrix€

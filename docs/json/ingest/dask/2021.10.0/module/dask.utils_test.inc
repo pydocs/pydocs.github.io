@@ -1,0 +1,1 @@
+Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚€ögMethodsÙ¯‚€öeNotesÙ¯‚€öpOther ParametersÙ¯‚€öjParametersÙ¯‚€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚€ögSummaryÙ¯‚Ù¹‚Ù§mNo Docstrings€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö‚gSummarypExtended Summarys/dask/utils_test.pyr<class 'function'>mdask.core.incÙ¯‚€ö€i2021.10.0Ù«finc(x)ösdask.utils_test.inc€
