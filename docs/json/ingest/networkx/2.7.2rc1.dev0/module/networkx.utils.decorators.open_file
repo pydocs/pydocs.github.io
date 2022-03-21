@@ -1,15 +1,0 @@
-Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚€ögMethodsÙ¯‚€öeNotesÙ¯‚„Ù¹‚Ù§xÉNote that this decorator solves the problem when a path argument is specified as a string, but it does not handle the situation when the function wants to accept a default of None (and then handle it).€Ù¹‚Ù§x3Here is an example of how to handle this case::    €ÙÀyÅ@open_file("path")
-def some_function(arg1, arg2, path=None):
-   if path is None:
-       fobj = tempfile.NamedTemporaryFile(delete=False)
-   else:
-       # `path` could have been a string or file object or something
-       # similar. In any event, the decorator has given us a file object
-       # and it will close it for us, if it should.
-       fobj = path
-
-   try:
-       fobj.write("blah")
-   finally:
-       if path is None:
-           fobj.close()Ù¹‚ƒÙ§xdNormally, we'd want to use "with" to ensure that fobj gets closed. However, the decorator will make Ù£ƒdpathööÙ§xÑ a file object for us, and using "with" would undesirably close that file object. Instead, we use a try block, as shown above. When we exit the function, fobj will be closed, if it should be, by the decorator.€öpOther ParametersÙ¯‚€öjParametersÙ¯‚‚Ù°ƒhpath_argmstring or intÙ¹‚Ù§x-Name or index of the argument that is a path.€Ù°ƒdmodecstrÙ¹‚Ù§xString for opening mode.€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚Ù°ƒj_open_filehfunctionÙ¹‚Ù§x'Function which cleanly executes the io.€ögSummaryÙ¯‚Ù¹‚Ù§x7Decorator to ensure clean opening and closing of files.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö…gSummaryjParametersgReturnshExampleseNotesxnetworkx/utils/decorators.pygr<class 'function'>xnetworkx.adjlist.open_fileÙ¯‚…Ù·ƒq@open_file(0,"r")xdef read_function(pathname):h    passÙ·ƒq@open_file(1,"w")x def write_function(G, pathname):h    passÙ·ƒq@open_file(1,"w")x,def write_function(G, pathname="graph.dot"):h    passÙ·ƒx@open_file("pathname","w")x,def write_function(G, pathname="graph.dot"):h    passÙ·„x@open_file("path", "w+")x$def another_function(arg, **kwargs):x    path = kwargs["path"]h    passö€m2.7.2rc1.dev0Ù«xopen_file(path_arg, mode='r')öx#networkx.utils.decorators.open_file€

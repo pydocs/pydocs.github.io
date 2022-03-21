@@ -1,2 +1,0 @@
-Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚€ögMethodsÙ¯‚€öeNotesÙ¯‚€öpOther ParametersÙ¯‚€öjParametersÙ¯‚€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚€ögSummaryÙ¯‚Ù¹‚Ù§x4Execute a normal python statement in user namespace.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö‚gSummarypExtended Summaryx-/dev/ipython/IPython/core/interactiveshell.py
-er<class 'function'>xIPython.InteractiveShell.exÙ¯‚€ö€i8.2.0.devÙ«mex(self, cmd)öx1IPython.core.interactiveshell.InteractiveShell.ex€

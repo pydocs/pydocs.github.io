@@ -1,29 +1,0 @@
-Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚Ù¹‚ƒÙ§tThis method takes a Ù¢„ckeyÙ „ööelocalckeyelocalõÙ§x? argument to select data at a particular level of a MultiIndex.€ögMethodsÙ¯‚€öeNotesÙ¯‚‚Ù¹‚‚Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ§x can not be used to set values.€Ù¹‚…Ù§xbMultiIndex Slicers is a generic way to get/set values on any level or levels. It is a superset of Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ§t functionality, see Ù£ƒx(MultiIndex Slicers <advanced.mi_slicers>öcrefÙ§a.€öpOther ParametersÙ¯‚€öjParametersÙ¯‚„Ù°ƒckeywlabel or tuple of labelÙ¹‚Ù§x;Label contained in the index, or partially in a MultiIndex.€Ù°ƒdaxisx){0 or 'index', 1 or 'columns'}, default 0Ù¹‚Ù§x"Axis to retrieve cross-section on.€Ù°ƒelevelx4object, defaults to first n levels (n=1 or len(key))Ù¹‚Ù§x‚In case of a key partially contained in a MultiIndex, indicate which levels are used. Levels can be referred by label or position.€Ù°ƒjdrop_levelrbool, default TrueÙ¹‚Ù§x2If False, returns object with same levels as self.€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚Ù°ƒ`sSeries or DataFrameÙ¹‚Ù§x_Cross-section from the original Series or DataFrame corresponding to the selected index levels.€ögSummaryÙ¯‚Ù¹‚Ù§x/Return cross-section from the Series/DataFrame.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö‡gSummarypExtended SummaryjParametersgReturnshSee AlsoeNoteshExamplesw/pandas/core/generic.py–r<class 'function'>xpandas.core.frame.NDFrame.xsÙ¯‚‹Ù´ƒ˜§Ù±‚`adÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`a{Ù±‚bs1a'Ù±‚bs1hnum_legsÙ±‚bs1a'Ù±‚`a:Ù±‚`a Ù±‚`a[Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚bmia4Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a
-Ù±‚`e     Ù±‚bs1a'Ù±‚bs1inum_wingsÙ±‚bs1a'Ù±‚`a:Ù±‚`a Ù±‚`a[Ù±‚bmia0Ù±‚`a,Ù±‚`a Ù±‚bmia0Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a,Ù±‚`a Ù±‚bmia2Ù±‚`a]Ù±‚`a,Ù±‚`a
-Ù±‚`e     Ù±‚bs1a'Ù±‚bs1eclassÙ±‚bs1a'Ù±‚`a:Ù±‚`a Ù±‚`a[Ù±‚bs1a'Ù±‚bs1fmammalÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1fmammalÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1fmammalÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1dbirdÙ±‚bs1a'Ù±‚`a]Ù±‚`a,Ù±‚`a
-Ù±‚`e     Ù±‚bs1a'Ù±‚bs1fanimalÙ±‚bs1a'Ù±‚`a:Ù±‚`a Ù±‚`a[Ù±‚bs1a'Ù±‚bs1Ù¢„ccatÙ „fpandase1.4.1fmodulex.pandas.core.strings.accessor.StringMethods.catfmoduleõÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1cdogÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1cbatÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1gpenguinÙ±‚bs1a'Ù±‚`a]Ù±‚`a,Ù±‚`a
-Ù±‚`e     Ù±‚bs1a'Ù±‚bs1jlocomotionÙ±‚bs1a'Ù±‚`a:Ù±‚`a Ù±‚`a[Ù±‚bs1a'Ù±‚bs1ewalksÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1ewalksÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1efliesÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1ewalksÙ±‚bs1a'Ù±‚`a]Ù±‚`a}Ù±‚`a
-Ù±‚`bdfÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`bpdÙ±‚aoa.Ù±‚`Ù¢„iDataFrameÙ „fpandase1.4.1fmodulexpandas.core.frame.DataFramefmoduleõÙ±‚`a(Ù±‚`ddataÙ±‚aoa=Ù±‚`adÙ±‚`a)Ù±‚`a
-Ù±‚`bdfÙ±‚`a Ù±‚aoa=Ù±‚`a Ù±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„iset_indexÙ „fpandase1.4.1fmodulex%pandas.core.frame.DataFrame.set_indexfmoduleõÙ±‚`a(Ù±‚`a[Ù±‚bs1a'Ù±‚bs1eclassÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1fanimalÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1jlocomotionÙ±‚bs1a'Ù±‚`a]Ù±‚`a)Ù±‚`a
-Ù±‚`bdfy                           num_legs  num_wings
-class  animal  locomotion
-mammal cat     walks              4          0
-       dog     walks              4          0
-       bat     flies              2          2
-bird   penguin walks              2          2hcompiledÙ¹‚Ù§xGet values at specified index€Ù´ƒˆÙ±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ±‚`a(Ù±‚bs1a'Ù±‚bs1fmammalÙ±‚bs1a'Ù±‚`a)x­                   num_legs  num_wings
-animal locomotion
-cat    walks              4          0
-dog    walks              4          0
-bat    flies              2          2hcompiledÙ¹‚Ù§xGet values at several indexes€Ù´ƒÙ±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ±‚`a(Ù±‚`a(Ù±‚bs1a'Ù±‚bs1fmammalÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1cdogÙ±‚bs1a'Ù±‚`a)Ù±‚`a)xJ            num_legs  num_wings
-locomotion
-walks              4          0hcompiledÙ¹‚Ù§x'Get values at specified index and level€Ù´ƒÙ±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ±‚`a(Ù±‚bs1a'Ù±‚bs1Ù¢„ccatÙ „fpandase1.4.1fmodulex.pandas.core.strings.accessor.StringMethods.catfmoduleõÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚`elevelÙ±‚aoa=Ù±‚bmia1Ù±‚`a)x_                   num_legs  num_wings
-class  locomotion
-mammal walks              4          0hcompiledÙ¹‚Ù§x(Get values at several indexes and levels€Ù´ƒ˜Ù±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ±‚`a(Ù±‚`a(Ù±‚bs1a'Ù±‚bs1dbirdÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1ewalksÙ±‚bs1a'Ù±‚`a)Ù±‚`a,Ù±‚`a
-Ù±‚`f      Ù±‚`elevelÙ±‚aoa=Ù±‚`a[Ù±‚bmia0Ù±‚`a,Ù±‚`a Ù±‚bs1a'Ù±‚bs1jlocomotionÙ±‚bs1a'Ù±‚`a]Ù±‚`a)x@         num_legs  num_wings
-animal
-penguin         2          2hcompiledÙ¹‚Ù§x'Get values at specified column and axis€Ù´ƒÙ±‚`bdfÙ±‚aoa.Ù±‚`Ù¢„bxsÙ „fpandase1.4.1fmodulexpandas.core.generic.NDFrame.xsfmoduleõÙ±‚`a(Ù±‚bs1a'Ù±‚bs1inum_wingsÙ±‚bs1a'Ù±‚`a,Ù±‚`a Ù±‚`daxisÙ±‚aoa=Ù±‚bmia1Ù±‚`a)x½class   animal   locomotion
-mammal  cat      walks         0
-        dog      walks         0
-        bat      flies         2
-bird    penguin  walks         2
-Name: num_wings, dtype: int64hcompiledö‚Ù¼ƒÙ»ƒnDataFrame.ilocööÙ¹‚Ù§xAPurely integer-location based indexing for selection by position.€öÙ¼ƒÙ»ƒmDataFrame.locööÙ¹‚Ù§xBAccess a group of rows and columns by label(s) or a boolean array.€öe1.4.1Ù«x>xs(self, key, axis=0, level=None, drop_level: 'bool_t' = True)öxpandas.core.generic.NDFrame.xs€

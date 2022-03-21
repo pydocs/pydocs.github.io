@@ -1,39 +1,0 @@
-Ùª­jAttributesÙ¯‚€öpExtended SummaryÙ¯‚ˆÙ¹‚Ù§xfThis class implements the special methods for almost all of Python's builtin operators defined in the Ù¢„hoperatorÙ „hoperatora*capihoperatorfmoduleõÙ§x  module, including comparisons (Ù¡b==Ù§b, Ù¡a>Ù§x, etc.) and arithmetic (Ù¡a+Ù§b, Ù¡a*Ù§b, Ù¡a-Ù§x, etc.), by deferring to the Ù¡o__array_ufunc__Ù§x) method, which subclasses must implement.€Ù¹‚…Ù§x:It is useful for writing classes that do not inherit from Ù¢„mnumpy.ndarrayÙ „enumpyf1.22.3fmodulemnumpy.ndarrayfmoduleõÙ§x_, but that should support arithmetic and numpy universal functions like arrays as described in ÙË‚x!A Mechanism for Overriding Ufuncsx4https://numpy.org/neps/nep-0013-ufunc-overrides.htmlÙ§a.€Ù¹‚…Ù§x:As an trivial example, consider this implementation of an Ù¡iArrayLikeÙ§xj class that simply wraps a NumPy array and ensures that the result of any arithmetic operation is also an Ù¡iArrayLikeÙ§o object::      €ÙÀyclass ArrayLike(np.lib.mixins.NDArrayOperatorsMixin):
-    def __init__(self, value):
-        self.value = np.asarray(value)
-
-    # One might also consider adding the built-in list type to this
-    # list, to support operations like np.add(array_like, list)
-    _HANDLED_TYPES = (np.ndarray, numbers.Number)
-
-    def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
-        out = kwargs.get('out', ())
-        for x in inputs + out:
-            # Only support operations with instances of _HANDLED_TYPES.
-            # Use ArrayLike instead of type(self) for isinstance to
-            # allow subclasses that don't override __array_ufunc__ to
-            # handle ArrayLike objects.
-            if not isinstance(x, self._HANDLED_TYPES + (ArrayLike,)):
-                return NotImplemented
-
-        # Defer to the implementation of the ufunc on unwrapped values.
-        inputs = tuple(x.value if isinstance(x, ArrayLike) else x
-                       for x in inputs)
-        if out:
-            kwargs['out'] = tuple(
-                x.value if isinstance(x, ArrayLike) else x
-                for x in out)
-        result = getattr(ufunc, method)(*inputs, **kwargs)
-
-        if type(result) is tuple:
-            # multiple return values
-            return tuple(type(self)(x) for x in result)
-        elif method == 'at':
-            # no return value
-            return None
-        else:
-            # one return value
-            return type(self)(result)
-
-    def __repr__(self):
-        return '%s(%r)' % (type(self).__name__, self.value)Ù¹‚…Ù§xIn interactions between Ù¡iArrayLikeÙ§xC objects and numbers or numpy arrays, the result is always another Ù¡iArrayLikeÙ§a:€Ù·‰x>>> x = ArrayLike([1, 2, 3])i>>> x - 1xArrayLike(array([0, 1, 2]))i>>> 1 - xxArrayLike(array([ 0, -1, -2]))t>>> np.arange(3) - xxArrayLike(array([-1, -1, -1]))t>>> x - np.arange(3)xArrayLike(array([1, 1, 1]))Ù¹‚…Ù§qNote that unlike Ù¡mnumpy.ndarrayÙ§b, Ù¡iArrayLikeÙ§x— does not allow operations with arbitrary, unrecognized types. This ensures that interactions with ArrayLike preserve a well-defined casting hierarchy.€ÙÆƒlversionaddeddTODOÙ¹‚Ù§e1.13 €ögMethodsÙ¯‚€öeNotesÙ¯‚€öpOther ParametersÙ¯‚€öjParametersÙ¯‚€öfRaisesÙ¯‚€öhReceivesÙ¯‚€ögReturnsÙ¯‚€ögSummaryÙ¯‚Ù¹‚Ù§xBMixin defining all operator special methods using __array_ufunc__.€öhWarningsÙ¯‚€öeWarnsÙ¯‚€öfYieldsÙ¯‚€ö‚gSummarypExtended Summaryt/numpy/lib/mixins.py;n<class 'type'>x&numpy.lib.mixins.NDArrayOperatorsMixinÙ¯‚€ö€f1.22.3Ù«ööx&numpy.lib.mixins.NDArrayOperatorsMixin€
