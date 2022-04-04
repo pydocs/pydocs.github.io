@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+               <div class='block_directive'>
+    <div class='head'>.. sectionauthor:: []
+    </div>
+    <pre class='not-implemented'><p>Pierre Gerard - Marchant &lt; pierregmcode@gmail.com&gt; </p>
+</pre>
+</div>
+
+
+
+<h1>Importing data with :func:`~numpy.genfromtxt`</h1>
+               <p>NumPy provides several functions to create arrays from tabular data. We focus here on the         <code class='verbatim'>~numpy.genfromtxt</code>
+ function.</p>
+
+               <p>In a nutshell,         <code class='verbatim'>~numpy.genfromtxt</code>
+ runs two main loops.  The first loop converts each line of the file in a sequence of strings.  The second loop converts each string to the appropriate data type.  This mechanism is slower than a single loop, but gives more flexibility.  In particular,         <code class='verbatim'>~numpy.genfromtxt</code>
+ is able to take missing data into account, when other faster and simpler functions like         <code class='verbatim'>~numpy.loadtxt</code>
+ cannot.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>When giving examples, we will use the following conventions : : &gt;&gt;&gt; import numpy as np &gt;&gt;&gt; from io import StringIO </p>
+
+</div>
+
+
+
+<h1>Defining the input</h1>
+               <p>The only mandatory argument of         <code class='verbatim'>~numpy.genfromtxt</code>
+ is the source of the data. It can be a string, a list of strings, a generator or an open file-like object with a         <code class='verbatim'>read</code>
+ method, for example, a file or          <code class='verbatim'>io.StringIO</code>
+ object. If a single string is provided, it is assumed to be the name of a local or remote file. If a list of strings or a generator returning strings is provided, each string is treated as one line in a file. When the URL of a remote file is passed, the file is automatically downloaded to the current directory and opened.</p>
+
+               <p>Recognized file types are text files and archives.  Currently, the function recognizes         <code class='verbatim'>gzip</code>
+ and         <code class='verbatim'>bz2</code>
+ (        <code class='verbatim'>bzip2</code>
+) archives.  The type of the archive is determined from the extension of the file: if the filename ends with         <code class='verbatim'>&#39;.gz&#39;</code>
+, a         <code class='verbatim'>gzip</code>
+ archive is expected; if it ends with         <code class='verbatim'>&#39;bz2&#39;</code>
+, a         <code class='verbatim'>bzip2</code>
+ archive is assumed.</p>
+
+
+<h1>Splitting the lines into columns</h1>
+
+<h1>The ``delimiter`` argument</h1>
+               <p>Once the file is defined and open for reading,         <code class='verbatim'>~numpy.genfromtxt</code>
+ splits each non-empty line into a sequence of strings.  Empty or commented lines are just skipped.  The         <code class='verbatim'>delimiter</code>
+ keyword is used to define how the splitting should take place.</p>
+
+               <p>Quite often, a single character marks the separation between columns.  For example, comma-separated files (CSV) use a comma (        <code class='verbatim'>,</code>
+) or a semicolon (        <code class='verbatim'>;</code>
+) as delimiter::     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;1, 2, 3\n4, 5, 6&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;)
+array([[1.,  2.,  3.],
+       [4.,  5.,  6.]])</pre>
+               <p>Another common separator is         <code class='verbatim'>&#34;\t&#34;</code>
+, the tabulation character.  However, we are not limited to a single character, any string will do.  By default,         <code class='verbatim'>~numpy.genfromtxt</code>
+ assumes         <code class='verbatim'>delimiter=None</code>
+, meaning that the line is split along white spaces (including tabs) and that consecutive white spaces are considered as a single white space.</p>
+
+               <p>Alternatively, we may be dealing with a fixed-width file, where columns are defined as a given number of characters.  In that case, we need to set         <code class='verbatim'>delimiter</code>
+ to a single integer (if all the columns have the same size) or to a sequence of integers (if columns can have different sizes)::     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;  1  2  3\n  4  5 67\n890123  4&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=3)
+array([[  1.,    2.,    3.],
+       [  4.,    5.,   67.],
+       [890.,  123.,    4.]])
+&gt;&gt;&gt; data = u&#34;123456789\n   4  7 9\n   4567 9&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=(4, 3, 2))
+array([[1234.,   567.,    89.],
+       [   4.,     7.,     9.],
+       [   4.,   567.,     9.]])</pre>
+
+<h1>The ``autostrip`` argument</h1>
+               <p>By default, when a line is decomposed into a series of strings, the individual entries are not stripped of leading nor trailing white spaces. This behavior can be overwritten by setting the optional argument         <code class='verbatim'>autostrip</code>
+ to a value of         <code class='verbatim'>True</code>
+     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;1, abc , 2\n 3, xxx, 4&#34;
+&gt;&gt;&gt; # Without autostrip
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;, dtype=&#34;|U5&#34;)
+array([[&#39;1&#39;, &#39; abc &#39;, &#39; 2&#39;],
+       [&#39;3&#39;, &#39; xxx&#39;, &#39; 4&#39;]], dtype=&#39;&lt;U5&#39;)
+&gt;&gt;&gt; # With autostrip
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;, dtype=&#34;|U5&#34;, autostrip=True)
+array([[&#39;1&#39;, &#39;abc&#39;, &#39;2&#39;],
+       [&#39;3&#39;, &#39;xxx&#39;, &#39;4&#39;]], dtype=&#39;&lt;U5&#39;)</pre>
+
+<h1>The ``comments`` argument</h1>
+               <p>The optional argument         <code class='verbatim'>comments</code>
+ is used to define a character string that marks the beginning of a comment.  By default,         <code class='verbatim'>~numpy.genfromtxt</code>
+ assumes         <code class='verbatim'>comments=&#39;#&#39;</code>
+.  The comment marker may occur anywhere on the line.  Any character present after the comment marker(s) is simply ignored::     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;&#34;&#34;#
+... # Skip me !
+... # Skip me too !
+... 1, 2
+... 3, 4
+... 5, 6 #This is the third line of the data
+... 7, 8
+... # And here comes the last line
+... 9, 0
+... &#34;&#34;&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), comments=&#34;#&#34;, delimiter=&#34;,&#34;)
+array([[1., 2.],
+       [3., 4.],
+       [5., 6.],
+       [7., 8.],
+       [9., 0.]])</pre>
+                           <div class='admonition'>
+    <div>versionadded</div>
+        <p>When ``comments`` is set to ``None``, no lines are treated as comments. </p>
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>There is one notable exception to this behavior : if the optional argument ``names=True``, the first commented line will be examined for names. </p>
+
+</div>
+
+
+
+<h1>Skipping lines and choosing columns</h1>
+
+<h1>The ``skip_header`` and ``skip_footer`` arguments</h1>
+               <p>The presence of a header in the file can hinder data processing.  In that case, we need to use the         <code class='verbatim'>skip_header</code>
+ optional argument.  The values of this argument must be an integer which corresponds to the number of lines to skip at the beginning of the file, before any other action is performed.  Similarly, we can skip the last         <code class='verbatim'>n</code>
+ lines of the file by using the         <code class='verbatim'>skip_footer</code>
+ attribute and giving it a value of         <code class='verbatim'>n</code>
+     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;\n&#34;.join(str(i) for i in range(10))
+&gt;&gt;&gt; np.genfromtxt(StringIO(data),)
+array([0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9.])
+&gt;&gt;&gt; np.genfromtxt(StringIO(data),
+...               skip_header=3, skip_footer=5)
+array([3.,  4.])</pre>
+               <p>By default,         <code class='verbatim'>skip_header=0</code>
+ and         <code class='verbatim'>skip_footer=0</code>
+, meaning that no lines are skipped.</p>
+
+
+<h1>The ``usecols`` argument</h1>
+               <p>In some cases, we are not interested in all the columns of the data but only a few of them.  We can select which columns to import with the         <code class='verbatim'>usecols</code>
+ argument.  This argument accepts a single integer or a sequence of integers corresponding to the indices of the columns to import. Remember that by convention, the first column has an index of 0.  Negative integers behave the same as regular Python negative indexes.</p>
+
+               <p>For example, if we want to import only the first and the last columns, we can use         <code class='verbatim'>usecols=(0, -1)</code>
+     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;1 2 3\n4 5 6&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), usecols=(0, -1))
+array([[1.,  3.],
+       [4.,  6.]])</pre>
+               <p>If the columns have names, we can also select which columns to import by giving their name to the         <code class='verbatim'>usecols</code>
+ argument, either as a sequence of strings or a comma-separated string::     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;1 2 3\n4 5 6&#34;
+&gt;&gt;&gt; np.genfromtxt(StringIO(data),
+...               names=&#34;a, b, c&#34;, usecols=(&#34;a&#34;, &#34;c&#34;))
+array([(1., 3.), (4., 6.)], dtype=[(&#39;a&#39;, &#39;&lt;f8&#39;), (&#39;c&#39;, &#39;&lt;f8&#39;)])
+&gt;&gt;&gt; np.genfromtxt(StringIO(data),
+...               names=&#34;a, b, c&#34;, usecols=(&#34;a, c&#34;))
+    array([(1., 3.), (4., 6.)], dtype=[(&#39;a&#39;, &#39;&lt;f8&#39;), (&#39;c&#39;, &#39;&lt;f8&#39;)])</pre>
+
+<h1>Choosing the data type</h1>
+               <p>The main way to control how the sequences of strings we have read from the file are converted to other types is to set the         <code class='verbatim'>dtype</code>
+ argument. Acceptable values for this argument are:</p>
+
+                          <ul>               <li>               <p>a single type, such as         <code class='verbatim'>dtype=float</code>
+.   The output will be 2D with the given dtype, unless a name has been   associated with each column with the use of the         <code class='verbatim'>names</code>
+ argument   (see below).  Note that         <code class='verbatim'>dtype=float</code>
+ is the default for           <code class='verbatim'>~numpy.genfromtxt</code>
+.</p>
+
+</li>
+               <li>               <p>a sequence of types, such as         <code class='verbatim'>dtype=(int, float, float)</code>
+.</p>
+
+</li>
+               <li>               <p>a comma-separated string, such as         <code class='verbatim'>dtype=&#34;i4,f8,|U3&#34;</code>
+.</p>
+
+</li>
+               <li>               <p>a dictionary with two keys         <code class='verbatim'>&#39;names&#39;</code>
+ and         <code class='verbatim'>&#39;formats&#39;</code>
+.</p>
+
+</li>
+               <li>               <p>a sequence of tuples         <code class='verbatim'>(name, type)</code>
+, such as           <code class='verbatim'>dtype=[(&#39;A&#39;, int), (&#39;B&#39;, float)]</code>
+.</p>
+
+</li>
+               <li>               <p>an existing         <code class='verbatim'>numpy.dtype</code>
+ object.</p>
+
+</li>
+               <li>               <p>the special value         <code class='verbatim'>None</code>
+.   In that case, the type of the columns will be determined from the data   itself (see below).</p>
+
+</li>
+            </ul>
+
+               <p>In all the cases but the first one, the output will be a 1D array with a structured dtype.  This dtype has as many fields as items in the sequence. The field names are defined with the         <code class='verbatim'>names</code>
+ keyword.</p>
+
+               <p>When         <code class='verbatim'>dtype=None</code>
+, the type of each column is determined iteratively from its data.  We start by checking whether a string can be converted to a boolean (that is, if the string matches         <code class='verbatim'>true</code>
+ or         <code class='verbatim'>false</code>
+ in lower cases); then whether it can be converted to an integer, then to a float, then to a complex and eventually to a string.</p>
+
+               <p>The option         <code class='verbatim'>dtype=None</code>
+ is provided for convenience.  However, it is significantly slower than setting the dtype explicitly.</p>
+
+
+<h1>Setting the names</h1>
+
+<h1>The ``names`` argument</h1>
+               <p>A natural approach when dealing with tabular data is to allocate a name to each column.  A first possibility is to use an explicit structured dtype, as mentioned previously::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, dtype=[(_, int) for _ in &#34;abc&#34;])
+array([(1, 2, 3), (4, 5, 6)],
+      dtype=[(&#39;a&#39;, &#39;&lt;i8&#39;), (&#39;b&#39;, &#39;&lt;i8&#39;), (&#39;c&#39;, &#39;&lt;i8&#39;)])</pre>
+               <p>Another simpler possibility is to use the         <code class='verbatim'>names</code>
+ keyword with a sequence of strings or a comma-separated string::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, names=&#34;A, B, C&#34;)
+array([(1., 2., 3.), (4., 5., 6.)],
+      dtype=[(&#39;A&#39;, &#39;&lt;f8&#39;), (&#39;B&#39;, &#39;&lt;f8&#39;), (&#39;C&#39;, &#39;&lt;f8&#39;)])</pre>
+               <p>In the example above, we used the fact that by default,         <code class='verbatim'>dtype=float</code>
+. By giving a sequence of names, we are forcing the output to a structured dtype.</p>
+
+               <p>We may sometimes need to define the column names from the data itself.  In that case, we must use the         <code class='verbatim'>names</code>
+ keyword with a value of         <code class='verbatim'>True</code>
+.  The names will then be read from the first line (after the         <code class='verbatim'>skip_header</code>
+ ones), even if the line is commented out::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;So it goes\n#a b c\n1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, skip_header=1, names=True)
+array([(1., 2., 3.), (4., 5., 6.)],
+      dtype=[(&#39;a&#39;, &#39;&lt;f8&#39;), (&#39;b&#39;, &#39;&lt;f8&#39;), (&#39;c&#39;, &#39;&lt;f8&#39;)])</pre>
+               <p>The default value of         <code class='verbatim'>names</code>
+ is         <code class='verbatim'>None</code>
+.  If we give any other value to the keyword, the new names will overwrite the field names we may have defined with the dtype::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; ndtype=[(&#39;a&#39;,int), (&#39;b&#39;, float), (&#39;c&#39;, int)]
+&gt;&gt;&gt; names = [&#34;A&#34;, &#34;B&#34;, &#34;C&#34;]
+&gt;&gt;&gt; np.genfromtxt(data, names=names, dtype=ndtype)
+array([(1, 2., 3), (4, 5., 6)],
+      dtype=[(&#39;A&#39;, &#39;&lt;i8&#39;), (&#39;B&#39;, &#39;&lt;f8&#39;), (&#39;C&#39;, &#39;&lt;i8&#39;)])</pre>
+
+<h1>The ``defaultfmt`` argument</h1>
+               <p>If         <code class='verbatim'>names=None</code>
+ but a structured dtype is expected, names are defined with the standard NumPy default of         <code class='verbatim'>&#34;f%i&#34;</code>
+, yielding names like         <code class='verbatim'>f0</code>
+,         <code class='verbatim'>f1</code>
+ and so forth::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, dtype=(int, float, int))
+array([(1, 2., 3), (4, 5., 6)],
+      dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f8&#39;), (&#39;f2&#39;, &#39;&lt;i8&#39;)])</pre>
+               <p>In the same way, if we don&#39;t give enough names to match the length of the dtype, the missing names will be defined with this default template::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, dtype=(int, float, int), names=&#34;a&#34;)
+array([(1, 2., 3), (4, 5., 6)],
+      dtype=[(&#39;a&#39;, &#39;&lt;i8&#39;), (&#39;f0&#39;, &#39;&lt;f8&#39;), (&#39;f1&#39;, &#39;&lt;i8&#39;)])</pre>
+               <p>We can overwrite this default with the         <code class='verbatim'>defaultfmt</code>
+ argument, that takes any format string::     </p>
+
+               <pre>&gt;&gt;&gt; data = StringIO(&#34;1 2 3\n 4 5 6&#34;)
+&gt;&gt;&gt; np.genfromtxt(data, dtype=(int, float, int), defaultfmt=&#34;var_%02i&#34;)
+array([(1, 2., 3), (4, 5., 6)],
+      dtype=[(&#39;var_00&#39;, &#39;&lt;i8&#39;), (&#39;var_01&#39;, &#39;&lt;f8&#39;), (&#39;var_02&#39;, &#39;&lt;i8&#39;)])</pre>
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We need to keep in mind that ``defaultfmt`` is used only if some names are expected but not defined. </p>
+
+</div>
+
+
+
+<h1>Validating names</h1>
+               <p>NumPy arrays with a structured dtype can also be viewed as         <code class='verbatim'>~numpy.recarray</code>
+, where a field can be accessed as if it were an attribute.  For that reason, we may need to make sure that the field name doesn&#39;t contain any space or invalid character, or that it does not correspond to the name of a standard attribute (like         <code class='verbatim'>size</code>
+ or         <code class='verbatim'>shape</code>
+), which would confuse the interpreter.          <code class='verbatim'>~numpy.genfromtxt</code>
+ accepts three optional arguments that provide a finer control on the names:</p>
+
+                           <pre>``deletechars``
+   Gives a string combining all the characters that must be deleted from
+   the name. By default, invalid characters are
+   ``~!@#$%^&amp;*()-=+~\|]}[{&#39;;:
+   /?.&gt;,&lt;``.
+``excludelist``
+   Gives a list of the names to exclude, such as ``return``, ``file``,
+   ``print``...  If one of the input name is part of this list, an
+   underscore character (``&#39;_&#39;``) will be appended to it.
+``case_sensitive``
+   Whether the names should be case-sensitive (``case_sensitive=True``),
+   converted to upper case (``case_sensitive=False`` or
+   ``case_sensitive=&#39;upper&#39;``) or to lower case
+   (``case_sensitive=&#39;lower&#39;``).
+</pre>
+
+
+
+<h1>Tweaking the conversion</h1>
+
+<h1>The ``converters`` argument</h1>
+               <p>Usually, defining a dtype is sufficient to define how the sequence of strings must be converted.  However, some additional control may sometimes be required.  For example, we may want to make sure that a date in a format         <code class='verbatim'>YYYY/MM/DD</code>
+ is converted to a         <code class='verbatim'>~datetime.datetime</code>
+ object, or that a string like         <code class='verbatim'>xx%</code>
+ is properly converted to a float between 0 and 1.  In such cases, we should define conversion functions with the         <code class='verbatim'>converters</code>
+ arguments.</p>
+
+               <p>The value of this argument is typically a dictionary with column indices or column names as keys and a conversion functions as values.  These conversion functions can either be actual functions or lambda functions. In any case, they should accept only a string as input and output only a single element of the wanted type.</p>
+
+               <p>In the following example, the second column is converted from as string representing a percentage to a float between 0 and 1::     </p>
+
+               <pre>&gt;&gt;&gt; convertfunc = lambda x: float(x.strip(b&#34;%&#34;))/100.
+&gt;&gt;&gt; data = u&#34;1, 2.3%, 45.\n6, 78.9%, 0&#34;
+&gt;&gt;&gt; names = (&#34;i&#34;, &#34;p&#34;, &#34;n&#34;)
+&gt;&gt;&gt; # General case .....
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;, names=names)
+array([(1., nan, 45.), (6., nan, 0.)],
+      dtype=[(&#39;i&#39;, &#39;&lt;f8&#39;), (&#39;p&#39;, &#39;&lt;f8&#39;), (&#39;n&#39;, &#39;&lt;f8&#39;)])</pre>
+               <p>We need to keep in mind that by default,         <code class='verbatim'>dtype=float</code>
+.  A float is therefore expected for the second column.  However, the strings         <code class='verbatim'>&#39; 2.3%&#39;</code>
+ and         <code class='verbatim'>&#39; 78.9%&#39;</code>
+ cannot be converted to float and we end up having         <code class='verbatim'>np.nan</code>
+ instead.  Let&#39;s now use a converter::     </p>
+
+               <pre>&gt;&gt;&gt; # Converted case ...
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;, names=names,
+...               converters={1: convertfunc})
+array([(1., 0.023, 45.), (6., 0.789, 0.)],
+      dtype=[(&#39;i&#39;, &#39;&lt;f8&#39;), (&#39;p&#39;, &#39;&lt;f8&#39;), (&#39;n&#39;, &#39;&lt;f8&#39;)])</pre>
+               <p>The same results can be obtained by using the name of the second column (        <code class='verbatim'>&#34;p&#34;</code>
+) as key instead of its index (1)::     </p>
+
+               <pre>&gt;&gt;&gt; # Using a name for the converter ...
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;, names=names,
+...               converters={&#34;p&#34;: convertfunc})
+array([(1., 0.023, 45.), (6., 0.789, 0.)],
+      dtype=[(&#39;i&#39;, &#39;&lt;f8&#39;), (&#39;p&#39;, &#39;&lt;f8&#39;), (&#39;n&#39;, &#39;&lt;f8&#39;)])</pre>
+               <p>Converters can also be used to provide a default for missing entries.  In the following example, the converter         <code class='verbatim'>convert</code>
+ transforms a stripped string into the corresponding float or into -999 if the string is empty. We need to explicitly strip the string from white spaces as it is not done by default::     </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;1, , 3\n 4, 5, 6&#34;
+&gt;&gt;&gt; convert = lambda x: float(x.strip() or -999)
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), delimiter=&#34;,&#34;,
+...               converters={1: convert})
+array([[   1., -999.,    3.],
+       [   4.,    5.,    6.]])</pre>
+
+<h1>Using missing and filling values</h1>
+               <p>Some entries may be missing in the dataset we are trying to import.  In a previous example, we used a converter to transform an empty string into a float.  However, user-defined converters may rapidly become cumbersome to manage.</p>
+
+               <p>The         <code class='verbatim'>~numpy.genfromtxt</code>
+ function provides two other complementary mechanisms: the         <code class='verbatim'>missing_values</code>
+ argument is used to recognize missing data and a second argument,         <code class='verbatim'>filling_values</code>
+, is used to process these missing data.</p>
+
+
+<h1>``missing_values``</h1>
+               <p>By default, any empty string is marked as missing.  We can also consider more complex strings, such as         <code class='verbatim'>&#34;N/A&#34;</code>
+ or         <code class='verbatim'>&#34;???&#34;</code>
+ to represent missing or invalid data.  The         <code class='verbatim'>missing_values</code>
+ argument accepts three kinds of values:</p>
+
+                           <pre>a string or a comma-separated string
+   This string will be used as the marker for missing data for all the
+   columns
+a sequence of strings
+   In that case, each item is associated to a column, in order.
+a dictionary
+   Values of the dictionary are strings or sequence of strings.  The
+   corresponding keys can be column indices (integers) or column names
+   (strings). In addition, the special key ``None`` can be used to
+   define a default applicable to all columns.
+</pre>
+
+
+
+<h1>``filling_values``</h1>
+               <p>We know how to recognize missing data, but we still need to provide a value for these missing entries.  By default, this value is determined from the expected dtype according to this table:</p>
+
+               <p>=============  ============== Expected type  Default =============  ==============         <code class='verbatim'>bool</code>
+               <code class='verbatim'>False</code>
+         <code class='verbatim'>int</code>
+                <code class='verbatim'>-1</code>
+         <code class='verbatim'>float</code>
+              <code class='verbatim'>np.nan</code>
+         <code class='verbatim'>complex</code>
+            <code class='verbatim'>np.nan+0j</code>
+         <code class='verbatim'>string</code>
+             <code class='verbatim'>&#39;???&#39;</code>
+ =============  ==============</p>
+
+               <p>We can get a finer control on the conversion of missing values with the         <code class='verbatim'>filling_values</code>
+ optional argument.  Like         <code class='verbatim'>missing_values</code>
+, this argument accepts different kind of values:</p>
+
+                           <pre>a single value
+   This will be the default for all columns
+a sequence of values
+   Each entry will be the default for the corresponding column
+a dictionary
+   Each key can be a column index or a column name, and the
+   corresponding value should be a single object.  We can use the
+   special key ``None`` to define a default for all columns.
+</pre>
+
+
+               <p>In the following example, we suppose that the missing values are flagged with         <code class='verbatim'>&#34;N/A&#34;</code>
+ in the first column and by         <code class='verbatim'>&#34;???&#34;</code>
+ in the third column. We wish to transform these missing values to 0 if they occur in the first and second column, and to -999 if they occur in the last column::      </p>
+
+               <pre>&gt;&gt;&gt; data = u&#34;N/A, 2, 3\n4, ,???&#34;
+&gt;&gt;&gt; kwargs = dict(delimiter=&#34;,&#34;,
+...               dtype=int,
+...               names=&#34;a,b,c&#34;,
+...               missing_values={0:&#34;N/A&#34;, &#39;b&#39;:&#34; &#34;, 2:&#34;???&#34;},
+...               filling_values={0:0, &#39;b&#39;:0, 2:-999})
+&gt;&gt;&gt; np.genfromtxt(StringIO(data), **kwargs)
+array([(0, 2, 3), (4, 0, -999)],
+      dtype=[(&#39;a&#39;, &#39;&lt;i8&#39;), (&#39;b&#39;, &#39;&lt;i8&#39;), (&#39;c&#39;, &#39;&lt;i8&#39;)])</pre>
+
+<h1>``usemask``</h1>
+               <p>We may also want to keep track of the occurrence of missing data by constructing a boolean mask, with         <code class='verbatim'>True</code>
+ entries where data was missing and         <code class='verbatim'>False</code>
+ otherwise.  To do that, we just have to set the optional argument         <code class='verbatim'>usemask</code>
+ to         <code class='verbatim'>True</code>
+ (the default is         <code class='verbatim'>False</code>
+).  The output array will then be a         <code class='verbatim'>~numpy.ma.MaskedArray</code>
+.</p>
+
+                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Comment: 
+   |value: &#39;.. unpack=None, loose=True, invalid_raise=True)&#39;
+   |&gt;</pre>
+
+<h1>Shortcut functions</h1>
+               <p>In addition to         <code class='verbatim'>~numpy.genfromtxt</code>
+, the         <code class='verbatim'>numpy.lib.npyio</code>
+ module provides several convenience functions derived from         <code class='verbatim'>~numpy.genfromtxt</code>
+.  These functions work the same way as the original, but they have different default values.</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>numpy.lib.npyio.recfromtxt</code>
+</p>
+</dt>
+               <dd><p>Returns a standard         <code class='verbatim'>numpy.recarray</code>
+ (if         <code class='verbatim'>usemask=False</code>
+) or a            <code class='verbatim'>numpy.ma.mrecords.MaskedRecords</code>
+ array (if         <code class='verbatim'>usemaske=True</code>
+).  The    default dtype is         <code class='verbatim'>dtype=None</code>
+, meaning that the types of each column    will be automatically determined.</p>
+</dd>
+               <dt><p>        <code class='verbatim'>numpy.lib.npyio.recfromcsv</code>
+</p>
+</dt>
+               <dd><p>Like         <code class='verbatim'>numpy.lib.npyio.recfromtxt</code>
+, but with a default         <code class='verbatim'>delimiter=&#34;,&#34;</code>
+.</p>
+</dd>
+           </dl>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

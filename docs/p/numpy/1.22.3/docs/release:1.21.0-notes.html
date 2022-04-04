@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+               <div class='block_directive'>
+    <div class='head'>.. currentmodule:: []
+    </div>
+    <pre class='not-implemented'><p>numpy </p>
+</pre>
+</div>
+
+
+
+<h1>NumPy 1.21.0 Release Notes</h1>
+               <p>The NumPy 1.21.0 release highlights are</p>
+
+                          <ul>               <li>               <p>continued SIMD work covering more functions and platforms,</p>
+
+</li>
+               <li>               <p>initial work on the new dtype infrastructure and casting,</p>
+
+</li>
+               <li>               <p>universal2 wheels for Python 3.8 and Python 3.9 on Mac,</p>
+
+</li>
+               <li>               <p>improved documentation,</p>
+
+</li>
+               <li>               <p>improved annotations,</p>
+
+</li>
+               <li>               <p>new         <code class='verbatim'>PCG64DXSM</code>
+ bitgenerator for random numbers.</p>
+
+</li>
+            </ul>
+
+               <p>In addition there are the usual large number of bug fixes and other improvements.</p>
+
+               <p>The Python versions supported for this release are 3.7-3.9. Official support for Python 3.10 will be added when it is released.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>There are unresolved problems compiling NumPy 1.20.0 with gcc - 11.1. * Optimization level ` - O3` results in many incorrect warnings when running the tests. * On some hardware NumPY will hang in an infinite loop. </p>
+
+</div>
+
+
+
+<h1>New functions</h1>
+               <div class='block_directive'>
+    <div class='head'>.. currentmodule:: []
+    </div>
+    <pre class='not-implemented'><p>numpy.random </p>
+</pre>
+</div>
+
+
+
+<h1>Add `PCG64DXSM` `BitGenerator`</h1>
+               <p>Uses of the         <code class='verbatim'>PCG64</code>
+         <code class='verbatim'>BitGenerator</code>
+ in a massively-parallel context have been shown to have statistical weaknesses that were not apparent at the first release in numpy 1.17. Most users will never observe this weakness and are safe to continue to use         <code class='verbatim'>PCG64</code>
+. We have introduced a new         <code class='verbatim'>PCG64DXSM</code>
+         <code class='verbatim'>BitGenerator</code>
+ that will eventually become the new default         <code class='verbatim'>BitGenerator</code>
+ implementation used by         <code class='verbatim'>default_rng</code>
+ in future releases.         <code class='verbatim'>PCG64DXSM</code>
+ solves the statistical weakness while preserving the performance and the features of         <code class='verbatim'>PCG64</code>
+.</p>
+
+               <p>See         <code class='verbatim'>upgrading-pcg64</code>
+ for more details.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. currentmodule:: []
+    </div>
+    <pre class='not-implemented'><p>numpy </p>
+</pre>
+</div>
+
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18906" class='external'>gh-18906</a>)</p>
+
+
+<h1>Expired deprecations</h1>
+                          <ul>               <li>               <p>The         <code class='verbatim'>shape</code>
+ argument <code><a link href="/p/numpy/*/api/numpy.unravel_index.html" class='exists'>unravel_index</a></code>
+ cannot be passed   as         <code class='verbatim'>dims</code>
+ keyword argument anymore. (Was deprecated in NumPy 1.16.)</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17900" class='external'>gh-17900</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The function         <code class='verbatim'>PyUFunc_GenericFunction</code>
+ has been disabled.   It was deprecated in NumPy 1.19.  Users should call the ufunc   directly using the Python API.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18697" class='external'>gh-18697</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The function         <code class='verbatim'>PyUFunc_SetUsesArraysAsData</code>
+ has been disabled.   It was deprecated in NumPy 1.19.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18697" class='external'>gh-18697</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The class         <code class='verbatim'>PolyBase</code>
+ has been removed (deprecated in numpy 1.9.0). Please   use the abstract         <code class='verbatim'>ABCPolyBase</code>
+ class instead.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18963" class='external'>gh-18963</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The unused         <code class='verbatim'>PolyError</code>
+ and         <code class='verbatim'>PolyDomainError</code>
+ exceptions are   removed.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18963" class='external'>gh-18963</a>)</p>
+
+</li>
+            </ul>
+
+
+<h1>Deprecations</h1>
+
+<h1>The ``.dtype`` attribute must return a ``dtype``</h1>
+               <p>A         <code class='verbatim'>DeprecationWarning</code>
+ is now given if the         <code class='verbatim'>.dtype</code>
+ attribute of an object passed into         <code class='verbatim'>np.dtype</code>
+ or as a         <code class='verbatim'>dtype=obj</code>
+ argument is not a dtype. NumPy will stop attempting to recursively coerce the result of         <code class='verbatim'>.dtype</code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/13578" class='external'>gh-13578</a>)</p>
+
+
+<h1>Inexact matches for ``numpy.convolve`` and ``numpy.correlate`` are deprecated</h1>
+               <p><code><a link href="/p/numpy/*/api/numpy.convolve.html" class='exists'>convolve</a></code>
+ and <code><a link href="/p/numpy/*/api/numpy.correlate.html" class='exists'>correlate</a></code>
+ now emit a warning when there are case insensitive and/or inexact matches found for         <code class='verbatim'>mode</code>
+ argument in the functions. Pass full         <code class='verbatim'>&#34;same&#34;</code>
+,         <code class='verbatim'>&#34;valid&#34;</code>
+,         <code class='verbatim'>&#34;full&#34;</code>
+ strings instead of         <code class='verbatim'>&#34;s&#34;</code>
+,         <code class='verbatim'>&#34;v&#34;</code>
+,         <code class='verbatim'>&#34;f&#34;</code>
+ for the         <code class='verbatim'>mode</code>
+ argument.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17492" class='external'>gh-17492</a>)</p>
+
+
+<h1>``np.typeDict`` has been formally deprecated</h1>
+               <p>        <code class='verbatim'>np.typeDict</code>
+ is a deprecated alias for         <code class='verbatim'>np.sctypeDict</code>
+ and has been so for over 14 years (<code>:None:None:`6689502_`</code>). A deprecation warning will now be issued whenever getting         <code class='verbatim'>np.typeDict</code>
+.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _6689502: https://github.com/numpy/numpy/commit/668950285c407593a368336ff2e737c5da84af7d&#39;&gt;</pre>
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17586" class='external'>gh-17586</a>)</p>
+
+
+<h1>Exceptions will be raised during array-like creation</h1>
+               <p>When an object raised an exception during access of the special attributes         <code class='verbatim'>__array__</code>
+ or         <code class='verbatim'>__array_interface__</code>
+, this exception was usually ignored. A warning is now given when the exception is anything but AttributeError. To silence the warning, the type raising the exception has to be adapted to raise an         <code class='verbatim'>AttributeError</code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/19001" class='external'>gh-19001</a>)</p>
+
+
+<h1>Four ``ndarray.ctypes`` methods have been deprecated</h1>
+               <p>Four methods of the <code>:None:None:`ndarray.ctypes`</code> object have been deprecated, as they are (undocumentated) implementation artifacts of their respective properties.</p>
+
+               <p>The methods in question are:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>_ctypes.get_data</code>
+ (use         <code class='verbatim'>_ctypes.data</code>
+ instead)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>_ctypes.get_shape</code>
+ (use         <code class='verbatim'>_ctypes.shape</code>
+ instead)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>_ctypes.get_strides</code>
+ (use         <code class='verbatim'>_ctypes.strides</code>
+ instead)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>_ctypes.get_as_parameter</code>
+ (use         <code class='verbatim'>_ctypes._as_parameter_</code>
+ instead)</p>
+
+</li>
+            </ul>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/19031" class='external'>gh-19031</a>)</p>
+
+
+<h1>Expired deprecations</h1>
+                          <ul>               <li>               <p>The         <code class='verbatim'>shape</code>
+ argument <code><a link href="/p/numpy/*/api/numpy.unravel_index.html" class='exists'>numpy.unravel_index</a></code>
+ cannot be passed   as         <code class='verbatim'>dims</code>
+ keyword argument anymore. (Was deprecated in NumPy 1.16.)</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17900" class='external'>gh-17900</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The function         <code class='verbatim'>PyUFunc_GenericFunction</code>
+ has been disabled.   It was deprecated in NumPy 1.19.  Users should call the ufunc   directly using the Python API.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18697" class='external'>gh-18697</a>)</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The function         <code class='verbatim'>PyUFunc_SetUsesArraysAsData</code>
+ has been disabled.   It was deprecated in NumPy 1.19.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18697" class='external'>gh-18697</a>)</p>
+
+</li>
+            </ul>
+
+
+<h1>Remove deprecated ``PolyBase`` and unused ``PolyError`` and ``PolyDomainError``</h1>
+               <p>The class         <code class='verbatim'>PolyBase</code>
+ has been removed (deprecated in numpy 1.9.0). Please use the abstract         <code class='verbatim'>ABCPolyBase</code>
+ class instead.</p>
+
+               <p>Furthermore, the unused         <code class='verbatim'>PolyError</code>
+ and         <code class='verbatim'>PolyDomainError</code>
+ exceptions are removed from the <code><a link href="/p/numpy/*/api/numpy.polynomial.html" class='exists'>numpy.polynomial</a></code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18963" class='external'>gh-18963</a>)</p>
+
+
+<h1>Compatibility notes</h1>
+
+<h1>Error type changes in universal functions</h1>
+               <p>The universal functions may now raise different errors on invalid input in some cases.  The main changes should be that a         <code class='verbatim'>RuntimeError</code>
+ was replaced with a more fitting         <code class='verbatim'>TypeError</code>
+.  When multiple errors were present in the same call, NumPy may now raise a different one.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/15271" class='external'>gh-15271</a>)</p>
+
+
+<h1>``__array_ufunc__`` argument validation</h1>
+               <p>NumPy will now partially validate arguments before calling         <code class='verbatim'>__array_ufunc__</code>
+. Previously, it was possible to pass on invalid arguments (such as a non-existing keyword argument) when dispatch was known to occur.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/15271" class='external'>gh-15271</a>)</p>
+
+
+<h1>``__array_ufunc__`` and additional positional arguments</h1>
+               <p>Previously, all positionally passed arguments were checked for         <code class='verbatim'>__array_ufunc__</code>
+ support.  In the case of         <code class='verbatim'>reduce</code>
+,         <code class='verbatim'>accumulate</code>
+, and         <code class='verbatim'>reduceat</code>
+ all arguments may be passed by position.  This means that when they were passed by position, they could previously have been asked to handle the ufunc call via         <code class='verbatim'>__array_ufunc__</code>
+.  Since this depended on the way the arguments were passed (by position or by keyword), NumPy will now only dispatch on the input and output array.  For example, NumPy will never dispatch on the         <code class='verbatim'>where</code>
+ array in a reduction such as         <code class='verbatim'>np.add.reduce</code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/15271" class='external'>gh-15271</a>)</p>
+
+
+<h1>Validate input values in ``Generator.uniform``</h1>
+               <p>Checked that         <code class='verbatim'>high - low &gt;= 0</code>
+ in         <code class='verbatim'>np.random.Generator.uniform</code>
+. Raises         <code class='verbatim'>ValueError</code>
+ if         <code class='verbatim'>low &gt; high</code>
+. Previously out-of-order inputs were accepted and silently swapped, so that if         <code class='verbatim'>low &gt; high</code>
+, the value generated was         <code class='verbatim'>high + (low - high) * random()</code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17921" class='external'>gh-17921</a>)</p>
+
+
+<h1>``/usr/include`` removed from default include paths</h1>
+               <p>The default include paths when building a package with         <code class='verbatim'>numpy.distutils</code>
+ no longer include         <code class='verbatim'>/usr/include</code>
+. This path is normally added by the compiler, and hardcoding it can be problematic. In case this causes a problem, please open an issue. A workaround is documented in PR 18658.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18658" class='external'>gh-18658</a>)</p>
+
+
+<h1>Changes to comparisons with ``dtype=...``</h1>
+               <p>When the         <code class='verbatim'>dtype=</code>
+ (or         <code class='verbatim'>signature</code>
+) arguments to comparison ufuncs (        <code class='verbatim'>equal</code>
+,         <code class='verbatim'>less</code>
+, etc.) is used, this will denote the desired output dtype in the future. This means that:</p>
+
+                           <pre>np.equal(2, 3, dtype=object)
+</pre>
+
+
+               <p>will give a         <code class='verbatim'>FutureWarning</code>
+ that it will return an         <code class='verbatim'>object</code>
+ array in the future, which currently happens for:</p>
+
+                           <pre>np.equal(None, None, dtype=object)
+</pre>
+
+
+               <p>due to the fact that         <code class='verbatim'>np.array(None)</code>
+ is already an object array. (This also happens for some other dtypes.)</p>
+
+               <p>Since comparisons normally only return boolean arrays, providing any other dtype will always raise an error in the future and give a         <code class='verbatim'>DeprecationWarning</code>
+ now.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18718" class='external'>gh-18718</a>)</p>
+
+
+<h1>Changes to ``dtype`` and ``signature`` arguments in ufuncs</h1>
+               <p>The universal function arguments         <code class='verbatim'>dtype</code>
+ and         <code class='verbatim'>signature</code>
+ which are also valid for reduction such as         <code class='verbatim'>np.add.reduce</code>
+ (which is the implementation for         <code class='verbatim'>np.sum</code>
+) will now issue a warning when the         <code class='verbatim'>dtype</code>
+ provided is not a &#34;basic&#34; dtype.</p>
+
+               <p>NumPy almost always ignored metadata, byteorder or time units on these inputs.  NumPy will now always ignore it and raise an error if byteorder or time unit changed. The following are the most important examples of changes which will give the error.  In some cases previously the information stored was not ignored, in all of these an error is now raised::      </p>
+
+               <pre># Previously ignored the byte-order (affect if non-native)
+np.add(3, 5, dtype=&#34;&gt;i32&#34;)
+
+# The biggest impact is for timedelta or datetimes:
+arr = np.arange(10, dtype=&#34;m8[s]&#34;)
+# The examples always ignored the time unit &#34;ns&#34;:
+np.add(arr, arr, dtype=&#34;m8[ns]&#34;)
+np.maximum.reduce(arr, dtype=&#34;m8[ns]&#34;)
+
+# The following previously did use &#34;ns&#34; (as opposed to `arr.dtype`)
+np.add(3, 5, dtype=&#34;m8[ns]&#34;)  # Now return generic time units
+np.maximum(arr, arr, dtype=&#34;m8[ns]&#34;)  # Now returns &#34;s&#34; (from `arr`)</pre>
+               <p>The same applies for functions like         <code class='verbatim'>np.sum</code>
+ which use these internally. This change is necessary to achieve consistent handling within NumPy.</p>
+
+               <p>If you run into these, in most cases pass for example         <code class='verbatim'>dtype=np.timedelta64</code>
+ which clearly denotes a general         <code class='verbatim'>timedelta64</code>
+ without any unit or byte-order defined.  If you need to specify the output dtype precisely, you may do so by either casting the inputs or providing an output array using <code>:None:None:`out=`</code>.</p>
+
+               <p>NumPy may choose to allow providing an exact output         <code class='verbatim'>dtype</code>
+ here in the future, which would be preceded by a         <code class='verbatim'>FutureWarning</code>
+.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18718" class='external'>gh-18718</a>)</p>
+
+
+<h1>Ufunc ``signature=...`` and ``dtype=`` generalization and ``casting``</h1>
+               <p>The behaviour for         <code class='verbatim'>np.ufunc(1.0, 1.0, signature=...)</code>
+ or         <code class='verbatim'>np.ufunc(1.0, 1.0, dtype=...)</code>
+ can now yield different loops in 1.21 compared to 1.20 because of changes in promotion. When         <code class='verbatim'>signature</code>
+ was previously used, the casting check on inputs was relaxed, which could lead to downcasting inputs unsafely especially if combined with         <code class='verbatim'>casting=&#34;unsafe&#34;</code>
+.</p>
+
+               <p>Casting is now guaranteed to be safe.  If a signature is only partially provided, for example using         <code class='verbatim'>signature=(&#34;float64&#34;, None, None)</code>
+, this could lead to no loop being found (an error). In that case, it is necessary to provide the complete signature to enforce casting the inputs. If         <code class='verbatim'>dtype=&#34;float64&#34;</code>
+ is used or only outputs are set (e.g.         <code class='verbatim'>signature=(None, None, &#34;float64&#34;)</code>
+ the is unchanged. We expect that very few users are affected by this change.</p>
+
+               <p>Further, the meaning of         <code class='verbatim'>dtype=&#34;float64&#34;</code>
+ has been slightly modified and now strictly enforces only the correct output (and not input) DTypes. This means it is now always equivalent to::      </p>
+
+               <pre>signature=(None, None, &#34;float64&#34;)</pre>
+               <p>(If the ufunc has two inputs and one output).  Since this could lead to no loop being found in some cases, NumPy will normally also search for the loop::      </p>
+
+               <pre>signature=(&#34;float64&#34;, &#34;float64&#34;, &#34;float64&#34;)</pre>
+               <p>if the first search failed. In the future, this behaviour may be customized to achieve the expected results for more complex ufuncs.  (For some universal functions such as         <code class='verbatim'>np.ldexp</code>
+ inputs can have different DTypes.)</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18880" class='external'>gh-18880</a>)</p>
+
+
+<h1>Distutils forces strict floating point model on clang</h1>
+               <p>NumPy distutils will now always add the         <code class='verbatim'>-ffp-exception-behavior=strict</code>
+ compiler flag when compiling with clang.  Clang defaults to a non-strict version, which allows the compiler to generate code that does not set floating point warnings/errors correctly.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/19049" class='external'>gh-19049</a>)</p>
+
+
+<h1>C API changes</h1>
+
+<h1>Use of ``ufunc-&gt;type_resolver`` and &#34;type tuple&#34;</h1>
+               <p>NumPy now normalizes the &#34;type tuple&#34; argument to the type resolver functions before calling it.  Note that in the use of this type resolver is legacy behaviour and NumPy will not do so when possible.  Calling         <code class='verbatim'>ufunc-&gt;type_resolver</code>
+ or         <code class='verbatim'>PyUFunc_DefaultTypeResolver</code>
+ is strongly discouraged and will now enforce a normalized type tuple if done.  Note that this does not affect providing a type resolver, which is expected to keep working in most circumstances.  If you have an unexpected use-case for calling the type resolver, please inform the NumPy developers so that a solution can be found.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18718" class='external'>gh-18718</a>)</p>
+
+
+<h1>New Features</h1>
+
+<h1>Added a mypy plugin for handling platform-specific ``numpy.number`` precisions</h1>
+               <p>A <code>:None:None:`mypy_`</code> plugin is now available for automatically assigning the (platform-dependent) precisions of certain <code><a link href="/p/numpy/*/api/numpy.number.html" class='exists'>number</a></code>
+ subclasses, including the likes of <code><a link href="/p/numpy/*/api/numpy.int64.html" class='exists'>int_</a></code>
+, <code><a link href="/p/numpy/*/api/numpy.int64.html" class='exists'>intp</a></code>
+ and <code><a link href="/p/numpy/*/api/numpy.longlong.html" class='exists'>longlong</a></code>
+. See the documentation on         <code class='verbatim'>scalar types &lt;arrays.scalars.built-in&gt;</code>
+ for a comprehensive overview of the affected classes.</p>
+
+               <p>Note that while usage of the plugin is completely optional, without it the precision of above-mentioned classes will be inferred as <code>:None:None:`~typing.Any`</code>.</p>
+
+               <p>To enable the plugin, one must add it to their mypy <code>:None:None:`configuration file`</code>:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ini&#39;]
+    </div>
+    <pre class='not-implemented'><p>[ mypy] plugins = numpy.typing.mypy_plugin </p>
+</pre>
+</div>
+
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _mypy: http://mypy-lang.org/&#39;&gt;</pre>
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _configuration file: https://mypy.readthedocs.io/en/stable/config_file.html&#39;&gt;</pre>
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17843" class='external'>gh-17843</a>)</p>
+
+
+<h1>Let the mypy plugin manage extended-precision ``numpy.number`` subclasses</h1>
+               <p>The <code>:None:None:`mypy_`</code> plugin, introduced in <code>:None:None:`numpy/numpy#17843`</code>, has been expanded: the plugin now removes annotations for platform-specific extended-precision types that are not available to the platform in question. For example, it will remove <code><a link href="/p/numpy/*/api/numpy.float128.html" class='exists'>float128</a></code>
+ when not available.</p>
+
+               <p>Without the plugin <em>all</em> extended-precision types will, as far as mypy is concerned, be available on all platforms.</p>
+
+               <p>To enable the plugin, one must add it to their mypy <code>:None:None:`configuration file`</code>:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ini&#39;]
+    </div>
+    <pre class='not-implemented'><p>[ mypy] plugins = numpy.typing.mypy_plugin </p>
+</pre>
+</div>
+
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _mypy: http://mypy-lang.org/&#39;&gt;</pre>
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _configuration file: https://mypy.readthedocs.io/en/stable/config_file.html&#39;&gt;</pre>
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _`numpy/numpy#17843`: https://github.com/numpy/numpy/pull/17843&#39;&gt;</pre>
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18322" class='external'>gh-18322</a>)</p>
+
+
+<h1>New ``min_digits`` argument for printing float values</h1>
+               <p>A new         <code class='verbatim'>min_digits</code>
+ argument has been added to the dragon4 float printing functions <code><a link href="/p/numpy/*/api/numpy.format_float_positional.html" class='exists'>format_float_positional</a></code>
+ and <code><a link href="/p/numpy/*/api/numpy.format_float_scientific.html" class='exists'>format_float_scientific</a></code>
+ . This kwd guarantees that at least the given number of digits will be printed when printing in unique=True mode, even if the extra digits are unnecessary to uniquely specify the value. It is the counterpart to the precision argument which sets the maximum number of digits to be printed. When unique=False in fixed precision mode, it has no effect and the precision argument fixes the number of digits.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18629" class='external'>gh-18629</a>)</p>
+
+
+<h1>f2py now recognizes Fortran abstract interface blocks</h1>
+               <p><code><a link href="/p/numpy/*/api/numpy.f2py.html" class='exists'>f2py</a></code>
+ can now parse abstract interface blocks.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18695" class='external'>gh-18695</a>)</p>
+
+
+<h1>BLAS and LAPACK configuration via environment variables</h1>
+               <p>Autodetection of installed BLAS and LAPACK libraries can be bypassed by using the         <code class='verbatim'>NPY_BLAS_LIBS</code>
+ and         <code class='verbatim'>NPY_LAPACK_LIBS</code>
+ environment variables. Instead, the link flags in these environment variables will be used directly, and the language is assumed to be F77.  This is especially useful in automated builds where the BLAS and LAPACK that are installed are known exactly.  A use case is replacing the actual implementation at runtime via stub library links.</p>
+
+               <p>If         <code class='verbatim'>NPY_CBLAS_LIBS</code>
+ is set (optional in addition to         <code class='verbatim'>NPY_BLAS_LIBS</code>
+), this will be used as well, by defining         <code class='verbatim'>HAVE_CBLAS</code>
+ and appending the environment variable content to the link flags.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18737" class='external'>gh-18737</a>)</p>
+
+
+<h1>A runtime-subcriptable alias has been added for ``ndarray``</h1>
+               <p>        <code class='verbatim'>numpy.typing.NDArray</code>
+ has been added, a runtime-subscriptable alias for         <code class='verbatim'>np.ndarray[Any, np.dtype[~Scalar]]</code>
+. The new type alias can be used for annotating arrays with a given dtype and unspecified shape.         <code class='verbatim'>1</code>
+</p>
+
+               <p>        <code class='verbatim'>1</code>
+ NumPy does not support the annotating of array shapes as of 1.21, this is expected to change in the future though (see <a link href="https://peps.python.org/pep-0646/" class='external'>Pep 646</a>).</p>
+
+
+<h1>Examples</h1>
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;python&#39;]
+    </div>
+    <pre class='not-implemented'><p>&gt;&gt;&gt; import numpy as np &gt;&gt;&gt; import numpy.typing as npt &gt;&gt;&gt; print ( npt.NDArray) numpy.ndarray [ typing.Any, numpy.dtype [ ~ScalarType]] &gt;&gt;&gt; print ( npt.NDArray [ np.float64]) numpy.ndarray [ typing.Any, numpy.dtype [ numpy.float64]] &gt;&gt;&gt; NDArrayInt = npt.NDArray [ np.int_] &gt;&gt;&gt; a : NDArrayInt = np.arange ( 10) &gt;&gt;&gt; def func ( a : npt.ArrayLike) - &gt; npt.NDArray [ Any] : ... return np.array ( a) </p>
+</pre>
+</div>
+
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18935" class='external'>gh-18935</a>)</p>
+
+
+<h1>Improvements</h1>
+
+<h1>Arbitrary ``period`` option for ``numpy.unwrap``</h1>
+               <p>The size of the interval over which phases are unwrapped is no longer restricted to         <code class='verbatim'>2 * pi</code>
+. This is especially useful for unwrapping degrees, but can also be used for other intervals.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code:: [&#39;python&#39;]
+    </div>
+    <pre class='not-implemented'><p>&gt;&gt;&gt; phase_deg = np.mod ( np.linspace ( 0,720,19), 360) - 180 &gt;&gt;&gt; phase_deg array ( [ - 180., - 140., - 100., - 60., - 20., 20., 60., 100., 140., - 180., - 140., - 100., - 60., - 20., 20., 60., 100., 140., - 180.]) &gt;&gt;&gt; unwrap ( phase_deg, period=360) array ( [ - 180., - 140., - 100., - 60., - 20., 20., 60., 100., 140., 180., 220., 260., 300., 340., 380., 420., 460., 500., 540.]) </p>
+</pre>
+</div>
+
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/16987" class='external'>gh-16987</a>)</p>
+
+
+<h1>``np.unique`` now returns single ``NaN``</h1>
+               <p>When         <code class='verbatim'>np.unique</code>
+ operated on an array with multiple         <code class='verbatim'>NaN</code>
+ entries, its return included a         <code class='verbatim'>NaN</code>
+ for each entry that was         <code class='verbatim'>NaN</code>
+ in the original array. This is now improved such that the returned array contains just one         <code class='verbatim'>NaN</code>
+ as the last element.</p>
+
+               <p>Also for complex arrays all         <code class='verbatim'>NaN</code>
+ values are considered equivalent (no matter whether the         <code class='verbatim'>NaN</code>
+ is in the real or imaginary part). As the representant for the returned array the smallest one in the lexicographical order is chosen - see         <code class='verbatim'>np.sort</code>
+ for how the lexicographical order is defined for complex arrays.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18070" class='external'>gh-18070</a>)</p>
+
+
+<h1>``Generator.rayleigh`` and ``Generator.geometric`` performance improved</h1>
+               <p>The performance of Rayleigh and geometric random variate generation in         <code class='verbatim'>Generator</code>
+ has improved. These are both transformation of exponential random variables and the slow log-based inverse cdf transformation has been replaced with the Ziggurat-based exponential variate generator.</p>
+
+               <p>This change breaks the stream of variates generated  when variates from either of these distributions are produced.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18666" class='external'>gh-18666</a>)</p>
+
+
+<h1>Placeholder annotations have been improved</h1>
+               <p>All placeholder annotations, that were previously annotated as         <code class='verbatim'>typing.Any</code>
+, have been improved. Where appropriate they have been replaced with explicit function definitions, classes or other miscellaneous objects.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18934" class='external'>gh-18934</a>)</p>
+
+
+<h1>Performance improvements</h1>
+
+<h1>Improved performance in integer division of NumPy arrays</h1>
+               <p>Integer division of NumPy arrays now uses <a link href="https://libdivide.com/" class='external'>libdivide</a> when the divisor is a constant. With the usage of libdivide and other minor optimizations, there is a large speedup. The         <code class='verbatim'>//</code>
+ operator and         <code class='verbatim'>np.floor_divide</code>
+ makes use of the new changes.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/17727" class='external'>gh-17727</a>)</p>
+
+
+<h1>Improve performance of ``np.save`` and ``np.load`` for small arrays</h1>
+               <p>        <code class='verbatim'>np.save</code>
+ is now a lot faster for small arrays.</p>
+
+               <p>        <code class='verbatim'>np.load</code>
+ is also faster for small arrays, but only when serializing with a version &gt;=         <code class='verbatim'>(3, 0)</code>
+.</p>
+
+               <p>Both are done by removing checks that are only relevant for Python 2, while still maintaining compatibility with arrays which might have been created by Python 2.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18657" class='external'>gh-18657</a>)</p>
+
+
+<h1>Changes</h1>
+
+<h1>`numpy.piecewise` output class now matches the input class</h1>
+               <p>When <code><a link href="/p/numpy/*/api/numpy.ndarray.html" class='exists'>ndarray</a></code>
+ subclasses are used on input to <code><a link href="/p/numpy/*/api/numpy.piecewise.html" class='exists'>piecewise</a></code>
+, they are passed on to the functions. The output will now be of the same subclass as well.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18110" class='external'>gh-18110</a>)</p>
+
+
+<h1>Enable Accelerate Framework</h1>
+               <p>With the release of macOS 11.3, several different issues that numpy was encountering when using Accelerate Framework&#39;s implementation of BLAS and LAPACK should be resolved.  This change enables the Accelerate Framework as an option on macOS.  If additional issues are found, please file a bug report against Accelerate using the developer feedback assistant tool (https://developer.apple.com/bug-reporting/). We intend to address issues promptly and plan to continue supporting and updating our BLAS and LAPACK libraries.</p>
+
+               <p>(<a link href="https://github.com/numpy/numpy/pull/18874" class='external'>gh-18874</a>)</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

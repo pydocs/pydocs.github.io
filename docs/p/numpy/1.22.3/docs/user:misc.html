@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Miscellaneous</h1>
+
+<h1>IEEE 754 Floating Point Special Values</h1>
+               <p>Special values defined in numpy: nan, inf,</p>
+
+               <p>NaNs can be used as a poor-man&#39;s mask (if you don&#39;t care what the original value was)</p>
+
+               <p>Note: cannot use equality to test NaNs. E.g.: ::   </p>
+
+               <pre>&gt;&gt;&gt; myarr = np.array([1., 0., np.nan, 3.])
+&gt;&gt;&gt; np.nonzero(myarr == np.nan)
+(array([], dtype=int64),)
+&gt;&gt;&gt; np.nan == np.nan  # is always False! Use special numpy functions instead.
+False
+&gt;&gt;&gt; myarr[myarr == np.nan] = 0. # doesn&#39;t work
+&gt;&gt;&gt; myarr
+array([  1.,   0.,  nan,   3.])
+&gt;&gt;&gt; myarr[np.isnan(myarr)] = 0. # use this instead find
+&gt;&gt;&gt; myarr
+array([1.,  0.,  0.,  3.])</pre>
+               <p>Other related special value functions: ::   </p>
+
+               <pre>isinf():    True if value is inf
+isfinite(): True if not nan or inf
+nan_to_num(): Map nan to 0, inf to max float, -inf to min float</pre>
+               <p>The following corresponds to the usual functions except that nans are excluded from the results: ::   </p>
+
+               <pre>nansum()
+nanmax()
+nanmin()
+nanargmax()
+nanargmin()
+
+&gt;&gt;&gt; x = np.arange(10.)
+&gt;&gt;&gt; x[3] = np.nan
+&gt;&gt;&gt; x.sum()
+nan
+&gt;&gt;&gt; np.nansum(x)
+42.0</pre>
+
+<h1>How numpy handles numerical exceptions</h1>
+               <p>The default is to         <code class='verbatim'>&#39;warn&#39;</code>
+ for         <code class='verbatim'>invalid</code>
+,         <code class='verbatim'>divide</code>
+, and         <code class='verbatim'>overflow</code>
+ and         <code class='verbatim'>&#39;ignore&#39;</code>
+ for         <code class='verbatim'>underflow</code>
+.  But this can be changed, and it can be set individually for different kinds of exceptions. The different behaviors are:</p>
+
+                           <pre>- &#39;ignore&#39; : Take no action when the exception occurs.
+- &#39;warn&#39;   : Print a `RuntimeWarning` (via the Python `warnings` module).
+- &#39;raise&#39;  : Raise a `FloatingPointError`.
+- &#39;call&#39;   : Call a function specified using the `seterrcall` function.
+- &#39;print&#39;  : Print a warning directly to ``stdout``.
+- &#39;log&#39;    : Record error in a Log object specified by `seterrcall`.
+
+hese behaviors can be set for all kinds of errors or specific ones:
+
+- all       : apply to all numeric exceptions
+- invalid   : when NaNs are generated
+- divide    : divide by zero (for integers as well!)
+- overflow  : floating point overflows
+- underflow : floating point underflows
+
+ote that integer divide-by-zero is handled by the same machinery.
+hese behaviors are set on a per-thread basis.
+
+xamples
+-------
+
+:
+
+&gt;&gt;&gt; oldsettings = np.seterr(all=&#39;warn&#39;)
+&gt;&gt;&gt; np.zeros(5,dtype=np.float32)/0.
+Traceback (most recent call last):
+...
+RuntimeWarning: invalid value encountered in divide
+&gt;&gt;&gt; j = np.seterr(under=&#39;ignore&#39;)
+&gt;&gt;&gt; np.array([1.e-100])**10
+array([0.])
+&gt;&gt;&gt; j = np.seterr(invalid=&#39;raise&#39;)
+&gt;&gt;&gt; np.sqrt(np.array([-1.]))
+Traceback (most recent call last):
+...
+FloatingPointError: invalid value encountered in sqrt
+&gt;&gt;&gt; def errorhandler(errstr, errflag):
+...      print(&#34;saw stupid error!&#34;)
+&gt;&gt;&gt; np.seterrcall(errorhandler)
+&gt;&gt;&gt; j = np.seterr(all=&#39;call&#39;)
+&gt;&gt;&gt; np.zeros(5, dtype=np.int32)/0
+saw stupid error!
+array([nan, nan, nan, nan, nan])
+&gt;&gt;&gt; j = np.seterr(**oldsettings) # restore previous
+...                              # error-handling settings
+
+nterfacing to C
+---------------
+nly a survey of the choices. Little detail on how each works.
+
+) Bare metal, wrap your own C-code manually.
+
+- Plusses:
+
+  - Efficient
+  - No dependencies on other tools
+
+- Minuses:
+
+  - Lots of learning overhead:
+
+    - need to learn basics of Python C API
+    - need to learn basics of numpy C API
+    - need to learn how to handle reference counting and love it.
+
+  - Reference counting often difficult to get right.
+
+    - getting it wrong leads to memory leaks, and worse, segfaults
+
+  - API will change for Python 3.0!
+</pre>
+
+
+                          <ol>               <li>               <p>Cython</p>
+
+</li>
+            </ol>
+
+                           <pre>- Plusses:
+
+  - avoid learning C API&#39;s
+  - no dealing with reference counting
+  - can code in pseudo python and generate C code
+  - can also interface to existing C code
+  - should shield you from changes to Python C api
+  - has become the de-facto standard within the scientific Python community
+  - fast indexing support for arrays
+
+- Minuses:
+
+  - Can write code in non-standard form which may become obsolete
+  - Not as flexible as manual wrapping
+</pre>
+
+
+                          <ol>               <li>               <p>ctypes</p>
+
+</li>
+            </ol>
+
+                           <pre>- Plusses:
+
+  - part of Python standard library
+  - good for interfacing to existing shareable libraries, particularly
+    Windows DLLs
+  - avoids API/reference counting issues
+  - good numpy support: arrays have all these in their ctypes
+    attribute: ::
+
+      a.ctypes.data
+      a.ctypes.data_as
+      a.ctypes.shape
+      a.ctypes.shape_as
+      a.ctypes.strides
+      a.ctypes.strides_as
+
+- Minuses:
+
+  - can&#39;t use for writing code to be turned into C extensions, only a wrapper
+    tool.
+</pre>
+
+
+                          <ol>               <li>               <p>SWIG (automatic wrapper generator)</p>
+
+</li>
+            </ol>
+
+                           <pre>- Plusses:
+
+  - around a long time
+  - multiple scripting language support
+  - C++ support
+  - Good for wrapping large (many functions) existing C libraries
+
+- Minuses:
+
+  - generates lots of code between Python and the C code
+  - can cause performance problems that are nearly impossible to optimize
+    out
+  - interface files can be hard to write
+  - doesn&#39;t necessarily avoid reference counting issues or needing to know
+    API&#39;s
+</pre>
+
+
+                          <ol>               <li>               <p>scipy.weave</p>
+
+</li>
+            </ol>
+
+                           <pre>- Plusses:
+
+  - can turn many numpy expressions into C code
+  - dynamic compiling and loading of generated C code
+  - can embed pure C code in Python module and have weave extract, generate
+    interfaces and compile, etc.
+
+- Minuses:
+
+  - Future very uncertain: it&#39;s the only part of Scipy not ported to Python 3
+    and is effectively deprecated in favor of Cython.
+</pre>
+
+
+                          <ol>               <li>               <p>Psyco</p>
+
+</li>
+            </ol>
+
+                           <pre>- Plusses:
+
+  - Turns pure python into efficient machine code through jit-like
+    optimizations
+  - very fast when it optimizes well
+
+- Minuses:
+
+  - Only on intel (windows?)
+  - Doesn&#39;t do much for numpy?
+</pre>
+
+
+
+<h1>Interfacing to Fortran:</h1>
+               <p>The clear choice to wrap Fortran code is <a link href="https://docs.scipy.org/doc/numpy/f2py/" class='external'>f2py</a>.</p>
+
+               <p>Pyfort is an older alternative, but not supported any longer. Fwrap is a newer project that looked promising but isn&#39;t being developed any longer.</p>
+
+
+<h1>Interfacing to C++:</h1>
+                           <pre>1) Cython
+2) CXX
+3) Boost.python
+4) SWIG
+5) SIP (used mainly in PyQT)
+</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

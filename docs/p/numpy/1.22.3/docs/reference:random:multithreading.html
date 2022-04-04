@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Multithreaded Generation</h1>
+               <p>The four core distributions (        <code class='verbatim'>~.Generator.random</code>
+,         <code class='verbatim'>~.Generator.standard_normal</code>
+,         <code class='verbatim'>~.Generator.standard_exponential</code>
+, and         <code class='verbatim'>~.Generator.standard_gamma</code>
+) all allow existing arrays to be filled using the         <code class='verbatim'>out</code>
+ keyword argument. Existing arrays need to be contiguous and well-behaved (writable and aligned). Under normal circumstances, arrays created using the common constructors such as         <code class='verbatim'>numpy.empty</code>
+ will satisfy these requirements.</p>
+
+               <p>This example makes use of Python 3         <code class='verbatim'>concurrent.futures</code>
+ to fill an array using multiple threads.  Threads are long-lived so that repeated calls do not require any additional overheads from thread creation.</p>
+
+               <p>The random numbers generated are reproducible in the sense that the same seed will produce the same outputs, given that the number of threads does not change.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>from numpy.random import default_rng, SeedSequence import multiprocessing import concurrent.futures import numpy as np class MultithreadedRNG : def __init__ ( self, n, seed=None, threads=None) : if threads is None : threads = multiprocessing.cpu_count ( ) self.threads = threads seq = SeedSequence ( seed) self._random_generators = [ default_rng ( s) for s in seq.spawn ( threads)] self.n = n self.executor = concurrent.futures.ThreadPoolExecutor ( threads) self.values = np.empty ( n) self.step = np.ceil ( n / threads).astype ( np.int_) def fill ( self) : def _fill ( random_state, out, first, last) : random_state.standard_normal ( out=out [ first : last]) futures = { } for i in range ( self.threads) : args = ( _fill, self._random_generators [ i], self.values, i * self.step, ( i + 1) * self.step) futures [ self.executor.submit ( *args)] = i concurrent.futures.wait ( futures) def __del__ ( self) : self.executor.shutdown ( False) </p>
+</pre>
+</div>
+
+
+               <p>The multithreaded random number generator can be used to fill an array. The         <code class='verbatim'>values</code>
+ attributes shows the zero-value before the fill and the random value after.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>In [ 2] : mrng = MultithreadedRNG ( 10000000, seed=12345) ... : print ( mrng.values [ - 1]) Out [ 2] : 0.0 In [ 3] : mrng.fill ( ) ... : print ( mrng.values [ - 1]) Out [ 3] : 2.4545724517479104 </p>
+</pre>
+</div>
+
+
+               <p>The time required to produce using multiple threads can be compared to the time required to generate using a single thread.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>In [ 4] : print ( mrng.threads) ... : %timeit mrng.fill ( ) Out [ 4] : 4 ... : 32.8 ms ± 2.71 ms per loop ( mean ± std. dev. of 7 runs, 10 loops each) </p>
+</pre>
+</div>
+
+
+               <p>The single threaded call directly uses the BitGenerator.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>In [ 5] : values = np.empty ( 10000000) ... : rg = default_rng ( ) ... : %timeit rg.standard_normal ( out=values) Out [ 5] : 99.6 ms ± 222 µs per loop ( mean ± std. dev. of 7 runs, 10 loops each) </p>
+</pre>
+</div>
+
+
+               <p>The gains are substantial and the scaling is reasonable even for arrays that are only moderately large. The gains are even larger when compared to a call that does not use an existing array due to array creation overhead.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>In [ 6] : rg = default_rng ( ) ... : %timeit rg.standard_normal ( 10000000) Out [ 6] : 125 ms ± 309 µs per loop ( mean ± std. dev. of 7 runs, 10 loops each) </p>
+</pre>
+</div>
+
+
+               <p>Note that if <code>:None:None:`threads`</code> is not set by the user, it will be determined by <code><a link href="/p/multiprocessing/*/api/multiprocessing.context.BaseContext.cpu_count.html" class='exists'>multiprocessing.cpu_count()</a></code>
+.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;ipython&#39;]
+    </div>
+    <pre class='not-implemented'><p>In [ 7] : # simulate the behavior for `threads=None`, if the machine had only one thread ... : mrng = MultithreadedRNG ( 10000000, seed=12345, threads=1) ... : print ( mrng.values [ - 1]) Out [ 7] : 1.1800150052158556 </p>
+</pre>
+</div>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

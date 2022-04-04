@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>numpy.i: a SWIG Interface File for NumPy</h1>
+
+<h1>Introduction</h1>
+               <p>The Simple Wrapper and Interface Generator (or <a link href="http://www.swig.org" class='external'>SWIG</a>) is a powerful tool for generating wrapper code for interfacing to a wide variety of scripting languages. <code>:None:None:`SWIG`</code> can parse header files, and using only the code prototypes, create an interface to the target language.  But <code>:None:None:`SWIG`</code> is not omnipotent.  For example, it cannot know from the prototype::      </p>
+
+               <pre>double rms(double* seq, int n);</pre>
+               <p>what exactly         <code class='verbatim'>seq</code>
+ is.  Is it a single value to be altered in-place? Is it an array, and if so what is its length?  Is it input-only? Output-only?  Input-output?  <code>:None:None:`SWIG`</code> cannot determine these details, and does not attempt to do so.</p>
+
+               <p>If we designed         <code class='verbatim'>rms</code>
+, we probably made it a routine that takes an input-only array of length         <code class='verbatim'>n</code>
+ of         <code class='verbatim'>double</code>
+ values called         <code class='verbatim'>seq</code>
+ and returns the root mean square.  The default behavior of <code>:None:None:`SWIG`</code>, however, will be to create a wrapper function that compiles, but is nearly impossible to use from the scripting language in the way the C routine was intended.</p>
+
+               <p>For Python, the preferred way of handling contiguous (or technically, <em>strided</em>) blocks of homogeneous data is with NumPy, which provides full object-oriented access to multidimensial arrays of data.  Therefore, the most logical Python interface for the         <code class='verbatim'>rms</code>
+ function would be (including doc string)::      </p>
+
+               <pre>def rms(seq):
+    &#34;&#34;&#34;
+    rms: return the root mean square of a sequence
+    rms(numpy.ndarray) -&gt; double
+    rms(list) -&gt; double
+    rms(tuple) -&gt; double
+    &#34;&#34;&#34;</pre>
+               <p>where         <code class='verbatim'>seq</code>
+ would be a NumPy array of         <code class='verbatim'>double</code>
+ values, and its length         <code class='verbatim'>n</code>
+ would be extracted from         <code class='verbatim'>seq</code>
+ internally before being passed to the C routine.  Even better, since NumPy supports construction of arrays from arbitrary Python sequences,         <code class='verbatim'>seq</code>
+ itself could be a nearly arbitrary sequence (so long as each element can be converted to a         <code class='verbatim'>double</code>
+) and the wrapper code would internally convert it to a NumPy array before extracting its data and length.</p>
+
+               <p><code>:None:None:`SWIG`</code> allows these types of conversions to be defined via a mechanism called <em>typemaps</em>.  This document provides information on how to use         <code class='verbatim'>numpy.i</code>
+, a <code>:None:None:`SWIG`</code> interface file that defines a series of typemaps intended to make the type of array-related conversions described above relatively simple to implement.  For example, suppose that the         <code class='verbatim'>rms</code>
+ function prototype defined above was in a header file named         <code class='verbatim'>rms.h</code>
+.  To obtain the Python interface discussed above, your <code>:None:None:`SWIG`</code> interface file would need the following::      </p>
+
+               <pre>%{
+#define SWIG_FILE_WITH_INIT
+#include &#34;rms.h&#34;
+%}
+
+%include &#34;numpy.i&#34;
+
+%init %{
+import_array();
+%}
+
+%apply (double* IN_ARRAY1, int DIM1) {(double* seq, int n)};
+%include &#34;rms.h&#34;</pre>
+               <p>Typemaps are keyed off a list of one or more function arguments, either by type or by type and name.  We will refer to such lists as <em>signatures</em>.  One of the many typemaps defined by         <code class='verbatim'>numpy.i</code>
+ is used above and has the signature         <code class='verbatim'>(double* IN_ARRAY1, int DIM1)</code>
+.  The argument names are intended to suggest that the         <code class='verbatim'>double*</code>
+ argument is an input array of one dimension and that the         <code class='verbatim'>int</code>
+ represents the size of that dimension.  This is precisely the pattern in the         <code class='verbatim'>rms</code>
+ prototype.</p>
+
+               <p>Most likely, no actual prototypes to be wrapped will have the argument names         <code class='verbatim'>IN_ARRAY1</code>
+ and         <code class='verbatim'>DIM1</code>
+.  We use the <code>:None:None:`SWIG`</code>         <code class='verbatim'>%apply</code>
+ directive to apply the typemap for one-dimensional input arrays of type         <code class='verbatim'>double</code>
+ to the actual prototype used by         <code class='verbatim'>rms</code>
+.  Using         <code class='verbatim'>numpy.i</code>
+ effectively, therefore, requires knowing what typemaps are available and what they do.</p>
+
+               <p>A <code>:None:None:`SWIG`</code> interface file that includes the <code>:None:None:`SWIG`</code> directives given above will produce wrapper code that looks something like::       </p>
+
+               <pre>1 PyObject *_wrap_rms(PyObject *args) {
+2   PyObject *resultobj = 0;
+3   double *arg1 = (double *) 0 ;
+4   int arg2 ;
+5   double result;
+6   PyArrayObject *array1 = NULL ;
+7   int is_new_object1 = 0 ;
+8   PyObject * obj0 = 0 ;
+9
+0   if (!PyArg_ParseTuple(args,(char *)&#34;O:rms&#34;,&amp;obj0)) SWIG_fail;
+1   {
+2     array1 = obj_to_array_contiguous_allow_conversion(
+3                  obj0, NPY_DOUBLE, &amp;is_new_object1);
+4     npy_intp size[1] = {
+5       -1
+6     };
+7     if (!array1 || !require_dimensions(array1, 1) ||
+8         !require_size(array1, size, 1)) SWIG_fail;
+9     arg1 = (double*) array1-&gt;data;
+0     arg2 = (int) array1-&gt;dimensions[0];
+1   }
+2   result = (double)rms(arg1,arg2);
+3   resultobj = SWIG_From_double((double)(result));
+4   {
+5     if (is_new_object1 &amp;&amp; array1) Py_DECREF(array1);
+6   }
+7   return resultobj;
+8 fail:
+9   {
+0     if (is_new_object1 &amp;&amp; array1) Py_DECREF(array1);
+1   }
+2   return NULL;
+3 }</pre>
+               <p>The typemaps from         <code class='verbatim'>numpy.i</code>
+ are responsible for the following lines of code: 12--20, 25 and 30.  Line 10 parses the input to the         <code class='verbatim'>rms</code>
+ function.  From the format string         <code class='verbatim'>&#34;O:rms&#34;</code>
+, we can see that the argument list is expected to be a single Python object (specified by the         <code class='verbatim'>O</code>
+ before the colon) and whose pointer is stored in         <code class='verbatim'>obj0</code>
+.  A number of functions, supplied by         <code class='verbatim'>numpy.i</code>
+, are called to make and check the (possible) conversion from a generic Python object to a NumPy array.  These functions are explained in the section <code>:None:None:`Helper Functions`</code>, but hopefully their names are self-explanatory.  At line 12 we use         <code class='verbatim'>obj0</code>
+ to construct a NumPy array.  At line 17, we check the validity of the result: that it is non-null and that it has a single dimension of arbitrary length.  Once these states are verified, we extract the data buffer and length in lines 19 and 20 so that we can call the underlying C function at line 22.  Line 25 performs memory management for the case where we have created a new array that is no longer needed.</p>
+
+               <p>This code has a significant amount of error handling.  Note the         <code class='verbatim'>SWIG_fail</code>
+ is a macro for         <code class='verbatim'>goto fail</code>
+, referring to the label at line 28.  If the user provides the wrong number of arguments, this will be caught at line 10.  If construction of the NumPy array fails or produces an array with the wrong number of dimensions, these errors are caught at line 17.  And finally, if an error is detected, memory is still managed correctly at line 30.</p>
+
+               <p>Note that if the C function signature was in a different order::      </p>
+
+               <pre>double rms(int n, double* seq);</pre>
+               <p>that <code>:None:None:`SWIG`</code> would not match the typemap signature given above with the argument list for         <code class='verbatim'>rms</code>
+.  Fortunately,         <code class='verbatim'>numpy.i</code>
+ has a set of typemaps with the data pointer given last::      </p>
+
+               <pre>%apply (int DIM1, double* IN_ARRAY1) {(int n, double* seq)};</pre>
+               <p>This simply has the effect of switching the definitions of         <code class='verbatim'>arg1</code>
+ and         <code class='verbatim'>arg2</code>
+ in lines 3 and 4 of the generated code above, and their assignments in lines 19 and 20.</p>
+
+
+<h1>Using numpy.i</h1>
+               <p>The         <code class='verbatim'>numpy.i</code>
+ file is currently located in the         <code class='verbatim'>tools/swig</code>
+ sub-directory under the         <code class='verbatim'>numpy</code>
+ installation directory.  Typically, you will want to copy it to the directory where you are developing your wrappers.</p>
+
+               <p>A simple module that only uses a single <code>:None:None:`SWIG`</code> interface file should include the following::      </p>
+
+               <pre>%{
+#define SWIG_FILE_WITH_INIT
+%}
+%include &#34;numpy.i&#34;
+%init %{
+import_array();
+%}</pre>
+               <p>Within a compiled Python module,         <code class='verbatim'>import_array()</code>
+ should only get called once.  This could be in a C/C++ file that you have written and is linked to the module.  If this is the case, then none of your interface files should         <code class='verbatim'>#define SWIG_FILE_WITH_INIT</code>
+ or call         <code class='verbatim'>import_array()</code>
+.  Or, this initialization call could be in a wrapper file generated by <code>:None:None:`SWIG`</code> from an interface file that has the         <code class='verbatim'>%init</code>
+ block as above.  If this is the case, and you have more than one <code>:None:None:`SWIG`</code> interface file, then only one interface file should         <code class='verbatim'>#define SWIG_FILE_WITH_INIT</code>
+ and call         <code class='verbatim'>import_array()</code>
+.</p>
+
+
+<h1>Available Typemaps</h1>
+               <p>The typemap directives provided by         <code class='verbatim'>numpy.i</code>
+ for arrays of different data types, say         <code class='verbatim'>double</code>
+ and         <code class='verbatim'>int</code>
+, and dimensions of different types, say         <code class='verbatim'>int</code>
+ or         <code class='verbatim'>long</code>
+, are identical to one another except for the C and NumPy type specifications.  The typemaps are therefore implemented (typically behind the scenes) via a macro::      </p>
+
+               <pre>%numpy_typemaps(DATA_TYPE, DATA_TYPECODE, DIM_TYPE)</pre>
+               <p>that can be invoked for appropriate         <code class='verbatim'>(DATA_TYPE, DATA_TYPECODE,
+DIM_TYPE)</code>
+ triplets.  For example::      </p>
+
+               <pre>%numpy_typemaps(double, NPY_DOUBLE, int)
+%numpy_typemaps(int,    NPY_INT   , int)</pre>
+               <p>The         <code class='verbatim'>numpy.i</code>
+ interface file uses the         <code class='verbatim'>%numpy_typemaps</code>
+ macro to implement typemaps for the following C data types and         <code class='verbatim'>int</code>
+ dimension types:</p>
+
+                           <pre>* ``signed char``
+* ``unsigned char``
+* ``short``
+* ``unsigned short``
+* ``int``
+* ``unsigned int``
+* ``long``
+* ``unsigned long``
+* ``long long``
+* ``unsigned long long``
+* ``float``
+* ``double``
+</pre>
+
+
+               <p>In the following descriptions, we reference a generic         <code class='verbatim'>DATA_TYPE</code>
+, which could be any of the C data types listed above, and         <code class='verbatim'>DIM_TYPE</code>
+ which should be one of the many types of integers.</p>
+
+               <p>The typemap signatures are largely differentiated on the name given to the buffer pointer.  Names with         <code class='verbatim'>FARRAY</code>
+ are for Fortran-ordered arrays, and names with         <code class='verbatim'>ARRAY</code>
+ are for C-ordered (or 1D arrays).</p>
+
+
+<h1>Input Arrays</h1>
+               <p>Input arrays are defined as arrays of data that are passed into a routine but are not altered in-place or returned to the user.  The Python input array is therefore allowed to be almost any Python sequence (such as a list) that can be converted to the requested type of array.  The input array signatures are</p>
+
+               <p>1D:</p>
+
+                           <pre>* ``(	DATA_TYPE IN_ARRAY1[ANY] )``
+* ``(	DATA_TYPE* IN_ARRAY1, int DIM1 )``
+* ``(	int DIM1, DATA_TYPE* IN_ARRAY1 )``
+</pre>
+
+
+               <p>2D:</p>
+
+                           <pre>* ``(	DATA_TYPE IN_ARRAY2[ANY][ANY] )``
+* ``(	DATA_TYPE* IN_ARRAY2, int DIM1, int DIM2 )``
+* ``(	int DIM1, int DIM2, DATA_TYPE* IN_ARRAY2 )``
+* ``(	DATA_TYPE* IN_FARRAY2, int DIM1, int DIM2 )``
+* ``(	int DIM1, int DIM2, DATA_TYPE* IN_FARRAY2 )``
+</pre>
+
+
+               <p>3D:</p>
+
+                           <pre>* ``(	DATA_TYPE IN_ARRAY3[ANY][ANY][ANY] )``
+* ``(	DATA_TYPE* IN_ARRAY3, int DIM1, int DIM2, int DIM3 )``
+* ``(	int DIM1, int DIM2, int DIM3, DATA_TYPE* IN_ARRAY3 )``
+* ``(	DATA_TYPE* IN_FARRAY3, int DIM1, int DIM2, int DIM3 )``
+* ``(	int DIM1, int DIM2, int DIM3, DATA_TYPE* IN_FARRAY3 )``
+</pre>
+
+
+               <p>4D:</p>
+
+                           <pre>* ``(DATA_TYPE IN_ARRAY4[ANY][ANY][ANY][ANY])``
+* ``(DATA_TYPE* IN_ARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)``
+* ``(DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, , DIM_TYPE DIM4, DATA_TYPE* IN_ARRAY4)``
+* ``(DATA_TYPE* IN_FARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)``
+* ``(DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* IN_FARRAY4)``
+</pre>
+
+
+               <p>The first signature listed,         <code class='verbatim'>( DATA_TYPE IN_ARRAY[ANY] )</code>
+ is for one-dimensional arrays with hard-coded dimensions.  Likewise,         <code class='verbatim'>( DATA_TYPE IN_ARRAY2[ANY][ANY] )</code>
+ is for two-dimensional arrays with hard-coded dimensions, and similarly for three-dimensional.</p>
+
+
+<h1>In-Place Arrays</h1>
+               <p>In-place arrays are defined as arrays that are modified in-place.  The input values may or may not be used, but the values at the time the function returns are significant.  The provided Python argument must therefore be a NumPy array of the required type.  The in-place signatures are</p>
+
+               <p>1D:</p>
+
+                           <pre>* ``(	DATA_TYPE INPLACE_ARRAY1[ANY] )``
+* ``(	DATA_TYPE* INPLACE_ARRAY1, int DIM1 )``
+* ``(	int DIM1, DATA_TYPE* INPLACE_ARRAY1 )``
+</pre>
+
+
+               <p>2D:</p>
+
+                           <pre>* ``(	DATA_TYPE INPLACE_ARRAY2[ANY][ANY] )``
+* ``(	DATA_TYPE* INPLACE_ARRAY2, int DIM1, int DIM2 )``
+* ``(	int DIM1, int DIM2, DATA_TYPE* INPLACE_ARRAY2 )``
+* ``(	DATA_TYPE* INPLACE_FARRAY2, int DIM1, int DIM2 )``
+* ``(	int DIM1, int DIM2, DATA_TYPE* INPLACE_FARRAY2 )``
+</pre>
+
+
+               <p>3D:</p>
+
+                           <pre>* ``(	DATA_TYPE INPLACE_ARRAY3[ANY][ANY][ANY] )``
+* ``(	DATA_TYPE* INPLACE_ARRAY3, int DIM1, int DIM2, int DIM3 )``
+* ``(	int DIM1, int DIM2, int DIM3, DATA_TYPE* INPLACE_ARRAY3 )``
+* ``(	DATA_TYPE* INPLACE_FARRAY3, int DIM1, int DIM2, int DIM3 )``
+* ``(	int DIM1, int DIM2, int DIM3, DATA_TYPE* INPLACE_FARRAY3 )``
+</pre>
+
+
+               <p>4D:</p>
+
+                           <pre>* ``(DATA_TYPE INPLACE_ARRAY4[ANY][ANY][ANY][ANY])``
+* ``(DATA_TYPE* INPLACE_ARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)``
+* ``(DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, , DIM_TYPE DIM4, DATA_TYPE* INPLACE_ARRAY4)``
+* ``(DATA_TYPE* INPLACE_FARRAY4, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4)``
+* ``(DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3, DIM_TYPE DIM4, DATA_TYPE* INPLACE_FARRAY4)``
+</pre>
+
+
+               <p>These typemaps now check to make sure that the         <code class='verbatim'>INPLACE_ARRAY</code>
+ arguments use native byte ordering.  If not, an exception is raised.</p>
+
+               <p>There is also a &#34;flat&#34; in-place array for situations in which you would like to modify or process each element, regardless of the number of dimensions. One example is a &#34;quantization&#34; function that quantizes each element of an array in-place, be it 1D, 2D or whatever. This form checks for continuity but allows either C or Fortran ordering.</p>
+
+               <p>ND:</p>
+
+                           <pre>* ``(DATA_TYPE* INPLACE_ARRAY_FLAT, DIM_TYPE DIM_FLAT)``
+</pre>
+
+
+
+<h1>Argout Arrays</h1>
+               <p>Argout arrays are arrays that appear in the input arguments in C, but are in fact output arrays.  This pattern occurs often when there is more than one output variable and the single return argument is therefore not sufficient.  In Python, the conventional way to return multiple arguments is to pack them into a sequence (tuple, list, etc.) and return the sequence.  This is what the argout typemaps do.  If a wrapped function that uses these argout typemaps has more than one return argument, they are packed into a tuple or list, depending on the version of Python.  The Python user does not pass these arrays in, they simply get returned.  For the case where a dimension is specified, the python user must provide that dimension as an argument.  The argout signatures are</p>
+
+               <p>1D:</p>
+
+                           <pre>* ``(	DATA_TYPE ARGOUT_ARRAY1[ANY] )``
+* ``(	DATA_TYPE* ARGOUT_ARRAY1, int DIM1 )``
+* ``(	int DIM1, DATA_TYPE* ARGOUT_ARRAY1 )``
+</pre>
+
+
+               <p>2D:</p>
+
+                           <pre>* ``(	DATA_TYPE ARGOUT_ARRAY2[ANY][ANY] )``
+</pre>
+
+
+               <p>3D:</p>
+
+                           <pre>* ``(	DATA_TYPE ARGOUT_ARRAY3[ANY][ANY][ANY] )``
+</pre>
+
+
+               <p>4D:</p>
+
+                           <pre>* ``(	DATA_TYPE ARGOUT_ARRAY4[ANY][ANY][ANY][ANY] )``
+</pre>
+
+
+               <p>These are typically used in situations where in C/C++, you would allocate a(n) array(s) on the heap, and call the function to fill the array(s) values.  In Python, the arrays are allocated for you and returned as new array objects.</p>
+
+               <p>Note that we support         <code class='verbatim'>DATA_TYPE*</code>
+ argout typemaps in 1D, but not 2D or 3D.  This is because of a quirk with the <code>:None:None:`SWIG`</code> typemap syntax and cannot be avoided.  Note that for these types of 1D typemaps, the Python function will take a single argument representing         <code class='verbatim'>DIM1</code>
+.</p>
+
+
+<h1>Argout View Arrays</h1>
+               <p>Argoutview arrays are for when your C code provides you with a view of its internal data and does not require any memory to be allocated by the user.  This can be dangerous.  There is almost no way to guarantee that the internal data from the C code will remain in existence for the entire lifetime of the NumPy array that encapsulates it.  If the user destroys the object that provides the view of the data before destroying the NumPy array, then using that array may result in bad memory references or segmentation faults.  Nevertheless, there are situations, working with large data sets, where you simply have no other choice.</p>
+
+               <p>The C code to be wrapped for argoutview arrays are characterized by pointers: pointers to the dimensions and double pointers to the data, so that these values can be passed back to the user.  The argoutview typemap signatures are therefore</p>
+
+               <p>1D:</p>
+
+                           <pre>* ``( DATA_TYPE** ARGOUTVIEW_ARRAY1, DIM_TYPE* DIM1 )``
+* ``( DIM_TYPE* DIM1, DATA_TYPE** ARGOUTVIEW_ARRAY1 )``
+</pre>
+
+
+               <p>2D:</p>
+
+                           <pre>* ``( DATA_TYPE** ARGOUTVIEW_ARRAY2, DIM_TYPE* DIM1, DIM_TYPE* DIM2 )``
+* ``( DIM_TYPE* DIM1, DIM_TYPE* DIM2, DATA_TYPE** ARGOUTVIEW_ARRAY2 )``
+* ``( DATA_TYPE** ARGOUTVIEW_FARRAY2, DIM_TYPE* DIM1, DIM_TYPE* DIM2 )``
+* ``( DIM_TYPE* DIM1, DIM_TYPE* DIM2, DATA_TYPE** ARGOUTVIEW_FARRAY2 )``
+</pre>
+
+
+               <p>3D:</p>
+
+                           <pre>* ``( DATA_TYPE** ARGOUTVIEW_ARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)``
+* ``( DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEW_ARRAY3)``
+* ``( DATA_TYPE** ARGOUTVIEW_FARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)``
+* ``( DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEW_FARRAY3)``
+</pre>
+
+
+               <p>4D:</p>
+
+                           <pre>* ``(DATA_TYPE** ARGOUTVIEW_ARRAY4, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4, DATA_TYPE** ARGOUTVIEW_ARRAY4)``
+* ``(DATA_TYPE** ARGOUTVIEW_FARRAY4, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4, DATA_TYPE** ARGOUTVIEW_FARRAY4)``
+</pre>
+
+
+               <p>Note that arrays with hard-coded dimensions are not supported.  These cannot follow the double pointer signatures of these typemaps.</p>
+
+
+<h1>Memory Managed Argout View Arrays</h1>
+               <p>A recent addition to         <code class='verbatim'>numpy.i</code>
+ are typemaps that permit argout arrays with views into memory that is managed.  See the discussion <a link href="http://blog.enthought.com/python/numpy-arrays-with-pre-allocated-memory" class='external'>here</a>.</p>
+
+               <p>1D:</p>
+
+                           <pre>* ``(DATA_TYPE** ARGOUTVIEWM_ARRAY1, DIM_TYPE* DIM1)``
+* ``(DIM_TYPE* DIM1, DATA_TYPE** ARGOUTVIEWM_ARRAY1)``
+</pre>
+
+
+               <p>2D:</p>
+
+                           <pre>* ``(DATA_TYPE** ARGOUTVIEWM_ARRAY2, DIM_TYPE* DIM1, DIM_TYPE* DIM2)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DATA_TYPE** ARGOUTVIEWM_ARRAY2)``
+* ``(DATA_TYPE** ARGOUTVIEWM_FARRAY2, DIM_TYPE* DIM1, DIM_TYPE* DIM2)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DATA_TYPE** ARGOUTVIEWM_FARRAY2)``
+</pre>
+
+
+               <p>3D:</p>
+
+                           <pre>* ``(DATA_TYPE** ARGOUTVIEWM_ARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEWM_ARRAY3)``
+* ``(DATA_TYPE** ARGOUTVIEWM_FARRAY3, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DATA_TYPE** ARGOUTVIEWM_FARRAY3)``
+</pre>
+
+
+               <p>4D:</p>
+
+                           <pre>* ``(DATA_TYPE** ARGOUTVIEWM_ARRAY4, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4, DATA_TYPE** ARGOUTVIEWM_ARRAY4)``
+* ``(DATA_TYPE** ARGOUTVIEWM_FARRAY4, DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4)``
+* ``(DIM_TYPE* DIM1, DIM_TYPE* DIM2, DIM_TYPE* DIM3, DIM_TYPE* DIM4, DATA_TYPE** ARGOUTVIEWM_FARRAY4)``
+</pre>
+
+
+
+<h1>Output Arrays</h1>
+               <p>The         <code class='verbatim'>numpy.i</code>
+ interface file does not support typemaps for output arrays, for several reasons.  First, C/C++ return arguments are limited to a single value.  This prevents obtaining dimension information in a general way.  Second, arrays with hard-coded lengths are not permitted as return arguments.  In other words::      </p>
+
+               <pre>double[3] newVector(double x, double y, double z);</pre>
+               <p>is not legal C/C++ syntax.  Therefore, we cannot provide typemaps of the form::      </p>
+
+               <pre>%typemap(out) (TYPE[ANY]);</pre>
+               <p>If you run into a situation where a function or method is returning a pointer to an array, your best bet is to write your own version of the function to be wrapped, either with         <code class='verbatim'>%extend</code>
+ for the case of class methods or         <code class='verbatim'>%ignore</code>
+ and         <code class='verbatim'>%rename</code>
+ for the case of functions.</p>
+
+
+<h1>Other Common Types: bool</h1>
+               <p>Note that C++ type         <code class='verbatim'>bool</code>
+ is not supported in the list in the <code>:None:None:`Available Typemaps`</code> section.  NumPy bools are a single byte, while the C++         <code class='verbatim'>bool</code>
+ is four bytes (at least on my system).  Therefore::      </p>
+
+               <pre>%numpy_typemaps(bool, NPY_BOOL, int)</pre>
+               <p>will result in typemaps that will produce code that reference improper data lengths.  You can implement the following macro expansion::      </p>
+
+               <pre>%numpy_typemaps(bool, NPY_UINT, int)</pre>
+               <p>to fix the data length problem, and <code>:None:None:`Input Arrays`</code> will work fine, but <code>:None:None:`In-Place Arrays`</code> might fail type-checking.</p>
+
+
+<h1>Other Common Types: complex</h1>
+               <p>Typemap conversions for complex floating-point types is also not supported automatically.  This is because Python and NumPy are written in C, which does not have native complex types.  Both Python and NumPy implement their own (essentially equivalent)         <code class='verbatim'>struct</code>
+ definitions for complex variables::      </p>
+
+               <pre>/* Python */
+typedef struct {double real; double imag;} Py_complex;
+
+/* NumPy */
+typedef struct {float  real, imag;} npy_cfloat;
+typedef struct {double real, imag;} npy_cdouble;</pre>
+               <p>We could have implemented::      </p>
+
+               <pre>%numpy_typemaps(Py_complex , NPY_CDOUBLE, int)
+%numpy_typemaps(npy_cfloat , NPY_CFLOAT , int)
+%numpy_typemaps(npy_cdouble, NPY_CDOUBLE, int)</pre>
+               <p>which would have provided automatic type conversions for arrays of type         <code class='verbatim'>Py_complex</code>
+,         <code class='verbatim'>npy_cfloat</code>
+ and         <code class='verbatim'>npy_cdouble</code>
+.  However, it seemed unlikely that there would be any independent (non-Python, non-NumPy) application code that people would be using <code>:None:None:`SWIG`</code> to generate a Python interface to, that also used these definitions for complex types.  More likely, these application codes will define their own complex types, or in the case of C++, use         <code class='verbatim'>std::complex</code>
+. Assuming these data structures are compatible with Python and NumPy complex types,         <code class='verbatim'>%numpy_typemap</code>
+ expansions as above (with the user&#39;s complex type substituted for the first argument) should work.</p>
+
+
+<h1>NumPy Array Scalars and SWIG</h1>
+               <p><code>:None:None:`SWIG`</code> has sophisticated type checking for numerical types.  For example, if your C/C++ routine expects an integer as input, the code generated by <code>:None:None:`SWIG`</code> will check for both Python integers and Python long integers, and raise an overflow error if the provided Python integer is too big to cast down to a C integer.  With the introduction of NumPy scalar arrays into your Python code, you might conceivably extract an integer from a NumPy array and attempt to pass this to a <code>:None:None:`SWIG`</code>-wrapped C/C++ function that expects an         <code class='verbatim'>int</code>
+, but the <code>:None:None:`SWIG`</code> type checking will not recognize the NumPy array scalar as an integer.  (Often, this does in fact work -- it depends on whether NumPy recognizes the integer type you are using as inheriting from the Python integer type on the platform you are using.  Sometimes, this means that code that works on a 32-bit machine will fail on a 64-bit machine.)</p>
+
+               <p>If you get a Python error that looks like the following::      </p>
+
+               <pre>TypeError: in method &#39;MyClass_MyMethod&#39;, argument 2 of type &#39;int&#39;</pre>
+               <p>and the argument you are passing is an integer extracted from a NumPy array, then you have stumbled upon this problem.  The solution is to modify the <code>:None:None:`SWIG`</code> type conversion system to accept NumPy array scalars in addition to the standard integer types. Fortunately, this capability has been provided for you.  Simply copy the file::      </p>
+
+               <pre>pyfragments.swg</pre>
+               <p>to the working build directory for you project, and this problem will be fixed.  It is suggested that you do this anyway, as it only increases the capabilities of your Python interface.</p>
+
+
+<h1>Why is There a Second File?</h1>
+               <p>The <code>:None:None:`SWIG`</code> type checking and conversion system is a complicated combination of C macros, <code>:None:None:`SWIG`</code> macros, <code>:None:None:`SWIG`</code> typemaps and <code>:None:None:`SWIG`</code> fragments.  Fragments are a way to conditionally insert code into your wrapper file if it is needed, and not insert it if not needed.  If multiple typemaps require the same fragment, the fragment only gets inserted into your wrapper code once.</p>
+
+               <p>There is a fragment for converting a Python integer to a C         <code class='verbatim'>long</code>
+.  There is a different fragment that converts a Python integer to a C         <code class='verbatim'>int</code>
+, that calls the routine defined in the         <code class='verbatim'>long</code>
+ fragment.  We can make the changes we want here by changing the definition for the         <code class='verbatim'>long</code>
+ fragment.  <code>:None:None:`SWIG`</code> determines the active definition for a fragment using a &#34;first come, first served&#34; system.  That is, we need to define the fragment for         <code class='verbatim'>long</code>
+ conversions prior to <code>:None:None:`SWIG`</code> doing it internally.  <code>:None:None:`SWIG`</code> allows us to do this by putting our fragment definitions in the file         <code class='verbatim'>pyfragments.swg</code>
+.  If we were to put the new fragment definitions in         <code class='verbatim'>numpy.i</code>
+, they would be ignored.</p>
+
+
+<h1>Helper Functions</h1>
+               <p>The         <code class='verbatim'>numpy.i</code>
+ file contains several macros and routines that it uses internally to build its typemaps.  However, these functions may be useful elsewhere in your interface file.  These macros and routines are implemented as fragments, which are described briefly in the previous section.  If you try to use one or more of the following macros or functions, but your compiler complains that it does not recognize the symbol, then you need to force these fragments to appear in your code using::      </p>
+
+               <pre>%fragment(&#34;NumPy_Fragments&#34;);</pre>
+               <p>in your <code>:None:None:`SWIG`</code> interface file.</p>
+
+
+<h1>Macros</h1>
+                           <pre>**is_array(a)**
+  Evaluates as true if ``a`` is non-``NULL`` and can be cast to a
+  ``PyArrayObject*``.
+
+**array_type(a)**
+  Evaluates to the integer data type code of ``a``, assuming ``a`` can
+  be cast to a ``PyArrayObject*``.
+
+**array_numdims(a)**
+  Evaluates to the integer number of dimensions of ``a``, assuming
+  ``a`` can be cast to a ``PyArrayObject*``.
+
+**array_dimensions(a)**
+  Evaluates to an array of type ``npy_intp`` and length
+  ``array_numdims(a)``, giving the lengths of all of the dimensions
+  of ``a``, assuming ``a`` can be cast to a ``PyArrayObject*``.
+
+**array_size(a,i)**
+  Evaluates to the ``i``-th dimension size of ``a``, assuming ``a``
+  can be cast to a ``PyArrayObject*``.
+
+**array_strides(a)**
+  Evaluates to an array of type ``npy_intp`` and length
+  ``array_numdims(a)``, giving the stridess of all of the dimensions
+  of ``a``, assuming ``a`` can be cast to a ``PyArrayObject*``.  A
+  stride is the distance in bytes between an element and its
+  immediate neighbor along the same axis.
+
+**array_stride(a,i)**
+  Evaluates to the ``i``-th stride of ``a``, assuming ``a`` can be
+  cast to a ``PyArrayObject*``.
+
+**array_data(a)**
+  Evaluates to a pointer of type ``void*`` that points to the data
+  buffer of ``a``, assuming ``a`` can be cast to a ``PyArrayObject*``.
+
+**array_descr(a)**
+  Returns a borrowed reference to the dtype property
+  (``PyArray_Descr*``) of ``a``, assuming ``a`` can be cast to a
+  ``PyArrayObject*``.
+
+**array_flags(a)**
+  Returns an integer representing the flags of ``a``, assuming ``a``
+  can be cast to a ``PyArrayObject*``.
+
+**array_enableflags(a,f)**
+  Sets the flag represented by ``f`` of ``a``, assuming ``a`` can be
+  cast to a ``PyArrayObject*``.
+
+**array_is_contiguous(a)**
+  Evaluates as true if ``a`` is a contiguous array.  Equivalent to
+  ``(PyArray_ISCONTIGUOUS(a))``.
+
+**array_is_native(a)**
+  Evaluates as true if the data buffer of ``a`` uses native byte
+  order.  Equivalent to ``(PyArray_ISNOTSWAPPED(a))``.
+
+**array_is_fortran(a)**
+  Evaluates as true if ``a`` is FORTRAN ordered.
+</pre>
+
+
+
+<h1>Routines</h1>
+                           <pre>**pytype_string()**
+
+  Return type: ``const char*``
+
+  Arguments:
+
+  * ``PyObject* py_obj``, a general Python object.
+
+  Return a string describing the type of ``py_obj``.
+
+
+**typecode_string()**
+
+  Return type: ``const char*``
+
+  Arguments:
+
+  * ``int typecode``, a NumPy integer typecode.
+
+  Return a string describing the type corresponding to the NumPy
+  ``typecode``.
+
+**type_match()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``int actual_type``, the NumPy typecode of a NumPy array.
+
+  * ``int desired_type``, the desired NumPy typecode.
+
+  Make sure that ``actual_type`` is compatible with
+  ``desired_type``.  For example, this allows character and
+  byte types, or int and long types, to match.  This is now
+  equivalent to ``PyArray_EquivTypenums()``.
+
+
+**obj_to_array_no_conversion()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments:
+
+  * ``PyObject* input``, a general Python object.
+
+  * ``int typecode``, the desired NumPy typecode.
+
+  Cast ``input`` to a ``PyArrayObject*`` if legal, and ensure that
+  it is of type ``typecode``.  If ``input`` cannot be cast, or the
+  ``typecode`` is wrong, set a Python error and return ``NULL``.
+
+
+**obj_to_array_allow_conversion()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments:
+
+  * ``PyObject* input``, a general Python object.
+
+  * ``int typecode``, the desired NumPy typecode of the resulting
+    array.
+
+  * ``int* is_new_object``, returns a value of 0 if no conversion
+    performed, else 1.
+
+  Convert ``input`` to a NumPy array with the given ``typecode``.
+  On success, return a valid ``PyArrayObject*`` with the correct
+  type.  On failure, the Python error string will be set and the
+  routine returns ``NULL``.
+
+
+**make_contiguous()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  * ``int* is_new_object``, returns a value of 0 if no conversion
+    performed, else 1.
+
+  * ``int min_dims``, minimum allowable dimensions.
+
+  * ``int max_dims``, maximum allowable dimensions.
+
+  Check to see if ``ary`` is contiguous.  If so, return the input
+  pointer and flag it as not a new object.  If it is not contiguous,
+  create a new ``PyArrayObject*`` using the original data, flag it
+  as a new object and return the pointer.
+
+
+**make_fortran()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  * ``int* is_new_object``, returns a value of 0 if no conversion
+    performed, else 1.
+
+  Check to see if ``ary`` is Fortran contiguous.  If so, return the
+  input pointer and flag it as not a new object.  If it is not
+  Fortran contiguous, create a new ``PyArrayObject*`` using the
+  original data, flag it as a new object and return the pointer.
+
+
+**obj_to_array_contiguous_allow_conversion()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments:
+
+  * ``PyObject* input``, a general Python object.
+
+  * ``int typecode``, the desired NumPy typecode of the resulting
+    array.
+
+  * ``int* is_new_object``, returns a value of 0 if no conversion
+    performed, else 1.
+
+  Convert ``input`` to a contiguous ``PyArrayObject*`` of the
+  specified type.  If the input object is not a contiguous
+  ``PyArrayObject*``, a new one will be created and the new object
+  flag will be set.
+
+
+**obj_to_array_fortran_allow_conversion()**
+
+  Return type: ``PyArrayObject*``
+
+  Arguments:
+
+  * ``PyObject* input``, a general Python object.
+
+  * ``int typecode``, the desired NumPy typecode of the resulting
+    array.
+
+  * ``int* is_new_object``, returns a value of 0 if no conversion
+    performed, else 1.
+
+  Convert ``input`` to a Fortran contiguous ``PyArrayObject*`` of
+  the specified type.  If the input object is not a Fortran
+  contiguous ``PyArrayObject*``, a new one will be created and the
+  new object flag will be set.
+
+
+**require_contiguous()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  Test whether ``ary`` is contiguous.  If so, return 1.  Otherwise,
+  set a Python error and return 0.
+
+
+**require_native()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArray_Object* ary``, a NumPy array.
+
+  Require that ``ary`` is not byte-swapped.  If the array is not
+  byte-swapped, return 1.  Otherwise, set a Python error and
+  return 0.
+
+**require_dimensions()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  * ``int exact_dimensions``, the desired number of dimensions.
+
+  Require ``ary`` to have a specified number of dimensions.  If the
+  array has the specified number of dimensions, return 1.
+  Otherwise, set a Python error and return 0.
+
+
+**require_dimensions_n()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  * ``int* exact_dimensions``, an array of integers representing
+    acceptable numbers of dimensions.
+
+  * ``int n``, the length of ``exact_dimensions``.
+
+  Require ``ary`` to have one of a list of specified number of
+  dimensions.  If the array has one of the specified number of
+  dimensions, return 1.  Otherwise, set the Python error string
+  and return 0.
+
+
+**require_size()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  * ``npy_int* size``, an array representing the desired lengths of
+    each dimension.
+
+  * ``int n``, the length of ``size``.
+
+  Require ``ary`` to have a specified shape.  If the array has the
+  specified shape, return 1.  Otherwise, set the Python error
+  string and return 0.
+
+
+**require_fortran()**
+
+  Return type: ``int``
+
+  Arguments:
+
+  * ``PyArrayObject* ary``, a NumPy array.
+
+  Require the given ``PyArrayObject`` to be Fortran ordered.  If
+  the ``PyArrayObject`` is already Fortran ordered, do nothing.
+  Else, set the Fortran ordering flag and recompute the strides.
+</pre>
+
+
+
+<h1>Beyond the Provided Typemaps</h1>
+               <p>There are many C or C++ array/NumPy array situations not covered by a simple         <code class='verbatim'>%include &#34;numpy.i&#34;</code>
+ and subsequent         <code class='verbatim'>%apply</code>
+ directives.</p>
+
+
+<h1>A Common Example</h1>
+               <p>Consider a reasonable prototype for a dot product function::      </p>
+
+               <pre>double dot(int len, double* vec1, double* vec2);</pre>
+               <p>The Python interface that we want is::      </p>
+
+               <pre>def dot(vec1, vec2):
+    &#34;&#34;&#34;
+    dot(PyObject,PyObject) -&gt; double
+    &#34;&#34;&#34;</pre>
+               <p>The problem here is that there is one dimension argument and two array arguments, and our typemaps are set up for dimensions that apply to a single array (in fact, <code>:None:None:`SWIG`</code> does not provide a mechanism for associating         <code class='verbatim'>len</code>
+ with         <code class='verbatim'>vec2</code>
+ that takes two Python input arguments).  The recommended solution is the following::      </p>
+
+               <pre>%apply (int DIM1, double* IN_ARRAY1) {(int len1, double* vec1),
+                                      (int len2, double* vec2)}
+%rename (dot) my_dot;
+%exception my_dot {
+    $action
+(PyErr_Occurred()) SWIG_fail;
+}
+%inline %{
+double my_dot(int len1, double* vec1, int len2, double* vec2) {
+    if (len1 != len2) {
+ PyErr_Format(PyExc_ValueError,
+                     &#34;Arrays of lengths (%d,%d) given&#34;,
+                     len1, len2);
+ return 0.0;
+    }
+    return dot(len1, vec1, vec2);
+}
+%}</pre>
+               <p>If the header file that contains the prototype for         <code class='verbatim'>double dot()</code>
+ also contains other prototypes that you want to wrap, so that you need to         <code class='verbatim'>%include</code>
+ this header file, then you will also need a         <code class='verbatim'>%ignore
+dot;</code>
+ directive, placed after the         <code class='verbatim'>%rename</code>
+ and before the         <code class='verbatim'>%include</code>
+ directives.  Or, if the function in question is a class method, you will want to use         <code class='verbatim'>%extend</code>
+ rather than         <code class='verbatim'>%inline</code>
+ in addition to         <code class='verbatim'>%ignore</code>
+.</p>
+
+               <p><strong>A note on error handling:</strong> Note that         <code class='verbatim'>my_dot</code>
+ returns a         <code class='verbatim'>double</code>
+ but that it can also raise a Python error.  The resulting wrapper function will return a Python float representation of 0.0 when the vector lengths do not match.  Since this is not         <code class='verbatim'>NULL</code>
+, the Python interpreter will not know to check for an error.  For this reason, we add the         <code class='verbatim'>%exception</code>
+ directive above for         <code class='verbatim'>my_dot</code>
+ to get the behavior we want (note that         <code class='verbatim'>$action</code>
+ is a macro that gets expanded to a valid call to         <code class='verbatim'>my_dot</code>
+).  In general, you will probably want to write a <code>:None:None:`SWIG`</code> macro to perform this task.</p>
+
+
+<h1>Other Situations</h1>
+               <p>There are other wrapping situations in which         <code class='verbatim'>numpy.i</code>
+ may be helpful when you encounter them.</p>
+
+                           <pre>* In some situations, it is possible that you could use the
+  ``%numpy_typemaps`` macro to implement typemaps for your own
+  types.  See the `Other Common Types: bool`_ or `Other Common
+  Types: complex`_ sections for examples.  Another situation is if
+  your dimensions are of a type other than ``int`` (say ``long`` for
+  example)::
+
+      %numpy_typemaps(double, NPY_DOUBLE, long)
+
+* You can use the code in ``numpy.i`` to write your own typemaps.
+  For example, if you had a five-dimensional array as a function
+  argument, you could cut-and-paste the appropriate four-dimensional
+  typemaps into your interface file.  The modifications for the
+  fourth dimension would be trivial.
+
+* Sometimes, the best approach is to use the ``%extend`` directive
+  to define new methods for your classes (or overload existing ones)
+  that take a ``PyObject*`` (that either is or can be converted to a
+  ``PyArrayObject*``) instead of a pointer to a buffer.  In this
+  case, the helper routines in ``numpy.i`` can be very useful.
+
+* Writing typemaps can be a bit nonintuitive.  If you have specific
+  questions about writing `SWIG`_ typemaps for NumPy, the
+  developers of ``numpy.i`` do monitor the
+  `Numpy-discussion &lt;mailto:Numpy-discussion@python.org&gt;`_ and
+  `Swig-user &lt;mailto:Swig-user@lists.sourceforge.net&gt;`_ mail lists.
+</pre>
+
+
+
+<h1>A Final Note</h1>
+               <p>When you use the         <code class='verbatim'>%apply</code>
+ directive, as is usually necessary to use         <code class='verbatim'>numpy.i</code>
+, it will remain in effect until you tell <code>:None:None:`SWIG`</code> that it shouldn&#39;t be.  If the arguments to the functions or methods that you are wrapping have common names, such as         <code class='verbatim'>length</code>
+ or         <code class='verbatim'>vector</code>
+, these typemaps may get applied in situations you do not expect or want.  Therefore, it is always a good idea to add a         <code class='verbatim'>%clear</code>
+ directive after you are done with a specific typemap::      </p>
+
+               <pre>%apply (double* IN_ARRAY1, int DIM1) {(double* vector, int length)}
+%include &#34;my_header.h&#34;
+%clear (double* vector, int length);</pre>
+               <p>In general, you should target these typemap signatures specifically where you want them, and then clear them after you are done.</p>
+
+
+<h1>Summary</h1>
+               <p>Out of the box,         <code class='verbatim'>numpy.i</code>
+ provides typemaps that support conversion between NumPy arrays and C arrays:</p>
+
+                           <pre>* That can be one of 12 different scalar types: ``signed char``,
+  ``unsigned char``, ``short``, ``unsigned short``, ``int``,
+  ``unsigned int``, ``long``, ``unsigned long``, ``long long``,
+  ``unsigned long long``, ``float`` and ``double``.
+
+* That support 74 different argument signatures for each data type,
+  including:
+
+  + One-dimensional, two-dimensional, three-dimensional and
+    four-dimensional arrays.
+
+  + Input-only, in-place, argout, argoutview, and memory managed
+    argoutview behavior.
+
+  + Hard-coded dimensions, data-buffer-then-dimensions
+    specification, and dimensions-then-data-buffer specification.
+
+  + Both C-ordering (&#34;last dimension fastest&#34;) or Fortran-ordering
+    (&#34;first dimension fastest&#34;) support for 2D, 3D and 4D arrays.
+</pre>
+
+
+               <p>The         <code class='verbatim'>numpy.i</code>
+ interface file also provides additional tools for wrapper developers, including:</p>
+
+                           <pre>* A `SWIG`_ macro (``%numpy_typemaps``) with three arguments for
+  implementing the 74 argument signatures for the user&#39;s choice of
+  (1) C data type, (2) NumPy data type (assuming they match), and
+  (3) dimension type.
+
+* Fourteen C macros and fifteen C functions that can be used to
+  write specialized typemaps, extensions, or inlined functions that
+  handle cases not covered by the provided typemaps.  Note that the
+  macros and functions are coded specifically to work with the NumPy
+  C/API regardless of NumPy version number, both before and after
+  the deprecation of some aspects of the API after version 1.6.
+</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

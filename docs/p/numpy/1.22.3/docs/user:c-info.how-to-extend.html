@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>How to extend NumPy</h1>
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _writing-an-extension:&#39;&gt;</pre>
+
+<h1>Writing an extension module</h1>
+               <p>While the ndarray object is designed to allow rapid computation in Python, it is also designed to be general-purpose and satisfy a wide- variety of computational needs. As a result, if absolute speed is essential, there is no replacement for a well-crafted, compiled loop specific to your application and hardware. This is one of the reasons that numpy includes f2py so that an easy-to-use mechanisms for linking (simple) C/C++ and (arbitrary) Fortran code directly into Python are available. You are encouraged to use and improve this mechanism. The purpose of this section is not to document this tool but to document the more basic steps to writing an extension module that this tool depends on.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. index:: []
+    </div>
+    <pre class='not-implemented'><p>single : extension module </p>
+</pre>
+</div>
+
+
+               <p>When an extension module is written, compiled, and installed to somewhere in the Python path (sys.path), the code can then be imported into Python as if it were a standard python file. It will contain objects and methods that have been defined and compiled in C code. The basic steps for doing this in Python are well-documented and you can find more information in the documentation for Python itself available online at <a link href="https://www.python.org" class='external'>www.python.org</a> .</p>
+
+               <p>In addition to the Python C-API, there is a full and rich C-API for NumPy allowing sophisticated manipulations on a C-level. However, for most applications, only a few API calls will typically be used. For example, if you need to just extract a pointer to memory along with some shape information to pass to another calculation routine, then you will use very different calls than if you are trying to create a new array-like type or add a new data type for ndarrays. This chapter documents the API calls and macros that are most commonly used.</p>
+
+
+<h1>Required subroutine</h1>
+               <p>There is exactly one function that must be defined in your C-code in order for Python to use it as an extension module. The function must be called init{name} where {name} is the name of the module from Python. This function must be declared so that it is visible to code outside of the routine. Besides adding the methods and constants you desire, this subroutine must also contain calls like         <code class='verbatim'>import_array()</code>
+ and/or         <code class='verbatim'>import_ufunc()</code>
+ depending on which C-API is needed. Forgetting to place these commands will show itself as an ugly segmentation fault (crash) as soon as any C-API subroutine is actually called. It is actually possible to have multiple init{name} functions in a single file in which case multiple modules will be defined by that file. However, there are some tricks to get that to work correctly and it is not covered here.</p>
+
+               <p>A minimal         <code class='verbatim'>init{name}</code>
+ method looks like:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>PyMODINIT_FUNC init { name} ( void) { ( void)Py_InitModule ( { name}, mymethods); import_array ( ); } </p>
+</pre>
+</div>
+
+
+               <p>The mymethods must be an array (usually statically declared) of PyMethodDef structures which contain method names, actual C-functions, a variable indicating whether the method uses keyword arguments or not, and docstrings. These are explained in the next section. If you want to add constants to the module, then you store the returned value from Py_InitModule which is a module object. The most general way to add items to the module is to get the module dictionary using PyModule_GetDict(module). With the module dictionary, you can add whatever you like to the module manually. An easier way to add objects to the module is to use one of three additional Python C-API calls that do not require a separate extraction of the module dictionary. These are documented in the Python documentation, but repeated here for convenience:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. c:function:: [&#39;int PyModule_AddObject( \\&#39;]
+    </div>
+    <pre class='not-implemented'><p>PyObject* module, char* name, PyObject* value) </p>
+</pre>
+</div>
+
+
+               <div class='block_directive'>
+    <div class='head'>.. c:function:: [&#39;int PyModule_AddIntConstant( \\&#39;]
+    </div>
+    <pre class='not-implemented'><p>PyObject* module, char* name, long value) </p>
+</pre>
+</div>
+
+
+               <div class='block_directive'>
+    <div class='head'>.. c:function:: [&#39;int PyModule_AddStringConstant( \\&#39;]
+    </div>
+    <pre class='not-implemented'><p>PyObject* module, char* name, char* value) </p>
+</pre>
+</div>
+
+
+                           <pre>All three of these functions require the *module* object (the
+return value of Py_InitModule). The *name* is a string that
+labels the value in the module. Depending on which function is
+called, the *value* argument is either a general object
+(:c:func:`PyModule_AddObject` steals a reference to it), an integer
+constant, or a string constant.
+</pre>
+
+
+
+<h1>Defining functions</h1>
+               <p>The second argument passed in to the Py_InitModule function is a structure that makes it easy to define functions in the module. In the example given above, the mymethods structure would have been defined earlier in the file (usually right before the init{name} subroutine) to:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>static PyMethodDef mymethods [ ] = { { nokeywordfunc,nokeyword_cfunc, METH_VARARGS, Doc string}, { keywordfunc, keyword_cfunc, METH_VARARGS|METH_KEYWORDS, Doc string}, { NULL, NULL, 0, NULL} / * Sentinel * / } </p>
+</pre>
+</div>
+
+
+               <p>Each entry in the mymethods array is a         <code class='verbatim'>PyMethodDef</code>
+ structure containing 1) the Python name, 2) the C-function that implements the function, 3) flags indicating whether or not keywords are accepted for this function, and 4) The docstring for the function. Any number of functions may be defined for a single module by adding more entries to this table. The last entry must be all NULL as shown to act as a sentinel. Python looks for this entry to know that all of the functions for the module have been defined.</p>
+
+               <p>The last thing that must be done to finish the extension module is to actually write the code that performs the desired functions. There are two kinds of functions: those that don&#39;t accept keyword arguments, and those that do.</p>
+
+
+<h1>Functions without keyword arguments</h1>
+               <p>Functions that don&#39;t accept keyword arguments should be written as:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>static PyObject* nokeyword_cfunc ( PyObject *dummy, PyObject *args) { / * convert Python arguments * / / * do function * / / * return something * / } </p>
+</pre>
+</div>
+
+
+               <p>The dummy argument is not used in this context and can be safely ignored. The <em>args</em> argument contains all of the arguments passed in to the function as a tuple. You can do anything you want at this point, but usually the easiest way to manage the input arguments is to call         <code class='verbatim'>PyArg_ParseTuple</code>
+ (args, format_string, addresses_to_C_variables...) or         <code class='verbatim'>PyArg_UnpackTuple</code>
+ (tuple, &#34;name&#34;, min, max, ...). A good description of how to use the first function is contained in the Python C-API reference manual under section 5.5 (Parsing arguments and building values). You should pay particular attention to the &#34;O&amp;&#34; format which uses converter functions to go between the Python object and the C object. All of the other format functions can be (mostly) thought of as special cases of this general rule. There are several converter functions defined in the NumPy C-API that may be of use. In particular, the         <code class='verbatim'>PyArray_DescrConverter</code>
+ function is very useful to support arbitrary data-type specification. This function transforms any valid data-type Python object into a         <code class='verbatim'>PyArray_Descr *</code>
+ object. Remember to pass in the address of the C-variables that should be filled in.</p>
+
+               <p>There are lots of examples of how to use         <code class='verbatim'>PyArg_ParseTuple</code>
+ throughout the NumPy source code. The standard usage is like this:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>PyObject *input; PyArray_Descr *dtype; if ( !PyArg_ParseTuple ( args, &#34; OO&amp; &#34; , &amp;input, PyArray_DescrConverter, &amp;dtype)) return NULL; </p>
+</pre>
+</div>
+
+
+               <p>It is important to keep in mind that you get a <em>borrowed</em> reference to the object when using the &#34;O&#34; format string. However, the converter functions usually require some form of memory handling. In this example, if the conversion is successful, <em>dtype</em> will hold a new reference to a         <code class='verbatim'>PyArray_Descr *</code>
+ object, while <em>input</em> will hold a borrowed reference. Therefore, if this conversion were mixed with another conversion (say to an integer) and the data-type conversion was successful but the integer conversion failed, then you would need to release the reference count to the data-type object before returning. A typical way to do this is to set <em>dtype</em> to         <code class='verbatim'>NULL</code>
+ before calling         <code class='verbatim'>PyArg_ParseTuple</code>
+ and then use         <code class='verbatim'>Py_XDECREF</code>
+ on <em>dtype</em> before returning.</p>
+
+               <p>After the input arguments are processed, the code that actually does the work is written (likely calling other functions as needed). The final step of the C-function is to return something. If an error is encountered then         <code class='verbatim'>NULL</code>
+ should be returned (making sure an error has actually been set). If nothing should be returned then increment         <code class='verbatim'>Py_None</code>
+ and return it. If a single object should be returned then it is returned (ensuring that you own a reference to it first). If multiple objects should be returned then you need to return a tuple. The         <code class='verbatim'>Py_BuildValue</code>
+ (format_string, c_variables...) function makes it easy to build tuples of Python objects from C variables. Pay special attention to the difference between &#39;N&#39; and &#39;O&#39; in the format string or you can easily create memory leaks. The &#39;O&#39; format string increments the reference count of the         <code class='verbatim'>PyObject *</code>
+ C-variable it corresponds to, while the &#39;N&#39; format string steals a reference to the corresponding         <code class='verbatim'>PyObject *</code>
+ C-variable. You should use &#39;N&#39; if you have already created a reference for the object and just want to give that reference to the tuple. You should use &#39;O&#39; if you only have a borrowed reference to an object and need to create one to provide for the tuple.</p>
+
+
+<h1>Functions with keyword arguments</h1>
+               <p>These functions are very similar to functions without keyword arguments. The only difference is that the function signature is:</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>static PyObject* keyword_cfunc ( PyObject *dummy, PyObject *args, PyObject *kwds) { ... } </p>
+</pre>
+</div>
+
+
+               <p>The kwds argument holds a Python dictionary whose keys are the names of the keyword arguments and whose values are the corresponding keyword-argument values. This dictionary can be processed however you see fit. The easiest way to handle it, however, is to replace the         <code class='verbatim'>PyArg_ParseTuple</code>
+ (args, format_string, addresses...) function with a call to         <code class='verbatim'>PyArg_ParseTupleAndKeywords</code>
+ (args, kwds, format_string, char \*kwlist[], addresses...). The kwlist parameter to this function is a         <code class='verbatim'>NULL</code>
+ -terminated array of strings providing the expected keyword arguments.  There should be one string for each entry in the format_string. Using this function will raise a TypeError if invalid keyword arguments are passed in.</p>
+
+               <p>For more help on this function please see section 1.8 (Keyword Parameters for Extension Functions) of the Extending and Embedding tutorial in the Python documentation.</p>
+
+
+<h1>Reference counting</h1>
+               <p>The biggest difficulty when writing extension modules is reference counting. It is an important reason for the popularity of f2py, weave, Cython, ctypes, etc.... If you mis-handle reference counts you can get problems from memory-leaks to segmentation faults. The only strategy I know of to handle reference counts correctly is blood, sweat, and tears. First, you force it into your head that every Python variable has a reference count. Then, you understand exactly what each function does to the reference count of your objects, so that you can properly use DECREF and INCREF when you need them. Reference counting can really test the amount of patience and diligence you have towards your programming craft. Despite the grim depiction, most cases of reference counting are quite straightforward with the most common difficulty being not using DECREF on objects before exiting early from a routine due to some error. In second place, is the common error of not owning the reference on an object that is passed to a function or macro that is going to steal the reference ( <em>e.g.</em>         <code class='verbatim'>PyTuple_SET_ITEM</code>
+, and most functions that take         <code class='verbatim'>PyArray_Descr</code>
+ objects).</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. index:: []
+    </div>
+    <pre class='not-implemented'><p>single : reference counting </p>
+</pre>
+</div>
+
+
+               <p>Typically you get a new reference to a variable when it is created or is the return value of some function (there are some prominent exceptions, however --- such as getting an item out of a tuple or a dictionary). When you own the reference, you are responsible to make sure that         <code class='verbatim'>Py_DECREF</code>
+ (var) is called when the variable is no longer necessary (and no other function has &#34;stolen&#34; its reference). Also, if you are passing a Python object to a function that will &#34;steal&#34; the reference, then you need to make sure you own it (or use         <code class='verbatim'>Py_INCREF</code>
+ to get your own reference). You will also encounter the notion of borrowing a reference. A function that borrows a reference does not alter the reference count of the object and does not expect to &#34;hold on &#34;to the reference. It&#39;s just going to use the object temporarily.  When you use         <code class='verbatim'>PyArg_ParseTuple</code>
+ or         <code class='verbatim'>PyArg_UnpackTuple</code>
+ you receive a borrowed reference to the objects in the tuple and should not alter their reference count inside your function. With practice, you can learn to get reference counting right, but it can be frustrating at first.</p>
+
+               <p>One common source of reference-count errors is the         <code class='verbatim'>Py_BuildValue</code>
+ function. Pay careful attention to the difference between the &#39;N&#39; format character and the &#39;O&#39; format character. If you create a new object in your subroutine (such as an output array), and you are passing it back in a tuple of return values, then you should most- likely use the &#39;N&#39; format character in         <code class='verbatim'>Py_BuildValue</code>
+. The &#39;O&#39; character will increase the reference count by one. This will leave the caller with two reference counts for a brand-new array.  When the variable is deleted and the reference count decremented by one, there will still be that extra reference count, and the array will never be deallocated. You will have a reference-counting induced memory leak. Using the &#39;N&#39; character will avoid this situation as it will return to the caller an object (inside the tuple) with a single reference count.</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. index:: []
+    </div>
+    <pre class='not-implemented'><p>single : reference counting </p>
+</pre>
+</div>
+
+
+
+<h1>Dealing with array objects</h1>
+               <p>Most extension modules for NumPy will need to access the memory for an ndarray object (or one of it&#39;s sub-classes). The easiest way to do this doesn&#39;t require you to know much about the internals of NumPy. The method is to</p>
+
+                          <ol>               <li>               <p>Ensure you are dealing with a well-behaved array (aligned, in machine    byte-order and single-segment) of the correct type and number of    dimensions.</p>
+
+                           <pre>1. By converting it from some Python object using
+   :c:func:`PyArray_FromAny` or a macro built on it.
+
+2. By constructing a new ndarray of your desired shape and type
+   using :c:func:`PyArray_NewFromDescr` or a simpler macro or function
+   based on it.
+</pre>
+
+
+</li>
+               <li>               <p>Get the shape of the array and a pointer to its actual data.</p>
+
+</li>
+               <li>               <p>Pass the data and shape information on to a subroutine or other    section of code that actually performs the computation.</p>
+
+</li>
+               <li>               <p>If you are writing the algorithm, then I recommend that you use the    stride information contained in the array to access the elements of    the array (the         <code class='verbatim'>PyArray_GetPtr</code>
+ macros make this painless). Then,    you can relax your requirements so as not to force a single-segment    array and the data-copying that might result.</p>
+
+</li>
+            </ol>
+
+               <p>Each of these sub-topics is covered in the following sub-sections.</p>
+
+
+<h1>Converting an arbitrary sequence object</h1>
+               <p>The main routine for obtaining an array from any Python object that can be converted to an array is         <code class='verbatim'>PyArray_FromAny</code>
+. This function is very flexible with many input arguments. Several macros make it easier to use the basic function.         <code class='verbatim'>PyArray_FROM_OTF</code>
+ is arguably the most useful of these macros for the most common uses.  It allows you to convert an arbitrary Python object to an array of a specific builtin data-type ( <em>e.g.</em> float), while specifying a particular set of requirements ( <em>e.g.</em> contiguous, aligned, and writeable). The syntax is</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>PyArray_FROM_OTF</code>
+</p>
+</dt>
+               <dd><p>Return an ndarray from any Python object, <em>obj</em>, that can be     converted to an array. The number of dimensions in the returned     array is determined by the object. The desired data-type of the     returned array is provided in <em>typenum</em> which should be one of the     enumerated types. The <em>requirements</em> for the returned array can be     any combination of standard array flags.  Each of these arguments     is explained in more detail below. You receive a new reference to     the array on success. On failure,         <code class='verbatim'>NULL</code>
+ is returned and an     exception is set.</p>
+<!-- deflist -->
+           <dl>
+               <dt><p><em>obj</em></p>
+</dt>
+               <dd><p>The object can be any Python object convertible to an ndarray.         If the object is already (a subclass of) the ndarray that         satisfies the requirements then a new reference is returned.         Otherwise, a new array is constructed. The contents of <em>obj</em>         are copied to the new array unless the array interface is used         so that data does not have to be copied. Objects that can be         converted to an array include: 1) any nested sequence object,         2) any object exposing the array interface, 3) any object with         an         <code class='verbatim'>~numpy.class.__array__</code>
+ method (which should return an ndarray),         and 4) any scalar object (becomes a zero-dimensional         array). Sub-classes of the ndarray that otherwise fit the         requirements will be passed through. If you want to ensure         a base-class ndarray, then use         <code class='verbatim'>NPY_ARRAY_ENSUREARRAY</code>
+ in the         requirements flag. A copy is made only if necessary. If you         want to guarantee a copy, then pass in         <code class='verbatim'>NPY_ARRAY_ENSURECOPY</code>
+         to the requirements flag.</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p><em>typenum</em></p>
+</dt>
+               <dd><p>One of the enumerated types or         <code class='verbatim'>NPY_NOTYPE</code>
+ if the data-type         should be determined from the object itself. The C-based names         can be used:</p>
+            <pre>:c:data:`NPY_BOOL`, :c:data:`NPY_BYTE`, :c:data:`NPY_UBYTE`,
+:c:data:`NPY_SHORT`, :c:data:`NPY_USHORT`, :c:data:`NPY_INT`,
+:c:data:`NPY_UINT`, :c:data:`NPY_LONG`, :c:data:`NPY_ULONG`,
+:c:data:`NPY_LONGLONG`, :c:data:`NPY_ULONGLONG`, :c:data:`NPY_DOUBLE`,
+:c:data:`NPY_LONGDOUBLE`, :c:data:`NPY_CFLOAT`, :c:data:`NPY_CDOUBLE`,
+:c:data:`NPY_CLONGDOUBLE`, :c:data:`NPY_OBJECT`.
+</pre>
+
+<p>Alternatively, the bit-width names can be used as supported on the         platform. For example:</p>
+            <pre>:c:data:`NPY_INT8`, :c:data:`NPY_INT16`, :c:data:`NPY_INT32`,
+:c:data:`NPY_INT64`, :c:data:`NPY_UINT8`,
+:c:data:`NPY_UINT16`, :c:data:`NPY_UINT32`,
+:c:data:`NPY_UINT64`, :c:data:`NPY_FLOAT32`,
+:c:data:`NPY_FLOAT64`, :c:data:`NPY_COMPLEX64`,
+:c:data:`NPY_COMPLEX128`.
+</pre>
+
+<p>The object will be converted to the desired type only if it         can be done without losing precision. Otherwise         <code class='verbatim'>NULL</code>
+ will         be returned and an error raised. Use         <code class='verbatim'>NPY_ARRAY_FORCECAST</code>
+ in the         requirements flag to override this behavior.</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p><em>requirements</em></p>
+</dt>
+               <dd><p>The memory model for an ndarray admits arbitrary strides in         each dimension to advance to the next element of the array.         Often, however, you need to interface with code that expects a         C-contiguous or a Fortran-contiguous memory layout. In         addition, an ndarray can be misaligned (the address of an         element is not at an integral multiple of the size of the         element) which can cause your program to crash (or at least         work more slowly) if you try and dereference a pointer into         the array data. Both of these problems can be solved by         converting the Python object into an array that is more         &#34;well-behaved&#34; for your specific usage.</p>
+<p>The requirements flag allows specification of what kind of         array is acceptable. If the object passed in does not satisfy         this requirements then a copy is made so that the returned         object will satisfy the requirements. these ndarray can use a         very generic pointer to memory.  This flag allows specification         of the desired properties of the returned array object. All         of the flags are explained in the detailed API chapter. The         flags most commonly needed are         <code class='verbatim'>NPY_ARRAY_IN_ARRAY</code>
+,                 <code class='verbatim'>NPY_OUT_ARRAY</code>
+, and         <code class='verbatim'>NPY_ARRAY_INOUT_ARRAY</code>
+:</p>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_IN_ARRAY</code>
+</p>
+</dt>
+               <dd><p>This flag is useful for arrays that must be in C-contiguous             order and aligned. These kinds of arrays are usually input              arrays for some algorithm.</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_OUT_ARRAY</code>
+</p>
+</dt>
+               <dd><p>This flag is useful to specify an array that is             in C-contiguous order, is aligned, and can be written to             as well. Such an array is usually returned as output             (although normally such output arrays are created from             scratch).</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_INOUT_ARRAY</code>
+</p>
+</dt>
+               <dd><p>This flag is useful to specify an array that will be used for both             input and output.         <code class='verbatim'>PyArray_ResolveWritebackIfCopy</code>
+             must be called before         <code class='verbatim'>Py_DECREF</code>
+ at             the end of the interface routine to write back the temporary data             into the original array passed in. Use             of the         <code class='verbatim'>NPY_ARRAY_WRITEBACKIFCOPY</code>
+ flag requires that the             input object is already an array (because other objects cannot             be automatically updated in this fashion). If an error             occurs use         <code class='verbatim'>PyArray_DiscardWritebackIfCopy</code>
+ (obj) on an             array with these flags set. This will set the underlying base array             writable without causing the contents to be copied             back into the original array.</p>
+</dd>
+           </dl>
+<p>Other useful flags that can be OR&#39;d as additional requirements are:</p>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_FORCECAST</code>
+</p>
+</dt>
+               <dd><p>Cast to the desired type, even if it can&#39;t be done without losing             information.</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_ENSURECOPY</code>
+</p>
+</dt>
+               <dd><p>Make sure the resulting array is a copy of the original.</p>
+</dd>
+           </dl>
+<!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>NPY_ARRAY_ENSUREARRAY</code>
+</p>
+</dt>
+               <dd><p>Make sure the resulting object is an actual ndarray and not a sub-             class.</p>
+</dd>
+           </dl>
+</dd>
+           </dl>
+</dd>
+           </dl>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Whether or not an array is byte - swapped is determined by the data - type of the array. Native byte - order arrays are always requested by : c : func : `PyArray_FROM_OTF` and so there is no need for a : c : data : `NPY_ARRAY_NOTSWAPPED` flag in the requirements argument. There is also no way to get a byte - swapped array from this routine. </p>
+
+</div>
+
+
+
+<h1>Creating a brand-new ndarray</h1>
+               <p>Quite often, new arrays must be created from within extension-module code. Perhaps an output array is needed and you don&#39;t want the caller to have to supply it. Perhaps only a temporary array is needed to hold an intermediate calculation. Whatever the need there are simple ways to get an ndarray object of whatever data-type is needed. The most general function for doing this is         <code class='verbatim'>PyArray_NewFromDescr</code>
+. All array creation functions go through this heavily re-used code. Because of its flexibility, it can be somewhat confusing to use. As a result, simpler forms exist that are easier to use. These forms are part of the         <code class='verbatim'>PyArray_SimpleNew</code>
+ family of functions, which simplify the interface by providing default values for common use cases.</p>
+
+
+<h1>Getting at ndarray memory and accessing elements of the ndarray</h1>
+               <p>If obj is an ndarray (        <code class='verbatim'>PyArrayObject *</code>
+), then the data-area of the ndarray is pointed to by the void* pointer         <code class='verbatim'>PyArray_DATA</code>
+ (obj) or the char* pointer         <code class='verbatim'>PyArray_BYTES</code>
+ (obj). Remember that (in general) this data-area may not be aligned according to the data-type, it may represent byte-swapped data, and/or it may not be writeable. If the data area is aligned and in native byte-order, then how to get at a specific element of the array is determined only by the array of npy_intp variables,         <code class='verbatim'>PyArray_STRIDES</code>
+ (obj). In particular, this c-array of integers shows how many <strong>bytes</strong> must be added to the current element pointer to get to the next element in each dimension. For arrays less than 4-dimensions there are         <code class='verbatim'>PyArray_GETPTR{k}</code>
+ (obj, ...) macros where {k} is the integer 1, 2, 3, or 4 that make using the array strides easier. The arguments .... represent {k} non- negative integer indices into the array. For example, suppose         <code class='verbatim'>E</code>
+ is a 3-dimensional ndarray. A (void*) pointer to the element         <code class='verbatim'>E[i,j,k]</code>
+ is obtained as         <code class='verbatim'>PyArray_GETPTR3</code>
+ (E, i, j, k).</p>
+
+               <p>As explained previously, C-style contiguous arrays and Fortran-style contiguous arrays have particular striding patterns. Two array flags (        <code class='verbatim'>NPY_ARRAY_C_CONTIGUOUS</code>
+ and         <code class='verbatim'>NPY_ARRAY_F_CONTIGUOUS</code>
+) indicate whether or not the striding pattern of a particular array matches the C-style contiguous or Fortran-style contiguous or neither. Whether or not the striding pattern matches a standard C or Fortran one can be tested Using         <code class='verbatim'>PyArray_IS_C_CONTIGUOUS</code>
+ (obj) and         <code class='verbatim'>PyArray_ISFORTRAN</code>
+ (obj) respectively. Most third-party libraries expect contiguous arrays.  But, often it is not difficult to support general-purpose striding. I encourage you to use the striding information in your own code whenever possible, and reserve single-segment requirements for wrapping third-party code. Using the striding information provided with the ndarray rather than requiring a contiguous striding reduces copying that otherwise must be made.</p>
+
+
+<h1>Example</h1>
+               <div class='block_directive'>
+    <div class='head'>.. index:: []
+    </div>
+    <pre class='not-implemented'><p>single : extension module </p>
+</pre>
+</div>
+
+
+               <p>The following example shows how you might write a wrapper that accepts two input arguments (that will be converted to an array) and an output argument (that must be an array). The function returns None and updates the output array. Note the updated use of WRITEBACKIFCOPY semantics for NumPy v1.14 and above</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;c&#39;]
+    </div>
+    <pre class='not-implemented'><p>static PyObject * example_wrapper ( PyObject *dummy, PyObject *args) { PyObject *arg1=NULL, *arg2=NULL, *out=NULL; PyObject *arr1=NULL, *arr2=NULL, *oarr=NULL; if ( !PyArg_ParseTuple ( args, &#34; OOO! &#34; , &amp;arg1, &amp;arg2, &amp;PyArray_Type, &amp;out)) return NULL; arr1 = PyArray_FROM_OTF ( arg1, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY); if ( arr1 == NULL) return NULL; arr2 = PyArray_FROM_OTF ( arg2, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY); if ( arr2 == NULL) goto fail; #if NPY_API_VERSION &gt;= 0x0000000c oarr = PyArray_FROM_OTF ( out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY2); #else oarr = PyArray_FROM_OTF ( out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY); #endif if ( oarr == NULL) goto fail; / * code that makes use of arguments * / / * You will probably need at least nd = PyArray_NDIM ( &lt; ..&gt;) - - number of dimensions dims = PyArray_DIMS ( &lt; ..&gt;) - - npy_intp array of length nd showing length in each dim. dptr = ( double *)PyArray_DATA ( &lt; ..&gt;) - - pointer to data. If an error occurs goto fail. * / Py_DECREF ( arr1); Py_DECREF ( arr2); #if NPY_API_VERSION &gt;= 0x0000000c PyArray_ResolveWritebackIfCopy ( oarr); #endif Py_DECREF ( oarr); Py_INCREF ( Py_None); return Py_None; fail : Py_XDECREF ( arr1); Py_XDECREF ( arr2); #if NPY_API_VERSION &gt;= 0x0000000c PyArray_DiscardWritebackIfCopy ( oarr); #endif Py_XDECREF ( oarr); return NULL; } </p>
+</pre>
+</div>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

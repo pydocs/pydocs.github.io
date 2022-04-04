@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>NumPy 1.16.0 Release Notes</h1>
+               <p>This NumPy release is the last one to support Python 2.7 and will be maintained as a long term release with bug fixes until 2020.  Support for Python 3.4 been dropped, the supported Python versions are 2.7 and 3.5-3.7. The wheels on PyPI are linked with OpenBLAS v0.3.4+,  which should fix the known threading issues found in previous OpenBLAS versions.</p>
+
+               <p>Downstream developers building this release should use Cython &gt;= 0.29 and, if using OpenBLAS, OpenBLAS &gt; v0.3.4.</p>
+
+               <p>This release has seen a lot of refactoring and features many bug fixes, improved code organization, and better cross platform compatibility. Not all of these improvements will be visible to users, but they should help make maintenance easier going forward.</p>
+
+
+<h1>Highlights</h1>
+                          <ul>               <li>               <p>Experimental (opt-in only) support for overriding numpy functions,   see         <code class='verbatim'>__array_function__</code>
+ below.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The         <code class='verbatim'>matmul</code>
+ function is now a ufunc. This provides better   performance and allows overriding with         <code class='verbatim'>__array_ufunc__</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Improved support for the ARM and POWER architectures.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Improved support for AIX and PyPy.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Improved interop with ctypes.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Improved support for PEP 3118.</p>
+
+</li>
+            </ul>
+
+
+<h1>New functions</h1>
+                          <ul>               <li>               <p>New functions added to the <code>:None:None:`numpy.lib.recfuntions`</code> module to ease the   structured assignment changes:</p>
+
+                           <pre>* ``assign_fields_by_name``
+* ``structured_to_unstructured``
+* ``unstructured_to_structured``
+* ``apply_along_fields``
+* ``require_fields``
+</pre>
+
+
+               <p>See the user guide at &lt;https://docs.scipy.org/doc/numpy/user/basics.rec.html&gt;   for more info.</p>
+
+</li>
+            </ul>
+
+
+<h1>New deprecations</h1>
+                          <ul>               <li>               <p>The type dictionaries <code>:None:None:`numpy.core.typeNA`</code> and <code>:None:None:`numpy.core.sctypeNA`</code> are   deprecated. They were buggy and not documented and will be removed in the   1.18 release. Use`numpy.sctypeDict` instead.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The <code><a link href="/p/numpy/*/api/numpy.asscalar.html" class='exists'>numpy.asscalar</a></code>
+ function is deprecated. It is an alias to the more   powerful <code>:None:None:`numpy.ndarray.item`</code>, not tested, and fails for scalars.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The <code>:None:None:`numpy.set_array_ops`</code> and <code>:None:None:`numpy.get_array_ops`</code> functions are deprecated.   As part of <code>:None:None:`NEP 15`</code>, they have been deprecated along with the C-API functions           <code class='verbatim'>PyArray_SetNumericOps</code>
+ and         <code class='verbatim'>PyArray_GetNumericOps</code>
+. Users   who wish to override the inner loop functions in built-in ufuncs should use           <code class='verbatim'>PyUFunc_ReplaceLoopBySignature</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The <code><a link href="/p/numpy/*/api/numpy.unravel_index.html" class='exists'>numpy.unravel_index</a></code>
+ keyword argument         <code class='verbatim'>dims</code>
+ is deprecated, use           <code class='verbatim'>shape</code>
+ instead.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The <code><a link href="/p/numpy/*/api/numpy.histogram.html" class='exists'>numpy.histogram</a></code>
+         <code class='verbatim'>normed</code>
+ argument is deprecated.  It was deprecated   previously, but no warning was issued.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>The         <code class='verbatim'>positive</code>
+ operator (        <code class='verbatim'>+</code>
+) applied to non-numerical arrays is   deprecated. See below for details.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Passing an iterator to the stack functions is deprecated</p>
+
+</li>
+            </ul>
+
+
+<h1>Expired deprecations</h1>
+                          <ul>               <li>               <p>NaT comparisons now return         <code class='verbatim'>False</code>
+ without a warning, finishing a   deprecation cycle begun in NumPy 1.11.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>np.lib.function_base.unique</code>
+ was removed, finishing a deprecation cycle   begun in NumPy 1.4. Use <code><a link href="/p/numpy/*/api/numpy.unique.html" class='exists'>numpy.unique</a></code>
+ instead.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>multi-field indexing now returns views instead of copies, finishing a   deprecation cycle begun in NumPy 1.7. The change was previously attempted in   NumPy 1.14 but reverted until now.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>np.PackageLoader</code>
+ and         <code class='verbatim'>np.pkgload</code>
+ have been removed. These were   deprecated in 1.10, had no tests, and seem to no longer work in 1.15.</p>
+
+</li>
+            </ul>
+
+
+<h1>Future changes</h1>
+                          <ul>               <li>               <p>NumPy 1.17 will drop support for Python 2.7.</p>
+
+</li>
+            </ul>
+
+
+<h1>Compatibility notes</h1>
+
+<h1>f2py script on Windows</h1>
+               <p>On Windows, the installed script for running f2py is now an         <code class='verbatim'>.exe</code>
+ file rather than a         <code class='verbatim'>*.py</code>
+ file and should be run from the command line as         <code class='verbatim'>f2py</code>
+ whenever the         <code class='verbatim'>Scripts</code>
+ directory is in the path. Running         <code class='verbatim'>f2py</code>
+ as a module         <code class='verbatim'>python -m numpy.f2py [...]</code>
+ will work without path modification in any version of NumPy.</p>
+
+
+<h1>NaT comparisons</h1>
+               <p>Consistent with the behavior of NaN, all comparisons other than inequality checks with datetime64 or timedelta64 NaT (&#34;not-a-time&#34;) values now always return         <code class='verbatim'>False</code>
+, and inequality checks with NaT now always return         <code class='verbatim'>True</code>
+. This includes comparisons between NaT values. For compatibility with the old behavior, use         <code class='verbatim'>np.isnat</code>
+ to explicitly check for NaT or convert datetime64/timedelta64 arrays with         <code class='verbatim'>.astype(np.int64)</code>
+ before making comparisons.</p>
+
+
+<h1>complex64/128 alignment has changed</h1>
+               <p>The memory alignment of complex types is now the same as a C-struct composed of two floating point values, while before it was equal to the size of the type. For many users (for instance on x64/unix/gcc) this means that complex64 is now 4-byte aligned instead of 8-byte aligned. An important consequence is that aligned structured dtypes may now have a different size. For instance,         <code class='verbatim'>np.dtype(&#39;c8,u1&#39;, align=True)</code>
+ used to have an itemsize of 16 (on x64/gcc) but now it is 12.</p>
+
+               <p>More in detail, the complex64 type now has the same alignment as a C-struct         <code class='verbatim'>struct {float r, i;}</code>
+, according to the compiler used to compile numpy, and similarly for the complex128 and complex256 types.</p>
+
+
+<h1>nd_grid __len__ removal</h1>
+               <p>        <code class='verbatim'>len(np.mgrid)</code>
+ and         <code class='verbatim'>len(np.ogrid)</code>
+ are now considered nonsensical and raise a         <code class='verbatim'>TypeError</code>
+.</p>
+
+
+<h1>``np.unravel_index`` now accepts ``shape`` keyword argument</h1>
+               <p>Previously, only the         <code class='verbatim'>dims</code>
+ keyword argument was accepted for specification of the shape of the array to be used for unraveling.         <code class='verbatim'>dims</code>
+ remains supported, but is now deprecated.</p>
+
+
+<h1>multi-field views return a view instead of a copy</h1>
+               <p>Indexing a structured array with multiple fields, e.g.,         <code class='verbatim'>arr[[&#39;f1&#39;, &#39;f3&#39;]]</code>
+, returns a view into the original array instead of a copy. The returned view will often have extra padding bytes corresponding to intervening fields in the original array, unlike before, which will affect code such as         <code class='verbatim'>arr[[&#39;f1&#39;, &#39;f3&#39;]].view(&#39;float64&#39;)</code>
+. This change has been planned since numpy 1.7. Operations hitting this path have emitted         <code class='verbatim'>FutureWarnings</code>
+ since then. Additional         <code class='verbatim'>FutureWarnings</code>
+ about this change were added in 1.12.</p>
+
+               <p>To help users update their code to account for these changes, a number of functions have been added to the         <code class='verbatim'>numpy.lib.recfunctions</code>
+ module which safely allow such operations. For instance, the code above can be replaced with         <code class='verbatim'>structured_to_unstructured(arr[[&#39;f1&#39;, &#39;f3&#39;]], dtype=&#39;float64&#39;)</code>
+. See the &#34;accessing multiple fields&#34; section of the <a link href="https://docs.scipy.org/doc/numpy/user/basics.rec.html#accessing-multiple-fields" class='external'>user guide</a>.</p>
+
+
+<h1>C API changes</h1>
+               <p>The         <code class='verbatim'>NPY_FEATURE_VERSION</code>
+ was incremented to 0x0000D, due to the addition of:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>PyUFuncObject.core_dim_flags</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>PyUFuncObject.core_dim_sizes</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>PyUFuncObject.identity_value</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>PyUFunc_FromFuncAndDataAndSignatureAndIdentity</code>
+</p>
+
+</li>
+            </ul>
+
+
+<h1>New Features</h1>
+
+<h1>Integrated squared error (ISE) estimator added to ``histogram``</h1>
+               <p>This method (        <code class='verbatim'>bins=&#39;stone&#39;</code>
+) for optimizing the bin number is a generalization of the Scott&#39;s rule. The Scott&#39;s rule assumes the distribution is approximately Normal, while the <code>:None:None:`ISE_`</code> is a non-parametric method based on cross-validation.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _ISE: https://en.wikipedia.org/wiki/Histogram#Minimizing_cross-validation_estimated_squared_error&#39;&gt;</pre>
+
+<h1>``max_rows`` keyword added for ``np.loadtxt``</h1>
+               <p>New keyword         <code class='verbatim'>max_rows</code>
+ in <code><a link href="/p/numpy/*/api/numpy.loadtxt.html" class='exists'>numpy.loadtxt</a></code>
+ sets the maximum rows of the content to be read after         <code class='verbatim'>skiprows</code>
+, as in <code><a link href="/p/numpy/*/api/numpy.genfromtxt.html" class='exists'>numpy.genfromtxt</a></code>
+.</p>
+
+
+<h1>modulus operator support added for ``np.timedelta64`` operands</h1>
+               <p>The modulus (remainder) operator is now supported for two operands of type         <code class='verbatim'>np.timedelta64</code>
+. The operands may have different units and the return value will match the type of the operands.</p>
+
+
+<h1>Improvements</h1>
+
+<h1>no-copy pickling of numpy arrays</h1>
+               <p>Up to protocol 4, numpy array pickling created 2 spurious copies of the data being serialized.  With pickle protocol 5, and the         <code class='verbatim'>PickleBuffer</code>
+ API, a large variety of numpy arrays can now be serialized without any copy using out-of-band buffers, and with one less copy using in-band buffers. This results, for large arrays, in an up to 66% drop in peak memory usage.</p>
+
+
+<h1>build shell independence</h1>
+               <p>NumPy builds should no longer interact with the host machine shell directly.         <code class='verbatim'>exec_command</code>
+ has been replaced with         <code class='verbatim'>subprocess.check_output</code>
+ where appropriate.</p>
+
+
+<h1>`np.polynomial.Polynomial` classes render in LaTeX in Jupyter notebooks</h1>
+               <p>When used in a front-end that supports it, <code>:None:None:`Polynomial`</code> instances are now rendered through LaTeX. The current format is experimental, and is subject to change.</p>
+
+
+<h1>``randint`` and ``choice`` now work on empty distributions</h1>
+               <p>Even when no elements needed to be drawn,         <code class='verbatim'>np.random.randint</code>
+ and         <code class='verbatim'>np.random.choice</code>
+ raised an error when the arguments described an empty distribution. This has been fixed so that e.g.         <code class='verbatim'>np.random.choice([], 0) == np.array([], dtype=float64)</code>
+.</p>
+
+
+<h1>``linalg.lstsq``, ``linalg.qr``, and ``linalg.svd`` now work with empty arrays</h1>
+               <p>Previously, a         <code class='verbatim'>LinAlgError</code>
+ would be raised when an empty matrix/empty matrices (with zero rows and/or columns) is/are passed in. Now outputs of appropriate shapes are returned.</p>
+
+
+<h1>Chain exceptions to give better error messages for invalid PEP3118 format strings</h1>
+               <p>This should help track down problems.</p>
+
+
+<h1>Einsum optimization path updates and efficiency improvements</h1>
+               <p>Einsum was synchronized with the current upstream work.</p>
+
+
+<h1>`numpy.angle` and `numpy.expand_dims` now work on ``ndarray`` subclasses</h1>
+               <p>In particular, they now work for masked arrays.</p>
+
+
+<h1>``NPY_NO_DEPRECATED_API`` compiler warning suppression</h1>
+               <p>Setting         <code class='verbatim'>NPY_NO_DEPRECATED_API</code>
+ to a value of 0 will suppress the current compiler warnings when the deprecated numpy API is used.</p>
+
+
+<h1>``np.diff`` Added kwargs prepend and append</h1>
+               <p>New kwargs         <code class='verbatim'>prepend</code>
+ and         <code class='verbatim'>append</code>
+, allow for values to be inserted on either end of the differences.  Similar to options for <code>:None:None:`ediff1d`</code>. Now the inverse of <code>:None:None:`cumsum`</code> can be obtained easily via         <code class='verbatim'>prepend=0</code>
+.</p>
+
+
+<h1>ARM support updated</h1>
+               <p>Support for ARM CPUs has been updated to accommodate 32 and 64 bit targets, and also big and little endian byte ordering. AARCH32 memory alignment issues have been addressed. CI testing has been expanded to include AARCH64 targets via the services of shippable.com.</p>
+
+
+<h1>Appending to build flags</h1>
+               <p><code><a link href="/p/numpy/*/api/numpy.distutils.html" class='exists'>numpy.distutils</a></code>
+ has always overridden rather than appended to <code>:None:None:`LDFLAGS`</code> and other similar such environment variables for compiling Fortran extensions. Now, if the <code>:None:None:`NPY_DISTUTILS_APPEND_FLAGS`</code> environment variable is set to 1, the behavior will be appending.  This applied to: <code>:None:None:`LDFLAGS`</code>, <code>:None:None:`F77FLAGS`</code>, <code>:None:None:`F90FLAGS`</code>, <code>:None:None:`FREEFLAGS`</code>, <code>:None:None:`FOPT`</code>, <code>:None:None:`FDEBUG`</code>, and <code>:None:None:`FFLAGS`</code>.  See gh-11525 for more details.</p>
+
+
+<h1>Generalized ufunc signatures now allow fixed-size dimensions</h1>
+               <p>By using a numerical value in the signature of a generalized ufunc, one can indicate that the given function requires input or output to have dimensions with the given size. E.g., the signature of a function that converts a polar angle to a two-dimensional cartesian unit vector would be         <code class='verbatim'>()-&gt;(2)</code>
+; that for one that converts two spherical angles to a three-dimensional unit vector would be         <code class='verbatim'>(),()-&gt;(3)</code>
+; and that for the cross product of two three-dimensional vectors would be         <code class='verbatim'>(3),(3)-&gt;(3)</code>
+.</p>
+
+               <p>Note that to the elementary function these dimensions are not treated any differently from variable ones indicated with a name starting with a letter; the loop still is passed the corresponding size, but it can now count on that size being equal to the fixed one given in the signature.</p>
+
+
+<h1>Generalized ufunc signatures now allow flexible dimensions</h1>
+               <p>Some functions, in particular numpy&#39;s implementation of         <code class='verbatim'>@</code>
+ as         <code class='verbatim'>matmul</code>
+, are very similar to generalized ufuncs in that they operate over core dimensions, but one could not present them as such because they were able to deal with inputs in which a dimension is missing. To support this, it is now allowed to postfix a dimension name with a question mark to indicate that the dimension does not necessarily have to be present.</p>
+
+               <p>With this addition, the signature for         <code class='verbatim'>matmul</code>
+ can be expressed as         <code class='verbatim'>(m?,n),(n,p?)-&gt;(m?,p?)</code>
+.  This indicates that if, e.g., the second operand has only one dimension, for the purposes of the elementary function it will be treated as if that input has core shape         <code class='verbatim'>(n, 1)</code>
+, and the output has the corresponding core shape of         <code class='verbatim'>(m, 1)</code>
+. The actual output array, however, has the flexible dimension removed, i.e., it will have shape         <code class='verbatim'>(..., m)</code>
+. Similarly, if both arguments have only a single dimension, the inputs will be presented as having shapes         <code class='verbatim'>(1, n)</code>
+ and         <code class='verbatim'>(n, 1)</code>
+ to the elementary function, and the output as         <code class='verbatim'>(1, 1)</code>
+, while the actual output array returned will have shape         <code class='verbatim'>()</code>
+. In this way, the signature allows one to use a single elementary function for four related but different signatures,         <code class='verbatim'>(m,n),(n,p)-&gt;(m,p)</code>
+,         <code class='verbatim'>(n),(n,p)-&gt;(p)</code>
+,         <code class='verbatim'>(m,n),(n)-&gt;(m)</code>
+ and         <code class='verbatim'>(n),(n)-&gt;()</code>
+.</p>
+
+
+<h1>``np.clip`` and the ``clip`` method check for memory overlap</h1>
+               <p>The         <code class='verbatim'>out</code>
+ argument to these functions is now always tested for memory overlap to avoid corrupted results when memory overlap occurs.</p>
+
+
+<h1>New value ``unscaled`` for option ``cov`` in ``np.polyfit``</h1>
+               <p>A further possible value has been added to the         <code class='verbatim'>cov</code>
+ parameter of the         <code class='verbatim'>np.polyfit</code>
+ function. With         <code class='verbatim'>cov=&#39;unscaled&#39;</code>
+ the scaling of the covariance matrix is disabled completely (similar to setting         <code class='verbatim'>absolute_sigma=True</code>
+ in         <code class='verbatim'>scipy.optimize.curve_fit</code>
+). This would be useful in occasions, where the weights are given by 1/sigma with sigma being the (known) standard errors of (Gaussian distributed) data points, in which case the unscaled matrix is already a correct estimate for the covariance matrix.</p>
+
+
+<h1>Detailed docstrings for scalar numeric types</h1>
+               <p>The         <code class='verbatim'>help</code>
+ function, when applied to numeric types such as <code><a link href="/p/numpy/*/api/numpy.int32.html" class='exists'>numpy.intc</a></code>
+, <code><a link href="/p/numpy/*/api/numpy.int64.html" class='exists'>numpy.int_</a></code>
+, and <code><a link href="/p/numpy/*/api/numpy.longlong.html" class='exists'>numpy.longlong</a></code>
+, now lists all of the aliased names for that type, distinguishing between platform -dependent and -independent aliases.</p>
+
+
+<h1>``__module__`` attribute now points to public modules</h1>
+               <p>The         <code class='verbatim'>__module__</code>
+ attribute on most NumPy functions has been updated to refer to the preferred public module from which to access a function, rather than the module in which the function happens to be defined. This produces more informative displays for functions in tools such as IPython, e.g., instead of         <code class='verbatim'>&lt;function &#39;numpy.core.fromnumeric.sum&#39;&gt;</code>
+ you now see         <code class='verbatim'>&lt;function &#39;numpy.sum&#39;&gt;</code>
+.</p>
+
+
+<h1>Large allocations marked as suitable for transparent hugepages</h1>
+               <p>On systems that support transparent hugepages over the madvise system call numpy now marks that large memory allocations can be backed by hugepages which reduces page fault overhead and can in some fault heavy cases improve performance significantly. On Linux the setting for huge pages to be used, <code>:None:None:`/sys/kernel/mm/transparent_hugepage/enabled`</code>, must be at least <code>:None:None:`madvise`</code>. Systems which already have it set to <code>:None:None:`always`</code> will not see much difference as the kernel will automatically use huge pages where appropriate.</p>
+
+               <p>Users of very old Linux kernels (~3.x and older) should make sure that <code>:None:None:`/sys/kernel/mm/transparent_hugepage/defrag`</code> is not set to <code>:None:None:`always`</code> to avoid performance problems due concurrency issues in the memory defragmentation.</p>
+
+
+<h1>Alpine Linux (and other musl c library distros) support</h1>
+               <p>We now default to use <code>:None:None:`fenv.h`</code> for floating point status error reporting. Previously we had a broken default that sometimes would not report underflow, overflow, and invalid floating point operations. Now we can support non-glibc distributions like Alpine Linux as long as they ship <code>:None:None:`fenv.h`</code>.</p>
+
+
+<h1>Speedup ``np.block`` for large arrays</h1>
+               <p>Large arrays (greater than         <code class='verbatim'>512 * 512</code>
+) now use a blocking algorithm based on copying the data directly into the appropriate slice of the resulting array. This results in significant speedups for these large arrays, particularly for arrays being blocked along more than 2 dimensions.</p>
+
+
+<h1>``arr.ctypes.data_as(...)`` holds a reference to arr</h1>
+               <p>Previously the caller was responsible for keeping the array alive for the lifetime of the pointer.</p>
+
+
+<h1>Speedup ``np.take`` for read-only arrays</h1>
+               <p>The implementation of         <code class='verbatim'>np.take</code>
+ no longer makes an unnecessary copy of the source array when its         <code class='verbatim'>writeable</code>
+ flag is set to         <code class='verbatim'>False</code>
+.</p>
+
+
+<h1>Support path-like objects for more functions</h1>
+               <p>The         <code class='verbatim'>np.core.records.fromfile</code>
+ function now supports         <code class='verbatim'>pathlib.Path</code>
+ and other path-like objects in addition to a file object. Furthermore, the         <code class='verbatim'>np.load</code>
+ function now also supports path-like objects when using memory mapping (        <code class='verbatim'>mmap_mode</code>
+ keyword argument).</p>
+
+
+<h1>Better behaviour of ufunc identities during reductions</h1>
+               <p>Universal functions have an         <code class='verbatim'>.identity</code>
+ which is used when         <code class='verbatim'>.reduce</code>
+ is called on an empty axis.</p>
+
+               <p>As of this release, the logical binary ufuncs, <code>:None:None:`logical_and`</code>, <code>:None:None:`logical_or`</code>, and <code>:None:None:`logical_xor`</code>, now have         <code class='verbatim'>identity</code>
+ s of type <code>:None:None:`bool`</code>, where previously they were of type <code>:None:None:`int`</code>. This restores the 1.14 behavior of getting         <code class='verbatim'>bool</code>
+ s when reducing empty object arrays with these ufuncs, while also keeping the 1.15 behavior of getting         <code class='verbatim'>int</code>
+ s when reducing empty object arrays with arithmetic ufuncs like         <code class='verbatim'>add</code>
+ and         <code class='verbatim'>multiply</code>
+.</p>
+
+               <p>Additionally, <code>:None:None:`logaddexp`</code> now has an identity of         <code class='verbatim'>-inf</code>
+, allowing it to be called on empty sequences, where previously it could not be.</p>
+
+               <p>This is possible thanks to the new         <code class='verbatim'>PyUFunc_FromFuncAndDataAndSignatureAndIdentity</code>
+, which allows arbitrary values to be used as identities now.</p>
+
+
+<h1>Improved conversion from ctypes objects</h1>
+               <p>Numpy has always supported taking a value or type from         <code class='verbatim'>ctypes</code>
+ and converting it into an array or dtype, but only behaved correctly for simpler types. As of this release, this caveat is lifted - now:</p>
+
+                          <ul>               <li>               <p>The         <code class='verbatim'>_pack_</code>
+ attribute of         <code class='verbatim'>ctypes.Structure</code>
+, used to emulate C&#39;s           <code class='verbatim'>__attribute__((packed))</code>
+, is respected.</p>
+
+</li>
+               <li>               <p>Endianness of all ctypes objects is preserved</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>ctypes.Union</code>
+ is supported</p>
+
+</li>
+               <li>               <p>Non-representable constructs raise exceptions, rather than producing   dangerously incorrect results:</p>
+
+                          <ul>               <li>               <p>Bitfields are no longer interpreted as sub-arrays</p>
+
+</li>
+               <li>               <p>Pointers are no longer replaced with the type that they point to</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h1>A new ``ndpointer.contents`` member</h1>
+               <p>This matches the         <code class='verbatim'>.contents</code>
+ member of normal ctypes arrays, and can be used to construct an         <code class='verbatim'>np.array</code>
+ around the pointers contents.  This replaces         <code class='verbatim'>np.array(some_nd_pointer)</code>
+, which stopped working in 1.15.  As a side effect of this change,         <code class='verbatim'>ndpointer</code>
+ now supports dtypes with overlapping fields and padding.</p>
+
+
+<h1>``matmul`` is now a ``ufunc``</h1>
+               <p><code>:None:None:`numpy.matmul`</code> is now a ufunc which means that both the function and the         <code class='verbatim'>__matmul__</code>
+ operator can now be overridden by         <code class='verbatim'>__array_ufunc__</code>
+. Its implementation has also changed. It uses the same BLAS routines as <code><a link href="/p/numpy/*/api/numpy.dot.html" class='exists'>numpy.dot</a></code>
+, ensuring its performance is similar for large matrices.</p>
+
+
+<h1>Start and stop arrays for ``linspace``, ``logspace`` and ``geomspace``</h1>
+               <p>These functions used to be limited to scalar stop and start values, but can now take arrays, which will be properly broadcast and result in an output which has one axis prepended.  This can be used, e.g., to obtain linearly interpolated points between sets of points.</p>
+
+
+<h1>CI extended with additional services</h1>
+               <p>We now use additional free CI services, thanks to the companies that provide:</p>
+
+                          <ul>               <li>               <p>Codecoverage testing via codecov.io</p>
+
+</li>
+               <li>               <p>Arm testing via shippable.com</p>
+
+</li>
+               <li>               <p>Additional test runs on azure pipelines</p>
+
+</li>
+            </ul>
+
+               <p>These are in addition to our continued use of travis, appveyor (for wheels) and LGTM</p>
+
+
+<h1>Changes</h1>
+
+<h1>Comparison ufuncs will now error rather than return NotImplemented</h1>
+               <p>Previously, comparison ufuncs such as         <code class='verbatim'>np.equal</code>
+ would return <code>:None:None:`NotImplemented`</code> if their arguments had structured dtypes, to help comparison operators such as         <code class='verbatim'>__eq__</code>
+ deal with those.  This is no longer needed, as the relevant logic has moved to the comparison operators proper (which thus do continue to return <code>:None:None:`NotImplemented`</code> as needed). Hence, like all other ufuncs, the comparison ufuncs will now error on structured dtypes.</p>
+
+
+<h1>Positive will now raise a deprecation warning for non-numerical arrays</h1>
+               <p>Previously,         <code class='verbatim'>+array</code>
+ unconditionally returned a copy. Now, it will raise a         <code class='verbatim'>DeprecationWarning</code>
+ if the array is not numerical (i.e., if         <code class='verbatim'>np.positive(array)</code>
+ raises a         <code class='verbatim'>TypeError</code>
+. For         <code class='verbatim'>ndarray</code>
+ subclasses that override the default         <code class='verbatim'>__array_ufunc__</code>
+ implementation, the         <code class='verbatim'>TypeError</code>
+ is passed on.</p>
+
+
+<h1>``NDArrayOperatorsMixin`` now implements matrix multiplication</h1>
+               <p>Previously,         <code class='verbatim'>np.lib.mixins.NDArrayOperatorsMixin</code>
+ did not implement the special methods for Python&#39;s matrix multiplication operator (        <code class='verbatim'>@</code>
+). This has changed now that         <code class='verbatim'>matmul</code>
+ is a ufunc and can be overridden using         <code class='verbatim'>__array_ufunc__</code>
+.</p>
+
+
+<h1>The scaling of the covariance matrix in ``np.polyfit`` is different</h1>
+               <p>So far,         <code class='verbatim'>np.polyfit</code>
+ used a non-standard factor in the scaling of the the covariance matrix. Namely, rather than using the standard         <code class='verbatim'>chisq/(M-N)</code>
+, it scaled it with         <code class='verbatim'>chisq/(M-N-2)</code>
+ where M is the number of data points and N is the number of parameters.  This scaling is inconsistent with other fitting programs such as e.g.         <code class='verbatim'>scipy.optimize.curve_fit</code>
+ and was changed to         <code class='verbatim'>chisq/(M-N)</code>
+.</p>
+
+
+<h1>``maximum`` and ``minimum`` no longer emit warnings</h1>
+               <p>As part of code introduced in 1.10,          <code class='verbatim'>float32</code>
+ and         <code class='verbatim'>float64</code>
+ set invalid float status when a Nan is encountered in <code>:None:None:`numpy.maximum`</code> and <code>:None:None:`numpy.minimum`</code>, when using SSE2 semantics. This caused a <code>:None:None:`RuntimeWarning`</code> to sometimes be emitted. In 1.15 we fixed the inconsistencies which caused the warnings to become more conspicuous. Now no warnings will be emitted.</p>
+
+
+<h1>Umath and multiarray c-extension modules merged into a single module</h1>
+               <p>The two modules were merged, according to <code>:None:None:`NEP 15`</code>. Previously <code>:None:None:`np.core.umath`</code> and <code>:None:None:`np.core.multiarray`</code> were separate c-extension modules. They are now python wrappers to the single <code>:None:None:`np.core/_multiarray_math`</code> c-extension module.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

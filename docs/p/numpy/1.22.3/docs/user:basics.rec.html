@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _structured_arrays:&#39;&gt;</pre>
+
+<h1>Structured arrays</h1>
+
+<h1>Introduction</h1>
+               <p>Structured arrays are ndarrays whose datatype is a composition of simpler datatypes organized as a sequence of named         <code class='verbatim'>fields &lt;field&gt;</code>
+. For example, ::</p>
+
+                           <pre>&gt;&gt;&gt; x = np.array([(&#39;Rex&#39;, 9, 81.0), (&#39;Fido&#39;, 3, 27.0)],
+...              dtype=[(&#39;name&#39;, &#39;U10&#39;), (&#39;age&#39;, &#39;i4&#39;), (&#39;weight&#39;, &#39;f4&#39;)])
+&gt;&gt;&gt; x
+array([(&#39;Rex&#39;, 9, 81.), (&#39;Fido&#39;, 3, 27.)],
+      dtype=[(&#39;name&#39;, &#39;&lt;U10&#39;), (&#39;age&#39;, &#39;&lt;i4&#39;), (&#39;weight&#39;, &#39;&lt;f4&#39;)])
+</pre>
+
+
+               <p>Here         <code class='verbatim'>x</code>
+ is a one-dimensional array of length two whose datatype is a structure with three fields: 1. A string of length 10 or less named &#39;name&#39;, 2. a 32-bit integer named &#39;age&#39;, and 3. a 32-bit float named &#39;weight&#39;.</p>
+
+               <p>If you index         <code class='verbatim'>x</code>
+ at position 1 you get a structure::   </p>
+
+               <pre>&gt;&gt;&gt; x[1]
+(&#39;Fido&#39;, 3, 27.)</pre>
+               <p>You can access and modify individual fields of a structured array by indexing with the field name::   </p>
+
+               <pre>&gt;&gt;&gt; x[&#39;age&#39;]
+array([9, 3], dtype=int32)
+&gt;&gt;&gt; x[&#39;age&#39;] = 5
+&gt;&gt;&gt; x
+array([(&#39;Rex&#39;, 5, 81.), (&#39;Fido&#39;, 5, 27.)],
+      dtype=[(&#39;name&#39;, &#39;&lt;U10&#39;), (&#39;age&#39;, &#39;&lt;i4&#39;), (&#39;weight&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>Structured datatypes are designed to be able to mimic &#39;structs&#39; in the C language, and share a similar memory layout. They are meant for interfacing with C code and for low-level manipulation of structured buffers, for example for interpreting binary blobs. For these purposes they support specialized features such as subarrays, nested datatypes, and unions, and allow control over the memory layout of the structure.</p>
+
+               <p>Users looking to manipulate tabular data, such as stored in csv files, may find other pydata projects more suitable, such as xarray, pandas, or DataArray. These provide a high-level interface for tabular data analysis and are better optimized for that use. For instance, the C-struct-like memory layout of structured arrays in numpy can lead to poor cache behavior in comparison.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _defining-structured-types:&#39;&gt;</pre>
+
+<h1>Structured Datatypes</h1>
+               <p>A structured datatype can be thought of as a sequence of bytes of a certain length (the structure&#39;s         <code class='verbatim'>itemsize</code>
+) which is interpreted as a collection of fields. Each field has a name, a datatype, and a byte offset within the structure. The datatype of a field may be any numpy datatype including other structured datatypes, and it may also be a         <code class='verbatim'>subarray data type</code>
+ which behaves like an ndarray of a specified shape. The offsets of the fields are arbitrary, and fields may even overlap. These offsets are usually determined automatically by numpy, but can also be specified.</p>
+
+
+<h1>Structured Datatype Creation</h1>
+               <p>Structured datatypes may be created using the function         <code class='verbatim'>numpy.dtype</code>
+. There are 4 alternative forms of specification which vary in flexibility and conciseness. These are further documented in the         <code class='verbatim'>Data Type Objects &lt;arrays.dtypes.constructing&gt;</code>
+ reference page, and in summary they are:</p>
+
+                          <ol>               <li>               <p>A list of tuples, one tuple per field</p>
+
+               <p>Each tuple has the form         <code class='verbatim'>(fieldname, datatype, shape)</code>
+ where shape is      optional.         <code class='verbatim'>fieldname</code>
+ is a string (or tuple if titles are used, see              <code class='verbatim'>Field Titles &lt;titles&gt;</code>
+ below),         <code class='verbatim'>datatype</code>
+ may be any object      convertible to a datatype, and         <code class='verbatim'>shape</code>
+ is a tuple of integers specifying      subarray shape.</p>
+
+                           <pre>&gt;&gt;&gt; np.dtype([(&#39;x&#39;, &#39;f4&#39;), (&#39;y&#39;, np.float32), (&#39;z&#39;, &#39;f4&#39;, (2, 2))])
+dtype([(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;y&#39;, &#39;&lt;f4&#39;), (&#39;z&#39;, &#39;&lt;f4&#39;, (2, 2))])
+</pre>
+
+
+               <p>If         <code class='verbatim'>fieldname</code>
+ is the empty string         <code class='verbatim'>&#39;&#39;</code>
+, the field will be given a      default name of the form         <code class='verbatim'>f#</code>
+, where         <code class='verbatim'>#</code>
+ is the integer index of the      field, counting from 0 from the left::        </p>
+
+               <pre>&gt;&gt;&gt; np.dtype([(&#39;x&#39;, &#39;f4&#39;), (&#39;&#39;, &#39;i4&#39;), (&#39;z&#39;, &#39;i8&#39;)])
+dtype([(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;f1&#39;, &#39;&lt;i4&#39;), (&#39;z&#39;, &#39;&lt;i8&#39;)])</pre>
+               <p>The byte offsets of the fields within the structure and the total      structure itemsize are determined automatically.</p>
+
+</li>
+               <li>               <p>A string of comma-separated dtype specifications</p>
+
+               <p>In this shorthand notation any of the         <code class='verbatim'>string dtype specifications
+     &lt;arrays.dtypes.constructing&gt;</code>
+ may be used in a string and separated by      commas. The itemsize and byte offsets of the fields are determined      automatically, and the field names are given the default names         <code class='verbatim'>f0</code>
+,              <code class='verbatim'>f1</code>
+, etc. ::        </p>
+
+               <pre>&gt;&gt;&gt; np.dtype(&#39;i8, f4, S3&#39;)
+dtype([(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;S3&#39;)])
+&gt;&gt;&gt; np.dtype(&#39;3int8, float32, (2, 3)float64&#39;)
+dtype([(&#39;f0&#39;, &#39;i1&#39;, (3,)), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;&lt;f8&#39;, (2, 3))])</pre>
+</li>
+               <li>               <p>A dictionary of field parameter arrays</p>
+
+               <p>This is the most flexible form of specification since it allows control      over the byte-offsets of the fields and the itemsize of the structure.</p>
+
+               <p>The dictionary has two required keys, &#39;names&#39; and &#39;formats&#39;, and four      optional keys, &#39;offsets&#39;, &#39;itemsize&#39;, &#39;aligned&#39; and &#39;titles&#39;. The values      for &#39;names&#39; and &#39;formats&#39; should respectively be a list of field names and      a list of dtype specifications, of the same length. The optional &#39;offsets&#39;      value should be a list of integer byte-offsets, one for each field within      the structure. If &#39;offsets&#39; is not given the offsets are determined      automatically. The optional &#39;itemsize&#39; value should be an integer      describing the total size in bytes of the dtype, which must be large      enough to contain all the fields.      ::</p>
+
+                           <pre>&gt;&gt;&gt; np.dtype({&#39;names&#39;: [&#39;col1&#39;, &#39;col2&#39;], &#39;formats&#39;: [&#39;i4&#39;, &#39;f4&#39;]})
+dtype([(&#39;col1&#39;, &#39;&lt;i4&#39;), (&#39;col2&#39;, &#39;&lt;f4&#39;)])
+&gt;&gt;&gt; np.dtype({&#39;names&#39;: [&#39;col1&#39;, &#39;col2&#39;],
+...           &#39;formats&#39;: [&#39;i4&#39;, &#39;f4&#39;],
+...           &#39;offsets&#39;: [0, 4],
+...           &#39;itemsize&#39;: 12})
+dtype({&#39;names&#39;: [&#39;col1&#39;, &#39;col2&#39;], &#39;formats&#39;: [&#39;&lt;i4&#39;, &#39;&lt;f4&#39;], &#39;offsets&#39;: [0, 4], &#39;itemsize&#39;: 12})
+</pre>
+
+
+               <p>Offsets may be chosen such that the fields overlap, though this will mean      that assigning to one field may clobber any overlapping field&#39;s data. As      an exception, fields of         <code class='verbatim'>numpy.object_</code>
+ type cannot overlap with      other fields, because of the risk of clobbering the internal object      pointer and then dereferencing it.</p>
+
+               <p>The optional &#39;aligned&#39; value can be set to         <code class='verbatim'>True</code>
+ to make the automatic      offset computation use aligned offsets (see         <code class='verbatim'>offsets-and-alignment</code>
+),      as if the &#39;align&#39; keyword argument of         <code class='verbatim'>numpy.dtype</code>
+ had been set to      True.</p>
+
+               <p>The optional &#39;titles&#39; value should be a list of titles of the same length      as &#39;names&#39;, see         <code class='verbatim'>Field Titles &lt;titles&gt;</code>
+ below.</p>
+
+</li>
+               <li>               <p>A dictionary of field names</p>
+
+               <p>The use of this form of specification is discouraged, but documented here      because older numpy code may use it. The keys of the dictionary are the      field names and the values are tuples specifying type and offset::        </p>
+
+               <pre>&gt;&gt;&gt; np.dtype({&#39;col1&#39;: (&#39;i1&#39;, 0), &#39;col2&#39;: (&#39;f4&#39;, 1)})
+dtype([(&#39;col1&#39;, &#39;i1&#39;), (&#39;col2&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>This form is discouraged because Python dictionaries do not preserve order      in Python versions before Python 3.6, and the order of the fields in a      structured dtype has meaning.         <code class='verbatim'>Field Titles &lt;titles&gt;</code>
+ may be      specified by using a 3-tuple, see below.</p>
+
+</li>
+            </ol>
+
+
+<h1>Manipulating and Displaying Structured Datatypes</h1>
+               <p>The list of field names of a structured datatype can be found in the         <code class='verbatim'>names</code>
+ attribute of the dtype object::   </p>
+
+               <pre>&gt;&gt;&gt; d = np.dtype([(&#39;x&#39;, &#39;i8&#39;), (&#39;y&#39;, &#39;f4&#39;)])
+&gt;&gt;&gt; d.names
+(&#39;x&#39;, &#39;y&#39;)</pre>
+               <p>The field names may be modified by assigning to the         <code class='verbatim'>names</code>
+ attribute using a sequence of strings of the same length.</p>
+
+               <p>The dtype object also has a dictionary-like attribute,         <code class='verbatim'>fields</code>
+, whose keys are the field names (and         <code class='verbatim'>Field Titles &lt;titles&gt;</code>
+, see below) and whose values are tuples containing the dtype and byte offset of each field. ::   </p>
+
+               <pre>&gt;&gt;&gt; d.fields
+mappingproxy({&#39;x&#39;: (dtype(&#39;int64&#39;), 0), &#39;y&#39;: (dtype(&#39;float32&#39;), 8)})</pre>
+               <p>Both the         <code class='verbatim'>names</code>
+ and         <code class='verbatim'>fields</code>
+ attributes will equal         <code class='verbatim'>None</code>
+ for unstructured arrays. The recommended way to test if a dtype is structured is with <code>:None:None:`if dt.names is not None`</code> rather than <code>:None:None:`if dt.names`</code>, to account for dtypes with 0 fields.</p>
+
+               <p>The string representation of a structured datatype is shown in the &#34;list of tuples&#34; form if possible, otherwise numpy falls back to using the more general dictionary form.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _offsets-and-alignment:&#39;&gt;</pre>
+
+<h1>Automatic Byte Offsets and Alignment</h1>
+               <p>Numpy uses one of two methods to automatically determine the field byte offsets and the overall itemsize of a structured datatype, depending on whether         <code class='verbatim'>align=True</code>
+ was specified as a keyword argument to         <code class='verbatim'>numpy.dtype</code>
+.</p>
+
+               <p>By default (        <code class='verbatim'>align=False</code>
+), numpy will pack the fields together such that each field starts at the byte offset the previous field ended, and the fields are contiguous in memory. ::   </p>
+
+               <pre>&gt;&gt;&gt; def print_offsets(d):
+...     print(&#34;offsets:&#34;, [d.fields[name][1] for name in d.names])
+...     print(&#34;itemsize:&#34;, d.itemsize)
+&gt;&gt;&gt; print_offsets(np.dtype(&#39;u1, u1, i4, u1, i8, u2&#39;))
+offsets: [0, 1, 2, 6, 7, 15]
+itemsize: 17</pre>
+               <p>If         <code class='verbatim'>align=True</code>
+ is set, numpy will pad the structure in the same way many C compilers would pad a C-struct. Aligned structures can give a performance improvement in some cases, at the cost of increased datatype size. Padding bytes are inserted between fields such that each field&#39;s byte offset will be a multiple of that field&#39;s alignment, which is usually equal to the field&#39;s size in bytes for simple datatypes, see         <code class='verbatim'>PyArray_Descr.alignment</code>
+.  The structure will also have trailing padding added so that its itemsize is a multiple of the largest field&#39;s alignment. ::   </p>
+
+               <pre>&gt;&gt;&gt; print_offsets(np.dtype(&#39;u1, u1, i4, u1, i8, u2&#39;, align=True))
+offsets: [0, 1, 4, 8, 16, 24]
+itemsize: 32</pre>
+               <p>Note that although almost all modern C compilers pad in this way by default, padding in C structs is C-implementation-dependent so this memory layout is not guaranteed to exactly match that of a corresponding struct in a C program. Some work may be needed, either on the numpy side or the C side, to obtain exact correspondence.</p>
+
+               <p>If offsets were specified using the optional         <code class='verbatim'>offsets</code>
+ key in the dictionary-based dtype specification, setting         <code class='verbatim'>align=True</code>
+ will check that each field&#39;s offset is a multiple of its size and that the itemsize is a multiple of the largest field size, and raise an exception if not.</p>
+
+               <p>If the offsets of the fields and itemsize of a structured array satisfy the alignment conditions, the array will have the         <code class='verbatim'>ALIGNED</code>
+         <code class='verbatim'>flag
+&lt;numpy.ndarray.flags&gt;</code>
+ set.</p>
+
+               <p>A convenience function         <code class='verbatim'>numpy.lib.recfunctions.repack_fields</code>
+ converts an aligned dtype or array to a packed one and vice versa. It takes either a dtype or structured ndarray as an argument, and returns a copy with fields re-packed, with or without padding bytes.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _titles:&#39;&gt;</pre>
+
+<h1>Field Titles</h1>
+               <p>In addition to field names, fields may also have an associated         <code class='verbatim'>title</code>
+, an alternate name, which is sometimes used as an additional description or alias for the field. The title may be used to index an array, just like a field name.</p>
+
+               <p>To add titles when using the list-of-tuples form of dtype specification, the field name may be specified as a tuple of two strings instead of a single string, which will be the field&#39;s title and field name respectively. For example::   </p>
+
+               <pre>&gt;&gt;&gt; np.dtype([((&#39;my title&#39;, &#39;name&#39;), &#39;f4&#39;)])
+dtype([((&#39;my title&#39;, &#39;name&#39;), &#39;&lt;f4&#39;)])</pre>
+               <p>When using the first form of dictionary-based specification, the titles may be supplied as an extra         <code class='verbatim'>&#39;titles&#39;</code>
+ key as described above. When using the second (discouraged) dictionary-based specification, the title can be supplied by providing a 3-element tuple         <code class='verbatim'>(datatype, offset, title)</code>
+ instead of the usual 2-element tuple::   </p>
+
+               <pre>&gt;&gt;&gt; np.dtype({&#39;name&#39;: (&#39;i4&#39;, 0, &#39;my title&#39;)})
+dtype([((&#39;my title&#39;, &#39;name&#39;), &#39;&lt;i4&#39;)])</pre>
+               <p>The         <code class='verbatim'>dtype.fields</code>
+ dictionary will contain titles as keys, if any titles are used.  This means effectively that a field with a title will be represented twice in the fields dictionary. The tuple values for these fields will also have a third element, the field title. Because of this, and because the         <code class='verbatim'>names</code>
+ attribute preserves the field order while the         <code class='verbatim'>fields</code>
+ attribute may not, it is recommended to iterate through the fields of a dtype using the         <code class='verbatim'>names</code>
+ attribute of the dtype, which will not list titles, as in::   </p>
+
+               <pre>&gt;&gt;&gt; for name in d.names:
+...     print(d.fields[name][:2])
+(dtype(&#39;int64&#39;), 0)
+(dtype(&#39;float32&#39;), 8)</pre>
+
+<h1>Union types</h1>
+               <p>Structured datatypes are implemented in numpy to have base type         <code class='verbatim'>numpy.void</code>
+ by default, but it is possible to interpret other numpy types as structured types using the         <code class='verbatim'>(base_dtype, dtype)</code>
+ form of dtype specification described in         <code class='verbatim'>Data Type Objects &lt;arrays.dtypes.constructing&gt;</code>
+.  Here,         <code class='verbatim'>base_dtype</code>
+ is the desired underlying dtype, and fields and flags will be copied from         <code class='verbatim'>dtype</code>
+. This dtype is similar to a &#39;union&#39; in C.</p>
+
+
+<h1>Indexing and Assignment to Structured arrays</h1>
+
+<h1>Assigning data to a Structured Array</h1>
+               <p>There are a number of ways to assign values to a structured array: Using python tuples, using scalar values, or using other structured arrays.</p>
+
+
+<h1>Assignment from Python Native Types (Tuples)</h1>
+               <p>The simplest way to assign values to a structured array is using python tuples. Each assigned value should be a tuple of length equal to the number of fields in the array, and not a list or array as these will trigger numpy&#39;s broadcasting rules. The tuple&#39;s elements are assigned to the successive fields of the array, from left to right::   </p>
+
+               <pre>&gt;&gt;&gt; x = np.array([(1, 2, 3), (4, 5, 6)], dtype=&#39;i8, f4, f8&#39;)
+&gt;&gt;&gt; x[1] = (7, 8, 9)
+&gt;&gt;&gt; x
+array([(1, 2., 3.), (7, 8., 9.)],
+     dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;&lt;f8&#39;)])</pre>
+
+<h1>Assignment from Scalars</h1>
+               <p>A scalar assigned to a structured element will be assigned to all fields. This happens when a scalar is assigned to a structured array, or when an unstructured array is assigned to a structured array::   </p>
+
+               <pre>&gt;&gt;&gt; x = np.zeros(2, dtype=&#39;i8, f4, ?, S1&#39;)
+&gt;&gt;&gt; x[:] = 3
+&gt;&gt;&gt; x
+array([(3, 3., True, b&#39;3&#39;), (3, 3., True, b&#39;3&#39;)],
+      dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;?&#39;), (&#39;f3&#39;, &#39;S1&#39;)])
+&gt;&gt;&gt; x[:] = np.arange(2)
+&gt;&gt;&gt; x
+array([(0, 0., False, b&#39;0&#39;), (1, 1., True, b&#39;1&#39;)],
+      dtype=[(&#39;f0&#39;, &#39;&lt;i8&#39;), (&#39;f1&#39;, &#39;&lt;f4&#39;), (&#39;f2&#39;, &#39;?&#39;), (&#39;f3&#39;, &#39;S1&#39;)])</pre>
+               <p>Structured arrays can also be assigned to unstructured arrays, but only if the structured datatype has just a single field::   </p>
+
+               <pre>&gt;&gt;&gt; twofield = np.zeros(2, dtype=[(&#39;A&#39;, &#39;i4&#39;), (&#39;B&#39;, &#39;i4&#39;)])
+&gt;&gt;&gt; onefield = np.zeros(2, dtype=[(&#39;A&#39;, &#39;i4&#39;)])
+&gt;&gt;&gt; nostruct = np.zeros(2, dtype=&#39;i4&#39;)
+&gt;&gt;&gt; nostruct[:] = twofield
+Traceback (most recent call last):
+...
+TypeError: Cannot cast array data from dtype([(&#39;A&#39;, &#39;&lt;i4&#39;), (&#39;B&#39;, &#39;&lt;i4&#39;)]) to dtype(&#39;int32&#39;) according to the rule &#39;unsafe&#39;</pre>
+
+<h1>Assignment from other Structured Arrays</h1>
+               <p>Assignment between two structured arrays occurs as if the source elements had been converted to tuples and then assigned to the destination elements. That is, the first field of the source array is assigned to the first field of the destination array, and the second field likewise, and so on, regardless of field names. Structured arrays with a different number of fields cannot be assigned to each other. Bytes of the destination structure which are not included in any of the fields are unaffected. ::   </p>
+
+               <pre>&gt;&gt;&gt; a = np.zeros(3, dtype=[(&#39;a&#39;, &#39;i8&#39;), (&#39;b&#39;, &#39;f4&#39;), (&#39;c&#39;, &#39;S3&#39;)])
+&gt;&gt;&gt; b = np.ones(3, dtype=[(&#39;x&#39;, &#39;f4&#39;), (&#39;y&#39;, &#39;S3&#39;), (&#39;z&#39;, &#39;O&#39;)])
+&gt;&gt;&gt; b[:] = a
+&gt;&gt;&gt; b
+array([(0., b&#39;0.0&#39;, b&#39;&#39;), (0., b&#39;0.0&#39;, b&#39;&#39;), (0., b&#39;0.0&#39;, b&#39;&#39;)],
+      dtype=[(&#39;x&#39;, &#39;&lt;f4&#39;), (&#39;y&#39;, &#39;S3&#39;), (&#39;z&#39;, &#39;O&#39;)])</pre>
+
+<h1>Assignment involving subarrays</h1>
+               <p>When assigning to fields which are subarrays, the assigned value will first be broadcast to the shape of the subarray.</p>
+
+
+<h1>Indexing Structured Arrays</h1>
+
+<h1>Accessing Individual Fields</h1>
+               <p>Individual fields of a structured array may be accessed and modified by indexing the array with the field name. ::   </p>
+
+               <pre>&gt;&gt;&gt; x = np.array([(1, 2), (3, 4)], dtype=[(&#39;foo&#39;, &#39;i8&#39;), (&#39;bar&#39;, &#39;f4&#39;)])
+&gt;&gt;&gt; x[&#39;foo&#39;]
+array([1, 3])
+&gt;&gt;&gt; x[&#39;foo&#39;] = 10
+&gt;&gt;&gt; x
+array([(10, 2.), (10, 4.)],
+      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>The resulting array is a view into the original array. It shares the same memory locations and writing to the view will modify the original array. ::   </p>
+
+               <pre>&gt;&gt;&gt; y = x[&#39;bar&#39;]
+&gt;&gt;&gt; y[:] = 11
+&gt;&gt;&gt; x
+array([(10, 11.), (10, 11.)],
+      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>This view has the same dtype and itemsize as the indexed field, so it is typically a non-structured array, except in the case of nested structures.</p>
+
+                           <pre>&gt;&gt;&gt; y.dtype, y.shape, y.strides
+(dtype(&#39;float32&#39;), (2,), (12,))
+</pre>
+
+
+               <p>If the accessed field is a subarray, the dimensions of the subarray are appended to the shape of the result::     </p>
+
+               <pre>&gt;&gt;&gt; x = np.zeros((2, 2), dtype=[(&#39;a&#39;, np.int32), (&#39;b&#39;, np.float64, (3, 3))])
+&gt;&gt;&gt; x[&#39;a&#39;].shape
+(2, 2)
+&gt;&gt;&gt; x[&#39;b&#39;].shape
+(2, 2, 3, 3)</pre>
+
+<h1>Accessing Multiple Fields</h1>
+               <p>One can index and assign to a structured array with a multi-field index, where the index is a list of field names.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>The behavior of multi - field indexes changed from Numpy 1.15 to Numpy 1.16. </p>
+
+</div>
+
+
+               <p>The result of indexing with a multi-field index is a view into the original array, as follows::   </p>
+
+               <pre>&gt;&gt;&gt; a = np.zeros(3, dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;), (&#39;c&#39;, &#39;f4&#39;)])
+&gt;&gt;&gt; a[[&#39;a&#39;, &#39;c&#39;]]
+array([(0, 0.), (0, 0.), (0, 0.)],
+     dtype={&#39;names&#39;: [&#39;a&#39;, &#39;c&#39;], &#39;formats&#39;: [&#39;&lt;i4&#39;, &#39;&lt;f4&#39;], &#39;offsets&#39;: [0, 8], &#39;itemsize&#39;: 12})</pre>
+               <p>Assignment to the view modifies the original array. The view&#39;s fields will be in the order they were indexed. Note that unlike for single-field indexing, the dtype of the view has the same itemsize as the original array, and has fields at the same offsets as in the original array, and unindexed fields are merely missing.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>In Numpy 1.15, indexing an array with a multi - field index returned a copy of the result above, but with fields packed together in memory as if passed through : func : `numpy.lib.recfunctions.repack_fields`. The new behavior as of Numpy 1.16 leads to extra &#34; padding &#34; bytes at the location of unindexed fields compared to 1.15. You will need to update any code which depends on the data having a &#34; packed &#34; layout. For instance code such as : : &gt;&gt;&gt; a [ [ &#39; a &#39; , &#39; c &#39; ]].view ( &#39; i8 &#39; ) # Fails in Numpy 1.16 Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; ValueError : When changing to a smaller dtype, its size must be a divisor of the size of original dtype will need to be changed. This code has raised a ``FutureWarning`` since Numpy 1.12, and similar code has raised ``FutureWarning`` since 1.7. In 1.16 a number of functions have been introduced in the : mod : `numpy.lib.recfunctions` module to help users account for this change. These are : func : `numpy.lib.recfunctions.repack_fields`. : func : `numpy.lib.recfunctions.structured_to_unstructured`, : func : `numpy.lib.recfunctions.unstructured_to_structured`, : func : `numpy.lib.recfunctions.apply_along_fields`, : func : `numpy.lib.recfunctions.assign_fields_by_name`, and : func : `numpy.lib.recfunctions.require_fields`. The function : func : `numpy.lib.recfunctions.repack_fields` can always be used to reproduce the old behavior, as it will return a packed copy of the structured array. The code above, for example, can be replaced with : &gt;&gt;&gt; from numpy.lib.recfunctions import repack_fields &gt;&gt;&gt; repack_fields ( a [ [ &#39; a &#39; , &#39; c &#39; ]]).view ( &#39; i8 &#39; ) # supported in 1.16 array ( [ 0, 0, 0]) Furthermore, numpy now provides a new function : func : `numpy.lib.recfunctions.structured_to_unstructured` which is a safer and more efficient alternative for users who wish to convert structured arrays to unstructured arrays, as the view above is often indeded to do. This function allows safe conversion to an unstructured type taking into account padding, often avoids a copy, and also casts the datatypes as needed, unlike the view. Code such as : &gt;&gt;&gt; b = np.zeros ( 3, dtype= [ ( &#39; x &#39; , &#39; f4 &#39; ), ( &#39; y &#39; , &#39; f4 &#39; ), ( &#39; z &#39; , &#39; f4 &#39; )]) &gt;&gt;&gt; b [ [ &#39; x &#39; , &#39; z &#39; ]].view ( &#39; f4 &#39; ) array ( [ 0., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=float32) can be made safer by replacing with : &gt;&gt;&gt; from numpy.lib.recfunctions import structured_to_unstructured &gt;&gt;&gt; structured_to_unstructured ( b [ [ &#39; x &#39; , &#39; z &#39; ]]) array ( [ [ 0., 0.], [ 0., 0.], [ 0., 0.]], dtype=float32) </p>
+
+</div>
+
+
+               <p>Assignment to an array with a multi-field index modifies the original array::   </p>
+
+               <pre>&gt;&gt;&gt; a[[&#39;a&#39;, &#39;c&#39;]] = (2, 3)
+&gt;&gt;&gt; a
+array([(2, 0, 3.), (2, 0, 3.), (2, 0, 3.)],
+      dtype=[(&#39;a&#39;, &#39;&lt;i4&#39;), (&#39;b&#39;, &#39;&lt;i4&#39;), (&#39;c&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>This obeys the structured array assignment rules described above. For example, this means that one can swap the values of two fields using appropriate multi-field indexes::   </p>
+
+               <pre>&gt;&gt;&gt; a[[&#39;a&#39;, &#39;c&#39;]] = a[[&#39;c&#39;, &#39;a&#39;]]</pre>
+
+<h1>Indexing with an Integer to get a Structured Scalar</h1>
+               <p>Indexing a single element of a structured array (with an integer index) returns a structured scalar::   </p>
+
+               <pre>&gt;&gt;&gt; x = np.array([(1, 2., 3.)], dtype=&#39;i, f, f&#39;)
+&gt;&gt;&gt; scalar = x[0]
+&gt;&gt;&gt; scalar
+(1, 2., 3.)
+&gt;&gt;&gt; type(scalar)
+&lt;class &#39;numpy.void&#39;&gt;</pre>
+               <p>Unlike other numpy scalars, structured scalars are mutable and act like views into the original array, such that modifying the scalar will modify the original array. Structured scalars also support access and assignment by field name::   </p>
+
+               <pre>&gt;&gt;&gt; x = np.array([(1, 2), (3, 4)], dtype=[(&#39;foo&#39;, &#39;i8&#39;), (&#39;bar&#39;, &#39;f4&#39;)])
+&gt;&gt;&gt; s = x[0]
+&gt;&gt;&gt; s[&#39;bar&#39;] = 100
+&gt;&gt;&gt; x
+array([(1, 100.), (3, 4.)],
+      dtype=[(&#39;foo&#39;, &#39;&lt;i8&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;)])</pre>
+               <p>Similarly to tuples, structured scalars can also be indexed with an integer::   </p>
+
+               <pre>&gt;&gt;&gt; scalar = np.array([(1, 2., 3.)], dtype=&#39;i, f, f&#39;)[0]
+&gt;&gt;&gt; scalar[0]
+1
+&gt;&gt;&gt; scalar[1] = 4</pre>
+               <p>Thus, tuples might be thought of as the native Python equivalent to numpy&#39;s structured types, much like native python integers are the equivalent to numpy&#39;s integer types. Structured scalars may be converted to a tuple by calling <code>:None:None:`numpy.ndarray.item`</code>   </p>
+
+               <pre>&gt;&gt;&gt; scalar.item(), type(scalar.item())
+((1, 4.0, 3.0), &lt;class &#39;tuple&#39;&gt;)</pre>
+
+<h1>Viewing Structured Arrays Containing Objects</h1>
+               <p>In order to prevent clobbering object pointers in fields of         <code class='verbatim'>object</code>
+ type, numpy currently does not allow views of structured arrays containing objects.</p>
+
+
+<h1>Structure Comparison</h1>
+               <p>If the dtypes of two void structured arrays are equal, testing the equality of the arrays will result in a boolean array with the dimensions of the original arrays, with elements set to         <code class='verbatim'>True</code>
+ where all fields of the corresponding structures are equal. Structured dtypes are equal if the field names, dtypes and titles are the same, ignoring endianness, and the fields are in the same order::   </p>
+
+               <pre>&gt;&gt;&gt; a = np.zeros(2, dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
+&gt;&gt;&gt; b = np.ones(2, dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
+&gt;&gt;&gt; a == b
+array([False, False])</pre>
+               <p>Currently, if the dtypes of two void structured arrays are not equivalent the comparison fails, returning the scalar value         <code class='verbatim'>False</code>
+. This behavior is deprecated as of numpy 1.10 and will raise an error or perform elementwise comparison in the future.</p>
+
+               <p>The         <code class='verbatim'>&lt;</code>
+ and         <code class='verbatim'>&gt;</code>
+ operators always return         <code class='verbatim'>False</code>
+ when comparing void structured arrays, and arithmetic and bitwise operations are not supported.</p>
+
+
+<h1>Record Arrays</h1>
+               <p>As an optional convenience numpy provides an ndarray subclass,         <code class='verbatim'>numpy.recarray</code>
+ that allows access to fields of structured arrays by attribute instead of only by index. Record arrays use a special datatype,         <code class='verbatim'>numpy.record</code>
+, that allows field access by attribute on the structured scalars obtained from the array. The         <code class='verbatim'>numpy.rec</code>
+ module provides functions for creating recarrays from various objects. Additional helper functions for creating and manipulating structured arrays can be found in         <code class='verbatim'>numpy.lib.recfunctions</code>
+.</p>
+
+               <p>The simplest way to create a record array is with         <code class='verbatim'>numpy.rec.array &lt;numpy.core.records.array&gt;</code>
+   </p>
+
+               <pre>&gt;&gt;&gt; recordarr = np.rec.array([(1, 2., &#39;Hello&#39;), (2, 3., &#34;World&#34;)],
+...                    dtype=[(&#39;foo&#39;, &#39;i4&#39;),(&#39;bar&#39;, &#39;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)])
+&gt;&gt;&gt; recordarr.bar
+array([2., 3.], dtype=float32)
+&gt;&gt;&gt; recordarr[1:2]
+rec.array([(2, 3., b&#39;World&#39;)],
+      dtype=[(&#39;foo&#39;, &#39;&lt;i4&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)])
+&gt;&gt;&gt; recordarr[1:2].foo
+array([2], dtype=int32)
+&gt;&gt;&gt; recordarr.foo[1:2]
+array([2], dtype=int32)
+&gt;&gt;&gt; recordarr[1].baz
+b&#39;World&#39;</pre>
+               <p>        <code class='verbatim'>numpy.rec.array &lt;numpy.core.records.array&gt;</code>
+ can convert a wide variety of arguments into record arrays, including structured arrays::   </p>
+
+               <pre>&gt;&gt;&gt; arr = np.array([(1, 2., &#39;Hello&#39;), (2, 3., &#34;World&#34;)],
+...             dtype=[(&#39;foo&#39;, &#39;i4&#39;), (&#39;bar&#39;, &#39;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)])
+&gt;&gt;&gt; recordarr = np.rec.array(arr)</pre>
+               <p>The         <code class='verbatim'>numpy.rec</code>
+ module provides a number of other convenience functions for creating record arrays, see         <code class='verbatim'>record array creation routines
+&lt;routines.array-creation.rec&gt;</code>
+.</p>
+
+               <p>A record array representation of a structured array can be obtained using the appropriate <code>:None:None:`view &lt;numpy-ndarray-view&gt;`</code>   </p>
+
+               <pre>&gt;&gt;&gt; arr = np.array([(1, 2., &#39;Hello&#39;), (2, 3., &#34;World&#34;)],
+...                dtype=[(&#39;foo&#39;, &#39;i4&#39;),(&#39;bar&#39;, &#39;f4&#39;), (&#39;baz&#39;, &#39;a10&#39;)])
+&gt;&gt;&gt; recordarr = arr.view(dtype=np.dtype((np.record, arr.dtype)),
+...                      type=np.recarray)</pre>
+               <p>For convenience, viewing an ndarray as type         <code class='verbatim'>numpy.recarray</code>
+ will automatically convert to         <code class='verbatim'>numpy.record</code>
+ datatype, so the dtype can be left out of the view::   </p>
+
+               <pre>&gt;&gt;&gt; recordarr = arr.view(np.recarray)
+&gt;&gt;&gt; recordarr.dtype
+dtype((numpy.record, [(&#39;foo&#39;, &#39;&lt;i4&#39;), (&#39;bar&#39;, &#39;&lt;f4&#39;), (&#39;baz&#39;, &#39;S10&#39;)]))</pre>
+               <p>To get back to a plain ndarray both the dtype and type must be reset. The following view does so, taking into account the unusual case that the recordarr was not a structured type::   </p>
+
+               <pre>&gt;&gt;&gt; arr2 = recordarr.view(recordarr.dtype.fields or recordarr.dtype, np.ndarray)</pre>
+               <p>Record array fields accessed by index or by attribute are returned as a record array if the field has a structured type but as a plain ndarray otherwise. ::   </p>
+
+               <pre>&gt;&gt;&gt; recordarr = np.rec.array([(&#39;Hello&#39;, (1, 2)), (&#34;World&#34;, (3, 4))],
+...                 dtype=[(&#39;foo&#39;, &#39;S6&#39;),(&#39;bar&#39;, [(&#39;A&#39;, int), (&#39;B&#39;, int)])])
+&gt;&gt;&gt; type(recordarr.foo)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+&gt;&gt;&gt; type(recordarr.bar)
+&lt;class &#39;numpy.recarray&#39;&gt;</pre>
+               <p>Note that if a field has the same name as an ndarray attribute, the ndarray attribute takes precedence. Such fields will be inaccessible by attribute but will still be accessible by index.</p>
+
+
+<h1>Recarray Helper Functions</h1>
+               <div class='block_directive'>
+    <div class='head'>.. automodule:: [&#39;numpy.lib.recfunctions&#39;]
+    </div>
+    <pre class='not-implemented'><p></p>
+</pre>
+</div>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

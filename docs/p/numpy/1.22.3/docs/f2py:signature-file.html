@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+        // this should process only math inside  span with tex2jax_process class
+    MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+    });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+<div class='container'>
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Signature file</h1>
+               <p>The interface definition file (.pyf) is how you can fine-tune the interface between Python and Fortran. The syntax specification for signature files (        <code class='verbatim'>.pyf</code>
+ files) is modeled on the Fortran 90/95 language specification. Almost all Fortran 90/95 standard constructs are understood, both in free and fixed format (recall that Fortran 77 is a subset of Fortran 90/95). F2PY introduces some extensions to the Fortran 90/95 language specification that help in the design of the Fortran to Python interface, making it more &#34;Pythonic&#34;.</p>
+
+               <p>Signature files may contain arbitrary Fortran code so that any Fortran 90/95 codes can be treated as signature files. F2PY silently ignores Fortran constructs that are irrelevant for creating the interface. However, this also means that syntax errors are not caught by F2PY and will only be caught when the library is built.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Currently, F2PY may fail with valid Fortran constructs, such as intrinsic modules. If this happens, you can check the `NumPy GitHub issue tracker &lt; https : / / github.com / numpy / numpy / issues&gt;`_ for possible workarounds or work - in - progress ideas. </p>
+
+</div>
+
+
+               <p>In general, the contents of the signature files are case-sensitive. When scanning Fortran codes to generate a signature file, F2PY lowers all cases automatically except in multi-line blocks or when the         <code class='verbatim'>--no-lower</code>
+ option is used.</p>
+
+               <p>The syntax of signature files is presented below.</p>
+
+
+<h1>Signature files syntax</h1>
+
+<h1>Python module block</h1>
+               <p>A signature file may contain one (recommended) or more         <code class='verbatim'>python
+module</code>
+ blocks. The         <code class='verbatim'>python module</code>
+ block describes the contents of a Python/C extension module         <code class='verbatim'>&lt;modulename&gt;module.c</code>
+ that F2PY generates.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>Exception : if `` &lt; modulename&gt;`` contains a substring ``__user__``, then the corresponding ``python module`` block describes the signatures of call - back functions ( see : ref : `Call - back arguments`). </p>
+
+</div>
+
+
+               <p>A         <code class='verbatim'>python module</code>
+ block has the following structure::    </p>
+
+               <pre>python module &lt;modulename&gt;
+  [&lt;usercode statement&gt;]...
+  [
+  interface
+    &lt;usercode statement&gt;
+    &lt;Fortran block data signatures&gt;
+    &lt;Fortran/C routine signatures&gt;
+  end [interface]
+  ]...
+  [
+  interface
+    module &lt;F90 modulename&gt;
+      [&lt;F90 module data type declarations&gt;]
+      [&lt;F90 module routine signatures&gt;]
+    end [module [&lt;F90 modulename&gt;]]
+  end [interface]
+  ]...
+end [python module [&lt;modulename&gt;]]</pre>
+               <p>Here brackets         <code class='verbatim'>[]</code>
+ indicate an optional section, dots         <code class='verbatim'>...</code>
+ indicate one or more of a previous section. So,         <code class='verbatim'>[]...</code>
+ is to be read as zero or more of a previous section.</p>
+
+
+<h1>Fortran/C routine signatures</h1>
+               <p>The signature of a Fortran routine has the following structure::    </p>
+
+               <pre>[&lt;typespec&gt;] function | subroutine &lt;routine name&gt; \
+              [ ( [&lt;arguments&gt;] ) ] [ result ( &lt;entityname&gt; ) ]
+  [&lt;argument/variable type declarations&gt;]
+  [&lt;argument/variable attribute statements&gt;]
+  [&lt;use statements&gt;]
+  [&lt;common block statements&gt;]
+  [&lt;other statements&gt;]
+end [ function | subroutine [&lt;routine name&gt;] ]</pre>
+               <p>From a Fortran routine signature F2PY generates a Python/C extension function that has the following signature::    </p>
+
+               <pre>def &lt;routine name&gt;(&lt;required arguments&gt;[,&lt;optional arguments&gt;]):
+     ...
+     return &lt;return variables&gt;</pre>
+               <p>The signature of a Fortran block data has the following structure::    </p>
+
+               <pre>block data [ &lt;block data name&gt; ]
+  [&lt;variable type declarations&gt;]
+  [&lt;variable attribute statements&gt;]
+  [&lt;use statements&gt;]
+  [&lt;common block statements&gt;]
+  [&lt;include statements&gt;]
+end [ block data [&lt;block data name&gt;] ]</pre>
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _type-declarations:&#39;&gt;</pre>
+
+<h1>Type declarations</h1>
+               <p>The definition of the         <code class='verbatim'>&lt;argument/variable type declaration&gt;</code>
+ part is</p>
+
+               <pre>&lt;typespec&gt; [ [&lt;attrspec&gt;] :: ] &lt;entitydecl&gt;</pre>
+               <p>where</p>
+
+               <pre>&lt;typespec&gt; := byte | character [&lt;charselector&gt;]
+           | complex [&lt;kindselector&gt;] | real [&lt;kindselector&gt;]
+           | double complex | double precision
+           | integer [&lt;kindselector&gt;] | logical [&lt;kindselector&gt;]
+
+&lt;charselector&gt; := * &lt;charlen&gt;
+               | ( [len=] &lt;len&gt; [ , [kind=] &lt;kind&gt;] )
+               | ( kind= &lt;kind&gt; [ , len= &lt;len&gt; ] )
+&lt;kindselector&gt; := * &lt;intlen&gt; | ( [kind=] &lt;kind&gt; )
+
+&lt;entitydecl&gt; := &lt;name&gt; [ [ * &lt;charlen&gt; ] [ ( &lt;arrayspec&gt; ) ]
+                      | [ ( &lt;arrayspec&gt; ) ] * &lt;charlen&gt; ]
+                     | [ / &lt;init_expr&gt; / | = &lt;init_expr&gt; ] \
+                       [ , &lt;entitydecl&gt; ]</pre>
+               <p>and</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>&lt;attrspec&gt;</code>
+ is a comma separated list of <code>:None:None:`attributes_`</code>;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>&lt;arrayspec&gt;</code>
+ is a comma separated list of dimension bounds;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>&lt;init_expr&gt;</code>
+ is a         <code class='verbatim'>C expression &lt;c-expressions&gt;</code>
+;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>&lt;intlen&gt;</code>
+ may be negative integer for         <code class='verbatim'>integer</code>
+ type   specifications. In such cases         <code class='verbatim'>integer*&lt;negintlen&gt;</code>
+ represents   unsigned C integers;</p>
+
+</li>
+            </ul>
+
+               <p>If an argument has no         <code class='verbatim'>&lt;argument type declaration&gt;</code>
+, its type is determined by applying         <code class='verbatim'>implicit</code>
+ rules to its name.</p>
+
+
+<h1>Statements</h1>
+
+<h1>Attribute statements</h1>
+               <p>The         <code class='verbatim'>&lt;argument/variable attribute statement&gt;</code>
+ is similar to the         <code class='verbatim'>&lt;argument/variable type declaration&gt;</code>
+, but without         <code class='verbatim'>&lt;typespec&gt;</code>
+.</p>
+
+               <p>An attribute statement cannot contain other attributes, and         <code class='verbatim'>&lt;entitydecl&gt;</code>
+ can be only a list of names. See         <code class='verbatim'>f2py-attributes</code>
+ for more details on the attributes that can be used by F2PY.</p>
+
+
+<h1>Use statements</h1>
+                          <ul>               <li>               <p>The definition of the         <code class='verbatim'>&lt;use statement&gt;</code>
+ part is</p>
+
+               <pre>use &lt;modulename&gt; [ , &lt;rename_list&gt; | , ONLY : &lt;only_list&gt; ]</pre>
+               <p>where</p>
+
+               <pre>&lt;rename_list&gt; := &lt;local_name&gt; =&gt; &lt;use_name&gt; [ , &lt;rename_list&gt; ]</pre>
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>Currently F2PY uses         <code class='verbatim'>use</code>
+ statements only for linking call-back modules and           <code class='verbatim'>external</code>
+ arguments (call-back functions). See         <code class='verbatim'>Call-back arguments</code>
+.</p>
+
+</li>
+            </ul>
+
+
+<h1>Common block statements</h1>
+                          <ul>               <li>               <p>The definition of the         <code class='verbatim'>&lt;common block statement&gt;</code>
+ part is</p>
+
+               <pre>common / &lt;common name&gt; / &lt;shortentitydecl&gt;</pre>
+               <p>where</p>
+
+               <pre>&lt;shortentitydecl&gt; := &lt;name&gt; [ ( &lt;arrayspec&gt; ) ] [ , &lt;shortentitydecl&gt; ]</pre>
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>If a         <code class='verbatim'>python module</code>
+ block contains two or more         <code class='verbatim'>common</code>
+ blocks   with the same name, the variables from the additional declarations   are appended.  The types of variables in         <code class='verbatim'>&lt;shortentitydecl&gt;</code>
+ are   defined using         <code class='verbatim'>&lt;argument type declarations&gt;</code>
+. Note that the   corresponding         <code class='verbatim'>&lt;argument type declarations&gt;</code>
+ may contain array   specifications; then these need not be specified in         <code class='verbatim'>&lt;shortentitydecl&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+
+<h1>Other statements</h1>
+                          <ul>               <li>               <p>The         <code class='verbatim'>&lt;other statement&gt;</code>
+ part refers to any other Fortran language   constructs that are not described above. F2PY ignores most of them   except the following:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>call</code>
+ statements and function calls of         <code class='verbatim'>external</code>
+ arguments     (see         <code class='verbatim'>more details on external arguments &lt;external&gt;</code>
+);</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>include</code>
+ statements</p>
+</dt>
+               <dd><pre>include &#39;&lt;filename&gt;&#39;
+include &#34;&lt;filename&gt;&#34;</pre><p>If a file         <code class='verbatim'>&lt;filename&gt;</code>
+ does not exist, the         <code class='verbatim'>include</code>
+       statement is ignored. Otherwise, the file         <code class='verbatim'>&lt;filename&gt;</code>
+ is       included to a signature file.          <code class='verbatim'>include</code>
+ statements can be used       in any part of a signature file, also outside the Fortran/C       routine signature blocks.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>implicit</code>
+ statements</p>
+</dt>
+               <dd><pre>implicit none
+t &lt;list of implicit maps&gt;</pre><p>where</p>
+<pre>&lt;implicit map&gt; := &lt;typespec&gt; ( &lt;list of letters or range of letters&gt; )</pre><p>Implicit rules are used to determine the type specification of       a variable (from the first-letter of its name) if the variable       is not defined using         <code class='verbatim'>&lt;variable type declaration&gt;</code>
+.  Default       implicit rules are given by:</p>
+<pre>implicit real (a-h,o-z,$_), integer (i-m)</pre></dd>
+           </dl>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>entry</code>
+ statements</p>
+</dt>
+               <dd><pre>entry &lt;entry name&gt; [([&lt;arguments&gt;])]</pre><p>F2PY generates wrappers for all entry names using the signature       of the routine block.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>The ``entry`` statement can be used to describe the signature of an arbitrary subroutine or function allowing F2PY to generate a number of wrappers from only one routine block signature. There are few restrictions while doing this : ``fortranname`` cannot be used, ``callstatement`` and ``callprotoargument`` can be used only if they are valid for all entry routines, etc. </p>
+
+</div>
+
+</dd>
+           </dl>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h1>F2PY statements</h1>
+               <p>In addition, F2PY introduces the following statements:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>threadsafe</code>
+</p>
+</dt>
+               <dd><p>Uses a         <code class='verbatim'>Py_BEGIN_ALLOW_THREADS .. Py_END_ALLOW_THREADS</code>
+ block   around the call to Fortran/C function.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>callstatement &lt;C-expr|multi-line block&gt;</code>
+</p>
+</dt>
+               <dd><p>Replaces the  F2PY generated call statement to Fortran/C function with           <code class='verbatim'>&lt;C-expr|multi-line block&gt;</code>
+. The wrapped Fortran/C function is available   as         <code class='verbatim'>(*f2py_func)</code>
+.</p>
+<p>To raise an exception, set         <code class='verbatim'>f2py_success = 0</code>
+ in         <code class='verbatim'>&lt;C-expr|multi-line
+  block&gt;</code>
+.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>callprotoargument &lt;C-typespecs&gt;</code>
+</p>
+</dt>
+               <dd><p>When the         <code class='verbatim'>callstatement</code>
+ statement is used, F2PY may not generate proper   prototypes for Fortran/C functions (because         <code class='verbatim'>&lt;C-expr&gt;</code>
+ may contain function   calls, and F2PY has no way to determine what should be the proper prototype).</p>
+<p>With this statement you can explicitly specify the arguments of the   corresponding prototype::      </p>
+<pre>extern &lt;return type&gt; FUNC_F(&lt;routine name&gt;,&lt;ROUTINE NAME&gt;)(&lt;callprotoargument&gt;);</pre></dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>fortranname [&lt;actual Fortran/C routine name&gt;]</code>
+</p>
+</dt>
+               <dd><p>F2PY allows for the use of an arbitrary         <code class='verbatim'>&lt;routine name&gt;</code>
+ for a given   Fortran/C function. Then this statement is used for the         <code class='verbatim'>&lt;actual
+  Fortran/C routine name&gt;</code>
+.</p>
+<p>If         <code class='verbatim'>fortranname</code>
+ statement is used without           <code class='verbatim'>&lt;actual Fortran/C routine name&gt;</code>
+ then a dummy wrapper is   generated.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>usercode &lt;multi-line block&gt;</code>
+</p>
+</dt>
+               <dd><p>When this is used inside a         <code class='verbatim'>python module</code>
+ block, the given C code will   be inserted to generated C/API source just before wrapper function   definitions.</p>
+<p>Here you can define arbitrary C functions to be used for the   initialization of optional arguments.</p>
+<p>For example, if         <code class='verbatim'>usercode</code>
+ is used twice inside         <code class='verbatim'>python module</code>
+ block   then the second multi-line block is inserted after the definition of   the external routines.</p>
+<p>When used inside         <code class='verbatim'>&lt;routine signature&gt;</code>
+, then the given C code will be   inserted into the corresponding wrapper function just after the   declaration of  variables but before any C statements. So, the           <code class='verbatim'>usercode</code>
+ follow-up can contain both declarations and C statements.</p>
+<p>When used inside the first         <code class='verbatim'>interface</code>
+ block, then the given C code will   be inserted at the end of the initialization function of the extension   module. This is how the extension modules dictionary can be modified and   has many use-cases; for example, to define additional variables.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>pymethoddef &lt;multiline block&gt;</code>
+</p>
+</dt>
+               <dd><p>This is a multi-line block which will be inserted into the definition of a   module methods         <code class='verbatim'>PyMethodDef</code>
+-array. It must be a comma-separated list of   C arrays (see <code>:None:None:`Extending and Embedding`</code> Python documentation for   details).          <code class='verbatim'>pymethoddef</code>
+ statement can be used only inside         <code class='verbatim'>python
+  module</code>
+ block.</p>
+           <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;__ https://docs.python.org/extending/index.html&#39;&gt;</pre></dd>
+           </dl>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _f2py-attributes:&#39;&gt;</pre>
+
+<h1>Attributes</h1>
+               <p>The following attributes can be used by F2PY.</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>optional</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is moved to the end of         <code class='verbatim'>&lt;optional arguments&gt;</code>
+   list. A default value for an optional argument can be specified via           <code class='verbatim'>&lt;init_expr&gt;</code>
+ (see the         <code class='verbatim'>entitydecl</code>
+         <code class='verbatim'>definition &lt;type-declarations&gt;</code>
+)</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>* The default value must be given as a valid C expression. * Whenever `` &lt; init_expr&gt;`` is used, the ``optional`` attribute is set automatically by F2PY. * For an optional array argument, all its dimensions must be bounded. </p>
+
+</div>
+
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>required</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument with this attribute is considered mandatory. This   is the default.         <code class='verbatim'>required</code>
+ should only be specified if there is a need to   disable the automatic         <code class='verbatim'>optional</code>
+ setting when         <code class='verbatim'>&lt;init_expr&gt;</code>
+ is used.</p>
+<p>If a Python         <code class='verbatim'>None</code>
+ object is used as a required argument, the argument is   treated as optional. That is, in the case of array arguments, the memory is   allocated. If         <code class='verbatim'>&lt;init_expr&gt;</code>
+ is given, then the corresponding initialization   is carried out.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>dimension(&lt;arrayspec&gt;)</code>
+</p>
+</dt>
+               <dd><p>The corresponding variable is considered as an array with dimensions given in           <code class='verbatim'>&lt;arrayspec&gt;</code>
+.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>intent(&lt;intentspec&gt;)</code>
+</p>
+</dt>
+               <dd><p>This specifies the &#34;intention&#34; of the corresponding argument.         <code class='verbatim'>&lt;intentspec&gt;</code>
+   is a comma separated list of the following keys:</p>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>in</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is considered to be input-only. This means that       the value of the argument is passed to a Fortran/C function and that the       function is expected to not change the value of this argument.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>inout</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is marked for input/output or as an <em>in situ</em>       output argument.         <code class='verbatim'>intent(inout)</code>
+ arguments can be only               <code class='verbatim'>contiguous</code>
+ NumPy arrays (in either the Fortran or C sense) with       proper type and size. The latter coincides with the default contiguous       concept used in NumPy and is effective only if         <code class='verbatim'>intent(c)</code>
+ is used. F2PY       assumes Fortran contiguous arguments by default.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>Using ``intent ( inout)`` is generally not recommended, as it can cause unexpected results. For example, scalar arguments using ``intent ( inout)`` are assumed to be array objects in order to have *in situ* changes be effective. Use ``intent ( in,out)`` instead. </p>
+
+</div>
+
+<p>See also the         <code class='verbatim'>intent(inplace)</code>
+ attribute.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>inplace</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is considered to be an input/output or <em>in situ</em> output       argument.         <code class='verbatim'>intent(inplace)</code>
+ arguments must be NumPy arrays of a proper       size. If the type of an array is not &#34;proper&#34; or the array is       non-contiguous then the array will be modified in-place to fix the type and       make it contiguous.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>Using ``intent ( inplace)`` is generally not recommended either. For example, when slices have been taken from an ``intent ( inplace)`` argument then after in - place changes, the data pointers for the slices may point to an unallocated memory area. </p>
+
+</div>
+
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>out</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is considered to be a return variable. It is appended to the               <code class='verbatim'>&lt;returned variables&gt;</code>
+ list. Using         <code class='verbatim'>intent(out)</code>
+ sets         <code class='verbatim'>intent(hide)</code>
+       automatically, unless          <code class='verbatim'>intent(in)</code>
+ or         <code class='verbatim'>intent(inout)</code>
+ are specified       as well.</p>
+<p>By default, returned multidimensional arrays are Fortran-contiguous. If               <code class='verbatim'>intent(c)</code>
+ attribute is used, then the returned multidimensional arrays       are C-contiguous.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>hide</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is removed from the list of required or optional       arguments. Typically         <code class='verbatim'>intent(hide)</code>
+ is used with         <code class='verbatim'>intent(out)</code>
+       or when         <code class='verbatim'>&lt;init_expr&gt;</code>
+ completely determines the value of the       argument like in the following example::          </p>
+<pre>integer intent(hide),depend(a) :: n = len(a)
+real intent(in),dimension(n) :: a</pre></dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>c</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is treated as a C scalar or C array argument. For the case       of a scalar argument, its value is passed to a C function as a C scalar       argument (recall that Fortran scalar arguments are actually C pointer       arguments).  For array arguments, the wrapper function is assumed to treat       multidimensional arrays as C-contiguous arrays.</p>
+<p>There is no need to use         <code class='verbatim'>intent(c)</code>
+ for one-dimensional       arrays, irrespective of whether the wrapped function is in Fortran or C.       This is because the concepts of Fortran- and C contiguity overlap in       one-dimensional cases.</p>
+<p>If         <code class='verbatim'>intent(c)</code>
+ is used as a statement but without an entity       declaration list, then F2PY adds the         <code class='verbatim'>intent(c)</code>
+ attribute to all       arguments.</p>
+<p>Also, when wrapping C functions, one must use         <code class='verbatim'>intent(c)</code>
+       attribute for         <code class='verbatim'>&lt;routine name&gt;</code>
+ in order to disable Fortran       specific         <code class='verbatim'>F_FUNC(..,..)</code>
+ macros.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>cache</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is treated as junk memory. No Fortran nor C contiguity       checks are carried out. Using         <code class='verbatim'>intent(cache)</code>
+ makes sense only for array       arguments, also in conjunction with         <code class='verbatim'>intent(hide)</code>
+ or         <code class='verbatim'>optional</code>
+       attributes.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>copy</code>
+</p>
+</dt>
+               <dd><p>Ensures that the original contents of         <code class='verbatim'>intent(in)</code>
+ argument is       preserved. Typically used with the         <code class='verbatim'>intent(in,out)</code>
+ attribute. F2PY       creates an optional argument         <code class='verbatim'>overwrite_&lt;argument name&gt;</code>
+ with the       default value         <code class='verbatim'>0</code>
+.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>overwrite</code>
+</p>
+</dt>
+               <dd><p>This indicates that the original contents of the         <code class='verbatim'>intent(in)</code>
+ argument       may be altered by the Fortran/C function.  F2PY creates an optional       argument         <code class='verbatim'>overwrite_&lt;argument name&gt;</code>
+ with the default value         <code class='verbatim'>1</code>
+.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>out=&lt;new name&gt;</code>
+</p>
+</dt>
+               <dd><p>Replaces the returned name with         <code class='verbatim'>&lt;new name&gt;</code>
+ in the         <code class='verbatim'>__doc__</code>
+ string       of the wrapper function.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>callback</code>
+</p>
+</dt>
+               <dd><p>Constructs an external function suitable for calling Python functions       from Fortran.         <code class='verbatim'>intent(callback)</code>
+ must be specified before the       corresponding         <code class='verbatim'>external</code>
+ statement. If the &#39;argument&#39; is not in       the argument list then it will be added to Python wrapper but only       by initializing an external function.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>Use ``intent ( callback)`` in situations where the Fortran / C code assumes that the user implemented a function with a given prototype and linked it to an executable. Don &#39; t use ``intent ( callback)`` if the function appears in the argument list of a Fortran routine. </p>
+
+</div>
+
+<p>With         <code class='verbatim'>intent(hide)</code>
+ or         <code class='verbatim'>optional</code>
+ attributes specified and using a       wrapper function without specifying the callback argument in the argument       list; then the call-back function is assumed to be found in the  namespace       of the F2PY generated extension module where it can be set as a module       attribute by a user.</p>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+           <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>aux</code>
+</p>
+</dt>
+               <dd><p>Defines an auxiliary C variable in the F2PY generated wrapper function.       Useful to save parameter values so that they can be accessed in       initialization expressions for other variables.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>``intent ( aux)`` silently implies ``intent ( c)``. </p>
+
+</div>
+
+</dd>
+           </dl>
+
+</li>
+            </ul>
+<p>The following rules apply:</p>
+           <ul>               <li>               <p>If none of         <code class='verbatim'>intent(in | inout | out | hide)</code>
+ are specified,             <code class='verbatim'>intent(in)</code>
+ is assumed.</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(in,inout)</code>
+ is         <code class='verbatim'>intent(in)</code>
+;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(in,hide)</code>
+ or         <code class='verbatim'>intent(inout,hide)</code>
+ is         <code class='verbatim'>intent(hide)</code>
+;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(out)</code>
+ is         <code class='verbatim'>intent(out,hide)</code>
+ unless         <code class='verbatim'>intent(in)</code>
+ or               <code class='verbatim'>intent(inout)</code>
+ is specified.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+           <ul>               <li>               <p>If         <code class='verbatim'>intent(copy)</code>
+ or         <code class='verbatim'>intent(overwrite)</code>
+ is used, then an additional     optional argument is introduced with a name         <code class='verbatim'>overwrite_&lt;argument name&gt;</code>
+     and a default value 0 or 1, respectively.</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(inout,inplace)</code>
+ is         <code class='verbatim'>intent(inplace)</code>
+;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(in,inplace)</code>
+ is         <code class='verbatim'>intent(inplace)</code>
+;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intent(hide)</code>
+ disables         <code class='verbatim'>optional</code>
+ and         <code class='verbatim'>required</code>
+.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>check([&lt;C-booleanexpr&gt;])</code>
+</p>
+</dt>
+               <dd><p>Performs a consistency check on the arguments by evaluating           <code class='verbatim'>&lt;C-booleanexpr&gt;</code>
+; if         <code class='verbatim'>&lt;C-booleanexpr&gt;</code>
+ returns 0, an exception is raised.</p>
+            <div class='admonition'>
+    <div>note</div>
+        <p>If ``check ( ..)`` is not used then F2PY automatically generates a few standard checks ( e.g. in a case of an array argument, it checks for the proper shape and size). Use ``check ( )`` to disable checks generated by F2PY. </p>
+
+</div>
+
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>depend([&lt;names&gt;])</code>
+</p>
+</dt>
+               <dd><p>This declares that the corresponding argument depends on the values   of variables in the         <code class='verbatim'>&lt;names&gt;</code>
+ list. For example,         <code class='verbatim'>&lt;init_expr&gt;</code>
+   may use the values of other arguments.  Using information given by           <code class='verbatim'>depend(..)</code>
+ attributes, F2PY ensures that arguments are   initialized in a proper order. If the         <code class='verbatim'>depend(..)</code>
+ attribute is not   used then F2PY determines dependence relations automatically. Use           <code class='verbatim'>depend()</code>
+ to disable the dependence relations generated by F2PY.</p>
+<p>When you edit dependence relations that were initially generated by   F2PY, be careful not to break the dependence relations of other   relevant variables. Another thing to watch out for is cyclic   dependencies. F2PY is able to detect cyclic dependencies   when constructing wrappers and it complains if any are found.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>allocatable</code>
+</p>
+</dt>
+               <dd><p>The corresponding variable is a Fortran 90 allocatable array defined as   Fortran 90 module data.</p>
+</dd>
+           </dl>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _external:&#39;&gt;</pre>
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>external</code>
+</p>
+</dt>
+               <dd><p>The corresponding argument is a function provided by user. The   signature of this call-back function can be defined</p>
+           <ul>               <li>               <p>in         <code class='verbatim'>__user__</code>
+ module block,</p>
+
+</li>
+               <li>               <p>or by demonstrative (or real, if the signature file is a real Fortran     code) call in the         <code class='verbatim'>&lt;other statements&gt;</code>
+ block.</p>
+
+</li>
+            </ul>
+<p>For example, F2PY generates from:</p>
+<div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;fortran&#39;]
+    </div>
+    <pre class='not-implemented'><p>external cb_sub, cb_fun integer n real a ( n),r call cb_sub ( a,n) r = cb_fun ( 4) </p>
+</pre>
+</div>
+
+<p>the following call-back signatures:</p>
+<div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;fortran&#39;]
+    </div>
+    <pre class='not-implemented'><p>subroutine cb_sub ( a,n) real dimension ( n) : : a integer optional,check ( len ( a)&gt;=n),depend ( a) : : n=len ( a) end subroutine cb_sub function cb_fun ( e_4_e) result ( r) integer : : e_4_e real : : r end function cb_fun </p>
+</pre>
+</div>
+
+<p>The corresponding user-provided Python function are then:</p>
+<div class='block_directive'>
+    <div class='head'>.. code-block:: [&#39;python&#39;]
+    </div>
+    <pre class='not-implemented'><p>def cb_sub ( a, [ n]) : ... return def cb_fun ( e_4_e) : ... return r </p>
+</pre>
+</div>
+
+<p>See also the         <code class='verbatim'>intent(callback)</code>
+ attribute.</p>
+</dd>
+           </dl>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>parameter</code>
+</p>
+</dt>
+               <dd><p>This indicates that the corresponding variable is a parameter and it must have   a fixed value. F2PY replaces all parameter occurrences by their corresponding   values.</p>
+</dd>
+           </dl>
+
+
+<h1>Extensions</h1>
+
+<h1>F2PY directives</h1>
+               <p>The F2PY directives allow using F2PY signature file constructs in Fortran 77/90 source codes. With this feature one  can (almost) completely skip the intermediate signature file generation and apply F2PY directly to Fortran source codes.</p>
+
+               <p>F2PY directives have the following form::    </p>
+
+               <pre>&lt;comment char&gt;f2py ...</pre>
+               <p>where allowed comment characters for fixed and free format Fortran codes are         <code class='verbatim'>cC*!#</code>
+ and         <code class='verbatim'>!</code>
+, respectively. Everything that follows         <code class='verbatim'>&lt;comment char&gt;f2py</code>
+ is ignored by a compiler but read by F2PY as a normal non-comment  Fortran line:</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>When F2PY finds a line with F2PY directive, the directive is first replaced by 5 spaces and then the line is reread. </p>
+
+</div>
+
+
+               <p>For fixed format Fortran codes,         <code class='verbatim'>&lt;comment char&gt;</code>
+ must be at the first column of a file, of course. For free format Fortran codes, the F2PY directives can appear anywhere in a file.</p>
+
+                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
+           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _c-expressions:&#39;&gt;</pre>
+
+<h1>C expressions</h1>
+               <p>C expressions are used in the following parts of signature files:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>&lt;init_expr&gt;</code>
+ for variable initialization;</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>&lt;C-booleanexpr&gt;</code>
+ of the         <code class='verbatim'>check</code>
+ attribute;</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>&lt;arrayspec&gt;</code>
+ of the         <code class='verbatim'>dimension</code>
+ attribute;</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>callstatement</code>
+ statement, here also a C multi-line block can be used.</p>
+
+</li>
+            </ul>
+
+               <p>A C expression may contain:</p>
+
+                          <ul>               <li>               <p>standard C constructs;</p>
+
+</li>
+               <li>               <p>functions from         <code class='verbatim'>math.h</code>
+ and         <code class='verbatim'>Python.h</code>
+;</p>
+
+</li>
+               <li>               <p>variables from the argument list, presumably initialized before   according to given dependence relations;</p>
+
+</li>
+               <li>               <p>the following CPP macros:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>rank(&lt;name&gt;)</code>
+     Returns the rank of an array         <code class='verbatim'>&lt;name&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>shape(&lt;name&gt;,&lt;n&gt;)</code>
+     Returns the         <code class='verbatim'>&lt;n&gt;</code>
+-th dimension of an array         <code class='verbatim'>&lt;name&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>len(&lt;name&gt;)</code>
+     Returns the length of an array         <code class='verbatim'>&lt;name&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>size(&lt;name&gt;)</code>
+     Returns the size of an array         <code class='verbatim'>&lt;name&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>slen(&lt;name&gt;)</code>
+     Returns the length of a string         <code class='verbatim'>&lt;name&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+               <p>For initializing an array         <code class='verbatim'>&lt;array name&gt;</code>
+, F2PY generates a loop over all indices and dimensions that executes the following pseudo-statement::    </p>
+
+               <pre>&lt;array name&gt;(_i[0],_i[1],...) = &lt;init_expr&gt;;</pre>
+               <p>where         <code class='verbatim'>_i[&lt;i&gt;]</code>
+ refers to the         <code class='verbatim'>&lt;i&gt;</code>
+-th index value and that runs from         <code class='verbatim'>0</code>
+ to         <code class='verbatim'>shape(&lt;array name&gt;,&lt;i&gt;)-1</code>
+.</p>
+
+               <p>For example, a function         <code class='verbatim'>myrange(n)</code>
+ generated from the following signature</p>
+
+               <div class='block_directive'>
+    <div class='head'>.. code-block:: []
+    </div>
+    <pre class='not-implemented'><p>subroutine myrange ( a,n) fortranname ! myrange is a dummy wrapper integer intent ( in) : : n real*8 intent ( c,out),dimension ( n),depend ( n) : : a = _i [ 0] end subroutine myrange </p>
+</pre>
+</div>
+
+
+               <p>is equivalent to         <code class='verbatim'>numpy.arange(n,dtype=float)</code>
+.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>F2PY may lower cases also in C expressions when scanning Fortran codes ( see `` - - [ no] - lower`` option). </p>
+
+</div>
+
+
+
+<h1>Multi-line blocks</h1>
+               <p>A multi-line block starts with         <code class='verbatim'>&#39;&#39;&#39;</code>
+ (triple single-quotes) and ends with         <code class='verbatim'>&#39;&#39;&#39;</code>
+ in some <em>strictly</em> subsequent line.  Multi-line blocks can be used only within .pyf files. The contents of a multi-line block can be arbitrary (except that it cannot contain         <code class='verbatim'>&#39;&#39;&#39;</code>
+) and no transformations (e.g. lowering cases) are applied to it.</p>
+
+               <p>Currently, multi-line blocks can be used in the following constructs:</p>
+
+                          <ul>               <li>               <p>as a C expression of the         <code class='verbatim'>callstatement</code>
+ statement;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>as a C type specification of the         <code class='verbatim'>callprotoargument</code>
+ statement;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>as a C code block of the         <code class='verbatim'>usercode</code>
+ statement;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>as a list of C arrays of the         <code class='verbatim'>pymethoddef</code>
+ statement;</p>
+
+</li>
+            </ul>
+
+                          <ul>               <li>               <p>as a documentation string.</p>
+
+</li>
+            </ul>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>
