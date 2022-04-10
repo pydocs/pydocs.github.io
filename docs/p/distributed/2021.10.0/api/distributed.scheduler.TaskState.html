@@ -227,236 +227,273 @@
 
 
 <!-- rendering Extended Summary -->
-                       <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;key: str&#39;]
-    </div>
-    <pre class='not-implemented'><p>The key is the unique identifier of a task, generally formed from the name of the function, followed by a hash of the function and arguments, like `` &#39; inc - ab31c010444977004d656610d2d421ec &#39; ``. </p>
-</pre>
-</div>
+                       <pre class='not-implemented'>
+.. attribute:: key: str
+    The key is the unique identifier of a task, generally formed
+    from the name of the function, followed by a hash of the function
+    and arguments, like ``&#39;inc-ab31c010444977004d656610d2d421ec&#39;``.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;prefix: TaskPrefix&#39;]
-    </div>
-    <pre class='not-implemented'><p>The broad class of tasks to which this task belongs like &#34; inc &#34; or &#34; read_csv &#34; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: prefix: TaskPrefix
+    The broad class of tasks to which this task belongs like &#34;inc&#34; or
+    &#34;read_csv&#34;</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;run_spec: object&#39;]
-    </div>
-    <pre class='not-implemented'><p>A specification of how to run the task. The type and meaning of this value is opaque to the scheduler, as it is only interpreted by the worker to which the task is sent for executing. As a special case, this attribute may also be ``None``, in which case the task is &#34; pure data &#34; ( such as, for example, a piece of data loaded in the scheduler using : meth : `Client.scatter`). A &#34; pure data &#34; task cannot be computed again if its value is lost. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: run_spec: object
+    A specification of how to run the task.  The type and meaning of this
+    value is opaque to the scheduler, as it is only interpreted by the
+    worker to which the task is sent for executing.
+
+    As a special case, this attribute may also be ``None``, in which case
+    the task is &#34;pure data&#34; (such as, for example, a piece of data loaded
+    in the scheduler using :meth:`Client.scatter`).  A &#34;pure data&#34; task
+    cannot be computed again if its value is lost.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;priority: tuple&#39;]
-    </div>
-    <pre class='not-implemented'><p>The priority provides each task with a relative ranking which is used to break ties when many tasks are being considered for execution. This ranking is generally a 2 - item tuple. The first ( and dominant) item corresponds to when it was submitted. Generally, earlier tasks take precedence. The second item is determined by the client, and is a way to prioritize tasks within a large graph that may be important, such as if they are on the critical path, or good to run in order to release many dependencies. This is explained further in : doc : `Scheduling Policy &lt; scheduling - policies&gt;`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: priority: tuple
+    The priority provides each task with a relative ranking which is used
+    to break ties when many tasks are being considered for execution.
+
+    This ranking is generally a 2-item tuple.  The first (and dominant)
+    item corresponds to when it was submitted.  Generally, earlier tasks
+    take precedence.  The second item is determined by the client, and is
+    a way to prioritize tasks within a large graph that may be important,
+    such as if they are on the critical path, or good to run in order to
+    release many dependencies.  This is explained further in
+    :doc:`Scheduling Policy &lt;scheduling-policies&gt;`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;state: str&#39;]
-    </div>
-    <pre class='not-implemented'><p>This task &#39; s current state. Valid states include ``released``, ``waiting``, ``no - worker``, ``processing``, ``memory``, ``erred`` and ``forgotten``. If it is ``forgotten``, the task isn &#39; t stored in the ``tasks`` dictionary anymore and will probably disappear soon from memory. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: state: str
+    This task&#39;s current state.  Valid states include ``released``,
+    ``waiting``, ``no-worker``, ``processing``, ``memory``, ``erred``
+    and ``forgotten``.  If it is ``forgotten``, the task isn&#39;t stored
+    in the ``tasks`` dictionary anymore and will probably disappear
+    soon from memory.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;dependencies: {TaskState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of tasks this task depends on for proper execution. Only tasks still alive are listed in this set. If, for whatever reason, this task also depends on a forgotten task, the : attr : `has_lost_dependencies` flag is set. A task can only be executed once all its dependencies have already been successfully executed and have their result stored on at least one worker. This is tracked by progressively draining the : attr : `waiting_on` set. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: dependencies: {TaskState}
+    The set of tasks this task depends on for proper execution.  Only
+    tasks still alive are listed in this set.  If, for whatever reason,
+    this task also depends on a forgotten task, the
+    :attr:`has_lost_dependencies` flag is set.
+
+    A task can only be executed once all its dependencies have already
+    been successfully executed and have their result stored on at least
+    one worker.  This is tracked by progressively draining the
+    :attr:`waiting_on` set.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;dependents: {TaskState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of tasks which depend on this task. Only tasks still alive are listed in this set. This is the reverse mapping of : attr : `dependencies`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: dependents: {TaskState}
+    The set of tasks which depend on this task.  Only tasks still alive
+    are listed in this set.
+
+    This is the reverse mapping of :attr:`dependencies`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;has_lost_dependencies: bool&#39;]
-    </div>
-    <pre class='not-implemented'><p>Whether any of the dependencies of this task has been forgotten. For memory consumption reasons, forgotten tasks are not kept in memory even though they may have dependent tasks. When a task is forgotten, therefore, each of its dependents has their : attr : `has_lost_dependencies` attribute set to ``True``. If : attr : `has_lost_dependencies` is true, this task cannot go into the &#34; processing &#34; state anymore. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: has_lost_dependencies: bool
+    Whether any of the dependencies of this task has been forgotten.
+    For memory consumption reasons, forgotten tasks are not kept in
+    memory even though they may have dependent tasks.  When a task is
+    forgotten, therefore, each of its dependents has their
+    :attr:`has_lost_dependencies` attribute set to ``True``.
+
+    If :attr:`has_lost_dependencies` is true, this task cannot go
+    into the &#34;processing&#34; state anymore.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;waiting_on: {TaskState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of tasks this task is waiting on *before* it can be executed. This is always a subset of : attr : `dependencies`. Each time one of the dependencies has finished processing, it is removed from the : attr : `waiting_on` set. Once : attr : `waiting_on` becomes empty, this task can move from the &#34; waiting &#34; state to the &#34; processing &#34; state ( unless one of the dependencies errored out, in which case this task is instead marked &#34; erred &#34; ). </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: waiting_on: {TaskState}
+    The set of tasks this task is waiting on *before* it can be executed.
+    This is always a subset of :attr:`dependencies`.  Each time one of the
+    dependencies has finished processing, it is removed from the
+    :attr:`waiting_on` set.
+
+    Once :attr:`waiting_on` becomes empty, this task can move from the
+    &#34;waiting&#34; state to the &#34;processing&#34; state (unless one of the
+    dependencies errored out, in which case this task is instead
+    marked &#34;erred&#34;).</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;waiters: {TaskState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of tasks which need this task to remain alive. This is always a subset of : attr : `dependents`. Each time one of the dependents has finished processing, it is removed from the : attr : `waiters` set. Once both : attr : `waiters` and : attr : `who_wants` become empty, this task can be released ( if it has a non - empty : attr : `run_spec`) or forgotten ( otherwise) by the scheduler, and by any workers in : attr : `who_has`. .. note : : Counter - intuitively, : attr : `waiting_on` and : attr : `waiters` are not reverse mappings of each other. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: waiters: {TaskState}
+    The set of tasks which need this task to remain alive.  This is always
+    a subset of :attr:`dependents`.  Each time one of the dependents
+    has finished processing, it is removed from the :attr:`waiters`
+    set.
+
+    Once both :attr:`waiters` and :attr:`who_wants` become empty, this
+    task can be released (if it has a non-empty :attr:`run_spec`) or
+    forgotten (otherwise) by the scheduler, and by any workers
+    in :attr:`who_has`.
+
+    .. note:: Counter-intuitively, :attr:`waiting_on` and
+       :attr:`waiters` are not reverse mappings of each other.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;who_wants: {ClientState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of clients who want this task &#39; s result to remain alive. This is the reverse mapping of : attr : `ClientState.wants_what`. When a client submits a graph to the scheduler it also specifies which output tasks it desires, such that their results are not released from memory. Once a task has finished executing ( i.e. moves into the &#34; memory &#34; or &#34; erred &#34; state), the clients in : attr : `who_wants` are notified. Once both : attr : `waiters` and : attr : `who_wants` become empty, this task can be released ( if it has a non - empty : attr : `run_spec`) or forgotten ( otherwise) by the scheduler, and by any workers in : attr : `who_has`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: who_wants: {ClientState}
+    The set of clients who want this task&#39;s result to remain alive.
+    This is the reverse mapping of :attr:`ClientState.wants_what`.
+
+    When a client submits a graph to the scheduler it also specifies
+    which output tasks it desires, such that their results are not released
+    from memory.
+
+    Once a task has finished executing (i.e. moves into the &#34;memory&#34;
+    or &#34;erred&#34; state), the clients in :attr:`who_wants` are notified.
+
+    Once both :attr:`waiters` and :attr:`who_wants` become empty, this
+    task can be released (if it has a non-empty :attr:`run_spec`) or
+    forgotten (otherwise) by the scheduler, and by any workers
+    in :attr:`who_has`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;who_has: {WorkerState}&#39;]
-    </div>
-    <pre class='not-implemented'><p>The set of workers who have this task &#39; s result in memory. It is non - empty iff the task is in the &#34; memory &#34; state. There can be more than one worker in this set if, for example, : meth : `Client.scatter` or : meth : `Client.replicate` was used. This is the reverse mapping of : attr : `WorkerState.has_what`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: who_has: {WorkerState}
+    The set of workers who have this task&#39;s result in memory.
+    It is non-empty iff the task is in the &#34;memory&#34; state.  There can be
+    more than one worker in this set if, for example, :meth:`Client.scatter`
+    or :meth:`Client.replicate` was used.
+
+    This is the reverse mapping of :attr:`WorkerState.has_what`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;processing_on: WorkerState (or None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>If this task is in the &#34; processing &#34; state, which worker is currently processing it. Otherwise this is ``None``. This attribute is kept in sync with : attr : `WorkerState.processing`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: processing_on: WorkerState (or None)
+    If this task is in the &#34;processing&#34; state, which worker is currently
+    processing it.  Otherwise this is ``None``.
+
+    This attribute is kept in sync with :attr:`WorkerState.processing`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;retries: int&#39;]
-    </div>
-    <pre class='not-implemented'><p>The number of times this task can automatically be retried in case of failure. If a task fails executing ( the worker returns with an error), its : attr : `retries` attribute is checked. If it is equal to 0, the task is marked &#34; erred &#34; . If it is greater than 0, the : attr : `retries` attribute is decremented and execution is attempted again. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: retries: int
+    The number of times this task can automatically be retried in case
+    of failure.  If a task fails executing (the worker returns with
+    an error), its :attr:`retries` attribute is checked.  If it is
+    equal to 0, the task is marked &#34;erred&#34;.  If it is greater than 0,
+    the :attr:`retries` attribute is decremented and execution is
+    attempted again.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;nbytes: int (or None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>The number of bytes, as determined by ``sizeof``, of the result of a finished task. This number is used for diagnostics and to help prioritize work. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: nbytes: int (or None)
+    The number of bytes, as determined by ``sizeof``, of the result
+    of a finished task.  This number is used for diagnostics and to
+    help prioritize work.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;type: str&#39;]
-    </div>
-    <pre class='not-implemented'><p>The type of the object as a string. Only present for tasks that have been computed. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: type: str
+    The type of the object as a string.  Only present for tasks that have
+    been computed.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;exception: object&#39;]
-    </div>
-    <pre class='not-implemented'><p>If this task failed executing, the exception object is stored here. Otherwise this is ``None``. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: exception: object
+    If this task failed executing, the exception object is stored here.
+    Otherwise this is ``None``.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;traceback: object&#39;]
-    </div>
-    <pre class='not-implemented'><p>If this task failed executing, the traceback object is stored here. Otherwise this is ``None``. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: traceback: object
+    If this task failed executing, the traceback object is stored here.
+    Otherwise this is ``None``.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;exception_blame: TaskState (or None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>If this task or one of its dependencies failed executing, the failed task is stored here ( possibly itself). Otherwise this is ``None``. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: exception_blame: TaskState (or None)
+    If this task or one of its dependencies failed executing, the
+    failed task is stored here (possibly itself).  Otherwise this
+    is ``None``.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;erred_on: set(str)&#39;]
-    </div>
-    <pre class='not-implemented'><p>Worker addresses on which errors appeared causing this task to be in an error state. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: erred_on: set(str)
+    Worker addresses on which errors appeared causing this task to be in an error state.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;suspicious: int&#39;]
-    </div>
-    <pre class='not-implemented'><p>The number of times this task has been involved in a worker death. Some tasks may cause workers to die ( such as calling ``os._exit ( 0)``). When a worker dies, all of the tasks on that worker are reassigned to others. This combination of behaviors can cause a bad task to catastrophically destroy all workers on the cluster, one after another. Whenever a worker dies, we mark each task currently processing on that worker ( as recorded by : attr : `WorkerState.processing`) as suspicious. If a task is involved in three deaths ( or some other fixed constant) then we mark the task as ``erred``. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: suspicious: int
+    The number of times this task has been involved in a worker death.
+
+    Some tasks may cause workers to die (such as calling ``os._exit(0)``).
+    When a worker dies, all of the tasks on that worker are reassigned
+    to others.  This combination of behaviors can cause a bad task to
+    catastrophically destroy all workers on the cluster, one after
+    another.  Whenever a worker dies, we mark each task currently
+    processing on that worker (as recorded by
+    :attr:`WorkerState.processing`) as suspicious.
+
+    If a task is involved in three deaths (or some other fixed constant)
+    then we mark the task as ``erred``.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;host_restrictions: {hostnames}&#39;]
-    </div>
-    <pre class='not-implemented'><p>A set of hostnames where this task can be run ( or ``None`` if empty). Usually this is empty unless the task has been specifically restricted to only run on certain hosts. A hostname may correspond to one or several connected workers. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: host_restrictions: {hostnames}
+    A set of hostnames where this task can be run (or ``None`` if empty).
+    Usually this is empty unless the task has been specifically restricted
+    to only run on certain hosts.  A hostname may correspond to one or
+    several connected workers.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;worker_restrictions: {worker addresses}&#39;]
-    </div>
-    <pre class='not-implemented'><p>A set of complete worker addresses where this can be run ( or ``None`` if empty). Usually this is empty unless the task has been specifically restricted to only run on certain workers. Note this is tracking worker addresses, not worker states, since the specific workers may not be connected at this time. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: worker_restrictions: {worker addresses}
+    A set of complete worker addresses where this can be run (or ``None``
+    if empty).  Usually this is empty unless the task has been specifically
+    restricted to only run on certain workers.
+
+    Note this is tracking worker addresses, not worker states, since
+    the specific workers may not be connected at this time.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;resource_restrictions: {resource: quantity}&#39;]
-    </div>
-    <pre class='not-implemented'><p>Resources required by this task, such as `` { &#39; gpu &#39; : 1}`` or `` { &#39; memory &#39; : 1e9}`` ( or ``None`` if empty). These are user - defined names and are matched against the contents of each : attr : `WorkerState.resources` dictionary. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: resource_restrictions: {resource: quantity}
+    Resources required by this task, such as ``{&#39;gpu&#39;: 1}`` or
+    ``{&#39;memory&#39;: 1e9}`` (or ``None`` if empty).  These are user-defined
+    names and are matched against the contents of each
+    :attr:`WorkerState.resources` dictionary.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;loose_restrictions: bool&#39;]
-    </div>
-    <pre class='not-implemented'><p>If ``False``, each of : attr : `host_restrictions`, : attr : `worker_restrictions` and : attr : `resource_restrictions` is a hard constraint : if no worker is available satisfying those restrictions, the task cannot go into the &#34; processing &#34; state and will instead go into the &#34; no - worker &#34; state. If ``True``, the above restrictions are mere preferences : if no worker is available satisfying those restrictions, the task can still go into the &#34; processing &#34; state and be sent for execution to another connected worker. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: loose_restrictions: bool
+    If ``False``, each of :attr:`host_restrictions`,
+    :attr:`worker_restrictions` and :attr:`resource_restrictions` is
+    a hard constraint: if no worker is available satisfying those
+    restrictions, the task cannot go into the &#34;processing&#34; state and
+    will instead go into the &#34;no-worker&#34; state.
+
+    If ``True``, the above restrictions are mere preferences: if no worker
+    is available satisfying those restrictions, the task can still go
+    into the &#34;processing&#34; state and be sent for execution to another
+    connected worker.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;metadata: dict&#39;]
-    </div>
-    <pre class='not-implemented'><p>Metadata related to task. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: metadata: dict
+    Metadata related to task.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;actor: bool&#39;]
-    </div>
-    <pre class='not-implemented'><p>Whether or not this task is an Actor. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: actor: bool
+    Whether or not this task is an Actor.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;group: TaskGroup&#39;]
-    </div>
-    <pre class='not-implemented'><p>The group of tasks to which this one belongs. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: group: TaskGroup
+    The group of tasks to which this one belongs.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;annotations: dict&#39;]
-    </div>
-    <pre class='not-implemented'><p>Task annotations </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: annotations: dict
+    Task annotations</pre>
 
 
 

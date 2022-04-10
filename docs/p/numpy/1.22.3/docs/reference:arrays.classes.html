@@ -106,25 +106,28 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _arrays.classes:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _arrays.classes:&#39;&gt;
+           </pre>
+
 
 <h1>Standard array subclasses</h1>
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. for doctests\n   &gt;&gt;&gt; np.random.seed(1)&#39;
-   |&gt;</pre>
+   |&gt;
+           </pre>
+
                            <div class='admonition'>
     <div>note</div>
-        <p>Subclassing a ``numpy.ndarray`` is possible but if your goal is to create an array with *modified* behavior, as do dask arrays for distributed computation and cupy arrays for GPU - based computation, subclassing is discouraged. Instead, using numpy &#39; s : ref : `dispatch mechanism &lt; basics.dispatch&gt;` is recommended. </p>
+        <p>Subclassing a         <code class='verbatim'>numpy.ndarray</code>
+ is possible but if your goal is to create an array with <em>modified</em> behavior, as do dask arrays for distributed computation and cupy arrays for GPU-based computation, subclassing is discouraged. Instead, using numpy&#39;s         <code class='verbatim'>dispatch mechanism &lt;basics.dispatch&gt;</code>
+ is recommended.</p>
 
 </div>
 
@@ -137,91 +140,321 @@
  can be used to allow subclasses to propagate more cleanly through your subroutine. In principal a subclass could redefine any aspect of the array and therefore, under strict guidelines,         <code class='verbatim'>asanyarray</code>
  would rarely be useful. However, most subclasses of the array object will not redefine certain aspects of the array object such as the buffer interface, or the attributes of the array. One important example, however, of why your subroutine may not be able to handle an arbitrary subclass of an array is that matrices redefine the &#34;*&#34; operator to be matrix-multiplication, rather than element-by-element multiplication.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _special-attributes-and-methods:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _special-attributes-and-methods:&#39;&gt;
+           </pre>
+
 
 <h1>Special attributes and methods</h1>
-               <div class='block_directive'>
-    <div class='head'>.. seealso:: []
-    </div>
-    <pre class='not-implemented'><p>: ref : `Subclassing ndarray &lt; basics.subclassing&gt;` </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. seealso:: :ref:`Subclassing ndarray &lt;basics.subclassing&gt;`
+    </pre>
 
 
                <p>NumPy provides several hooks that classes can customize:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array_ufunc__(ufunc, method, *inputs, **kwargs)&#39;]
-    </div>
-    <pre class='not-implemented'><p>.. versionadded : : 1.13 Any class, ndarray subclass or not, can define this method or set it to None in order to override the behavior of NumPy &#39; s ufuncs. This works quite similarly to Python &#39; s ``__mul__`` and other binary operation routines. - *ufunc* is the ufunc object that was called. - *method* is a string indicating which Ufunc method was called ( one of `` &#34; __call__ &#34; ``, `` &#34; reduce &#34; ``, `` &#34; reduceat &#34; ``, `` &#34; accumulate &#34; ``, `` &#34; outer &#34; ``, `` &#34; inner &#34; ``). - *inputs* is a tuple of the input arguments to the ``ufunc``. - *kwargs* is a dictionary containing the optional input arguments of the ufunc. If given, any ``out`` arguments, both positional and keyword, are passed as a : obj : `tuple` in *kwargs*. See the discussion in : ref : `ufuncs` for details. The method should return either the result of the operation, or : obj : `NotImplemented` if the operation requested is not implemented. If one of the input or output arguments has a : func : `__array_ufunc__` method, it is executed *instead* of the ufunc. If more than one of the arguments implements : func : `__array_ufunc__`, they are tried in the order : subclasses before superclasses, inputs before outputs, otherwise left to right. The first routine returning something other than : obj : `NotImplemented` determines the result. If all of the : func : `__array_ufunc__` operations return : obj : `NotImplemented`, a : exc : `TypeError` is raised. .. note : : We intend to re - implement numpy functions as ( generalized) Ufunc, in which case it will become possible for them to be overridden by the ``__array_ufunc__`` method. A prime candidate is : func : `~numpy.matmul`, which currently is not a Ufunc, but could be relatively easily be rewritten as a ( set of) generalized Ufuncs. The same may happen with functions such as : func : `~numpy.median`, : func : `~numpy.amin`, and : func : `~numpy.argsort`. Like with some other special methods in python, such as ``__hash__`` and ``__iter__``, it is possible to indicate that your class does *not* support ufuncs by setting ``__array_ufunc__ = None``. Ufuncs always raise : exc : `TypeError` when called on an object that sets ``__array_ufunc__ = None``. The presence of : func : `__array_ufunc__` also influences how : class : `ndarray` handles binary operations like ``arr + obj`` and ``arr &lt; obj`` when ``arr`` is an : class : `ndarray` and ``obj`` is an instance of a custom class. There are two possibilities. If ``obj.__array_ufunc__`` is present and not None, then ``ndarray.__add__`` and friends will delegate to the ufunc machinery, meaning that ``arr + obj`` becomes ``np.add ( arr, obj)``, and then : func : `~numpy.add` invokes ``obj.__array_ufunc__``. This is useful if you want to define an object that acts like an array. Alternatively, if ``obj.__array_ufunc__`` is set to None, then as a special case, special methods like ``ndarray.__add__`` will notice this and *unconditionally* raise : exc : `TypeError`. This is useful if you want to create objects that interact with arrays via binary operations, but are not themselves arrays. For example, a units handling system might have an object ``m`` representing the &#34; meters &#34; unit, and want to support the syntax ``arr * m`` to represent that the array has units of &#34; meters &#34; , but not want to otherwise interact with arrays via ufuncs or otherwise. This can be done by setting ``__array_ufunc__ = None`` and defining ``__mul__`` and ``__rmul__`` methods. ( Note that this means that writing an ``__array_ufunc__`` that always returns : obj : `NotImplemented` is not quite the same as setting ``__array_ufunc__ = None`` : in the former case, ``arr + obj`` will raise : exc : `TypeError`, while in the latter case it is possible to define a ``__radd__`` method to prevent this.) The above does not hold for in - place operators, for which : class : `ndarray` never returns : obj : `NotImplemented`. Hence, ``arr += obj`` would always lead to a : exc : `TypeError`. This is because for arrays in - place operations cannot generically be replaced by a simple reverse operation. ( For instance, by default, ``arr += obj`` would be translated to ``arr = arr + obj``, i.e., ``arr`` would be replaced, contrary to what is expected for in - place array operations.) .. note : : If you define ``__array_ufunc__`` : - If you are not a subclass of : class : `ndarray`, we recommend your class define special methods like ``__add__`` and ``__lt__`` that delegate to ufuncs just like ndarray does. An easy way to do this is to subclass from : class : `~numpy.lib.mixins.NDArrayOperatorsMixin`. - If you subclass : class : `ndarray`, we recommend that you put all your override logic in ``__array_ufunc__`` and not also override special methods. This ensures the class hierarchy is determined in only one place rather than separately by the ufunc machinery and by the binary operation rules ( which gives preference to special methods of subclasses; the alternative way to enforce a one - place only hierarchy, of setting : func : `__array_ufunc__` to None, would seem very unexpected and thus confusing, as then the subclass would not work at all with ufuncs). - : class : `ndarray` defines its own : func : `__array_ufunc__`, which, evaluates the ufunc if no arguments have overrides, and returns : obj : `NotImplemented` otherwise. This may be useful for subclasses for which : func : `__array_ufunc__` converts any instances of its own class to : class : `ndarray` : it can then pass these on to its superclass using ``super ( ).__array_ufunc__ ( *inputs, **kwargs)``, and finally return the results after possible back - conversion. The advantage of this practice is that it ensures that it is possible to have a hierarchy of subclasses that extend the behaviour. See : ref : `Subclassing ndarray &lt; basics.subclassing&gt;` for details. .. note : : If a class defines the : func : `__array_ufunc__` method, this disables the : func : `__array_wrap__`, : func : `__array_prepare__`, : data : `__array_priority__` mechanism described below for ufuncs ( which may eventually be deprecated). </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array_ufunc__(ufunc, method, *inputs, **kwargs)
+    .. versionadded:: 1.13
+
+    Any class, ndarray subclass or not, can define this method or set it to
+    None in order to override the behavior of NumPy&#39;s ufuncs. This works
+    quite similarly to Python&#39;s ``__mul__`` and other binary operation routines.
+
+    - *ufunc* is the ufunc object that was called.
+    - *method* is a string indicating which Ufunc method was called
+      (one of ``&#34;__call__&#34;``, ``&#34;reduce&#34;``, ``&#34;reduceat&#34;``,
+      ``&#34;accumulate&#34;``, ``&#34;outer&#34;``, ``&#34;inner&#34;``).
+    - *inputs* is a tuple of the input arguments to the ``ufunc``.
+    - *kwargs* is a dictionary containing the optional input arguments
+      of the ufunc. If given, any ``out`` arguments, both positional
+      and keyword, are passed as a :obj:`tuple` in *kwargs*. See the
+      discussion in :ref:`ufuncs` for details.
+
+    The method should return either the result of the operation, or
+    :obj:`NotImplemented` if the operation requested is not implemented.
+
+    If one of the input or output arguments has a :func:`__array_ufunc__`
+    method, it is executed *instead* of the ufunc.  If more than one of the
+    arguments implements :func:`__array_ufunc__`, they are tried in the
+    order: subclasses before superclasses, inputs before outputs, otherwise
+    left to right. The first routine returning something other than
+    :obj:`NotImplemented` determines the result. If all of the
+    :func:`__array_ufunc__` operations return :obj:`NotImplemented`, a
+    :exc:`TypeError` is raised.
+
+    .. note:: We intend to re-implement numpy functions as (generalized)
+        Ufunc, in which case it will become possible for them to be
+        overridden by the ``__array_ufunc__`` method.  A prime candidate is
+        :func:`~numpy.matmul`, which currently is not a Ufunc, but could be
+        relatively easily be rewritten as a (set of) generalized Ufuncs. The
+        same may happen with functions such as :func:`~numpy.median`,
+        :func:`~numpy.amin`, and :func:`~numpy.argsort`.
+
+    Like with some other special methods in python, such as ``__hash__`` and
+    ``__iter__``, it is possible to indicate that your class does *not*
+    support ufuncs by setting ``__array_ufunc__ = None``. Ufuncs always raise
+    :exc:`TypeError` when called on an object that sets
+    ``__array_ufunc__ = None``.
+
+    The presence of :func:`__array_ufunc__` also influences how
+    :class:`ndarray` handles binary operations like ``arr + obj`` and ``arr
+    &lt; obj`` when ``arr`` is an :class:`ndarray` and ``obj`` is an instance
+    of a custom class. There are two possibilities. If
+    ``obj.__array_ufunc__`` is present and not None, then
+    ``ndarray.__add__`` and friends will delegate to the ufunc machinery,
+    meaning that ``arr + obj`` becomes ``np.add(arr, obj)``, and then
+    :func:`~numpy.add` invokes ``obj.__array_ufunc__``. This is useful if you
+    want to define an object that acts like an array.
+
+    Alternatively, if ``obj.__array_ufunc__`` is set to None, then as a
+    special case, special methods like ``ndarray.__add__`` will notice this
+    and *unconditionally* raise :exc:`TypeError`. This is useful if you want to
+    create objects that interact with arrays via binary operations, but
+    are not themselves arrays. For example, a units handling system might have
+    an object ``m`` representing the &#34;meters&#34; unit, and want to support the
+    syntax ``arr * m`` to represent that the array has units of &#34;meters&#34;, but
+    not want to otherwise interact with arrays via ufuncs or otherwise. This
+    can be done by setting ``__array_ufunc__ = None`` and defining ``__mul__``
+    and ``__rmul__`` methods. (Note that this means that writing an
+    ``__array_ufunc__`` that always returns :obj:`NotImplemented` is not
+    quite the same as setting ``__array_ufunc__ = None``: in the former
+    case, ``arr + obj`` will raise :exc:`TypeError`, while in the latter
+    case it is possible to define a ``__radd__`` method to prevent this.)
+
+    The above does not hold for in-place operators, for which :class:`ndarray`
+    never returns :obj:`NotImplemented`.  Hence, ``arr += obj`` would always
+    lead to a :exc:`TypeError`.  This is because for arrays in-place operations
+    cannot generically be replaced by a simple reverse operation.  (For
+    instance, by default, ``arr += obj`` would be translated to ``arr =
+    arr + obj``, i.e., ``arr`` would be replaced, contrary to what is expected
+    for in-place array operations.)
+
+    .. note:: If you define ``__array_ufunc__``:
+
+       - If you are not a subclass of :class:`ndarray`, we recommend your
+         class define special methods like ``__add__`` and ``__lt__`` that
+         delegate to ufuncs just like ndarray does.  An easy way to do this
+         is to subclass from :class:`~numpy.lib.mixins.NDArrayOperatorsMixin`.
+       - If you subclass :class:`ndarray`, we recommend that you put all your
+         override logic in ``__array_ufunc__`` and not also override special
+         methods. This ensures the class hierarchy is determined in only one
+         place rather than separately by the ufunc machinery and by the binary
+         operation rules (which gives preference to special methods of
+         subclasses; the alternative way to enforce a one-place only hierarchy,
+         of setting :func:`__array_ufunc__` to None, would seem very
+         unexpected and thus confusing, as then the subclass would not work at
+         all with ufuncs).
+       - :class:`ndarray` defines its own :func:`__array_ufunc__`, which,
+         evaluates the ufunc if no arguments have overrides, and returns
+         :obj:`NotImplemented` otherwise. This may be useful for subclasses
+         for which :func:`__array_ufunc__` converts any instances of its own
+         class to :class:`ndarray`: it can then pass these on to its
+         superclass using ``super().__array_ufunc__(*inputs, **kwargs)``,
+         and finally return the results after possible back-conversion. The
+         advantage of this practice is that it ensures that it is possible
+         to have a hierarchy of subclasses that extend the behaviour. See
+         :ref:`Subclassing ndarray &lt;basics.subclassing&gt;` for details.
+
+    .. note:: If a class defines the :func:`__array_ufunc__` method,
+       this disables the :func:`__array_wrap__`,
+       :func:`__array_prepare__`, :data:`__array_priority__` mechanism
+       described below for ufuncs (which may eventually be deprecated).</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array_function__(func, types, args, kwargs)&#39;]
-    </div>
-    <pre class='not-implemented'><p>.. versionadded : : 1.16 .. note : : - In NumPy 1.17, the protocol is enabled by default, but can be disabled with ``NUMPY_EXPERIMENTAL_ARRAY_FUNCTION=0``. - In NumPy 1.16, you need to set the environment variable ``NUMPY_EXPERIMENTAL_ARRAY_FUNCTION=1`` before importing NumPy to use NumPy function overrides. - Eventually, expect to ``__array_function__`` to always be enabled. - ``func`` is an arbitrary callable exposed by NumPy &#39; s public API, which was called in the form ``func ( *args, **kwargs)``. - ``types`` is a collection : py : class : `collections.abc.Collection` of unique argument types from the original NumPy function call that implement ``__array_function__``. - The tuple ``args`` and dict ``kwargs`` are directly passed on from the original call. As a convenience for ``__array_function__`` implementors, ``types`` provides all argument types with an `` &#39; __array_function__ &#39; `` attribute. This allows implementors to quickly identify cases where they should defer to ``__array_function__`` implementations on other arguments. Implementations should not rely on the iteration order of ``types``. Most implementations of ``__array_function__`` will start with two checks : 1. Is the given function something that we know how to overload? 2. Are all arguments of a type that we know how to handle? If these conditions hold, ``__array_function__`` should return the result from calling its implementation for ``func ( *args, **kwargs)``. Otherwise, it should return the sentinel value ``NotImplemented``, indicating that the function is not implemented by these types. There are no general requirements on the return value from ``__array_function__``, although most sensible implementations should probably return array ( s) with the same type as one of the function &#39; s arguments. It may also be convenient to define a custom decorators ( ``implements`` below) for registering ``__array_function__`` implementations. .. code : : python HANDLED_FUNCTIONS = { } class MyArray : def __array_function__ ( self, func, types, args, kwargs) : if func not in HANDLED_FUNCTIONS : return NotImplemented # Note : this allows subclasses that don &#39; t override # __array_function__ to handle MyArray objects if not all ( issubclass ( t, MyArray) for t in types) : return NotImplemented return HANDLED_FUNCTIONS [ func] ( *args, **kwargs) def implements ( numpy_function) : &#34; &#34; &#34; Register an __array_function__ implementation for MyArray objects. &#34; &#34; &#34; def decorator ( func) : HANDLED_FUNCTIONS [ numpy_function] = func return func return decorator @implements ( np.concatenate) def concatenate ( arrays, axis=0, out=None) : ... # implementation of concatenate for MyArray objects @implements ( np.broadcast_to) def broadcast_to ( array, shape) : ... # implementation of broadcast_to for MyArray objects Note that it is not required for ``__array_function__`` implementations to include *all* of the corresponding NumPy function &#39; s optional arguments ( e.g., ``broadcast_to`` above omits the irrelevant ``subok`` argument). Optional arguments are only passed in to ``__array_function__`` if they were explicitly used in the NumPy function call. Just like the case for builtin special methods like ``__add__``, properly written ``__array_function__`` methods should always return ``NotImplemented`` when an unknown type is encountered. Otherwise, it will be impossible to correctly override NumPy functions from another object if the operation also includes one of your objects. For the most part, the rules for dispatch with ``__array_function__`` match those for ``__array_ufunc__``. In particular : - NumPy will gather implementations of ``__array_function__`` from all specified inputs and call them in order : subclasses before superclasses, and otherwise left to right. Note that in some edge cases involving subclasses, this differs slightly from the `current behavior &lt; https : / / bugs.python.org / issue30140&gt;`_ of Python. - Implementations of ``__array_function__`` indicate that they can handle the operation by returning any value other than ``NotImplemented``. - If all ``__array_function__`` methods return ``NotImplemented``, NumPy will raise ``TypeError``. If no ``__array_function__`` methods exists, NumPy will default to calling its own implementation, intended for use on NumPy arrays. This case arises, for example, when all array - like arguments are Python numbers or lists. ( NumPy arrays do have a ``__array_function__`` method, given below, but it always returns ``NotImplemented`` if any argument other than a NumPy array subclass implements ``__array_function__``.) One deviation from the current behavior of ``__array_ufunc__`` is that NumPy will only call ``__array_function__`` on the *first* argument of each unique type. This matches Python &#39; s `rule for calling reflected methods &lt; https : / / docs.python.org / 3 / reference / datamodel.html#object.__ror__&gt;`_, and this ensures that checking overloads has acceptable performance even when there are a large number of overloaded arguments. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array_function__(func, types, args, kwargs)
+    .. versionadded:: 1.16
+
+    .. note::
+
+        - In NumPy 1.17, the protocol is enabled by default, but can be disabled
+          with ``NUMPY_EXPERIMENTAL_ARRAY_FUNCTION=0``.
+        - In NumPy 1.16, you need to set the environment variable
+          ``NUMPY_EXPERIMENTAL_ARRAY_FUNCTION=1`` before importing NumPy to use
+          NumPy function overrides.
+        - Eventually, expect to ``__array_function__`` to always be enabled.
+
+    -  ``func`` is an arbitrary callable exposed by NumPy&#39;s public API,
+       which was called in the form ``func(*args, **kwargs)``.
+    -  ``types`` is a collection :py:class:`collections.abc.Collection`
+       of unique argument types from the original NumPy function call that
+       implement ``__array_function__``.
+    -  The tuple ``args`` and dict ``kwargs`` are directly passed on from the
+       original call.
+
+    As a convenience for ``__array_function__`` implementors, ``types``
+    provides all argument types with an ``&#39;__array_function__&#39;`` attribute.
+    This allows implementors to quickly identify cases where they should defer
+    to ``__array_function__`` implementations on other arguments.
+    Implementations should not rely on the iteration order of ``types``.
+
+    Most implementations of ``__array_function__`` will start with two
+    checks:
+
+    1.  Is the given function something that we know how to overload?
+    2.  Are all arguments of a type that we know how to handle?
+
+    If these conditions hold, ``__array_function__`` should return the result
+    from calling its implementation for ``func(*args, **kwargs)``.  Otherwise,
+    it should return the sentinel value ``NotImplemented``, indicating that the
+    function is not implemented by these types.
+
+    There are no general requirements on the return value from
+    ``__array_function__``, although most sensible implementations should
+    probably return array(s) with the same type as one of the function&#39;s
+    arguments.
+
+    It may also be convenient to define a custom decorators (``implements``
+    below) for registering ``__array_function__`` implementations.
+
+    .. code:: python
+
+        HANDLED_FUNCTIONS = {}
+
+        class MyArray:
+            def __array_function__(self, func, types, args, kwargs):
+                if func not in HANDLED_FUNCTIONS:
+                    return NotImplemented
+                # Note: this allows subclasses that don&#39;t override
+                # __array_function__ to handle MyArray objects
+                if not all(issubclass(t, MyArray) for t in types):
+                    return NotImplemented
+                return HANDLED_FUNCTIONS[func](*args, **kwargs)
+
+        def implements(numpy_function):
+            &#34;&#34;&#34;Register an __array_function__ implementation for MyArray objects.&#34;&#34;&#34;
+            def decorator(func):
+                HANDLED_FUNCTIONS[numpy_function] = func
+                return func
+            return decorator
+
+        @implements(np.concatenate)
+        def concatenate(arrays, axis=0, out=None):
+            ...  # implementation of concatenate for MyArray objects
+
+        @implements(np.broadcast_to)
+        def broadcast_to(array, shape):
+            ...  # implementation of broadcast_to for MyArray objects
+
+    Note that it is not required for ``__array_function__`` implementations to
+    include *all* of the corresponding NumPy function&#39;s optional arguments
+    (e.g., ``broadcast_to`` above omits the irrelevant ``subok`` argument).
+    Optional arguments are only passed in to ``__array_function__`` if they
+    were explicitly used in the NumPy function call.
+
+    Just like the case for builtin special methods like ``__add__``, properly
+    written ``__array_function__`` methods should always return
+    ``NotImplemented`` when an unknown type is encountered. Otherwise, it will
+    be impossible to correctly override NumPy functions from another object
+    if the operation also includes one of your objects.
+
+    For the most part, the rules for dispatch with ``__array_function__``
+    match those for ``__array_ufunc__``. In particular:
+
+    -  NumPy will gather implementations of ``__array_function__`` from all
+       specified inputs and call them in order: subclasses before
+       superclasses, and otherwise left to right. Note that in some edge cases
+       involving subclasses, this differs slightly from the
+       `current behavior &lt;https://bugs.python.org/issue30140&gt;`_ of Python.
+    -  Implementations of ``__array_function__`` indicate that they can
+       handle the operation by returning any value other than
+       ``NotImplemented``.
+    -  If all ``__array_function__`` methods return ``NotImplemented``,
+       NumPy will raise ``TypeError``.
+
+    If no ``__array_function__`` methods exists, NumPy will default to calling
+    its own implementation, intended for use on NumPy arrays. This case arises,
+    for example, when all array-like arguments are Python numbers or lists.
+    (NumPy arrays do have a ``__array_function__`` method, given below, but it
+    always returns ``NotImplemented`` if any argument other than a NumPy array
+    subclass implements ``__array_function__``.)
+
+    One deviation from the current behavior of ``__array_ufunc__`` is that
+    NumPy will only call ``__array_function__`` on the *first* argument of each
+    unique type. This matches Python&#39;s `rule for calling reflected methods
+    &lt;https://docs.python.org/3/reference/datamodel.html#object.__ror__&gt;`_, and
+    this ensures that checking overloads has acceptable performance even when
+    there are a large number of overloaded arguments.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array_finalize__(obj)&#39;]
-    </div>
-    <pre class='not-implemented'><p>This method is called whenever the system internally allocates a new array from *obj*, where *obj* is a subclass ( subtype) of the : class : `ndarray`. It can be used to change attributes of *self* after construction ( so as to ensure a 2 - d matrix for example), or to update meta - information from the &#34; parent. &#34; Subclasses inherit a default implementation of this method that does nothing. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array_finalize__(obj)
+    This method is called whenever the system internally allocates a
+    new array from *obj*, where *obj* is a subclass (subtype) of the
+    :class:`ndarray`. It can be used to change attributes of *self*
+    after construction (so as to ensure a 2-d matrix for example), or
+    to update meta-information from the &#34;parent.&#34; Subclasses inherit
+    a default implementation of this method that does nothing.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array_prepare__(array, context=None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>At the beginning of every : ref : `ufunc &lt; ufuncs - output - type&gt;`, this method is called on the input object with the highest array priority, or the output object if one was specified. The output array is passed in and whatever is returned is passed to the ufunc. Subclasses inherit a default implementation of this method which simply returns the output array unmodified. Subclasses may opt to use this method to transform the output array into an instance of the subclass and update metadata before returning the array to the ufunc for computation. .. note : : For ufuncs, it is hoped to eventually deprecate this method in favour of : func : `__array_ufunc__`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array_prepare__(array, context=None)
+    At the beginning of every :ref:`ufunc &lt;ufuncs-output-type&gt;`, this
+    method is called on the input object with the highest array
+    priority, or the output object if one was specified. The output
+    array is passed in and whatever is returned is passed to the ufunc.
+    Subclasses inherit a default implementation of this method which
+    simply returns the output array unmodified. Subclasses may opt to
+    use this method to transform the output array into an instance of
+    the subclass and update metadata before returning the array to the
+    ufunc for computation.
+
+    .. note:: For ufuncs, it is hoped to eventually deprecate this method in
+              favour of :func:`__array_ufunc__`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array_wrap__(array, context=None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>At the end of every : ref : `ufunc &lt; ufuncs - output - type&gt;`, this method is called on the input object with the highest array priority, or the output object if one was specified. The ufunc - computed array is passed in and whatever is returned is passed to the user. Subclasses inherit a default implementation of this method, which transforms the array into a new instance of the object &#39; s class. Subclasses may opt to use this method to transform the output array into an instance of the subclass and update metadata before returning the array to the user. .. note : : For ufuncs, it is hoped to eventually deprecate this method in favour of : func : `__array_ufunc__`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array_wrap__(array, context=None)
+    At the end of every :ref:`ufunc &lt;ufuncs-output-type&gt;`, this method
+    is called on the input object with the highest array priority, or
+    the output object if one was specified. The ufunc-computed array
+    is passed in and whatever is returned is passed to the user.
+    Subclasses inherit a default implementation of this method, which
+    transforms the array into a new instance of the object&#39;s class.
+    Subclasses may opt to use this method to transform the output array
+    into an instance of the subclass and update metadata before
+    returning the array to the user.
+
+    .. note:: For ufuncs, it is hoped to eventually deprecate this method in
+              favour of :func:`__array_ufunc__`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:attribute:: [&#39;class.__array_priority__&#39;]
-    </div>
-    <pre class='not-implemented'><p>The value of this attribute is used to determine what type of object to return in situations where there is more than one possibility for the Python type of the returned object. Subclasses inherit a default value of 0.0 for this attribute. .. note : : For ufuncs, it is hoped to eventually deprecate this method in favour of : func : `__array_ufunc__`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:attribute:: class.__array_priority__
+    The value of this attribute is used to determine what type of
+    object to return in situations where there is more than one
+    possibility for the Python type of the returned object. Subclasses
+    inherit a default value of 0.0 for this attribute.
+
+    .. note:: For ufuncs, it is hoped to eventually deprecate this method in
+              favour of :func:`__array_ufunc__`.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. py:method:: [&#39;class.__array__([dtype])&#39;]
-    </div>
-    <pre class='not-implemented'><p>If a class ( ndarray subclass or not) having the : func : `__array__` method is used as the output object of an : ref : `ufunc &lt; ufuncs - output - type&gt;`, results will *not* be written to the object returned by : func : `__array__`. This practice will return ``TypeError``. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. py:method:: class.__array__([dtype])
+    If a class (ndarray subclass or not) having the :func:`__array__`
+    method is used as the output object of an :ref:`ufunc
+    &lt;ufuncs-output-type&gt;`, results will *not* be written to the object
+    returned by :func:`__array__`. This practice will return ``TypeError``.</pre>
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _matrix-objects:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _matrix-objects:&#39;&gt;
+           </pre>
+
 
 <h1>Matrix objects</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : matrix </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: matrix</pre>
 
 
                            <div class='admonition'>
     <div>note</div>
-        <p>It is strongly advised *not* to use the matrix subclass. As described below, it makes writing functions that deal consistently with matrices and regular arrays very difficult. Currently, they are mainly used for interacting with ``scipy.sparse``. We hope to provide an alternative for this use, however, and eventually remove the ``matrix`` subclass. </p>
+        <p>It is strongly advised <em>not</em> to use the matrix subclass.  As described below, it makes writing functions that deal consistently with matrices and regular arrays very difficult. Currently, they are mainly used for interacting with         <code class='verbatim'>scipy.sparse</code>
+. We hope to provide an alternative for this use, however, and eventually remove the         <code class='verbatim'>matrix</code>
+ subclass.</p>
 
 </div>
 
@@ -249,20 +482,18 @@
 </li>
                <li>               <p>Matrices have special attributes which make calculations easier.    These are</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>matrix.T matrix.H matrix.I matrix.A </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    matrix.T
+       matrix.H
+       matrix.I
+       matrix.A</pre>
 </li>
             </ol>
 
                            <div class='admonition'>
     <div>warning</div>
-        <p>Matrix objects over - ride multiplication, &#39; * &#39; , and power, &#39; ** &#39; , to be matrix - multiplication and matrix power, respectively. If your subroutine can accept sub - classes and you do not convert to base - class arrays, then you must use the ufuncs multiply and power to be sure that you are performing the correct operation for all inputs. </p>
+        <p>Matrix objects over-ride multiplication, &#39;<em>&#39;, and power, &#39;*</em>&#39;, to be matrix-multiplication and matrix power, respectively. If your subroutine can accept sub-classes and you do not convert to base- class arrays, then you must use the ufuncs multiply and power to be sure that you are performing the correct operation for all inputs.</p>
 
 </div>
 
@@ -270,14 +501,11 @@
                <p>The matrix class is a Python subclass of the ndarray and can be used as a reference for how to construct your own subclass of the ndarray. Matrices can be created from other matrices, strings, and anything else that can be converted to an         <code class='verbatim'>ndarray</code>
  . The name &#34;mat &#34;is an alias for &#34;matrix &#34;in NumPy.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>matrix asmatrix bmat </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    matrix
+    asmatrix
+    bmat</pre>
                <p>Example 1: Matrix creation from a string</p>
 
                <pre>&gt;&gt;&gt; a = np.mat(&#39;1 2 3; 4 5 3&#39;)
@@ -297,20 +525,14 @@ matrix([[4.17022005e-01, 3.02332573e-01, 1.86260211e-01],
         [1.14374817e-04, 9.23385948e-02, 3.96767474e-01]])</pre>
 
 <h1>Memory-mapped file arrays</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : memory maps </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: memory maps</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
                <p>Memory-mapped files are useful for reading and/or modifying small segments of a large file with regular layout, without reading the entire file into memory. A simple subclass of the ndarray uses a memory-mapped file for the data buffer of the array. For small files, the over-head of reading the entire file into memory is typically not significant, however for large files using memory mapping can save considerable resources.</p>
@@ -318,14 +540,10 @@ matrix([[4.17022005e-01, 3.02332573e-01, 1.86260211e-01],
                <p>Memory-mapped-file arrays have one additional method (besides those they inherit from the ndarray):         <code class='verbatim'>.flush() &lt;memmap.flush&gt;</code>
  which must be called manually by the user to ensure that any changes to the array actually get written to disk.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>memmap memmap.flush </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    memmap
+    memmap.flush</pre>
                <p>Example:</p>
 
                <pre>&gt;&gt;&gt; a = np.memmap(&#39;newfile.dat&#39;, dtype=float, mode=&#39;w+&#39;, shape=1000)
@@ -340,25 +558,20 @@ matrix([[4.17022005e-01, 3.02332573e-01, 1.86260211e-01],
 10.0 30.0</pre>
 
 <h1>Character arrays (:mod:`numpy.char`)</h1>
-               <div class='block_directive'>
-    <div class='head'>.. seealso:: []
-    </div>
-    <pre class='not-implemented'><p>: ref : `routines.array - creation.char` </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. seealso:: :ref:`routines.array-creation.char`
+    </pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : character arrays </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: character arrays</pre>
 
 
                            <div class='admonition'>
     <div>note</div>
-        <p>The `chararray` class exists for backwards compatibility with Numarray, it is not recommended for new development. Starting from numpy 1.4, if one needs arrays of strings, it is recommended to use arrays of `dtype` `object_`, `bytes_` or `str_`, and use the free functions in the `numpy.char` module for fast vectorized string operations. </p>
+        <p>The <code>:None:None:`chararray`</code> class exists for backwards compatibility with Numarray, it is not recommended for new development. Starting from numpy 1.4, if one needs arrays of strings, it is recommended to use arrays of <code>:None:None:`dtype`</code> <code>:None:None:`object_`</code>, <code>:None:None:`bytes_`</code> or <code>:None:None:`str_`</code>, and use the free functions in the <code><a href="/p/numpy/*/api/numpy.core.defchararray.html" class='exists'>numpy.char</a></code>
+ module for fast vectorized string operations.</p>
 
 </div>
 
@@ -379,103 +592,72 @@ matrix([[4.17022005e-01, 3.02332573e-01, 1.86260211e-01],
  constructor, or via the         <code class='verbatim'>numpy.char.array &lt;core.defchararray.array&gt;</code>
  function:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>chararray core.defchararray.array </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    chararray
+    core.defchararray.array</pre>
                <p>Another difference with the standard ndarray of str data-type is that the chararray inherits the feature introduced by Numarray that white-space at the end of any element in the array will be ignored on item retrieval and comparison operations.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _arrays.classes.rec:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _arrays.classes.rec:&#39;&gt;
+           </pre>
+
 
 <h1>Record arrays (:mod:`numpy.rec`)</h1>
-               <div class='block_directive'>
-    <div class='head'>.. seealso:: [&#39;:ref:`routines.array-creation.rec`, :ref:`routines.dtype`,&#39;]
-    </div>
-    <pre class='not-implemented'><p>: ref : `arrays.dtypes`. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. seealso:: :ref:`routines.array-creation.rec`, :ref:`routines.dtype`,
+    :ref:`arrays.dtypes`.</pre>
 
 
                <p>NumPy provides the         <code class='verbatim'>recarray</code>
  class which allows accessing the fields of a structured array as attributes, and a corresponding scalar data type object         <code class='verbatim'>record</code>
 .</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>recarray record </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    recarray
+    record</pre>
 
 <h1>Masked arrays (:mod:`numpy.ma`)</h1>
-               <div class='block_directive'>
-    <div class='head'>.. seealso:: []
-    </div>
-    <pre class='not-implemented'><p>: ref : `maskedarray` </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. seealso:: :ref:`maskedarray`
+    </pre>
 
 
 
 <h1>Standard container class</h1>
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
                <p>For backward compatibility and as a standard &#34;container &#34;class, the UserArray from Numeric has been brought over to NumPy and named         <code class='verbatim'>numpy.lib.user_array.container</code>
  The container class is a Python class whose self.array attribute is an ndarray. Multiple inheritance is probably easier with numpy.lib.user_array.container than with the ndarray itself and so it is included by default. It is not documented here beyond mentioning its existence because you are encouraged to use the ndarray class directly if you can.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>numpy.lib.user_array.container </p>
-</pre>
-</div>
-
-
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : user_array single : container class </p>
-</pre>
-</div>
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    numpy.lib.user_array.container</pre>
+               <pre class='not-implemented'>
+.. index:: 
+    single: user_array
+    single: container class</pre>
 
 
 
 <h1>Array Iterators</h1>
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : array iterator </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: array iterator</pre>
 
 
                <p>Iterators are a powerful concept for array processing. Essentially, iterators implement a generalized for-loop. If <em>myiter</em> is an iterator object, then the Python code::      </p>
@@ -510,14 +692,9 @@ item: [[26 27 28 29]
  [30 31 32 33]]</pre>
 
 <h1>Flat iteration</h1>
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>ndarray.flat </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    ndarray.flat</pre>
                <p>As mentioned previously, the flat attribute of ndarray objects returns an iterator that will cycle over the entire array in C-style contiguous order.</p>
 
                <pre>&gt;&gt;&gt; for i, val in enumerate(a.flat):
@@ -531,14 +708,9 @@ item: [[26 27 28 29]
 
 
 <h1>N-dimensional enumeration</h1>
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>ndenumerate </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    ndenumerate</pre>
                <p>Sometimes it may be useful to get the N-dimensional index while iterating. The ndenumerate iterator can achieve this.</p>
 
                <pre>&gt;&gt;&gt; for i, val in np.ndenumerate(a):
@@ -549,14 +721,9 @@ item: [[26 27 28 29]
 (2, 1, 2) 32</pre>
 
 <h1>Iterator for broadcasting</h1>
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>broadcast </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    broadcast</pre>
                <p>The general concept of broadcasting is also available from Python using the         <code class='verbatim'>broadcast</code>
  iterator. This object takes         <span class="tex2jax_process">$N$</span>
  objects as inputs and returns an iterator that returns tuples providing each of the input sequence elements in the broadcasted result.</p>

@@ -113,12 +113,43 @@
                <p>For our example, we&#39;ll create a sum of squares function. To start, let&#39;s implement this function in straightforward Python. We want to support an &#39;axis&#39; parameter similar to the numpy         <code class='verbatim'>sum</code>
  function, so we will need to construct a list for the <code>:None:None:`op_axes`</code> parameter. Here&#39;s how this looks.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; def axis_to_axeslist ( axis, ndim) : ... if axis is None : ... return [ - 1] * ndim ... else : ... if type ( axis) is not tuple : ... axis = ( axis,) ... axeslist = [ 1] * ndim ... for i in axis : ... axeslist [ i] = - 1 ... ax = 0 ... for i in range ( ndim) : ... if axeslist [ i] != - 1 : ... axeslist [ i] = ax ... ax += 1 ... return axeslist ... &gt;&gt;&gt; def sum_squares_py ( arr, axis=None, out=None) : ... axeslist = axis_to_axeslist ( axis, arr.ndim) ... it = np.nditer ( [ arr, out], flags= [ &#39; reduce_ok &#39; , ... &#39; buffered &#39; , &#39; delay_bufalloc &#39; ], ... op_flags= [ [ &#39; readonly &#39; ], [ &#39; readwrite &#39; , &#39; allocate &#39; ]], ... op_axes= [ None, axeslist], ... op_dtypes= [ &#39; float64 &#39; , &#39; float64 &#39; ]) ... with it : ... it.operands [ 1] [ ...] = 0 ... it.reset ( ) ... for x, y in it : ... y [ ...] += x*x ... return it.operands [ 1] ... &gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; sum_squares_py ( a) array ( 55.) &gt;&gt;&gt; sum_squares_py ( a, axis= - 1) array ( [ 5., 50.]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; def axis_to_axeslist(axis, ndim):
+    ...     if axis is None:
+    ...         return [-1] * ndim
+    ...     else:
+    ...         if type(axis) is not tuple:
+    ...             axis = (axis,)
+    ...         axeslist = [1] * ndim
+    ...         for i in axis:
+    ...             axeslist[i] = -1
+    ...         ax = 0
+    ...         for i in range(ndim):
+    ...             if axeslist[i] != -1:
+    ...                 axeslist[i] = ax
+    ...                 ax += 1
+    ...         return axeslist
+    ...
+    &gt;&gt;&gt; def sum_squares_py(arr, axis=None, out=None):
+    ...     axeslist = axis_to_axeslist(axis, arr.ndim)
+    ...     it = np.nditer([arr, out], flags=[&#39;reduce_ok&#39;,
+    ...                                       &#39;buffered&#39;, &#39;delay_bufalloc&#39;],
+    ...                 op_flags=[[&#39;readonly&#39;], [&#39;readwrite&#39;, &#39;allocate&#39;]],
+    ...                 op_axes=[None, axeslist],
+    ...                 op_dtypes=[&#39;float64&#39;, &#39;float64&#39;])
+    ...     with it:
+    ...         it.operands[1][...] = 0
+    ...         it.reset()
+    ...         for x, y in it:
+    ...             y[...] += x*x
+    ...         return it.operands[1]
+    ...
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; sum_squares_py(a)
+    array(55.)
+    &gt;&gt;&gt; sum_squares_py(a, axis=-1)
+    array([  5.,  50.])</pre>
 
 
                <p>To Cython-ize this function, we replace the inner loop (y[...] += x*x) with Cython code that&#39;s specialized for the float64 dtype. With the &#39;external_loop&#39; flag enabled, the arrays provided to the inner loop will always be one-dimensional, so very little checking needs to be done.</p>
@@ -175,12 +206,14 @@ def sum_squares_cy(arr, axis=None, out=None):
 $ gcc -shared -pthread -fPIC -fwrapv -O2 -Wall -I/usr/include/python2.7 -fno-strict-aliasing -o sum_squares.so sum_squares.c</pre>
                <p>Running this from the Python interpreter produces the same answers as our native Python/NumPy code did.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; from sum_squares import sum_squares_cy #doctest : +SKIP &gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; sum_squares_cy ( a) #doctest : +SKIP array ( 55.0) &gt;&gt;&gt; sum_squares_cy ( a, axis= - 1) #doctest : +SKIP array ( [ 5., 50.]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; from sum_squares import sum_squares_cy #doctest: +SKIP
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; sum_squares_cy(a) #doctest: +SKIP
+    array(55.0)
+    &gt;&gt;&gt; sum_squares_cy(a, axis=-1) #doctest: +SKIP
+    array([  5.,  50.])</pre>
 
 
                <p>Doing a little timing in IPython shows that the reduced overhead and memory allocation of the Cython inner loop is providing a very nice speedup over both the straightforward Python code and an expression using NumPy&#39;s built-in sum function.::      </p>

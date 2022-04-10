@@ -179,7 +179,7 @@
 
 <h3 id="section-Notes">Notes</h3>
 <!-- rendering Notes -->
-                       <p>An object of this class is callable and intended to be used when defining a decorator. Generally, a decorator takes a function as input and constructs a function as output. Specifically, an <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
+                       <p>An object of this class is callable and intended to be used when defining a decorator. Generally, a decorator takes a function as input and constructs a function as output. Specifically, an <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
  object returns the input function decorated/wrapped so that specified arguments are mapped (transformed) to new values before the decorated function is called.</p>
 
                <p>As an overview, the argmap object returns a new function with all the dunder values of the original function (like <code>:None:None:`__doc__`</code>, <code>:None:None:`__name__`</code>, etc). Code for this decorated function is built based on the original function&#39;s signature. It starts by mapping the input arguments to potentially new values. Then it calls the decorated function with these new values in place of the indicated arguments that have been mapped. The return value of the original function is then returned. This new function is the function that is actually called by the user.</p>
@@ -197,7 +197,7 @@
 
 </li>
             </ol>
-<p>follows each mapped argument, matched on the other side of the wrapped     call, by a finally block closing that mapping.  We expect func to return     a 2-tuple: the mapped value and a function to be called in the finally     clause.  This feature was included so the <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file.html" class='exists'>open_file</a></code>
+<p>follows each mapped argument, matched on the other side of the wrapped     call, by a finally block closing that mapping.  We expect func to return     a 2-tuple: the mapped value and a function to be called in the finally     clause.  This feature was included so the <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file.html" class='exists'>open_file</a></code>
  decorator could     provide a file handle to the decorated function and close the file handle     after the function call. It even keeps track of whether to close the file     handle or not based on whether it had to open the file or the input was     already open. So, the decorated function does not need to include any     code to open or close files.</p>
            <ol>               <li>               <p>The maps applied can process multiple arguments. For example,</p>
 
@@ -209,12 +209,12 @@
 
                <p>The remaining notes describe the code structure and methods for this class in broad terms to aid in understanding how to use it.</p>
 
-               <p>Instantiating an <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
- object simply stores the mapping function and the input identifiers of which arguments to map. The resulting decorator is ready to use this map to decorate any function. Calling that object (<code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.__call__.html" class='exists'>argmap.__call__</a></code>
-, but usually done via <code>:None:None:`@my_decorator`</code>) a lazily compiled thin wrapper of the decorated function is constructed, wrapped with the necessary function dunder attributes like <code>:None:None:`__doc__`</code> and <code>:None:None:`__name__`</code>. That thinly wrapped function is returned as the decorated function. When that decorated function is called, the thin wrapper of code calls <code>:None:None:`argmap._lazy_compile`</code> which compiles the decorated function (using <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile.html" class='exists'>argmap.compile</a></code>
+               <p>Instantiating an <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
+ object simply stores the mapping function and the input identifiers of which arguments to map. The resulting decorator is ready to use this map to decorate any function. Calling that object (<code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.__call__.html" class='exists'>argmap.__call__</a></code>
+, but usually done via <code>:None:None:`@my_decorator`</code>) a lazily compiled thin wrapper of the decorated function is constructed, wrapped with the necessary function dunder attributes like <code>:None:None:`__doc__`</code> and <code>:None:None:`__name__`</code>. That thinly wrapped function is returned as the decorated function. When that decorated function is called, the thin wrapper of code calls <code>:None:None:`argmap._lazy_compile`</code> which compiles the decorated function (using <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile.html" class='exists'>argmap.compile</a></code>
 ) and replaces the code of the thin wrapper with the newly compiled code. This saves the compilation step every import of networkx, at the cost of compiling upon the first call to the decorated function.</p>
 
-               <p>When the decorated function is compiled, the code is recursively assembled using the <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.assemble.html" class='exists'>argmap.assemble</a></code>
+               <p>When the decorated function is compiled, the code is recursively assembled using the <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.assemble.html" class='exists'>argmap.assemble</a></code>
  method. The recursive nature is needed in case of nested decorators. The result of the assembly is a number of useful objects.</p>
 
                            <pre>sig : the function signature of the original decorated function as
@@ -242,11 +242,10 @@ mutable_args : a bool indicating whether the `sig.args` tuple should be
     converted to a list so mutation can occur.
 </pre>
 
-
-               <p>After this recursive assembly process, the <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile.html" class='exists'>argmap.compile</a></code>
+               <p>After this recursive assembly process, the <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile.html" class='exists'>argmap.compile</a></code>
  method constructs code (as strings) to convert the tuple <code>:None:None:`sig.args`</code> to a list if needed. It joins the defining code with appropriate indents and compiles the result.  Finally, this code is evaluated and the original wrapper&#39;s implementation is replaced with the compiled version (see <code>:None:None:`argmap._lazy_compile`</code> for more details).</p>
 
-               <p>Other <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
+               <p>Other <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
  methods include <code>:None:None:`_name`</code> and <code>:None:None:`_count`</code> which allow internally generated names to be unique within a python session. The methods <code>:None:None:`_flatten`</code> and <code>:None:None:`_indent`</code> process the nested lists of strings into properly indented python code ready to be compiled.</p>
 
                <p>More complicated nested tuples of arguments also allowed though usually not used. For the simple 2 argument case, the argmap input (&#34;a&#34;, &#34;b&#34;) implies the mapping function will take 2 arguments and return a 2-tuple of mapped values. A more complicated example with argmap input <code>:None:None:`(&#34;a&#34;, (&#34;b&#34;, &#34;c&#34;))`</code> requires the mapping function take 2 inputs, with the second being a 2-tuple. It then must output the 3 mapped values in the same nested structure <code>:None:None:`(newa, (newb, newc))`</code>. This level of generality is not often needed, but was convenient to implement when handling the multiple arguments.</p>
@@ -266,7 +265,7 @@ mutable_args : a bool indicating whether the `sig.args` tuple should be
 </dd>
 <dt><a id="try_finally">try_finally</a> : bool (default: False)</dt>
 <dd>
-<p>When True, wrap the function call in a try-finally block with code for the finally block created by <code><a link href="#func" class='local'>func</a></code>. This is used when the map function constructs an object (like a file handle) that requires post-processing (like closing).</p>
+<p>When True, wrap the function call in a try-finally block with code for the finally block created by <code><a href="#func" class='local'>func</a></code>. This is used when the map function constructs an object (like a file handle) that requires post-processing (like closing).</p>
 
 </dd>
 </dl>
@@ -281,7 +280,6 @@ def show_me_the_money(name, income):
     print(f&#34;{name} : {income}&#34;)
 </pre>
 
-
             
                 <p>Despite this common idiom for argmap, most of the following examples use the <code>:None:None:`@argmap(...)`</code> idiom to save space.</p>
 
@@ -291,7 +289,6 @@ def foo(xlist, y, zlist):
     return xlist - y + zlist
 </pre>
 
-
             
                             <pre>def foo(xlist, y, zlist):
     x = sum(xlist)
@@ -299,13 +296,11 @@ def foo(xlist, y, zlist):
     return x - y + z
 </pre>
 
-
             
                             <pre>@argmap(sum, &#34;xlist&#34;, 2)
 def foo(xlist, y, zlist):
     return xlist - y + zlist
 </pre>
-
 
             
                             <pre>@argmap(sum, &#34;zlist&#34;, 0)
@@ -313,12 +308,10 @@ def foo(xlist, y, zlist):
     return xlist - y + zlist
 </pre>
 
-
             
                             <pre>def swap(x, y):
     return y, x
 </pre>
-
 
             
                             <pre># the 2-tuple tells argmap that the map `swap` has 2 inputs/outputs.
@@ -327,13 +320,11 @@ def foo(a, b, c):
     return a / b * c
 </pre>
 
-
             
                             <pre>def foo(a, b, c):
     a, b = swap(a, b)
     return a / b * c
 </pre>
-
 
             
                 <p>More generally, the applied arguments can be nested tuples of strings or ints. The syntax <code>:None:None:`@argmap(some_func, (&#34;a&#34;, (&#34;b&#34;, &#34;c&#34;)))`</code> would expect <code>:None:None:`some_func`</code> to accept 2 inputs with the second expected to be a 2-tuple. It should then return 2 outputs with the second a 2-tuple. The returns values would replace input &#34;a&#34; &#34;b&#34; and &#34;c&#34; respectively. Similarly for <code>:None:None:`@argmap(some_func, (0, (&#34;b&#34;, 2)))`</code>.</p>
@@ -343,26 +334,23 @@ def foo(a, b, c):
     return 2 * a
 </pre>
 
-
             
                             <pre>@argmap(double, 3)
 def overflow(a, *args):
     return a, args
 </pre>
 
-
             
                             <pre>print(overflow(1, 2, 3, 4, 5, 6))  # output is 1, (2, 3, 8, 5, 6)
 </pre>
-
 
             
                 <p><strong>Try Finally</strong></p>
 
             
-                <p>Additionally, this <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
- class can be used to create a decorator that initiates a try...finally block. The decorator must be written to return both the transformed argument and a closing function. This feature was included to enable the <code><a link href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file.html" class='exists'>open_file</a></code>
- decorator which might need to close the file or not depending on whether it had to open that file. This feature uses the keyword-only <code><a link href="#try_finally" class='local'>try_finally</a></code> argument to <code>:None:None:`@argmap`</code>.</p>
+                <p>Additionally, this <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.html" class='exists'>argmap</a></code>
+ class can be used to create a decorator that initiates a try...finally block. The decorator must be written to return both the transformed argument and a closing function. This feature was included to enable the <code><a href="/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file.html" class='exists'>open_file</a></code>
+ decorator which might need to close the file or not depending on whether it had to open that file. This feature uses the keyword-only <code><a href="#try_finally" class='local'>try_finally</a></code> argument to <code>:None:None:`@argmap`</code>.</p>
 
             
                             <pre>def open_file(fn):
@@ -370,13 +358,11 @@ def overflow(a, *args):
     return f, lambda: f.close()
 </pre>
 
-
             
                             <pre>@argmap(open_file, &#34;file&#34;, try_finally=True)
 def foo(file):
     print(file.read())
 </pre>
-
 
             
                             <pre>def foo(file):
@@ -387,13 +373,11 @@ def foo(file):
         close_file()
 </pre>
 
-
             
                             <pre>@argmap(open_file, 0, try_finally=True)
 def foo(file):
     print(file.read())
 </pre>
-
 
             
                             <pre>@my_closing_decorator(&#34;file&#34;)
@@ -401,7 +385,6 @@ def fancy_reader(file=None):
     # this code doesn&#39;t need to worry about closing the file
     print(file.read())
 </pre>
-
 
             
          See :
@@ -441,7 +424,7 @@ Commit: <br/>
         .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
     </style>
 <script>
-    window._data_graph = {"nodes": [{"id": 2, "val": 9.414213562373096, "label": "networkx.utils.decorators.argmap.assemble", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.assemble"}, {"id": 3, "val": 9.0, "label": "networkx.utils.decorators.argmap.__call__", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.__call__"}, {"id": 4, "val": 9.732050807568877, "label": "networkx.utils.decorators.argmap.compile", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile"}, {"id": 5, "val": 9.0, "label": "networkx.utils.decorators.open_file", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file"}], "links": [{"source": 2, "target": 4, "id": 2}, {"source": 4, "target": 2, "id": 4}]};
+    window._data_graph = {"nodes": [{"id": 1, "val": 9.732050807568877, "label": "networkx.utils.decorators.argmap.compile", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.compile"}, {"id": 2, "val": 9.0, "label": "networkx.utils.decorators.argmap.__call__", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.__call__"}, {"id": 3, "val": 9.0, "label": "networkx.utils.decorators.open_file", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.open_file"}, {"id": 5, "val": 9.414213562373096, "label": "networkx.utils.decorators.argmap.assemble", "mod": "networkx", "url": "/p/networkx/2.7.2rc1.dev0/api/networkx.utils.decorators.argmap.assemble"}], "links": [{"source": 5, "target": 1, "id": 2}, {"source": 1, "target": 5, "id": 5}]};
 </script>
 <script type="text/javascript" src='/graph_canvas.js'></script>
 <script type="text/javascript" src='/graph_svg.js'></script>

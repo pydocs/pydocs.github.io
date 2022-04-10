@@ -106,8 +106,10 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _basics.subclassing:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _basics.subclassing:&#39;&gt;
+           </pre>
+
 
 <h1>Subclassing ndarray</h1>
 
@@ -133,8 +135,10 @@
 
                <p>The last two are characteristics of ndarrays - in order to support things like array slicing.  The complications of subclassing ndarray are due to the mechanisms numpy has to support these latter two routes of instance creation.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _view-casting:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _view-casting:&#39;&gt;
+           </pre>
+
 
 <h1>View casting</h1>
                <p><em>View casting</em> is the standard ndarray mechanism by which you take an ndarray of any subclass, and return a view of the array as another (specified) subclass:</p>
@@ -148,8 +152,10 @@
 &gt;&gt;&gt; c_arr = arr.view(C)
 &gt;&gt;&gt; type(c_arr)
 &lt;class &#39;__main__.C&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _new-from-template:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _new-from-template:&#39;&gt;
+           </pre>
+
 
 <h1>Creating new from template</h1>
                <p>New instances of an ndarray subclass can also come about by a very similar mechanism to         <code class='verbatim'>view-casting</code>
@@ -191,8 +197,9 @@ False</pre>
 <h1>A brief Python primer on ``__new__`` and ``__init__``</h1>
                <p>        <code class='verbatim'>__new__</code>
  is a standard Python method, and, if present, is called before         <code class='verbatim'>__init__</code>
- when we create a class instance. See the <a link href="https://docs.python.org/reference/datamodel.html#object.__new__" class='external'>python
-__new__ documentation</a> for more detail.</p>
+ when we create a class instance. See the <code>:None:None:`python
+__new__ documentation
+&lt;https://docs.python.org/reference/datamodel.html#object.__new__&gt;`</code> for more detail.</p>
 
                <p>For example, consider the following Python code:</p>
 
@@ -230,12 +237,17 @@ Args in __init__: (&#39;hello&#39;,)</pre>
  rather than just the usual         <code class='verbatim'>__init__</code>
 ?  Because in some cases, as for ndarray, we want to be able to return an object of some other class.  Consider the following:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>class D ( C) : def __new__ ( cls, *args) : print ( &#39; D cls is : &#39; , cls) print ( &#39; D args in __new__ : &#39; , args) return C.__new__ ( C, *args) def __init__ ( self, *args) : # we never get here print ( &#39; In D __init__ &#39; ) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    class D(C):
+        def __new__(cls, *args):
+            print(&#39;D cls is:&#39;, cls)
+            print(&#39;D args in __new__:&#39;, args)
+            return C.__new__(C, *args)
+
+        def __init__(self, *args):
+            # we never get here
+            print(&#39;In D __init__&#39;)</pre>
 
 
                <p>meaning that:</p>
@@ -316,12 +328,24 @@ Args in __new__: (&#39;hello&#39;,)
 
                <p>The following code allows us to look at the call sequences and arguments:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>import numpy as np class C ( np.ndarray) : def __new__ ( cls, *args, **kwargs) : print ( &#39; In __new__ with class %s &#39; % cls) return super ( ).__new__ ( cls, *args, **kwargs) def __init__ ( self, *args, **kwargs) : # in practice you probably will not need or want an __init__ # method for your subclass print ( &#39; In __init__ with class %s &#39; % self.__class__) def __array_finalize__ ( self, obj) : print ( &#39; In array_finalize : &#39; ) print ( &#39; self type is %s &#39; % type ( self)) print ( &#39; obj type is %s &#39; % type ( obj)) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    import numpy as np
+
+    class C(np.ndarray):
+        def __new__(cls, *args, **kwargs):
+            print(&#39;In __new__ with class %s&#39; % cls)
+            return super().__new__(cls, *args, **kwargs)
+
+        def __init__(self, *args, **kwargs):
+            # in practice you probably will not need or want an __init__
+            # method for your subclass
+            print(&#39;In __init__ with class %s&#39; % self.__class__)
+
+        def __array_finalize__(self, obj):
+            print(&#39;In array_finalize:&#39;)
+            print(&#39;   self type is %s&#39; % type(self))
+            print(&#39;   obj type is %s&#39; % type(obj))</pre>
 
 
                <p>Now:</p>
@@ -380,12 +404,51 @@ In array_finalize:
 
 
 <h1>Simple example - adding an extra attribute to ndarray</h1>
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>import numpy as np class InfoArray ( np.ndarray) : def __new__ ( subtype, shape, dtype=float, buffer=None, offset=0, strides=None, order=None, info=None) : # Create the ndarray instance of our type, given the usual # ndarray input arguments. This will call the standard # ndarray constructor, but return an object of our type. # It also triggers a call to InfoArray.__array_finalize__ obj = super ( ).__new__ ( subtype, shape, dtype, buffer, offset, strides, order) # set the new &#39; info &#39; attribute to the value passed obj.info = info # Finally, we must return the newly created object : return obj def __array_finalize__ ( self, obj) : # ``self`` is a new object resulting from # ndarray.__new__ ( InfoArray, ...), therefore it only has # attributes that the ndarray.__new__ constructor gave it - # i.e. those of a standard ndarray. # # We could have got to the ndarray.__new__ call in 3 ways : # From an explicit constructor - e.g. InfoArray ( ) : # obj is None # ( we &#39; re in the middle of the InfoArray.__new__ # constructor, and self.info will be set when we return to # InfoArray.__new__) if obj is None : return # From view casting - e.g arr.view ( InfoArray) : # obj is arr # ( type ( obj) can be InfoArray) # From new - from - template - e.g infoarr [ : 3] # type ( obj) is InfoArray # # Note that it is here, rather than in the __new__ method, # that we set the default value for &#39; info &#39; , because this # method sees all creation of default objects - with the # InfoArray.__new__ constructor, but also with # arr.view ( InfoArray). self.info = getattr ( obj, &#39; info &#39; , None) # We do not need to return anything </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    import numpy as np
+
+    class InfoArray(np.ndarray):
+
+        def __new__(subtype, shape, dtype=float, buffer=None, offset=0,
+                    strides=None, order=None, info=None):
+            # Create the ndarray instance of our type, given the usual
+            # ndarray input arguments.  This will call the standard
+            # ndarray constructor, but return an object of our type.
+            # It also triggers a call to InfoArray.__array_finalize__
+            obj = super().__new__(subtype, shape, dtype,
+                                  buffer, offset, strides, order)
+            # set the new &#39;info&#39; attribute to the value passed
+            obj.info = info
+            # Finally, we must return the newly created object:
+            return obj
+
+        def __array_finalize__(self, obj):
+            # ``self`` is a new object resulting from
+            # ndarray.__new__(InfoArray, ...), therefore it only has
+            # attributes that the ndarray.__new__ constructor gave it -
+            # i.e. those of a standard ndarray.
+            #
+            # We could have got to the ndarray.__new__ call in 3 ways:
+            # From an explicit constructor - e.g. InfoArray():
+            #    obj is None
+            #    (we&#39;re in the middle of the InfoArray.__new__
+            #    constructor, and self.info will be set when we return to
+            #    InfoArray.__new__)
+            if obj is None: return
+            # From view casting - e.g arr.view(InfoArray):
+            #    obj is arr
+            #    (type(obj) can be InfoArray)
+            # From new-from-template - e.g infoarr[:3]
+            #    type(obj) is InfoArray
+            #
+            # Note that it is here, rather than in the __new__ method,
+            # that we set the default value for &#39;info&#39;, because this
+            # method sees all creation of default objects - with the
+            # InfoArray.__new__ constructor, but also with
+            # arr.view(InfoArray).
+            self.info = getattr(obj, &#39;info&#39;, None)
+            # We do not need to return anything</pre>
 
 
                <p>Using the object looks like this:</p>
@@ -411,7 +474,6 @@ True
 True
 </pre>
 
-
                <p>This class isn&#39;t very useful, because it has the same constructor as the bare ndarray object, including passing in buffers and shapes and so on. We would probably prefer the constructor to be able to take an already formed ndarray from the usual numpy calls to         <code class='verbatim'>np.array</code>
  and return an object.</p>
 
@@ -419,12 +481,25 @@ True
 <h1>Slightly more realistic example - attribute added to existing array</h1>
                <p>Here is a class that takes a standard ndarray that already exists, casts as our type, and adds an extra attribute.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>import numpy as np class RealisticInfoArray ( np.ndarray) : def __new__ ( cls, input_array, info=None) : # Input array is an already formed ndarray instance # We first cast to be our class type obj = np.asarray ( input_array).view ( cls) # add the new attribute to the created instance obj.info = info # Finally, we must return the newly created object : return obj def __array_finalize__ ( self, obj) : # see InfoArray.__array_finalize__ for comments if obj is None : return self.info = getattr ( obj, &#39; info &#39; , None) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    import numpy as np
+
+    class RealisticInfoArray(np.ndarray):
+
+        def __new__(cls, input_array, info=None):
+            # Input array is an already formed ndarray instance
+            # We first cast to be our class type
+            obj = np.asarray(input_array).view(cls)
+            # add the new attribute to the created instance
+            obj.info = info
+            # Finally, we must return the newly created object:
+            return obj
+
+        def __array_finalize__(self, obj):
+            # see InfoArray.__array_finalize__ for comments
+            if obj is None: return
+            self.info = getattr(obj, &#39;info&#39;, None)</pre>
 
 
                <p>So:</p>
@@ -442,14 +517,14 @@ True
 &#39;information&#39;
 </pre>
 
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _array-ufunc:&#39;&gt;
+           </pre>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _array-ufunc:&#39;&gt;</pre>
 
 <h1>``__array_ufunc__`` for ufuncs</h1>
                            <pre>.. versionadded:: 1.13
 </pre>
-
 
                <p>A subclass can override what happens when executing numpy ufuncs on it by overriding the default         <code class='verbatim'>ndarray.__array_ufunc__</code>
  method. This method is executed <em>instead</em> of the ufunc and should return either the result of the operation, or         <code class='verbatim'>NotImplemented</code>
@@ -474,12 +549,60 @@ True
  in         <code class='verbatim'>core/tests/test_umath.py</code>
 , is the following.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>input numpy as np class A ( np.ndarray) : def __array_ufunc__ ( self, ufunc, method, *inputs, out=None, **kwargs) : args = [ ] in_no = [ ] for i, input_ in enumerate ( inputs) : if isinstance ( input_, A) : in_no.append ( i) args.append ( input_.view ( np.ndarray)) else : args.append ( input_) outputs = out out_no = [ ] if outputs : out_args = [ ] for j, output in enumerate ( outputs) : if isinstance ( output, A) : out_no.append ( j) out_args.append ( output.view ( np.ndarray)) else : out_args.append ( output) kwargs [ &#39; out &#39; ] = tuple ( out_args) else : outputs = ( None,) * ufunc.nout info = { } if in_no : info [ &#39; inputs &#39; ] = in_no if out_no : info [ &#39; outputs &#39; ] = out_no results = super ( ).__array_ufunc__ ( ufunc, method, *args, **kwargs) if results is NotImplemented : return NotImplemented if method == &#39; at &#39; : if isinstance ( inputs [ 0], A) : inputs [ 0].info = info return if ufunc.nout == 1 : results = ( results,) results = tuple ( ( np.asarray ( result).view ( A) if output is None else output) for result, output in zip ( results, outputs)) if results and isinstance ( results [ 0], A) : results [ 0].info = info return results [ 0] if len ( results) == 1 else results </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    input numpy as np
+
+    class A(np.ndarray):
+        def __array_ufunc__(self, ufunc, method, *inputs, out=None, **kwargs):
+            args = []
+            in_no = []
+            for i, input_ in enumerate(inputs):
+                if isinstance(input_, A):
+                    in_no.append(i)
+                    args.append(input_.view(np.ndarray))
+                else:
+                    args.append(input_)
+
+            outputs = out
+            out_no = []
+            if outputs:
+                out_args = []
+                for j, output in enumerate(outputs):
+                    if isinstance(output, A):
+                        out_no.append(j)
+                        out_args.append(output.view(np.ndarray))
+                    else:
+                        out_args.append(output)
+                kwargs[&#39;out&#39;] = tuple(out_args)
+            else:
+                outputs = (None,) * ufunc.nout
+
+            info = {}
+            if in_no:
+                info[&#39;inputs&#39;] = in_no
+            if out_no:
+                info[&#39;outputs&#39;] = out_no
+
+            results = super().__array_ufunc__(ufunc, method, *args, **kwargs)
+            if results is NotImplemented:
+                return NotImplemented
+
+            if method == &#39;at&#39;:
+                if isinstance(inputs[0], A):
+                    inputs[0].info = info
+                return
+
+            if ufunc.nout == 1:
+                results = (results,)
+
+            results = tuple((np.asarray(result).view(A)
+                             if output is None else output)
+                            for result, output in zip(results, outputs))
+            if results and isinstance(results[0], A):
+                results[0].info = info
+
+            return results[0] if len(results) == 1 else results</pre>
 
 
                <p>So, this class does not actually do anything interesting: it just converts any instances of its own to regular ndarray (otherwise, we&#39;d get infinite recursion!), and adds an         <code class='verbatim'>info</code>
@@ -544,8 +667,10 @@ methods)(*inputs, **kwargs)</code>
  and         <code class='verbatim'>B</code>
  to collaborate.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _array-wrap:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _array-wrap:&#39;&gt;
+           </pre>
+
 
 <h1>``__array_wrap__`` for ufuncs and other functions</h1>
                <p>Prior to numpy 1.13, the behaviour of ufuncs could only be tuned using         <code class='verbatim'>__array_wrap__</code>
@@ -558,12 +683,30 @@ methods)(*inputs, **kwargs)</code>
                <p>Conceptually,         <code class='verbatim'>__array_wrap__</code>
  &#34;wraps up the action&#34; in the sense of allowing a subclass to set the type of the return value and update attributes and metadata.  Let&#39;s show how this works with an example.  First we return to the simpler example subclass, but with a different name and some print statements:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>import numpy as np class MySubClass ( np.ndarray) : def __new__ ( cls, input_array, info=None) : obj = np.asarray ( input_array).view ( cls) obj.info = info return obj def __array_finalize__ ( self, obj) : print ( &#39; In __array_finalize__ : &#39; ) print ( &#39; self is %s &#39; % repr ( self)) print ( &#39; obj is %s &#39; % repr ( obj)) if obj is None : return self.info = getattr ( obj, &#39; info &#39; , None) def __array_wrap__ ( self, out_arr, context=None) : print ( &#39; In __array_wrap__ : &#39; ) print ( &#39; self is %s &#39; % repr ( self)) print ( &#39; arr is %s &#39; % repr ( out_arr)) # then just call the parent return super ( ).__array_wrap__ ( self, out_arr, context) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    import numpy as np
+
+    class MySubClass(np.ndarray):
+
+        def __new__(cls, input_array, info=None):
+            obj = np.asarray(input_array).view(cls)
+            obj.info = info
+            return obj
+
+        def __array_finalize__(self, obj):
+            print(&#39;In __array_finalize__:&#39;)
+            print(&#39;   self is %s&#39; % repr(self))
+            print(&#39;   obj is %s&#39; % repr(obj))
+            if obj is None: return
+            self.info = getattr(obj, &#39;info&#39;, None)
+
+        def __array_wrap__(self, out_arr, context=None):
+            print(&#39;In __array_wrap__:&#39;)
+            print(&#39;   self is %s&#39; % repr(self))
+            print(&#39;   arr is %s&#39; % repr(out_arr))
+            # then just call the parent
+            return super().__array_wrap__(self, out_arr, context)</pre>
 
 
                <p>We run a ufunc on an instance of our new array:</p>
@@ -598,12 +741,12 @@ MySubClass([1, 3, 5, 7, 9])
 
                <p>But, we could do anything we wanted:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>class SillySubClass ( np.ndarray) : def __array_wrap__ ( self, arr, context=None) : return &#39; I lost your data &#39; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    class SillySubClass(np.ndarray):
+
+        def __array_wrap__(self, arr, context=None):
+            return &#39;I lost your data&#39;</pre>
 
 
                <pre>&gt;&gt;&gt; arr1 = np.arange(5)
@@ -671,12 +814,10 @@ True</pre>
  function, the method signature for this object&#39;s         <code class='verbatim'>sum</code>
  method should be the following:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>def sum ( self, axis=None, dtype=None, out=None, keepdims=False) : ... </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    def sum(self, axis=None, dtype=None, out=None, keepdims=False):
+    ...</pre>
 
 
                <p>This is the exact same method signature for         <code class='verbatim'>np.sum</code>
@@ -686,12 +827,10 @@ True</pre>
 
                <p>If, however, you decide to deviate from this signature and do something like this:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>def sum ( self, axis=None, dtype=None) : ... </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    def sum(self, axis=None, dtype=None):
+    ...</pre>
 
 
                <p>This object is no longer compatible with         <code class='verbatim'>np.sum</code>
@@ -703,12 +842,10 @@ True</pre>
                <p>If you wish to maintain compatibility with numpy and its subsequent versions (which might add new keyword arguments) but do not want to surface all of numpy&#39;s arguments, your function&#39;s signature should accept         <code class='verbatim'>**kwargs</code>
 . For example:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. testcode:: []
-    </div>
-    <pre class='not-implemented'><p>def sum ( self, axis=None, dtype=None, **unused_kwargs) : ... </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. testcode:: 
+    def sum(self, axis=None, dtype=None, **unused_kwargs):
+    ...</pre>
 
 
                <p>This object is now compatible with         <code class='verbatim'>np.sum</code>

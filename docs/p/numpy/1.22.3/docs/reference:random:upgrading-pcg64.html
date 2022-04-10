@@ -106,14 +106,13 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _upgrading-pcg64:&#39;&gt;</pre>
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy.random </p>
-</pre>
-</div>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _upgrading-pcg64:&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. currentmodule:: numpy.random
+    </pre>
 
 
 
@@ -130,15 +129,16 @@
 4. explicitly use a `BitGenerator` other than `PCG64`,
 </pre>
 
-
                <p>then this weakness does not affect you at all. Carry on.</p>
 
                <p>If you use moderate numbers of parallel streams created with <code>:None:None:`default_rng`</code> or <code>:None:None:`SeedSequence.spawn`</code>, in the 1000s, then the chance of observing this weakness is negligibly small. You can continue to use <code>:None:None:`PCG64`</code> comfortably.</p>
 
                <p>If you use very large numbers of parallel streams, in the millions, and draw large amounts of numbers from each, then the chance of observing this weakness can become non-negligible, if still small. An example of such a use case would be a very large distributed reinforcement learning problem with millions of long Monte Carlo playouts each generating billions of random number draws. Such use cases should consider using <code>:None:None:`PCG64DXSM`</code> explicitly or another modern <code>:None:None:`BitGenerator`</code> like <code>:None:None:`SFC64`</code> or <code>:None:None:`Philox`</code>, but it is unlikely that any old results you may have calculated are invalid. In any case, the weakness is a kind of <a link href="https://en.wikipedia.org/wiki/Birthday_problem" class='external'>Birthday Paradox</a> collision. That is, a single pair of parallel streams out of the millions, considered together, might fail a stringent set of statistical tests of randomness. The remaining millions of streams would all be perfectly fine, and the effect of the bad pair in the whole calculation is very likely to be swamped by the remaining streams in most applications.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _upgrading-pcg64-details:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _upgrading-pcg64-details:&#39;&gt;
+           </pre>
+
 
 <h1>Technical Details</h1>
                <p>Like many PRNG algorithms, <code>:None:None:`PCG64`</code> is constructed from a transition function, which advances a 128-bit state, and an output function, that mixes the 128-bit state into a 64-bit integer to be output. One of the guiding design principles of the PCG family of PRNGs is to balance the computational cost (and pseudorandomness strength) between the transition function and the output function. The transition function is a 128-bit linear congruential generator (LCG), which consists of multiplying the 128-bit state with a fixed multiplication constant and then adding a user-chosen increment, in 128-bit modular arithmetic. LCGs are well-analyzed PRNGs with known weaknesses, though 128-bit LCGs are large enough to pass stringent statistical tests on their own, with only the trivial output function. The output function of <code>:None:None:`PCG64`</code> is intended to patch up some of those known weaknesses by doing &#34;just enough&#34; scrambling of the bits to assist in the statistical properties without adding too much computational cost.</p>

@@ -107,18 +107,17 @@
 
 
 <h1>How to extend NumPy</h1>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _writing-an-extension:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _writing-an-extension:&#39;&gt;
+           </pre>
+
 
 <h1>Writing an extension module</h1>
                <p>While the ndarray object is designed to allow rapid computation in Python, it is also designed to be general-purpose and satisfy a wide- variety of computational needs. As a result, if absolute speed is essential, there is no replacement for a well-crafted, compiled loop specific to your application and hardware. This is one of the reasons that numpy includes f2py so that an easy-to-use mechanisms for linking (simple) C/C++ and (arbitrary) Fortran code directly into Python are available. You are encouraged to use and improve this mechanism. The purpose of this section is not to document this tool but to document the more basic steps to writing an extension module that this tool depends on.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : extension module </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: extension module</pre>
 
 
                <p>When an extension module is written, compiled, and installed to somewhere in the Python path (sys.path), the code can then be imported into Python as if it were a standard python file. It will contain objects and methods that have been defined and compiled in C code. The basic steps for doing this in Python are well-documented and you can find more information in the documentation for Python itself available online at <a link href="https://www.python.org" class='external'>www.python.org</a> .</p>
@@ -134,38 +133,31 @@
                <p>A minimal         <code class='verbatim'>init{name}</code>
  method looks like:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyMODINIT_FUNC init { name} ( void) { ( void)Py_InitModule ( { name}, mymethods); import_array ( ); } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    PyMODINIT_FUNC
+    init{name}(void)
+    {
+       (void)Py_InitModule({name}, mymethods);
+       import_array();
+    }</pre>
 
 
                <p>The mymethods must be an array (usually statically declared) of PyMethodDef structures which contain method names, actual C-functions, a variable indicating whether the method uses keyword arguments or not, and docstrings. These are explained in the next section. If you want to add constants to the module, then you store the returned value from Py_InitModule which is a module object. The most general way to add items to the module is to get the module dictionary using PyModule_GetDict(module). With the module dictionary, you can add whatever you like to the module manually. An easier way to add objects to the module is to use one of three additional Python C-API calls that do not require a separate extraction of the module dictionary. These are documented in the Python documentation, but repeated here for convenience:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. c:function:: [&#39;int PyModule_AddObject( \\&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyObject* module, char* name, PyObject* value) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. c:function:: int PyModule_AddObject( \
+    PyObject* module, char* name, PyObject* value)</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. c:function:: [&#39;int PyModule_AddIntConstant( \\&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyObject* module, char* name, long value) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. c:function:: int PyModule_AddIntConstant( \
+    PyObject* module, char* name, long value)</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. c:function:: [&#39;int PyModule_AddStringConstant( \\&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyObject* module, char* name, char* value) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. c:function:: int PyModule_AddStringConstant( \
+    PyObject* module, char* name, char* value)</pre>
 
 
                            <pre>All three of these functions require the *module* object (the
@@ -177,16 +169,20 @@ constant, or a string constant.
 </pre>
 
 
-
 <h1>Defining functions</h1>
                <p>The second argument passed in to the Py_InitModule function is a structure that makes it easy to define functions in the module. In the example given above, the mymethods structure would have been defined earlier in the file (usually right before the init{name} subroutine) to:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>static PyMethodDef mymethods [ ] = { { nokeywordfunc,nokeyword_cfunc, METH_VARARGS, Doc string}, { keywordfunc, keyword_cfunc, METH_VARARGS|METH_KEYWORDS, Doc string}, { NULL, NULL, 0, NULL} / * Sentinel * / } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    static PyMethodDef mymethods[] = {
+        { nokeywordfunc,nokeyword_cfunc,
+          METH_VARARGS,
+          Doc string},
+        { keywordfunc, keyword_cfunc,
+          METH_VARARGS|METH_KEYWORDS,
+          Doc string},
+        {NULL, NULL, 0, NULL} /* Sentinel */
+    }</pre>
 
 
                <p>Each entry in the mymethods array is a         <code class='verbatim'>PyMethodDef</code>
@@ -198,12 +194,15 @@ constant, or a string constant.
 <h1>Functions without keyword arguments</h1>
                <p>Functions that don&#39;t accept keyword arguments should be written as:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>static PyObject* nokeyword_cfunc ( PyObject *dummy, PyObject *args) { / * convert Python arguments * / / * do function * / / * return something * / } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    static PyObject*
+    nokeyword_cfunc (PyObject *dummy, PyObject *args)
+    {
+        /* convert Python arguments */
+        /* do function */
+        /* return something */
+    }</pre>
 
 
                <p>The dummy argument is not used in this context and can be safely ignored. The <em>args</em> argument contains all of the arguments passed in to the function as a tuple. You can do anything you want at this point, but usually the easiest way to manage the input arguments is to call         <code class='verbatim'>PyArg_ParseTuple</code>
@@ -215,12 +214,13 @@ constant, or a string constant.
                <p>There are lots of examples of how to use         <code class='verbatim'>PyArg_ParseTuple</code>
  throughout the NumPy source code. The standard usage is like this:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyObject *input; PyArray_Descr *dtype; if ( !PyArg_ParseTuple ( args, &#34; OO&amp; &#34; , &amp;input, PyArray_DescrConverter, &amp;dtype)) return NULL; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    PyObject *input;
+    PyArray_Descr *dtype;
+    if (!PyArg_ParseTuple(args, &#34;OO&amp;&#34;, &amp;input,
+                          PyArray_DescrConverter,
+                          &amp;dtype)) return NULL;</pre>
 
 
                <p>It is important to keep in mind that you get a <em>borrowed</em> reference to the object when using the &#34;O&#34; format string. However, the converter functions usually require some form of memory handling. In this example, if the conversion is successful, <em>dtype</em> will hold a new reference to a         <code class='verbatim'>PyArray_Descr *</code>
@@ -240,12 +240,13 @@ constant, or a string constant.
 <h1>Functions with keyword arguments</h1>
                <p>These functions are very similar to functions without keyword arguments. The only difference is that the function signature is:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>static PyObject* keyword_cfunc ( PyObject *dummy, PyObject *args, PyObject *kwds) { ... } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    static PyObject*
+    keyword_cfunc (PyObject *dummy, PyObject *args, PyObject *kwds)
+    {
+    ...
+    }</pre>
 
 
                <p>The kwds argument holds a Python dictionary whose keys are the names of the keyword arguments and whose values are the corresponding keyword-argument values. This dictionary can be processed however you see fit. The easiest way to handle it, however, is to replace the         <code class='verbatim'>PyArg_ParseTuple</code>
@@ -261,12 +262,9 @@ constant, or a string constant.
 , and most functions that take         <code class='verbatim'>PyArray_Descr</code>
  objects).</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : reference counting </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: reference counting</pre>
 
 
                <p>Typically you get a new reference to a variable when it is created or is the return value of some function (there are some prominent exceptions, however --- such as getting an item out of a tuple or a dictionary). When you own the reference, you are responsible to make sure that         <code class='verbatim'>Py_DECREF</code>
@@ -279,12 +277,9 @@ constant, or a string constant.
  function. Pay careful attention to the difference between the &#39;N&#39; format character and the &#39;O&#39; format character. If you create a new object in your subroutine (such as an output array), and you are passing it back in a tuple of return values, then you should most- likely use the &#39;N&#39; format character in         <code class='verbatim'>Py_BuildValue</code>
 . The &#39;O&#39; character will increase the reference count by one. This will leave the caller with two reference counts for a brand-new array.  When the variable is deleted and the reference count decremented by one, there will still be that extra reference count, and the array will never be deallocated. You will have a reference-counting induced memory leak. Using the &#39;N&#39; character will avoid this situation as it will return to the caller an object (inside the tuple) with a single reference count.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : reference counting </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: reference counting</pre>
 
 
 
@@ -300,7 +295,6 @@ constant, or a string constant.
    using :c:func:`PyArray_NewFromDescr` or a simpler macro or function
    based on it.
 </pre>
-
 
 </li>
                <li>               <p>Get the shape of the array and a pointer to its actual data.</p>
@@ -353,7 +347,6 @@ constant, or a string constant.
 :c:data:`NPY_LONGDOUBLE`, :c:data:`NPY_CFLOAT`, :c:data:`NPY_CDOUBLE`,
 :c:data:`NPY_CLONGDOUBLE`, :c:data:`NPY_OBJECT`.
 </pre>
-
 <p>Alternatively, the bit-width names can be used as supported on the         platform. For example:</p>
             <pre>:c:data:`NPY_INT8`, :c:data:`NPY_INT16`, :c:data:`NPY_INT32`,
 :c:data:`NPY_INT64`, :c:data:`NPY_UINT8`,
@@ -362,7 +355,6 @@ constant, or a string constant.
 :c:data:`NPY_FLOAT64`, :c:data:`NPY_COMPLEX64`,
 :c:data:`NPY_COMPLEX128`.
 </pre>
-
 <p>The object will be converted to the desired type only if it         can be done without losing precision. Otherwise         <code class='verbatim'>NULL</code>
  will         be returned and an error raised. Use         <code class='verbatim'>NPY_ARRAY_FORCECAST</code>
  in the         requirements flag to override this behavior.</p>
@@ -437,7 +429,9 @@ constant, or a string constant.
 
                            <div class='admonition'>
     <div>note</div>
-        <p>Whether or not an array is byte - swapped is determined by the data - type of the array. Native byte - order arrays are always requested by : c : func : `PyArray_FROM_OTF` and so there is no need for a : c : data : `NPY_ARRAY_NOTSWAPPED` flag in the requirements argument. There is also no way to get a byte - swapped array from this routine. </p>
+        <p>Whether or not an array is byte-swapped is determined by the data-type of the array. Native byte-order arrays are always requested by         <code class='verbatim'>PyArray_FROM_OTF</code>
+ and so there is no need for a         <code class='verbatim'>NPY_ARRAY_NOTSWAPPED</code>
+ flag in the requirements argument. There is also no way to get a byte-swapped array from this routine.</p>
 
 </div>
 
@@ -468,22 +462,63 @@ constant, or a string constant.
 
 
 <h1>Example</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : extension module </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: extension module</pre>
 
 
                <p>The following example shows how you might write a wrapper that accepts two input arguments (that will be converted to an array) and an output argument (that must be an array). The function returns None and updates the output array. Note the updated use of WRITEBACKIFCOPY semantics for NumPy v1.14 and above</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>static PyObject * example_wrapper ( PyObject *dummy, PyObject *args) { PyObject *arg1=NULL, *arg2=NULL, *out=NULL; PyObject *arr1=NULL, *arr2=NULL, *oarr=NULL; if ( !PyArg_ParseTuple ( args, &#34; OOO! &#34; , &amp;arg1, &amp;arg2, &amp;PyArray_Type, &amp;out)) return NULL; arr1 = PyArray_FROM_OTF ( arg1, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY); if ( arr1 == NULL) return NULL; arr2 = PyArray_FROM_OTF ( arg2, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY); if ( arr2 == NULL) goto fail; #if NPY_API_VERSION &gt;= 0x0000000c oarr = PyArray_FROM_OTF ( out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY2); #else oarr = PyArray_FROM_OTF ( out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY); #endif if ( oarr == NULL) goto fail; / * code that makes use of arguments * / / * You will probably need at least nd = PyArray_NDIM ( &lt; ..&gt;) - - number of dimensions dims = PyArray_DIMS ( &lt; ..&gt;) - - npy_intp array of length nd showing length in each dim. dptr = ( double *)PyArray_DATA ( &lt; ..&gt;) - - pointer to data. If an error occurs goto fail. * / Py_DECREF ( arr1); Py_DECREF ( arr2); #if NPY_API_VERSION &gt;= 0x0000000c PyArray_ResolveWritebackIfCopy ( oarr); #endif Py_DECREF ( oarr); Py_INCREF ( Py_None); return Py_None; fail : Py_XDECREF ( arr1); Py_XDECREF ( arr2); #if NPY_API_VERSION &gt;= 0x0000000c PyArray_DiscardWritebackIfCopy ( oarr); #endif Py_XDECREF ( oarr); return NULL; } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    static PyObject *
+    example_wrapper(PyObject *dummy, PyObject *args)
+    {
+        PyObject *arg1=NULL, *arg2=NULL, *out=NULL;
+        PyObject *arr1=NULL, *arr2=NULL, *oarr=NULL;
+
+        if (!PyArg_ParseTuple(args, &#34;OOO!&#34;, &amp;arg1, &amp;arg2,
+            &amp;PyArray_Type, &amp;out)) return NULL;
+
+        arr1 = PyArray_FROM_OTF(arg1, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+        if (arr1 == NULL) return NULL;
+        arr2 = PyArray_FROM_OTF(arg2, NPY_DOUBLE, NPY_ARRAY_IN_ARRAY);
+        if (arr2 == NULL) goto fail;
+    #if NPY_API_VERSION &gt;= 0x0000000c
+        oarr = PyArray_FROM_OTF(out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY2);
+    #else
+        oarr = PyArray_FROM_OTF(out, NPY_DOUBLE, NPY_ARRAY_INOUT_ARRAY);
+    #endif
+        if (oarr == NULL) goto fail;
+
+        /* code that makes use of arguments */
+        /* You will probably need at least
+           nd = PyArray_NDIM(&lt;..&gt;)    -- number of dimensions
+           dims = PyArray_DIMS(&lt;..&gt;)  -- npy_intp array of length nd
+                                         showing length in each dim.
+           dptr = (double *)PyArray_DATA(&lt;..&gt;) -- pointer to data.
+
+           If an error occurs goto fail.
+         */
+
+        Py_DECREF(arr1);
+        Py_DECREF(arr2);
+    #if NPY_API_VERSION &gt;= 0x0000000c
+        PyArray_ResolveWritebackIfCopy(oarr);
+    #endif
+        Py_DECREF(oarr);
+        Py_INCREF(Py_None);
+        return Py_None;
+
+     fail:
+        Py_XDECREF(arr1);
+        Py_XDECREF(arr2);
+    #if NPY_API_VERSION &gt;= 0x0000000c
+        PyArray_DiscardWritebackIfCopy(oarr);
+    #endif
+        Py_XDECREF(oarr);
+        return NULL;
+    }</pre>
 
 
 

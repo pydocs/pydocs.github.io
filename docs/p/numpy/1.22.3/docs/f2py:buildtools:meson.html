@@ -106,8 +106,10 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _f2py-meson:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _f2py-meson:&#39;&gt;
+           </pre>
+
 
 <h1>Using via ``meson``</h1>
                <p>The key advantage gained by leveraging         <code class='verbatim'>meson</code>
@@ -118,7 +120,9 @@
 
                            <div class='admonition'>
     <div>note</div>
-        <p>Meson needs to be at - least ``0.46.0`` in order to resolve the ``python`` include directories. </p>
+        <p>Meson needs to be at-least         <code class='verbatim'>0.46.0</code>
+ in order to resolve the         <code class='verbatim'>python</code>
+ include directories.</p>
 
 </div>
 
@@ -129,12 +133,9 @@
  wrapper before we can use a general purpose build system like         <code class='verbatim'>meson</code>
 . We will acquire this by:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;bash&#39;]
-    </div>
-    <pre class='not-implemented'><p>python - n numpy.f2py fib1.f - m fib2 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: bash
+    python -n numpy.f2py fib1.f -m fib2</pre>
 
 
                <p>Now, consider the following         <code class='verbatim'>meson.build</code>
@@ -143,32 +144,34 @@
  examples from         <code class='verbatim'>f2py-getting-started</code>
  section:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./../code/meson.build&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./../code/meson.build
+    [&#39;language&#39;, &#39;meson&#39;]
+    </pre>
 
 
                <p>At this point the build will complete, but the import will fail:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;bash&#39;]
-    </div>
-    <pre class='not-implemented'><p>meson setup builddir meson compile - C builddir cd builddir python - c &#39; import fib2 &#39; Traceback ( most recent call last) : File &#34; &lt; string&gt; &#34; , line 1, in &lt; module&gt; ImportError : fib2.cpython - 39 - x86_64 - linux - gnu.so : undefined symbol : FIB_ # Check this isn &#39; t a false positive nm - A fib2.cpython - 39 - x86_64 - linux - gnu.so | grep FIB_ fib2.cpython - 39 - x86_64 - linux - gnu.so : U FIB_ </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: bash
+    meson setup builddir
+    meson compile -C builddir
+    cd builddir
+    python -c &#39;import fib2&#39;
+    Traceback (most recent call last):
+    File &#34;&lt;string&gt;&#34;, line 1, in &lt;module&gt;
+    ImportError: fib2.cpython-39-x86_64-linux-gnu.so: undefined symbol: FIB_
+    # Check this isn&#39;t a false positive
+    nm -A fib2.cpython-39-x86_64-linux-gnu.so | grep FIB_
+    fib2.cpython-39-x86_64-linux-gnu.so: U FIB_</pre>
 
 
                <p>Recall that the original example, as reproduced below, was in SCREAMCASE:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./../code/fib1.f&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./../code/fib1.f
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
 
 
                <p>With the standard approach, the subroutine exposed to         <code class='verbatim'>python</code>
@@ -176,23 +179,26 @@
  and not         <code class='verbatim'>FIB</code>
 . This means we have a few options. One approach (where possible) is to lowercase the original Fortran file with say:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;bash&#39;]
-    </div>
-    <pre class='not-implemented'><p>tr &#34; [ : upper : ] &#34; &#34; [ : lower : ] &#34; &lt; fib1.f &gt; fib1.f python - n numpy.f2py fib1.f - m fib2 meson - - wipe builddir meson compile - C builddir cd builddir python - c &#39; import fib2 &#39; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: bash
+    tr &#34;[:upper:]&#34; &#34;[:lower:]&#34; &lt; fib1.f &gt; fib1.f
+    python -n numpy.f2py fib1.f -m fib2
+    meson --wipe builddir
+    meson compile -C builddir
+    cd builddir
+    python -c &#39;import fib2&#39;</pre>
 
 
                <p>However this requires the ability to modify the source which is not always possible. The easiest way to solve this is to let         <code class='verbatim'>f2py</code>
  deal with it:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;bash&#39;]
-    </div>
-    <pre class='not-implemented'><p>python - n numpy.f2py fib1.f - m fib2 - - lower meson - - wipe builddir meson compile - C builddir cd builddir python - c &#39; import fib2 &#39; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: bash
+    python -n numpy.f2py fib1.f -m fib2 --lower
+    meson --wipe builddir
+    meson compile -C builddir
+    cd builddir
+    python -c &#39;import fib2&#39;</pre>
 
 
 
@@ -202,22 +208,22 @@
 
                <p>However, we can augment our workflow in a straightforward to take into account files for which the outputs are known when the build system is set up.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./../code/meson_upd.build&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./../code/meson_upd.build
+    [&#39;language&#39;, &#39;meson&#39;]
+    </pre>
 
 
                <p>This can be compiled and run as before.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;bash&#39;]
-    </div>
-    <pre class='not-implemented'><p>rm - rf builddir meson setup builddir meson compile - C builddir cd builddir python - c &#34; import numpy as np; import fibby; a = np.zeros ( 9); fibby.fib ( a); print ( a) &#34; # [ 0. 1. 1. 2. 3. 5. 8. 13. 21.] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: bash
+    rm -rf builddir
+    meson setup builddir
+    meson compile -C builddir
+    cd builddir
+    python -c &#34;import numpy as np; import fibby; a = np.zeros(9); fibby.fib(a); print (a)&#34;
+    # [ 0.  1.  1.  2.  3.  5.  8. 13. 21.]</pre>
 
 
 

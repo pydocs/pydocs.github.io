@@ -121,19 +121,18 @@ HermiteE        HermiteE series
 ============    ================
 </pre>
 
-
                <p>The series in this context are finite sums of the corresponding polynomial basis functions multiplied by coefficients. For instance, a power series looks like</p>
 
-                       <span class="tex2jax_process">$$p ( x) = 1 + 2x + 3x^2 $$</span>
+                       <span class="tex2jax_process">$$p(x) = 1 + 2x + 3x^2$$</span>
 
                <p>and has coefficients         <span class="tex2jax_process">$[1, 2, 3]$</span>
 . The Chebyshev series with the same coefficients looks like</p>
 
-                       <span class="tex2jax_process">$$p ( x) = 1 T_0 ( x) + 2 T_1 ( x) + 3 T_2 ( x) $$</span>
+                       <span class="tex2jax_process">$$p(x) = 1 T_0(x) + 2 T_1(x) + 3 T_2(x)$$</span>
 
                <p>and more generally</p>
 
-                       <span class="tex2jax_process">$$p ( x) = \sum_ { i=0}^n c_i T_i ( x) $$</span>
+                       <span class="tex2jax_process">$$p(x) = \sum_{i=0}^n c_i T_i(x)$$</span>
 
                <p>where in this case the         <span class="tex2jax_process">$T_n$</span>
  are the Chebyshev functions of degree         <span class="tex2jax_process">$n$</span>
@@ -162,7 +161,7 @@ array([-1,  1])</pre>
 
                <pre>&gt;&gt;&gt; print(p)
 1.0 + 2.0·x¹ + 3.0·x²</pre>
-               <p>Note that the string representation of polynomials uses Unicode characters by default (except on Windows) to express powers and subscripts. An ASCII-based representation is also available (default on Windows). The polynomial string format can be toggled at the package-level with the  <code><a link href="/p/numpy/*/api/numpy.polynomial.set_default_printstyle.html" class='exists'>set_default_printstyle</a></code>
+               <p>Note that the string representation of polynomials uses Unicode characters by default (except on Windows) to express powers and subscripts. An ASCII-based representation is also available (default on Windows). The polynomial string format can be toggled at the package-level with the  <code><a href="/p/numpy/*/api/numpy.polynomial.set_default_printstyle.html" class='exists'>set_default_printstyle</a></code>
  function::     </p>
 
                <pre>&gt;&gt;&gt; np.polynomial.set_default_printstyle(&#39;ascii&#39;)
@@ -316,32 +315,51 @@ Chebyshev([-9.  , 11.75, -3. ,  0.25], domain=[-1.,  1.], window=[-1.,  1.])</pr
 <h1>Fitting</h1>
                <p>Fitting is the reason that the <code>:None:None:`domain`</code> and <code>:None:None:`window`</code> attributes are part of the convenience classes. To illustrate the problem, the values of the Chebyshev polynomials up to degree 5 are plotted below.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. plot:: []
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; import matplotlib.pyplot as plt &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T &gt;&gt;&gt; x = np.linspace ( - 1, 1, 100) &gt;&gt;&gt; for i in range ( 6) : ... ax = plt.plot ( x, T.basis ( i) ( x), lw=2, label=f &#34; $T_ { i}$ &#34; ) ... &gt;&gt;&gt; plt.legend ( loc= &#34; upper left &#34; ) &gt;&gt;&gt; plt.show ( ) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. plot:: 
+    &gt;&gt;&gt; import matplotlib.pyplot as plt
+    &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T
+    &gt;&gt;&gt; x = np.linspace(-1, 1, 100)
+    &gt;&gt;&gt; for i in range(6):
+    ...     ax = plt.plot(x, T.basis(i)(x), lw=2, label=f&#34;$T_{i}$&#34;)
+    ...
+    &gt;&gt;&gt; plt.legend(loc=&#34;upper left&#34;)
+    &gt;&gt;&gt; plt.show()</pre>
 
 
                <p>In the range -1 &lt;= <code>:None:None:`x`</code> &lt;= 1 they are nice, equiripple functions lying between +/- 1. The same plots over the range -2 &lt;= <code>:None:None:`x`</code> &lt;= 2 look very different:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. plot:: []
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; import matplotlib.pyplot as plt &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T &gt;&gt;&gt; x = np.linspace ( - 2, 2, 100) &gt;&gt;&gt; for i in range ( 6) : ... ax = plt.plot ( x, T.basis ( i) ( x), lw=2, label=f &#34; $T_ { i}$ &#34; ) ... &gt;&gt;&gt; plt.legend ( loc= &#34; lower right &#34; ) &gt;&gt;&gt; plt.show ( ) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. plot:: 
+    &gt;&gt;&gt; import matplotlib.pyplot as plt
+    &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T
+    &gt;&gt;&gt; x = np.linspace(-2, 2, 100)
+    &gt;&gt;&gt; for i in range(6):
+    ...     ax = plt.plot(x, T.basis(i)(x), lw=2, label=f&#34;$T_{i}$&#34;)
+    ...
+    &gt;&gt;&gt; plt.legend(loc=&#34;lower right&#34;)
+    &gt;&gt;&gt; plt.show()</pre>
 
 
                <p>As can be seen, the &#34;good&#34; parts have shrunk to insignificance. In using Chebyshev polynomials for fitting we want to use the region where <code>:None:None:`x`</code> is between -1 and 1 and that is what the <code>:None:None:`window`</code> specifies. However, it is unlikely that the data to be fit has all its data points in that interval, so we use <code>:None:None:`domain`</code> to specify the interval where the data points lie. When the fit is done, the domain is first mapped to the window by a linear transformation and the usual least squares fit is done using the mapped data points. The window and domain of the fit are part of the returned series and are automatically used when computing values, derivatives, and such. If they aren&#39;t specified in the call the fitting routine will use the default window and the smallest domain that holds all the data points. This is illustrated below for a fit to a noisy sine curve.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. plot:: []
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; import numpy as np &gt;&gt;&gt; import matplotlib.pyplot as plt &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T &gt;&gt;&gt; np.random.seed ( 11) &gt;&gt;&gt; x = np.linspace ( 0, 2*np.pi, 20) &gt;&gt;&gt; y = np.sin ( x) + np.random.normal ( scale=.1, size=x.shape) &gt;&gt;&gt; p = T.fit ( x, y, 5) &gt;&gt;&gt; plt.plot ( x, y, &#39; o &#39; ) &gt;&gt;&gt; xx, yy = p.linspace ( ) &gt;&gt;&gt; plt.plot ( xx, yy, lw=2) &gt;&gt;&gt; p.domain array ( [ 0. , 6.28318531]) &gt;&gt;&gt; p.window array ( [ - 1., 1.]) &gt;&gt;&gt; plt.show ( ) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. plot:: 
+    &gt;&gt;&gt; import numpy as np
+    &gt;&gt;&gt; import matplotlib.pyplot as plt
+    &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T
+    &gt;&gt;&gt; np.random.seed(11)
+    &gt;&gt;&gt; x = np.linspace(0, 2*np.pi, 20)
+    &gt;&gt;&gt; y = np.sin(x) + np.random.normal(scale=.1, size=x.shape)
+    &gt;&gt;&gt; p = T.fit(x, y, 5)
+    &gt;&gt;&gt; plt.plot(x, y, &#39;o&#39;)
+    &gt;&gt;&gt; xx, yy = p.linspace()
+    &gt;&gt;&gt; plt.plot(xx, yy, lw=2)
+    &gt;&gt;&gt; p.domain
+    array([0.        ,  6.28318531])
+    &gt;&gt;&gt; p.window
+    array([-1.,  1.])
+    &gt;&gt;&gt; plt.show()</pre>
 
 
 

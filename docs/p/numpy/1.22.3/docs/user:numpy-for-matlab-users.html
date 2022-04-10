@@ -106,30 +106,68 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _numpy-for-matlab-users:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _numpy-for-matlab-users:&#39;&gt;
+           </pre>
+
 
 <h1>NumPy for MATLAB users</h1>
 
 <h1>Introduction</h1>
                <p>MATLAB® and NumPy have a lot in common, but NumPy was created to work with Python, not to be a MATLAB clone.  This guide will help MATLAB users get started with NumPy.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. raw:: [&#39;html&#39;]
-    </div>
-    <pre class='not-implemented'><p>&lt; style&gt; table.docutils td { border : solid 1px #ccc; } &lt; / style&gt; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. raw:: html
+    &lt;style&gt;
+    table.docutils td { border: solid 1px #ccc; }
+    &lt;/style&gt;</pre>
 
 
 
 <h1>Some key differences</h1>
-               <div class='block_directive'>
-    <div class='head'>.. list-table:: [&#39;:class: docutils&#39;]
-    </div>
-    <pre class='not-implemented'><p>* - In MATLAB, the basic type, even for scalars, is a multidimensional array. Array assignments in MATLAB are stored as 2D arrays of double precision floating point numbers, unless you specify the number of dimensions and type. Operations on the 2D instances of these arrays are modeled on matrix operations in linear algebra. - In NumPy, the basic type is a multidimensional ``array``. Array assignments in NumPy are usually stored as : ref : `n - dimensional arrays &lt; arrays&gt;` with the minimum type required to hold the objects in sequence, unless you specify the number of dimensions and type. NumPy performs operations element - by - element, so multiplying 2D arrays with ``*`` is not a matrix multiplication - - it &#39; s an element - by - element multiplication. ( The ``@`` operator, available since Python 3.5, can be used for conventional matrix multiplication.) * - MATLAB numbers indices from 1; ``a ( 1)`` is the first element. : ref : `See note INDEXING &lt; numpy - for - matlab - users.notes&gt;` - NumPy, like Python, numbers indices from 0; ``a [ 0]`` is the first element. * - MATLAB &#39; s scripting language was created for linear algebra so the syntax for some array manipulations is more compact than NumPy &#39; s. On the other hand, the API for adding GUIs and creating full - fledged applications is more or less an afterthought. - NumPy is based on Python, a general - purpose language. The advantage to NumPy is access to Python libraries including : `SciPy &lt; https : / / www.scipy.org / &gt;`_, `Matplotlib &lt; https : / / matplotlib.org / &gt;`_, `Pandas &lt; https : / / pandas.pydata.org / &gt;`_, `OpenCV &lt; https : / / opencv.org / &gt;`_, and more. In addition, Python is often `embedded as a scripting language &lt; https : / / en.wikipedia.org / wiki / List_of_Python_software#Embedded_as_a_scripting_language&gt;`_ in other software, allowing NumPy to be used there too. * - MATLAB array slicing uses pass - by - value semantics, with a lazy copy - on - write scheme to prevent creating copies until they are needed. Slicing operations copy parts of the array. - NumPy array slicing uses pass - by - reference, that does not copy the arguments. Slicing operations are views into an array. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. list-table:: 
+    [&#39;class&#39;, &#39;docutils&#39;]
+    * - In MATLAB, the basic type, even for scalars, is a
+        multidimensional array. Array assignments in MATLAB are stored as
+        2D arrays of double precision floating point numbers, unless you
+        specify the number of dimensions and type.  Operations on the 2D
+        instances of these arrays are modeled on matrix operations in
+        linear algebra. 
+
+      - In NumPy, the basic type is a multidimensional ``array``.  Array
+        assignments in NumPy are usually stored as :ref:`n-dimensional arrays&lt;arrays&gt;` with the
+        minimum type required to hold the objects in sequence, unless you
+        specify the number of dimensions and type. NumPy performs
+        operations element-by-element, so multiplying 2D arrays with
+        ``*`` is not a matrix multiplication -- it&#39;s an
+        element-by-element multiplication. (The ``@`` operator, available
+        since Python 3.5, can be used for conventional matrix
+        multiplication.)
+
+    * - MATLAB numbers indices from 1; ``a(1)`` is the first element.
+        :ref:`See note INDEXING &lt;numpy-for-matlab-users.notes&gt;`
+      - NumPy, like Python, numbers indices from 0; ``a[0]`` is the first
+        element.
+
+    * - MATLAB&#39;s scripting language was created for linear algebra so the
+        syntax for some array manipulations is more compact than
+        NumPy&#39;s. On the other hand, the API for adding GUIs and creating 
+        full-fledged applications is more or less an afterthought.
+      - NumPy is  based on Python, a
+        general-purpose language.  The advantage to NumPy
+        is access to Python libraries including: `SciPy
+        &lt;https://www.scipy.org/&gt;`_, `Matplotlib &lt;https://matplotlib.org/&gt;`_,
+        `Pandas &lt;https://pandas.pydata.org/&gt;`_, `OpenCV &lt;https://opencv.org/&gt;`_,
+        and more. In addition, Python is often `embedded as a scripting language
+        &lt;https://en.wikipedia.org/wiki/List_of_Python_software#Embedded_as_a_scripting_language&gt;`_
+        in other software, allowing NumPy to be used there too. 
+
+    * - MATLAB array slicing uses pass-by-value semantics, with a lazy
+        copy-on-write scheme to prevent creating copies until they are
+        needed. Slicing operations copy parts of the array.
+      - NumPy array slicing uses pass-by-reference, that does not copy
+        the arguments. Slicing operations are views into an array.</pre>
 
 
 
@@ -146,26 +184,491 @@ from scipy.sparse.linalg import eigs</pre>
 
 
 <h1>General purpose equivalents</h1>
-               <div class='block_directive'>
-    <div class='head'>.. list-table:: [&#39;:header-rows: 1&#39;]
-    </div>
-    <pre class='not-implemented'><p>* - MATLAB - NumPy - Notes * - ``help func`` - ``info ( func)`` or ``help ( func)`` or ``func?`` ( in IPython) - get help on the function *func* * - ``which func`` - : ref : `see note HELP &lt; numpy - for - matlab - users.notes&gt;` - find out where *func* is defined * - ``type func`` - ``np.source ( func)`` or ``func??`` ( in IPython) - print source for *func* ( if not a native function) * - ``% comment`` - ``# comment`` - comment a line of code with the text ``comment`` * - : : for i=1 : 3 fprintf ( &#39; %i\n &#39; ,i) end - : : for i in range ( 1, 4) : print ( i) - use a for - loop to print the numbers 1, 2, and 3 using : py : class : `range &lt; range&gt;` * - ``a &amp;&amp; b`` - ``a and b`` - short - circuiting logical AND operator ( : ref : `Python native operator &lt; python : boolean&gt;`); scalar arguments only * - ``a || b`` - ``a or b`` - short - circuiting logical OR operator ( : ref : `Python native operator &lt; python : boolean&gt;`); scalar arguments only * - .. code : : matlab &gt;&gt; 4 == 4 ans = 1 &gt;&gt; 4 == 5 ans = 0 - : : &gt;&gt;&gt; 4 == 4 True &gt;&gt;&gt; 4 == 5 False - The : ref : `boolean objects &lt; python : bltin - boolean - values&gt;` in Python are ``True`` and ``False``, as opposed to MATLAB logical types of ``1`` and ``0``. * - .. code : : matlab a=4 if a==4 fprintf ( &#39; a = 4\n &#39; ) elseif a==5 fprintf ( &#39; a = 5\n &#39; ) end - : : a = 4 if a == 4 : print ( &#39; a = 4 &#39; ) elif a == 5 : print ( &#39; a = 5 &#39; ) - create an if - else statement to check if ``a`` is 4 or 5 and print result * - ``1*i``, ``1*j``, ``1i``, ``1j`` - ``1j`` - complex numbers * - ``eps`` - ``np.finfo ( float).eps`` or ``np.spacing ( 1)`` - Upper bound to relative error due to rounding in 64 - bit floating point arithmetic. * - ``load data.mat`` - ``io.loadmat ( &#39; data.mat &#39; )`` - Load MATLAB variables saved to the file ``data.mat``. ( Note : When saving arrays to ``data.mat`` in MATLAB / Octave, use a recent binary format. : func : `scipy.io.loadmat` will create a dictionary with the saved arrays and further information.) * - ``ode45`` - ``integrate.solve_ivp ( f)`` - integrate an ODE with Runge - Kutta 4,5 * - ``ode15s`` - ``integrate.solve_ivp ( f, method= &#39; BDF &#39; )`` - integrate an ODE with BDF method </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. list-table:: 
+    [&#39;header-rows&#39;, &#39;1&#39;]
+    * - MATLAB
+      - NumPy
+      - Notes
+
+    * - ``help func``
+      - ``info(func)`` or ``help(func)`` or ``func?`` (in IPython)
+      - get help on the function *func*
+
+    * - ``which func``
+      - :ref:`see note HELP &lt;numpy-for-matlab-users.notes&gt;`
+      - find out where *func* is defined
+
+    * - ``type func``
+      - ``np.source(func)`` or ``func??`` (in IPython)
+      - print source for *func* (if not a native function)
+
+    * - ``% comment``
+      - ``# comment``
+      - comment a line of code with the text ``comment``
+
+    * - ::
+
+          for i=1:3
+              fprintf(&#39;%i\n&#39;,i)
+          end
+
+      - ::
+
+          for i in range(1, 4):
+             print(i)
+
+      - use a for-loop to print the numbers 1, 2, and 3 using :py:class:`range &lt;range&gt;`
+
+    * - ``a &amp;&amp; b``
+      - ``a and b``
+      - short-circuiting logical AND operator (:ref:`Python native operator &lt;python:boolean&gt;`);
+        scalar arguments only
+
+    * - ``a || b``
+      - ``a or b``
+      - short-circuiting logical OR operator (:ref:`Python native operator &lt;python:boolean&gt;`);
+        scalar arguments only
+
+    * - .. code:: matlab
+
+         &gt;&gt; 4 == 4
+         ans = 1
+         &gt;&gt; 4 == 5
+         ans = 0
+
+      - ::
+
+         &gt;&gt;&gt; 4 == 4
+         True
+         &gt;&gt;&gt; 4 == 5
+         False
+
+      - The :ref:`boolean objects &lt;python:bltin-boolean-values&gt;`
+        in Python are ``True`` and ``False``, as opposed to MATLAB
+        logical types of ``1`` and ``0``. 
+
+    * - .. code:: matlab
+
+          a=4
+          if a==4
+              fprintf(&#39;a = 4\n&#39;)
+          elseif a==5
+              fprintf(&#39;a = 5\n&#39;)
+          end
+
+      - ::
+
+          a = 4
+          if a == 4:
+              print(&#39;a = 4&#39;)
+          elif a == 5: 
+              print(&#39;a = 5&#39;)
+
+      - create an if-else statement to check if ``a`` is 4 or 5 and print result
+
+    * - ``1*i``, ``1*j``,  ``1i``, ``1j``
+      - ``1j``
+      - complex numbers
+
+    * - ``eps``
+      - ``np.finfo(float).eps`` or ``np.spacing(1)``
+      - Upper bound to relative error due to rounding in 64-bit floating point
+        arithmetic.
+
+    * - ``load data.mat``
+      - ``io.loadmat(&#39;data.mat&#39;)``
+      - Load MATLAB variables saved to the file ``data.mat``. (Note: When saving arrays to
+        ``data.mat`` in MATLAB/Octave, use a recent binary format. :func:`scipy.io.loadmat`
+        will create a dictionary with the saved arrays and further information.)
+
+    * - ``ode45``
+      - ``integrate.solve_ivp(f)``
+      - integrate an ODE with Runge-Kutta 4,5
+
+    * - ``ode15s``
+      - ``integrate.solve_ivp(f, method=&#39;BDF&#39;)``
+      - integrate an ODE with BDF method</pre>
 
 
 
 <h1>Linear algebra equivalents</h1>
-               <div class='block_directive'>
-    <div class='head'>.. list-table:: [&#39;:header-rows: 1&#39;]
-    </div>
-    <pre class='not-implemented'><p>* - MATLAB - NumPy - Notes * - ``ndims ( a)`` - ``np.ndim ( a)`` or ``a.ndim`` - number of dimensions of array ``a`` * - ``numel ( a)`` - ``np.size ( a)`` or ``a.size`` - number of elements of array ``a`` * - ``size ( a)`` - ``np.shape ( a)`` or ``a.shape`` - &#34; size &#34; of array ``a`` * - ``size ( a,n)`` - ``a.shape [ n - 1]`` - get the number of elements of the n - th dimension of array ``a``. ( Note that MATLAB uses 1 based indexing while Python uses 0 based indexing, See note : ref : `INDEXING &lt; numpy - for - matlab - users.notes&gt;`) * - `` [ 1 2 3; 4 5 6 ]`` - ``np.array ( [ [ 1. ,2. ,3.], [ 4. ,5. ,6.]])`` - define a 2x3 2D array * - `` [ a b; c d ]`` - ``np.block ( [ [ a, b], [ c, d]])`` - construct a matrix from blocks ``a``, ``b``, ``c``, and ``d`` * - ``a ( end)`` - ``a [ - 1]`` - access last element in MATLAB vector ( 1xn or nx1) or 1D NumPy array ``a`` ( length n) * - ``a ( 2,5)`` - ``a [ 1, 4]`` - access element in second row, fifth column in 2D array ``a`` * - ``a ( 2, : )`` - ``a [ 1]`` or ``a [ 1, : ]`` - entire second row of 2D array ``a`` * - ``a ( 1 : 5, : )`` - ``a [ 0 : 5]`` or ``a [ : 5]`` or ``a [ 0 : 5, : ]`` - first 5 rows of 2D array ``a`` * - ``a ( end - 4 : end, : )`` - ``a [ - 5 : ]`` - last 5 rows of 2D array ``a`` * - ``a ( 1 : 3,5 : 9)`` - ``a [ 0 : 3, 4 : 9]`` - The first through third rows and fifth through ninth columns of a 2D array, ``a``. * - ``a ( [ 2,4,5], [ 1,3])`` - ``a [ np.ix_ ( [ 1, 3, 4], [ 0, 2])]`` - rows 2,4 and 5 and columns 1 and 3. This allows the matrix to be modified, and doesn &#39; t require a regular slice. * - ``a ( 3 : 2 : 21, : )`` - ``a [ 2 : 21 : 2, : ]`` - every other row of ``a``, starting with the third and going to the twenty - first * - ``a ( 1 : 2 : end, : )`` - ``a [ : : 2, : ]`` - every other row of ``a``, starting with the first * - ``a ( end : - 1 : 1, : )`` or ``flipud ( a)`` - ``a [ : : - 1, : ]`` - ``a`` with rows in reverse order * - ``a ( [ 1 : end 1], : )`` - ``a [ np.r_ [ : len ( a),0]]`` - ``a`` with copy of the first row appended to the end * - ``a. &#39; `` - ``a.transpose ( )`` or ``a.T`` - transpose of ``a`` * - ``a &#39; `` - ``a.conj ( ).transpose ( )`` or ``a.conj ( ).T`` - conjugate transpose of ``a`` * - ``a * b`` - ``a @ b`` - matrix multiply * - ``a .* b`` - ``a * b`` - element - wise multiply * - ``a. / b`` - ``a / b`` - element - wise divide * - ``a.^3`` - ``a**3`` - element - wise exponentiation * - `` ( a &gt; 0.5)`` - `` ( a &gt; 0.5)`` - matrix whose i,jth element is ( a_ij &gt; 0.5). The MATLAB result is an array of logical values 0 and 1. The NumPy result is an array of the boolean values ``False`` and ``True``. * - ``find ( a &gt; 0.5)`` - ``np.nonzero ( a &gt; 0.5)`` - find the indices where ( ``a`` &gt; 0.5) * - ``a ( : ,find ( v &gt; 0.5))`` - ``a [ : ,np.nonzero ( v &gt; 0.5) [ 0]]`` - extract the columns of ``a`` where vector v &gt; 0.5 * - ``a ( : ,find ( v&gt;0.5))`` - ``a [ : , v.T &gt; 0.5]`` - extract the columns of ``a`` where column vector v &gt; 0.5 * - ``a ( a &lt; 0.5)=0`` - ``a [ a &lt; 0.5]=0`` - ``a`` with elements less than 0.5 zeroed out * - ``a .* ( a&gt;0.5)`` - ``a * ( a &gt; 0.5)`` - ``a`` with elements less than 0.5 zeroed out * - ``a ( : ) = 3`` - ``a [ : ] = 3`` - set all values to the same scalar value * - ``y=x`` - ``y = x.copy ( )`` - NumPy assigns by reference * - ``y=x ( 2, : )`` - ``y = x [ 1, : ].copy ( )`` - NumPy slices are by reference * - ``y=x ( : )`` - ``y = x.flatten ( )`` - turn array into vector ( note that this forces a copy). To obtain the same data ordering as in MATLAB, use ``x.flatten ( &#39; F &#39; )``. * - ``1 : 10`` - ``np.arange ( 1., 11.)`` or ``np.r_ [ 1. : 11.]`` or ``np.r_ [ 1 : 10 : 10j]`` - create an increasing vector ( see note : ref : `RANGES &lt; numpy - for - matlab - users.notes&gt;`) * - ``0 : 9`` - ``np.arange ( 10.)`` or ``np.r_ [ : 10.]`` or ``np.r_ [ : 9 : 10j]`` - create an increasing vector ( see note : ref : `RANGES &lt; numpy - for - matlab - users.notes&gt;`) * - `` [ 1 : 10] &#39; `` - ``np.arange ( 1.,11.) [ : , np.newaxis]`` - create a column vector * - ``zeros ( 3,4)`` - ``np.zeros ( ( 3, 4))`` - 3x4 two - dimensional array full of 64 - bit floating point zeros * - ``zeros ( 3,4,5)`` - ``np.zeros ( ( 3, 4, 5))`` - 3x4x5 three - dimensional array full of 64 - bit floating point zeros * - ``ones ( 3,4)`` - ``np.ones ( ( 3, 4))`` - 3x4 two - dimensional array full of 64 - bit floating point ones * - ``eye ( 3)`` - ``np.eye ( 3)`` - 3x3 identity matrix * - ``diag ( a)`` - ``np.diag ( a)`` - returns a vector of the diagonal elements of 2D array, ``a`` * - ``diag ( v,0)`` - ``np.diag ( v, 0)`` - returns a square diagonal matrix whose nonzero values are the elements of vector, ``v`` * - .. code : : matlab rng ( 42, &#39; twister &#39; ) rand ( 3,4) - : : from numpy.random import default_rng rng = default_rng ( 42) rng.random ( 3, 4) or older version : ``random.rand ( ( 3, 4))`` - generate a random 3x4 array with default random number generator and seed = 42 * - ``linspace ( 1,3,4)`` - ``np.linspace ( 1,3,4)`` - 4 equally spaced samples between 1 and 3, inclusive * - `` [ x,y]=meshgrid ( 0 : 8,0 : 5)`` - ``np.mgrid [ 0 : 9.,0 : 6.]`` or ``np.meshgrid ( r_ [ 0 : 9.],r_ [ 0 : 6.]`` - two 2D arrays : one of x values, the other of y values * - - ``ogrid [ 0 : 9.,0 : 6.]`` or ``np.ix_ ( np.r_ [ 0 : 9.],np.r_ [ 0 : 6.]`` - the best way to eval functions on a grid * - `` [ x,y]=meshgrid ( [ 1,2,4], [ 2,4,5])`` - ``np.meshgrid ( [ 1,2,4], [ 2,4,5])`` - * - - ``ix_ ( [ 1,2,4], [ 2,4,5])`` - the best way to eval functions on a grid * - ``repmat ( a, m, n)`` - ``np.tile ( a, ( m, n))`` - create m by n copies of ``a`` * - `` [ a b]`` - ``np.concatenate ( ( a,b),1)`` or ``np.hstack ( ( a,b))`` or ``np.column_stack ( ( a,b))`` or ``np.c_ [ a,b]`` - concatenate columns of ``a`` and ``b`` * - `` [ a; b]`` - ``np.concatenate ( ( a,b))`` or ``np.vstack ( ( a,b))`` or ``np.r_ [ a,b]`` - concatenate rows of ``a`` and ``b`` * - ``max ( max ( a))`` - ``a.max ( )`` or ``np.nanmax ( a)`` - maximum element of ``a`` ( with ndims ( a) &lt; =2 for MATLAB, if there are NaN &#39; s, ``nanmax`` will ignore these and return largest value) * - ``max ( a)`` - ``a.max ( 0)`` - maximum element of each column of array ``a`` * - ``max ( a, [ ],2)`` - ``a.max ( 1)`` - maximum element of each row of array ``a`` * - ``max ( a,b)`` - ``np.maximum ( a, b)`` - compares ``a`` and ``b`` element - wise, and returns the maximum value from each pair * - ``norm ( v)`` - ``np.sqrt ( v @ v)`` or ``np.linalg.norm ( v)`` - L2 norm of vector ``v`` * - ``a &amp; b`` - ``logical_and ( a,b)`` - element - by - element AND operator ( NumPy ufunc) : ref : `See note LOGICOPS &lt; numpy - for - matlab - users.notes&gt;` * - ``a | b`` - ``np.logical_or ( a,b)`` - element - by - element OR operator ( NumPy ufunc) : ref : `See note LOGICOPS &lt; numpy - for - matlab - users.notes&gt;` * - ``bitand ( a,b)`` - ``a &amp; b`` - bitwise AND operator ( Python native and NumPy ufunc) * - ``bitor ( a,b)`` - ``a | b`` - bitwise OR operator ( Python native and NumPy ufunc) * - ``inv ( a)`` - ``linalg.inv ( a)`` - inverse of square 2D array ``a`` * - ``pinv ( a)`` - ``linalg.pinv ( a)`` - pseudo - inverse of 2D array ``a`` * - ``rank ( a)`` - ``linalg.matrix_rank ( a)`` - matrix rank of a 2D array ``a`` * - ``a\b`` - ``linalg.solve ( a, b)`` if ``a`` is square; ``linalg.lstsq ( a, b)`` otherwise - solution of a x = b for x * - ``b / a`` - Solve ``a.T x.T = b.T`` instead - solution of x a = b for x * - `` [ U,S,V]=svd ( a)`` - ``U, S, Vh = linalg.svd ( a), V = Vh.T`` - singular value decomposition of ``a`` * - ``c=chol ( a)`` where ``a==c &#39; *c`` - ``c = linalg.cholesky ( a)`` where ``a == c@c.T`` - Cholesky factorization of a 2D array ( ``chol ( a)`` in MATLAB returns an upper triangular 2D array, but : func : `~scipy.linalg.cholesky` returns a lower triangular 2D array) * - `` [ V,D]=eig ( a)`` - ``D,V = linalg.eig ( a)`` - eigenvalues : math : `\lambda` and eigenvectors : math : `\bar { v}` of ``a``, where : math : `\lambda\bar { v}=\mathbf { a}\bar { v}` * - `` [ V,D]=eig ( a,b)`` - ``D,V = linalg.eig ( a, b)`` - eigenvalues : math : `\lambda` and eigenvectors : math : `\bar { v}` of ``a``, ``b`` where : math : `\lambda\mathbf { b}\bar { v}=\mathbf { a}\bar { v}` * - `` [ V,D]=eigs ( a,3)`` - ``D,V = eigs ( a, k = 3)`` - find the ``k=3`` largest eigenvalues and eigenvectors of 2D array, ``a`` * - `` [ Q,R,P]=qr ( a,0)`` - ``Q,R = linalg.qr ( a)`` - QR decomposition * - `` [ L,U,P]=lu ( a)`` where ``a==P &#39; *L*U`` - ``P,L,U = linalg.lu ( a)`` where ``a == P@L@U`` - LU decomposition ( note : P ( MATLAB) == transpose ( P ( NumPy))) * - ``conjgrad`` - ``cg`` - Conjugate gradients solver * - ``fft ( a)`` - ``np.fft ( a)`` - Fourier transform of ``a`` * - ``ifft ( a)`` - ``np.ifft ( a)`` - inverse Fourier transform of ``a`` * - ``sort ( a)`` - ``np.sort ( a)`` or ``a.sort ( axis=0)`` - sort each column of a 2D array, ``a`` * - ``sort ( a, 2)`` - ``np.sort ( a, axis = 1)`` or ``a.sort ( axis = 1)`` - sort the each row of 2D array, ``a`` * - `` [ b,I]=sortrows ( a,1)`` - ``I = np.argsort ( a [ : , 0]); b = a [ I, : ]`` - save the array ``a`` as array ``b`` with rows sorted by the first column * - ``x = Z\y`` - ``x = linalg.lstsq ( Z, y)`` - perform a linear regression of the form : math : `\mathbf { Zx}=\mathbf { y}` * - ``decimate ( x, q)`` - ``signal.resample ( x, np.ceil ( len ( x) / q))`` - downsample with low - pass filtering * - ``unique ( a)`` - ``np.unique ( a)`` - a vector of unique values in array ``a`` * - ``squeeze ( a)`` - ``a.squeeze ( )`` - remove singleton dimensions of array ``a``. Note that MATLAB will always return arrays of 2D or higher while NumPy will return arrays of 0D or higher </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. list-table:: 
+    [&#39;header-rows&#39;, &#39;1&#39;]
+    * - MATLAB
+      - NumPy
+      - Notes
+
+    * - ``ndims(a)``
+      - ``np.ndim(a)`` or ``a.ndim``
+      - number of dimensions of array ``a``
+
+    * - ``numel(a)``
+      - ``np.size(a)`` or ``a.size``
+      - number of elements of array ``a``
+
+    * - ``size(a)``
+      - ``np.shape(a)`` or ``a.shape``
+      - &#34;size&#34; of array ``a``
+
+    * - ``size(a,n)``
+      - ``a.shape[n-1]``
+      - get the number of elements of the n-th dimension of array ``a``. (Note
+        that MATLAB uses 1 based indexing while Python uses 0 based indexing,
+        See note :ref:`INDEXING &lt;numpy-for-matlab-users.notes&gt;`)
+
+    * - ``[ 1 2 3; 4 5 6 ]``
+      - ``np.array([[1. ,2. ,3.], [4. ,5. ,6.]])``
+      - define a 2x3 2D array
+
+    * - ``[ a b; c d ]``
+      - ``np.block([[a, b], [c, d]])``
+      - construct a matrix from blocks ``a``, ``b``, ``c``, and ``d``
+
+    * - ``a(end)``
+      - ``a[-1]``
+      - access last element in MATLAB vector (1xn or nx1) or 1D NumPy array
+        ``a`` (length n)
+
+    * - ``a(2,5)``
+      - ``a[1, 4]``
+      - access element in second row, fifth column in 2D array ``a``
+
+    * - ``a(2,:)``
+      - ``a[1]`` or  ``a[1, :]``
+      - entire second row of 2D array ``a``
+
+    * - ``a(1:5,:)``
+      - ``a[0:5]`` or ``a[:5]`` or ``a[0:5, :]``
+      - first 5 rows of 2D array ``a``
+
+    * - ``a(end-4:end,:)``
+      - ``a[-5:]``
+      - last 5 rows of 2D array ``a``
+
+    * - ``a(1:3,5:9)``
+      - ``a[0:3, 4:9]``
+      - The first through third rows and fifth through ninth columns of a 2D array, ``a``. 
+
+    * - ``a([2,4,5],[1,3])``
+      - ``a[np.ix_([1, 3, 4], [0, 2])]``
+      - rows 2,4 and 5 and columns 1 and 3.  This allows the matrix to be
+        modified, and doesn&#39;t require a regular slice.
+
+    * - ``a(3:2:21,:)``
+      - ``a[2:21:2,:]``
+      - every other row of ``a``, starting with the third and going to the
+        twenty-first
+
+    * - ``a(1:2:end,:)``
+      - ``a[ ::2,:]``
+      - every other row of ``a``, starting with the first
+
+    * - ``a(end:-1:1,:)``  or ``flipud(a)``
+      -  ``a[::-1,:]``
+      - ``a`` with rows in reverse order
+
+    * - ``a([1:end 1],:)``
+      -  ``a[np.r_[:len(a),0]]``
+      - ``a`` with copy of the first row appended to the end
+
+    * - ``a.&#39;``
+      - ``a.transpose()`` or ``a.T``
+      - transpose of ``a``
+
+    * - ``a&#39;``
+      - ``a.conj().transpose()`` or ``a.conj().T``
+      - conjugate transpose of ``a``
+
+    * - ``a * b``
+      - ``a @ b``
+      - matrix multiply
+
+    * - ``a .* b``
+      - ``a * b``
+      - element-wise multiply
+
+    * - ``a./b``
+      - ``a/b``
+      - element-wise divide
+
+    * - ``a.^3``
+      - ``a**3``
+      - element-wise exponentiation
+
+    * - ``(a &gt; 0.5)``
+      - ``(a &gt; 0.5)``
+      - matrix whose i,jth element is (a_ij &gt; 0.5).  The MATLAB result is an
+        array of logical values 0 and 1.  The NumPy result is an array of the boolean
+        values ``False`` and ``True``.
+
+    * - ``find(a &gt; 0.5)``
+      - ``np.nonzero(a &gt; 0.5)``
+      - find the indices where (``a`` &gt; 0.5)
+
+    * - ``a(:,find(v &gt; 0.5))``
+      - ``a[:,np.nonzero(v &gt; 0.5)[0]]``
+      - extract the columns of ``a`` where vector v &gt; 0.5
+
+    * - ``a(:,find(v&gt;0.5))``
+      - ``a[:, v.T &gt; 0.5]``
+      - extract the columns of ``a`` where column vector v &gt; 0.5
+
+    * - ``a(a&lt;0.5)=0``
+      - ``a[a &lt; 0.5]=0``
+      - ``a`` with elements less than 0.5 zeroed out
+
+    * - ``a .* (a&gt;0.5)``
+      - ``a * (a &gt; 0.5)``
+      - ``a`` with elements less than 0.5 zeroed out
+
+    * - ``a(:) = 3``
+      - ``a[:] = 3``
+      - set all values to the same scalar value
+
+    * - ``y=x``
+      - ``y = x.copy()``
+      - NumPy assigns by reference
+
+    * - ``y=x(2,:)``
+      - ``y = x[1, :].copy()``
+      - NumPy slices are by reference
+
+    * - ``y=x(:)``
+      - ``y = x.flatten()``
+      - turn array into vector (note that this forces a copy). To obtain the
+        same data ordering as in MATLAB, use ``x.flatten(&#39;F&#39;)``.
+
+    * - ``1:10``
+      - ``np.arange(1., 11.)`` or ``np.r_[1.:11.]`` or  ``np.r_[1:10:10j]``
+      - create an increasing vector (see note :ref:`RANGES
+        &lt;numpy-for-matlab-users.notes&gt;`)
+
+    * - ``0:9``
+      - ``np.arange(10.)`` or  ``np.r_[:10.]`` or  ``np.r_[:9:10j]``
+      - create an increasing vector (see note :ref:`RANGES
+        &lt;numpy-for-matlab-users.notes&gt;`)
+
+    * - ``[1:10]&#39;``
+      - ``np.arange(1.,11.)[:, np.newaxis]``
+      - create a column vector
+
+    * - ``zeros(3,4)``
+      - ``np.zeros((3, 4))``
+      - 3x4 two-dimensional array full of 64-bit floating point zeros
+
+    * - ``zeros(3,4,5)``
+      - ``np.zeros((3, 4, 5))``
+      - 3x4x5 three-dimensional array full of 64-bit floating point zeros
+
+    * - ``ones(3,4)``
+      - ``np.ones((3, 4))``
+      - 3x4 two-dimensional array full of 64-bit floating point ones
+
+    * - ``eye(3)``
+      - ``np.eye(3)``
+      - 3x3 identity matrix
+
+    * - ``diag(a)``
+      - ``np.diag(a)``
+      - returns a vector of the diagonal elements of 2D array, ``a``
+
+    * - ``diag(v,0)``
+      - ``np.diag(v, 0)``
+      - returns a square diagonal matrix whose nonzero values are the elements of
+        vector, ``v``
+
+    * - .. code:: matlab
+
+          rng(42,&#39;twister&#39;)
+          rand(3,4)
+
+      - ::
+
+          from numpy.random import default_rng
+          rng = default_rng(42)
+          rng.random(3, 4) 
+
+        or older version: ``random.rand((3, 4))``
+
+      - generate a random 3x4 array with default random number generator and
+        seed = 42
+
+    * - ``linspace(1,3,4)``
+      - ``np.linspace(1,3,4)``
+      - 4 equally spaced samples between 1 and 3, inclusive
+
+    * - ``[x,y]=meshgrid(0:8,0:5)``
+      - ``np.mgrid[0:9.,0:6.]`` or ``np.meshgrid(r_[0:9.],r_[0:6.]``
+      - two 2D arrays: one of x values, the other of y values
+
+    * -
+      - ``ogrid[0:9.,0:6.]`` or ``np.ix_(np.r_[0:9.],np.r_[0:6.]``
+      - the best way to eval functions on a grid
+
+    * - ``[x,y]=meshgrid([1,2,4],[2,4,5])``
+      - ``np.meshgrid([1,2,4],[2,4,5])``
+      -
+
+    * -
+      - ``ix_([1,2,4],[2,4,5])``
+      - the best way to eval functions on a grid
+
+    * - ``repmat(a, m, n)``
+      - ``np.tile(a, (m, n))``
+      - create m by n copies of ``a``
+
+    * - ``[a b]``
+      - ``np.concatenate((a,b),1)`` or ``np.hstack((a,b))`` or
+        ``np.column_stack((a,b))`` or ``np.c_[a,b]``
+      - concatenate columns of ``a`` and ``b``
+
+    * - ``[a; b]``
+      - ``np.concatenate((a,b))`` or ``np.vstack((a,b))`` or ``np.r_[a,b]``
+      - concatenate rows of ``a`` and ``b``
+
+    * - ``max(max(a))``
+      - ``a.max()`` or ``np.nanmax(a)``
+      - maximum element of ``a`` (with ndims(a)&lt;=2 for MATLAB, if there are
+        NaN&#39;s, ``nanmax`` will ignore these and return largest value)
+
+    * - ``max(a)``
+      - ``a.max(0)``
+      - maximum element of each column of array ``a``
+
+    * - ``max(a,[],2)``
+      - ``a.max(1)``
+      - maximum element of each row of array ``a``
+
+    * - ``max(a,b)``
+      - ``np.maximum(a, b)``
+      - compares ``a`` and ``b`` element-wise, and returns the maximum value
+        from each pair
+
+    * - ``norm(v)``
+      - ``np.sqrt(v @ v)`` or ``np.linalg.norm(v)``
+      - L2 norm of vector ``v``
+
+    * - ``a &amp; b``
+      - ``logical_and(a,b)``
+      - element-by-element AND operator (NumPy ufunc) :ref:`See note
+        LOGICOPS &lt;numpy-for-matlab-users.notes&gt;`
+
+    * - ``a | b``
+      - ``np.logical_or(a,b)``
+      - element-by-element OR operator (NumPy ufunc) :ref:`See note LOGICOPS
+        &lt;numpy-for-matlab-users.notes&gt;`
+
+    * - ``bitand(a,b)``
+      - ``a &amp; b``
+      - bitwise AND operator (Python native and NumPy ufunc)
+
+    * - ``bitor(a,b)``
+      - ``a | b``
+      - bitwise OR operator (Python native and NumPy ufunc)
+
+    * - ``inv(a)``
+      - ``linalg.inv(a)``
+      - inverse of square 2D array ``a``
+
+    * - ``pinv(a)``
+      - ``linalg.pinv(a)``
+      - pseudo-inverse of 2D array ``a``
+
+    * - ``rank(a)``
+      - ``linalg.matrix_rank(a)``
+      - matrix rank of a 2D array ``a``
+
+    * - ``a\b``
+      - ``linalg.solve(a, b)`` if ``a`` is square; ``linalg.lstsq(a, b)``
+        otherwise
+      - solution of a x = b for x
+
+    * - ``b/a``
+      - Solve ``a.T x.T = b.T`` instead
+      - solution of x a = b for x
+
+    * - ``[U,S,V]=svd(a)``
+      - ``U, S, Vh = linalg.svd(a), V = Vh.T``
+      - singular value decomposition of ``a``
+
+    * - ``c=chol(a)`` where ``a==c&#39;*c``
+      - ``c = linalg.cholesky(a)`` where ``a == c@c.T``
+      - Cholesky factorization of a 2D array (``chol(a)`` in MATLAB returns an
+        upper triangular 2D array, but :func:`~scipy.linalg.cholesky` returns a lower
+        triangular 2D array)
+
+    * - ``[V,D]=eig(a)``
+      - ``D,V = linalg.eig(a)``
+      - eigenvalues :math:`\lambda` and eigenvectors :math:`\bar{v}` of ``a``,
+        where :math:`\lambda\bar{v}=\mathbf{a}\bar{v}`
+
+    * - ``[V,D]=eig(a,b)``
+      - ``D,V = linalg.eig(a, b)``
+      - eigenvalues :math:`\lambda` and eigenvectors :math:`\bar{v}` of
+        ``a``, ``b``
+        where :math:`\lambda\mathbf{b}\bar{v}=\mathbf{a}\bar{v}`
+
+    * - ``[V,D]=eigs(a,3)``
+      - ``D,V = eigs(a, k = 3)``
+      - find the ``k=3`` largest eigenvalues and eigenvectors of 2D array, ``a``
+
+    * - ``[Q,R,P]=qr(a,0)``
+      - ``Q,R = linalg.qr(a)``
+      - QR decomposition
+
+    * - ``[L,U,P]=lu(a)`` where ``a==P&#39;*L*U``
+      - ``P,L,U = linalg.lu(a)`` where ``a == P@L@U``
+      - LU decomposition (note: P(MATLAB) == transpose(P(NumPy)))
+
+    * - ``conjgrad``
+      - ``cg``
+      - Conjugate gradients solver
+
+    * - ``fft(a)``
+      - ``np.fft(a)``
+      - Fourier transform of ``a``
+
+    * - ``ifft(a)``
+      - ``np.ifft(a)``
+      - inverse Fourier transform of ``a``
+
+    * - ``sort(a)``
+      - ``np.sort(a)`` or ``a.sort(axis=0)``
+      - sort each column of a 2D array, ``a``
+
+    * - ``sort(a, 2)``
+      - ``np.sort(a, axis = 1)`` or ``a.sort(axis = 1)``
+      - sort the each row of 2D array, ``a``
+
+    * - ``[b,I]=sortrows(a,1)``
+      - ``I = np.argsort(a[:, 0]); b = a[I,:]``
+      - save the array ``a`` as array ``b`` with rows sorted by the first column
+
+    * - ``x = Z\y``
+      - ``x = linalg.lstsq(Z, y)``
+      - perform a linear regression of the form :math:`\mathbf{Zx}=\mathbf{y}`
+
+    * - ``decimate(x, q)``
+      - ``signal.resample(x, np.ceil(len(x)/q))``
+      - downsample with low-pass filtering
+
+    * - ``unique(a)``
+      - ``np.unique(a)``
+      - a vector of unique values in array ``a``
+
+    * - ``squeeze(a)``
+      - ``a.squeeze()``
+      - remove singleton dimensions of array ``a``. Note that MATLAB will always
+        return arrays of 2D or higher while NumPy will return arrays of 0D or
+        higher</pre>
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _numpy-for-matlab-users.notes:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _numpy-for-matlab-users.notes:&#39;&gt;
+           </pre>
+
 
 <h1>Notes</h1>
                <p>\ <strong>Submatrix</strong>: Assignment to a submatrix can be done with lists of indices using the         <code class='verbatim'>ix_</code>
@@ -519,7 +1022,8 @@ from numpy.matlib import matrix,rand,zeros,ones,empty,eye</pre>
 
                <p>An extensive list of tools for scientific work with Python can be found in the <a link href="https://scipy.org/topical-software.html" class='external'>topical software page</a>.</p>
 
-               <p>See <a link href="https://en.wikipedia.org/wiki/List_of_Python_software#Embedded_as_a_scripting_language" class='external'>List of Python software: scripting</a> for a list of software that use Python as a scripting language</p>
+               <p>See <code>:None:None:`List of Python software: scripting
+&lt;https://en.wikipedia.org/wiki/List_of_Python_software#Embedded_as_a_scripting_language&gt;`</code> for a list of software that use Python as a scripting language</p>
 
                <p>MATLAB® and SimuLink® are registered trademarks of The MathWorks, Inc.</p>
 

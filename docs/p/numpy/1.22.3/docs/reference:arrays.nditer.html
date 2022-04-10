@@ -106,21 +106,22 @@
 
 
 
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy
+    </pre>
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _arrays.nditer:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _arrays.nditer:&#39;&gt;
+           </pre>
+
 
 <h1>Iterating Over Arrays</h1>
                            <div class='admonition'>
     <div>note</div>
-        <p>Arrays support the iterator protocol and can be iterated over like Python lists. See the : ref : `quickstart.indexing - slicing - and - iterating` section in the Quickstart guide for basic usage and examples. The remainder of this document presents the : class : `nditer` object and covers more advanced usage. </p>
+        <p>Arrays support the iterator protocol and can be iterated over like Python lists. See the         <code class='verbatim'>quickstart.indexing-slicing-and-iterating</code>
+ section in the Quickstart guide for basic usage and examples. The remainder of this document presents the         <code class='verbatim'>nditer</code>
+ object and covers more  advanced usage.</p>
 
 </div>
 
@@ -134,22 +135,29 @@
                <p>The most basic task that can be done with the         <code class='verbatim'>nditer</code>
  is to visit every element of an array. Each element is provided one by one using the standard Python iterator interface.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x in np.nditer ( a) : ... print ( x, end= &#39; &#39; ) ... 0 1 2 3 4 5 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x in np.nditer(a):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0 1 2 3 4 5</pre>
 
 
                <p>An important thing to be aware of for this iteration is that the order is chosen to match the memory layout of the array instead of using a standard C or Fortran ordering. This is done for access efficiency, reflecting the idea that by default one simply wants to visit each element without concern for a particular ordering. We can see this by iterating over the transpose of our previous array, compared to taking a copy of that transpose in C order.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x in np.nditer ( a.T) : ... print ( x, end= &#39; &#39; ) ... 0 1 2 3 4 5 &gt;&gt;&gt; for x in np.nditer ( a.T.copy ( order= &#39; C &#39; )) : ... print ( x, end= &#39; &#39; ) ... 0 3 1 4 2 5 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x in np.nditer(a.T):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0 1 2 3 4 5
+
+    &gt;&gt;&gt; for x in np.nditer(a.T.copy(order=&#39;C&#39;)):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0 3 1 4 2 5</pre>
 
 
                <p>The elements of both <code>:None:None:`a`</code> and <code>:None:None:`a.T`</code> get traversed in the same order, namely the order they are stored in memory, whereas the elements of <code>:None:None:`a.T.copy(order=&#39;C&#39;)`</code> get visited in a different order because they have been put into a different memory layout.</p>
@@ -159,16 +167,23 @@
                <p>There are times when it is important to visit the elements of an array in a specific order, irrespective of the layout of the elements in memory. The         <code class='verbatim'>nditer</code>
  object provides an <code>:None:None:`order`</code> parameter to control this aspect of iteration. The default, having the behavior described above, is order=&#39;K&#39; to keep the existing order. This can be overridden with order=&#39;C&#39; for C order and order=&#39;F&#39; for Fortran order.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x in np.nditer ( a, order= &#39; F &#39; ) : ... print ( x, end= &#39; &#39; ) ... 0 3 1 4 2 5 &gt;&gt;&gt; for x in np.nditer ( a.T, order= &#39; C &#39; ) : ... print ( x, end= &#39; &#39; ) ... 0 3 1 4 2 5 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x in np.nditer(a, order=&#39;F&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0 3 1 4 2 5
+    &gt;&gt;&gt; for x in np.nditer(a.T, order=&#39;C&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0 3 1 4 2 5</pre>
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _nditer-context-manager:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _nditer-context-manager:&#39;&gt;
+           </pre>
+
 
 <h1>Modifying Array Values</h1>
                <p>By default, the         <code class='verbatim'>nditer</code>
@@ -182,15 +197,21 @@
   the write-back.
 </pre>
 
-
                <p>The nditer can no longer be iterated once either <code>:None:None:`close`</code> is called or its context is exited.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; a array ( [ [ 0, 1, 2], [ 3, 4, 5]]) &gt;&gt;&gt; with np.nditer ( a, op_flags= [ &#39; readwrite &#39; ]) as it : ... for x in it : ... x [ ...] = 2 * x ... &gt;&gt;&gt; a array ( [ [ 0, 2, 4], [ 6, 8, 10]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; a
+    array([[0, 1, 2],
+           [3, 4, 5]])
+    &gt;&gt;&gt; with np.nditer(a, op_flags=[&#39;readwrite&#39;]) as it:
+    ...    for x in it:
+    ...        x[...] = 2 * x
+    ...
+    &gt;&gt;&gt; a
+    array([[ 0,  2,  4],
+           [ 6,  8, 10]])</pre>
 
 
                <p>If you are writing code that needs to support older versions of numpy, note that prior to 1.15,         <code class='verbatim'>nditer</code>
@@ -205,12 +226,18 @@
 
                <p>Observe that with the default of keeping native memory order, the iterator is able to provide a single one-dimensional chunk, whereas when forcing Fortran order, it has to provide three chunks of two elements each.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; external_loop &#39; ]) : ... print ( x, end= &#39; &#39; ) ... [ 0 1 2 3 4 5] &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; external_loop &#39; ], order= &#39; F &#39; ) : ... print ( x, end= &#39; &#39; ) ... [ 0 3] [ 1 4] [ 2 5] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;external_loop&#39;]):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    [0 1 2 3 4 5]
+
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;external_loop&#39;], order=&#39;F&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    [0 3] [1 4] [2 5]</pre>
 
 
 
@@ -219,23 +246,40 @@
 
                <p>The index is tracked by the iterator object itself, and accessible through the <code>:None:None:`index`</code> or <code>:None:None:`multi_index`</code> properties, depending on what was requested. The examples below show printouts demonstrating the progression of the index:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; it = np.nditer ( a, flags= [ &#39; f_index &#39; ]) &gt;&gt;&gt; for x in it : ... print ( &#34; %d &lt; %d&gt; &#34; % ( x, it.index), end= &#39; &#39; ) ... 0 &lt; 0&gt; 1 &lt; 2&gt; 2 &lt; 4&gt; 3 &lt; 1&gt; 4 &lt; 3&gt; 5 &lt; 5&gt; &gt;&gt;&gt; it = np.nditer ( a, flags= [ &#39; multi_index &#39; ]) &gt;&gt;&gt; for x in it : ... print ( &#34; %d &lt; %s&gt; &#34; % ( x, it.multi_index), end= &#39; &#39; ) ... 0 &lt; ( 0, 0)&gt; 1 &lt; ( 0, 1)&gt; 2 &lt; ( 0, 2)&gt; 3 &lt; ( 1, 0)&gt; 4 &lt; ( 1, 1)&gt; 5 &lt; ( 1, 2)&gt; &gt;&gt;&gt; with np.nditer ( a, flags= [ &#39; multi_index &#39; ], op_flags= [ &#39; writeonly &#39; ]) as it : ... for x in it : ... x [ ...] = it.multi_index [ 1] - it.multi_index [ 0] ... &gt;&gt;&gt; a array ( [ [ 0, 1, 2], [ - 1, 0, 1]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; it = np.nditer(a, flags=[&#39;f_index&#39;])
+    &gt;&gt;&gt; for x in it:
+    ...     print(&#34;%d &lt;%d&gt;&#34; % (x, it.index), end=&#39; &#39;)
+    ...
+    0 &lt;0&gt; 1 &lt;2&gt; 2 &lt;4&gt; 3 &lt;1&gt; 4 &lt;3&gt; 5 &lt;5&gt;
+
+    &gt;&gt;&gt; it = np.nditer(a, flags=[&#39;multi_index&#39;])
+    &gt;&gt;&gt; for x in it:
+    ...     print(&#34;%d &lt;%s&gt;&#34; % (x, it.multi_index), end=&#39; &#39;)
+    ...
+    0 &lt;(0, 0)&gt; 1 &lt;(0, 1)&gt; 2 &lt;(0, 2)&gt; 3 &lt;(1, 0)&gt; 4 &lt;(1, 1)&gt; 5 &lt;(1, 2)&gt;
+
+    &gt;&gt;&gt; with np.nditer(a, flags=[&#39;multi_index&#39;], op_flags=[&#39;writeonly&#39;]) as it:
+    ...     for x in it:
+    ...         x[...] = it.multi_index[1] - it.multi_index[0]
+    ...
+    &gt;&gt;&gt; a
+    array([[ 0,  1,  2],
+           [-1,  0,  1]])</pre>
 
 
                <p>Tracking an index or multi-index is incompatible with using an external loop, because it requires a different index value per element. If you try to combine these flags, the         <code class='verbatim'>nditer</code>
  object will raise an exception.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.zeros ( ( 2,3)) &gt;&gt;&gt; it = np.nditer ( a, flags= [ &#39; c_index &#39; , &#39; external_loop &#39; ]) Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; ValueError : Iterator flag EXTERNAL_LOOP cannot be used if an index or multi - index is being tracked </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.zeros((2,3))
+    &gt;&gt;&gt; it = np.nditer(a, flags=[&#39;c_index&#39;, &#39;external_loop&#39;])
+    Traceback (most recent call last):
+      File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+    ValueError: Iterator flag EXTERNAL_LOOP cannot be used if an index or multi-index is being tracked</pre>
 
 
 
@@ -243,12 +287,31 @@
                <p>To make its properties more readily accessible during iteration,         <code class='verbatim'>nditer</code>
  has an alternative syntax for iterating, which works explicitly with the iterator object itself. With this looping construct, the current value is accessible by indexing into the iterator. Other properties, such as tracked indices remain as before. The examples below produce identical results to the ones in the previous section.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; it = np.nditer ( a, flags= [ &#39; f_index &#39; ]) &gt;&gt;&gt; while not it.finished : ... print ( &#34; %d &lt; %d&gt; &#34; % ( it [ 0], it.index), end= &#39; &#39; ) ... is_not_finished = it.iternext ( ) ... 0 &lt; 0&gt; 1 &lt; 2&gt; 2 &lt; 4&gt; 3 &lt; 1&gt; 4 &lt; 3&gt; 5 &lt; 5&gt; &gt;&gt;&gt; it = np.nditer ( a, flags= [ &#39; multi_index &#39; ]) &gt;&gt;&gt; while not it.finished : ... print ( &#34; %d &lt; %s&gt; &#34; % ( it [ 0], it.multi_index), end= &#39; &#39; ) ... is_not_finished = it.iternext ( ) ... 0 &lt; ( 0, 0)&gt; 1 &lt; ( 0, 1)&gt; 2 &lt; ( 0, 2)&gt; 3 &lt; ( 1, 0)&gt; 4 &lt; ( 1, 1)&gt; 5 &lt; ( 1, 2)&gt; &gt;&gt;&gt; with np.nditer ( a, flags= [ &#39; multi_index &#39; ], op_flags= [ &#39; writeonly &#39; ]) as it : ... while not it.finished : ... it [ 0] = it.multi_index [ 1] - it.multi_index [ 0] ... is_not_finished = it.iternext ( ) ... &gt;&gt;&gt; a array ( [ [ 0, 1, 2], [ - 1, 0, 1]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; it = np.nditer(a, flags=[&#39;f_index&#39;])
+    &gt;&gt;&gt; while not it.finished:
+    ...     print(&#34;%d &lt;%d&gt;&#34; % (it[0], it.index), end=&#39; &#39;)
+    ...     is_not_finished = it.iternext()
+    ...
+    0 &lt;0&gt; 1 &lt;2&gt; 2 &lt;4&gt; 3 &lt;1&gt; 4 &lt;3&gt; 5 &lt;5&gt;
+
+    &gt;&gt;&gt; it = np.nditer(a, flags=[&#39;multi_index&#39;])
+    &gt;&gt;&gt; while not it.finished:
+    ...     print(&#34;%d &lt;%s&gt;&#34; % (it[0], it.multi_index), end=&#39; &#39;)
+    ...     is_not_finished = it.iternext()
+    ...
+    0 &lt;(0, 0)&gt; 1 &lt;(0, 1)&gt; 2 &lt;(0, 2)&gt; 3 &lt;(1, 0)&gt; 4 &lt;(1, 1)&gt; 5 &lt;(1, 2)&gt;
+
+    &gt;&gt;&gt; with np.nditer(a, flags=[&#39;multi_index&#39;], op_flags=[&#39;writeonly&#39;]) as it:
+    ...     while not it.finished:
+    ...         it[0] = it.multi_index[1] - it.multi_index[0]
+    ...         is_not_finished = it.iternext()
+    ...
+    &gt;&gt;&gt; a
+    array([[ 0,  1,  2],
+           [-1,  0,  1]])</pre>
 
 
 
@@ -257,12 +320,18 @@
 
                <p>By enabling buffering mode, the chunks provided by the iterator to the inner loop can be made larger, significantly reducing the overhead of the Python interpreter. In the example forcing Fortran iteration order, the inner loop gets to see all the elements in one go when buffering is enabled.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; external_loop &#39; ], order= &#39; F &#39; ) : ... print ( x, end= &#39; &#39; ) ... [ 0 3] [ 1 4] [ 2 5] &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; external_loop &#39; , &#39; buffered &#39; ], order= &#39; F &#39; ) : ... print ( x, end= &#39; &#39; ) ... [ 0 3 1 4 2 5] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;external_loop&#39;], order=&#39;F&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    [0 3] [1 4] [2 5]
+
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;external_loop&#39;,&#39;buffered&#39;], order=&#39;F&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    [0 3 1 4 2 5]</pre>
 
 
 
@@ -275,42 +344,72 @@
 
                <p>In our examples, we will treat the input array with a complex data type, so that we can take square roots of negative numbers. Without enabling copies or buffering mode, the iterator will raise an exception if the data type doesn&#39;t match precisely.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) - 3 &gt;&gt;&gt; for x in np.nditer ( a, op_dtypes= [ &#39; complex128 &#39; ]) : ... print ( np.sqrt ( x), end= &#39; &#39; ) ... Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; TypeError : Iterator operand required copying or buffering, but neither copying nor buffering was enabled </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3) - 3
+    &gt;&gt;&gt; for x in np.nditer(a, op_dtypes=[&#39;complex128&#39;]):
+    ...     print(np.sqrt(x), end=&#39; &#39;)
+    ...
+    Traceback (most recent call last):
+      File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+    TypeError: Iterator operand required copying or buffering, but neither copying nor buffering was enabled</pre>
 
 
                <p>In copying mode, &#39;copy&#39; is specified as a per-operand flag. This is done to provide control in a per-operand fashion. Buffering mode is specified as an iterator flag.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6).reshape ( 2,3) - 3 &gt;&gt;&gt; for x in np.nditer ( a, op_flags= [ &#39; readonly &#39; , &#39; copy &#39; ], ... op_dtypes= [ &#39; complex128 &#39; ]) : ... print ( np.sqrt ( x), end= &#39; &#39; ) ... 1.7320508075688772j 1.4142135623730951j 1j 0j ( 1+0j) ( 1.4142135623730951+0j) &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; buffered &#39; ], op_dtypes= [ &#39; complex128 &#39; ]) : ... print ( np.sqrt ( x), end= &#39; &#39; ) ... 1.7320508075688772j 1.4142135623730951j 1j 0j ( 1+0j) ( 1.4142135623730951+0j) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6).reshape(2,3) - 3
+    &gt;&gt;&gt; for x in np.nditer(a, op_flags=[&#39;readonly&#39;,&#39;copy&#39;],
+    ...                 op_dtypes=[&#39;complex128&#39;]):
+    ...     print(np.sqrt(x), end=&#39; &#39;)
+    ...
+    1.7320508075688772j 1.4142135623730951j 1j 0j (1+0j) (1.4142135623730951+0j)
+
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;buffered&#39;], op_dtypes=[&#39;complex128&#39;]):
+    ...     print(np.sqrt(x), end=&#39; &#39;)
+    ...
+    1.7320508075688772j 1.4142135623730951j 1j 0j (1+0j) (1.4142135623730951+0j)</pre>
 
 
                <p>The iterator uses NumPy&#39;s casting rules to determine whether a specific conversion is permitted. By default, it enforces &#39;safe&#39; casting. This means, for example, that it will raise an exception if you try to treat a 64-bit float array as a 32-bit float array. In many cases, the rule &#39;same_kind&#39; is the most reasonable rule to use, since it will allow conversion from 64 to 32-bit float, but not from float to int or from complex to float.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6.) &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; buffered &#39; ], op_dtypes= [ &#39; float32 &#39; ]) : ... print ( x, end= &#39; &#39; ) ... Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; TypeError : Iterator operand 0 dtype could not be cast from dtype ( &#39; float64 &#39; ) to dtype ( &#39; float32 &#39; ) according to the rule &#39; safe &#39; &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; buffered &#39; ], op_dtypes= [ &#39; float32 &#39; ], ... casting= &#39; same_kind &#39; ) : ... print ( x, end= &#39; &#39; ) ... 0.0 1.0 2.0 3.0 4.0 5.0 &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; buffered &#39; ], op_dtypes= [ &#39; int32 &#39; ], casting= &#39; same_kind &#39; ) : ... print ( x, end= &#39; &#39; ) ... Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; TypeError : Iterator operand 0 dtype could not be cast from dtype ( &#39; float64 &#39; ) to dtype ( &#39; int32 &#39; ) according to the rule &#39; same_kind &#39; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6.)
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;buffered&#39;], op_dtypes=[&#39;float32&#39;]):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    Traceback (most recent call last):
+      File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+    TypeError: Iterator operand 0 dtype could not be cast from dtype(&#39;float64&#39;) to dtype(&#39;float32&#39;) according to the rule &#39;safe&#39;
+
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;buffered&#39;], op_dtypes=[&#39;float32&#39;],
+    ...                 casting=&#39;same_kind&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    0.0 1.0 2.0 3.0 4.0 5.0
+
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;buffered&#39;], op_dtypes=[&#39;int32&#39;], casting=&#39;same_kind&#39;):
+    ...     print(x, end=&#39; &#39;)
+    ...
+    Traceback (most recent call last):
+      File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+    TypeError: Iterator operand 0 dtype could not be cast from dtype(&#39;float64&#39;) to dtype(&#39;int32&#39;) according to the rule &#39;same_kind&#39;</pre>
 
 
                <p>One thing to watch out for is conversions back to the original data type when using a read-write or write-only operand. A common case is to implement the inner loop in terms of 64-bit floats, and use &#39;same_kind&#39; casting to allow the other floating-point types to be processed as well. While in read-only mode, an integer array could be provided, read-write mode will raise an exception because conversion back to the array would violate the casting rule.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 6) &gt;&gt;&gt; for x in np.nditer ( a, flags= [ &#39; buffered &#39; ], op_flags= [ &#39; readwrite &#39; ], ... op_dtypes= [ &#39; float64 &#39; ], casting= &#39; same_kind &#39; ) : ... x [ ...] = x / 2.0 ... Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 2, in &lt; module&gt; TypeError : Iterator requested dtype could not be cast from dtype ( &#39; float64 &#39; ) to dtype ( &#39; int64 &#39; ), the operand 0 dtype, according to the rule &#39; same_kind &#39; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(6)
+    &gt;&gt;&gt; for x in np.nditer(a, flags=[&#39;buffered&#39;], op_flags=[&#39;readwrite&#39;],
+    ...                 op_dtypes=[&#39;float64&#39;], casting=&#39;same_kind&#39;):
+    ...     x[...] = x / 2.0
+    ...
+    Traceback (most recent call last):
+      File &#34;&lt;stdin&gt;&#34;, line 2, in &lt;module&gt;
+    TypeError: Iterator requested dtype could not be cast from dtype(&#39;float64&#39;) to dtype(&#39;int64&#39;), the operand 0 dtype, according to the rule &#39;same_kind&#39;</pre>
 
 
 
@@ -321,22 +420,28 @@
 
                <p>As an example, we print out the result of broadcasting a one and a two dimensional array together.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 3) &gt;&gt;&gt; b = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x, y in np.nditer ( [ a,b]) : ... print ( &#34; %d : %d &#34; % ( x,y), end= &#39; &#39; ) ... 0 : 0 1 : 1 2 : 2 0 : 3 1 : 4 2 : 5 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(3)
+    &gt;&gt;&gt; b = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x, y in np.nditer([a,b]):
+    ...     print(&#34;%d:%d&#34; % (x,y), end=&#39; &#39;)
+    ...
+    0:0 1:1 2:2 0:3 1:4 2:5</pre>
 
 
                <p>When a broadcasting error occurs, the iterator raises an exception which includes the input shapes to help diagnose the problem.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 2) &gt;&gt;&gt; b = np.arange ( 6).reshape ( 2,3) &gt;&gt;&gt; for x, y in np.nditer ( [ a,b]) : ... print ( &#34; %d : %d &#34; % ( x,y), end= &#39; &#39; ) ... Traceback ( most recent call last) : ... ValueError : operands could not be broadcast together with shapes ( 2,) ( 2,3) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(2)
+    &gt;&gt;&gt; b = np.arange(6).reshape(2,3)
+    &gt;&gt;&gt; for x, y in np.nditer([a,b]):
+    ...     print(&#34;%d:%d&#34; % (x,y), end=&#39; &#39;)
+    ...
+    Traceback (most recent call last):
+    ...
+    ValueError: operands could not be broadcast together with shapes (2,) (2,3)</pre>
 
 
 
@@ -346,12 +451,16 @@
 
                <p>We&#39;ll show how this works by creating a function <code>:None:None:`square`</code> which squares its input. Let&#39;s start with a minimal function definition excluding &#39;out&#39; parameter support.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; def square ( a) : ... with np.nditer ( [ a, None]) as it : ... for x, y in it : ... y [ ...] = x*x ... return it.operands [ 1] ... &gt;&gt;&gt; square ( [ 1,2,3]) array ( [ 1, 4, 9]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; def square(a):
+    ...     with np.nditer([a, None]) as it:
+    ...         for x, y in it:
+    ...             y[...] = x*x
+    ...         return it.operands[1]
+    ...
+    &gt;&gt;&gt; square([1,2,3])
+    array([1, 4, 9])</pre>
 
 
                <p>By default, the         <code class='verbatim'>nditer</code>
@@ -363,12 +472,33 @@
 
                <p>For completeness, we&#39;ll also add the &#39;external_loop&#39; and &#39;buffered&#39; flags, as these are what you will typically want for performance reasons.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; def square ( a, out=None) : ... it = np.nditer ( [ a, out], ... flags = [ &#39; external_loop &#39; , &#39; buffered &#39; ], ... op_flags = [ [ &#39; readonly &#39; ], ... [ &#39; writeonly &#39; , &#39; allocate &#39; , &#39; no_broadcast &#39; ]]) ... with it : ... for x, y in it : ... y [ ...] = x*x ... return it.operands [ 1] ... &gt;&gt;&gt; square ( [ 1,2,3]) array ( [ 1, 4, 9]) &gt;&gt;&gt; b = np.zeros ( ( 3,)) &gt;&gt;&gt; square ( [ 1,2,3], out=b) array ( [ 1., 4., 9.]) &gt;&gt;&gt; b array ( [ 1., 4., 9.]) &gt;&gt;&gt; square ( np.arange ( 6).reshape ( 2,3), out=b) Traceback ( most recent call last) : ... ValueError : non - broadcastable output operand with shape ( 3,) doesn &#39; t match the broadcast shape ( 2,3) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; def square(a, out=None):
+    ...     it = np.nditer([a, out],
+    ...             flags = [&#39;external_loop&#39;, &#39;buffered&#39;],
+    ...             op_flags = [[&#39;readonly&#39;],
+    ...                         [&#39;writeonly&#39;, &#39;allocate&#39;, &#39;no_broadcast&#39;]])
+    ...     with it:
+    ...         for x, y in it:
+    ...             y[...] = x*x
+    ...         return it.operands[1]
+    ...
+
+    &gt;&gt;&gt; square([1,2,3])
+    array([1, 4, 9])
+
+    &gt;&gt;&gt; b = np.zeros((3,))
+    &gt;&gt;&gt; square([1,2,3], out=b)
+    array([1.,  4.,  9.])
+    &gt;&gt;&gt; b
+    array([1.,  4.,  9.])
+
+    &gt;&gt;&gt; square(np.arange(6).reshape(2,3), out=b)
+    Traceback (most recent call last):
+      ...
+    ValueError: non-broadcastable output operand with shape (3,) doesn&#39;t
+    match the broadcast shape (2,3)</pre>
 
 
 
@@ -384,12 +514,24 @@
 
                <p>The operation in the inner loop is a straightforward multiplication. Everything to do with the outer product is handled by the iterator setup.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 3) &gt;&gt;&gt; b = np.arange ( 8).reshape ( 2,4) &gt;&gt;&gt; it = np.nditer ( [ a, b, None], flags= [ &#39; external_loop &#39; ], ... op_axes= [ [ 0, - 1, - 1], [ - 1, 0, 1], None]) &gt;&gt;&gt; with it : ... for x, y, z in it : ... z [ ...] = x*y ... result = it.operands [ 2] # same as z ... &gt;&gt;&gt; result array ( [ [ [ 0, 0, 0, 0], [ 0, 0, 0, 0]], [ [ 0, 1, 2, 3], [ 4, 5, 6, 7]], [ [ 0, 2, 4, 6], [ 8, 10, 12, 14]]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(3)
+    &gt;&gt;&gt; b = np.arange(8).reshape(2,4)
+    &gt;&gt;&gt; it = np.nditer([a, b, None], flags=[&#39;external_loop&#39;],
+    ...             op_axes=[[0, -1, -1], [-1, 0, 1], None])
+    &gt;&gt;&gt; with it:
+    ...     for x, y, z in it:
+    ...         z[...] = x*y
+    ...     result = it.operands[2]  # same as z
+    ...
+    &gt;&gt;&gt; result
+    array([[[ 0,  0,  0,  0],
+            [ 0,  0,  0,  0]],
+           [[ 0,  1,  2,  3],
+            [ 4,  5,  6,  7]],
+           [[ 0,  2,  4,  6],
+            [ 8, 10, 12, 14]]])</pre>
 
 
                <p>Note that once the iterator is closed we can not access         <code class='verbatim'>operands &lt;nditer.operands&gt;</code>
@@ -402,46 +544,75 @@
 
                <p>For a simple example, consider taking the sum of all elements in an array.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 24).reshape ( 2,3,4) &gt;&gt;&gt; b = np.array ( 0) &gt;&gt;&gt; with np.nditer ( [ a, b], flags= [ &#39; reduce_ok &#39; ], ... op_flags= [ [ &#39; readonly &#39; ], [ &#39; readwrite &#39; ]]) as it : ... for x,y in it : ... y [ ...] += x ... &gt;&gt;&gt; b array ( 276) &gt;&gt;&gt; np.sum ( a) 276 </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(24).reshape(2,3,4)
+    &gt;&gt;&gt; b = np.array(0)
+    &gt;&gt;&gt; with np.nditer([a, b], flags=[&#39;reduce_ok&#39;],
+    ...                     op_flags=[[&#39;readonly&#39;], [&#39;readwrite&#39;]]) as it:
+    ...     for x,y in it:
+    ...         y[...] += x
+    ...
+    &gt;&gt;&gt; b
+    array(276)
+    &gt;&gt;&gt; np.sum(a)
+    276</pre>
 
 
                <p>Things are a little bit more tricky when combining reduction and allocated operands. Before iteration is started, any reduction operand must be initialized to its starting values. Here&#39;s how we can do this, taking sums along the last axis of <code>:None:None:`a`</code>.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 24).reshape ( 2,3,4) &gt;&gt;&gt; it = np.nditer ( [ a, None], flags= [ &#39; reduce_ok &#39; ], ... op_flags= [ [ &#39; readonly &#39; ], [ &#39; readwrite &#39; , &#39; allocate &#39; ]], ... op_axes= [ None, [ 0,1, - 1]]) &gt;&gt;&gt; with it : ... it.operands [ 1] [ ...] = 0 ... for x, y in it : ... y [ ...] += x ... result = it.operands [ 1] ... &gt;&gt;&gt; result array ( [ [ 6, 22, 38], [ 54, 70, 86]]) &gt;&gt;&gt; np.sum ( a, axis=2) array ( [ [ 6, 22, 38], [ 54, 70, 86]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(24).reshape(2,3,4)
+    &gt;&gt;&gt; it = np.nditer([a, None], flags=[&#39;reduce_ok&#39;],
+    ...             op_flags=[[&#39;readonly&#39;], [&#39;readwrite&#39;, &#39;allocate&#39;]],
+    ...             op_axes=[None, [0,1,-1]])
+    &gt;&gt;&gt; with it:
+    ...     it.operands[1][...] = 0
+    ...     for x, y in it:
+    ...         y[...] += x
+    ...     result = it.operands[1]
+    ...
+    &gt;&gt;&gt; result
+    array([[ 6, 22, 38],
+           [54, 70, 86]])
+    &gt;&gt;&gt; np.sum(a, axis=2)
+    array([[ 6, 22, 38],
+           [54, 70, 86]])</pre>
 
 
                <p>To do buffered reduction requires yet another adjustment during the setup. Normally the iterator construction involves copying the first buffer of data from the readable arrays into the buffer. Any reduction operand is readable, so it may be read into a buffer. Unfortunately, initialization of the operand after this buffering operation is complete will not be reflected in the buffer that the iteration starts with, and garbage results will be produced.</p>
 
                <p>The iterator flag &#34;delay_bufalloc&#34; is there to allow iterator-allocated reduction operands to exist together with buffering. When this flag is set, the iterator will leave its buffers uninitialized until it receives a reset, after which it will be ready for regular iteration. Here&#39;s how the previous example looks if we also enable buffering.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Example&#39;]
-    </div>
-    <pre class='not-implemented'><p>&gt;&gt;&gt; a = np.arange ( 24).reshape ( 2,3,4) &gt;&gt;&gt; it = np.nditer ( [ a, None], flags= [ &#39; reduce_ok &#39; , ... &#39; buffered &#39; , &#39; delay_bufalloc &#39; ], ... op_flags= [ [ &#39; readonly &#39; ], [ &#39; readwrite &#39; , &#39; allocate &#39; ]], ... op_axes= [ None, [ 0,1, - 1]]) &gt;&gt;&gt; with it : ... it.operands [ 1] [ ...] = 0 ... it.reset ( ) ... for x, y in it : ... y [ ...] += x ... result = it.operands [ 1] ... &gt;&gt;&gt; result array ( [ [ 6, 22, 38], [ 54, 70, 86]]) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Example
+    &gt;&gt;&gt; a = np.arange(24).reshape(2,3,4)
+    &gt;&gt;&gt; it = np.nditer([a, None], flags=[&#39;reduce_ok&#39;,
+    ...                                  &#39;buffered&#39;, &#39;delay_bufalloc&#39;],
+    ...             op_flags=[[&#39;readonly&#39;], [&#39;readwrite&#39;, &#39;allocate&#39;]],
+    ...             op_axes=[None, [0,1,-1]])
+    &gt;&gt;&gt; with it:
+    ...     it.operands[1][...] = 0
+    ...     it.reset()
+    ...     for x, y in it:
+    ...         y[...] += x
+    ...     result = it.operands[1]
+    ...
+    &gt;&gt;&gt; result
+    array([[ 6, 22, 38],
+           [54, 70, 86]])</pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. for doctests\n   Include Cython section separately. Those tests are skipped entirely via an\n   entry in RST_SKIPLIST&#39;
-   |&gt;</pre>
-               <div class='block_directive'>
-    <div class='head'>.. include:: []
-    </div>
-    <pre class='not-implemented'><p>arrays.nditer.cython.rst </p>
-</pre>
-</div>
+   |&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. include:: arrays.nditer.cython.rst
+    </pre>
 
 
 

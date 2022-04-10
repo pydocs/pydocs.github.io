@@ -106,12 +106,9 @@
 
 
 
-               <div class='block_directive'>
-    <div class='head'>.. currentmodule:: []
-    </div>
-    <pre class='not-implemented'><p>numpy.random </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy.random
+    </pre>
 
 
 
@@ -144,58 +141,68 @@
 </li>
             </ul>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#34;.. _`PCG author&#39;s page`: http://www.pcg-random.org/&#34;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _`Random123`: https://www.deshawresearch.com/resources_random123.html&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#34;.. _`SFC author&#39;s page`: http://pracrand.sourceforge.net/RNG_engines.txt&#34;&gt;</pre>
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>BitGenerator </p>
-</pre>
-</div>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#34;.. _`PCG author&#39;s page`: http://www.pcg-random.org/&#34;&gt;
+           </pre>
 
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`Random123`: https://www.deshawresearch.com/resources_random123.html&#39;&gt;
+           </pre>
 
-               <div class='block_directive'>
-    <div class='head'>.. toctree:: [&#39;:maxdepth: 1&#39;]
-    </div>
-    <pre class='not-implemented'><p>MT19937 &lt; mt19937&gt; PCG64 &lt; pcg64&gt; PCG64DXSM &lt; pcg64dxsm&gt; Philox &lt; philox&gt; SFC64 &lt; sfc64&gt; </p>
-</pre>
-</div>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#34;.. _`SFC author&#39;s page`: http://pracrand.sourceforge.net/RNG_engines.txt&#34;&gt;
+           </pre>
+
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    BitGenerator</pre>
+               <pre class='not-implemented'>
+.. toctree:: 
+    [&#39;maxdepth&#39;, &#39;1&#39;]
+    MT19937 &lt;mt19937&gt;
+    PCG64 &lt;pcg64&gt;
+    PCG64DXSM &lt;pcg64dxsm&gt;
+    Philox &lt;philox&gt;
+    SFC64 &lt;sfc64&gt;</pre>
 
 
 
 <h1>Seeding and Entropy</h1>
                <p>A BitGenerator provides a stream of random values. In order to generate reproducible streams, BitGenerators support setting their initial state via a seed. All of the provided BitGenerators will take an arbitrary-sized non-negative integer, or a list of such integers, as a seed. BitGenerators need to take those inputs and process them into a high-quality internal state for the BitGenerator. All of the BitGenerators in numpy delegate that task to <code>:None:None:`SeedSequence`</code>, which uses hashing techniques to ensure that even low-quality seeds generate high-quality initial states.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>from numpy.random import PCG64 bg = PCG64 ( 12345678903141592653589793) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    from numpy.random import PCG64
+
+    bg = PCG64(12345678903141592653589793)</pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. end_block&#39;
-   |&gt;</pre>
+   |&gt;
+           </pre>
+
                <p><code>:None:None:`~SeedSequence`</code> is designed to be convenient for implementing best practices. We recommend that a stochastic program defaults to using entropy from the OS so that each run is different. The program should print out or log that entropy. In order to reproduce a past value, the program should allow the user to provide that value through some mechanism, a command-line argument is common, so that the user can then re-enter that entropy to reproduce the result. <code>:None:None:`~SeedSequence`</code> can take care of everything except for communicating with the user, which is up to you.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>from numpy.random import PCG64, SeedSequence # Get the user &#39; s seed somehow, maybe through `argparse`. # If the user did not provide a seed, it should return `None`. seed = get_user_seed ( ) ss = SeedSequence ( seed) print ( &#39; seed = { } &#39; .format ( ss.entropy)) bg = PCG64 ( ss) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    from numpy.random import PCG64, SeedSequence
+
+    # Get the user&#39;s seed somehow, maybe through `argparse`.
+    # If the user did not provide a seed, it should return `None`.
+    seed = get_user_seed()
+    ss = SeedSequence(seed)
+    print(&#39;seed = {}&#39;.format(ss.entropy))
+    bg = PCG64(ss)</pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. end_block&#39;
-   |&gt;</pre>
+   |&gt;
+           </pre>
+
                <p>We default to using a 128-bit integer using entropy gathered from the OS. This is a good amount of entropy to initialize all of the generators that we have in numpy. We do not recommend using small seeds below 32 bits for general use. Using just a small set of seeds to instantiate larger state spaces means that there are some initial states that are impossible to reach. This creates some biases if everyone uses such values.</p>
 
                <p>There will not be anything <em>wrong</em> with the results, per se; even a seed of 0 is perfectly fine thanks to the processing that <code>:None:None:`~SeedSequence`</code> does. If you just need <em>some</em> fixed value for unit tests or debugging, feel free to use whatever seed you like. But if you want to make inferences from the results or publish them, drawing from a larger set of seeds is good practice.</p>
@@ -206,43 +213,47 @@
 
                <p>If you need to run several stochastic simulations in parallel, best practice is to construct a random generator instance for each simulation.  To make sure that the random streams have distinct initial states, you can use the <code>:None:None:`spawn`</code> method of <code>:None:None:`~SeedSequence`</code>. For instance, here we construct a list of 12 instances:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>from numpy.random import PCG64, SeedSequence # High quality initial entropy entropy = 0x87351080e25cb0fad77a44a3be03b491 base_seq = SeedSequence ( entropy) child_seqs = base_seq.spawn ( 12) # a list of 12 SeedSequences generators = [ PCG64 ( seq) for seq in child_seqs] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    from numpy.random import PCG64, SeedSequence
+
+    # High quality initial entropy
+    entropy = 0x87351080e25cb0fad77a44a3be03b491
+    base_seq = SeedSequence(entropy)
+    child_seqs = base_seq.spawn(12)    # a list of 12 SeedSequences
+    generators = [PCG64(seq) for seq in child_seqs]</pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. end_block&#39;
-   |&gt;</pre>
+   |&gt;
+           </pre>
+
                <p>An alternative way is to use the fact that a <code>:None:None:`~SeedSequence`</code> can be initialized by a tuple of elements. Here we use a base entropy value and an integer         <code class='verbatim'>worker_id</code>
 </p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>from numpy.random import PCG64, SeedSequence # High quality initial entropy entropy = 0x87351080e25cb0fad77a44a3be03b491 sequences = [ SeedSequence ( ( entropy, worker_id)) for worker_id in range ( 12)] generators = [ PCG64 ( seq) for seq in sequences] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    from numpy.random import PCG64, SeedSequence
+
+    # High quality initial entropy
+    entropy = 0x87351080e25cb0fad77a44a3be03b491    
+    sequences = [SeedSequence((entropy, worker_id)) for worker_id in range(12)]
+    generators = [PCG64(seq) for seq in sequences]</pre>
 
 
-                          <code class='not-implemented'>Type Comment (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Comment: 
+                          <pre class='not-implemented'>
+            &lt;Comment: 
    |value: &#39;.. end_block&#39;
-   |&gt;</pre>
+   |&gt;
+           </pre>
+
                <p>Note that the sequences produced by the latter method will be distinct from those constructed via <code>:None:None:`~SeedSequence.spawn`</code>.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. autosummary:: [&#39;:toctree: generated/&#39;]
-    </div>
-    <pre class='not-implemented'><p>SeedSequence </p>
-</pre>
-</div>
-
-
+               <pre>.. autosummary:: 
+    :toctree:generated/
+    SeedSequence</pre>
 
 <h3 id="section-Examples">Examples</h3>
          See :

@@ -109,12 +109,9 @@
 <h1>How does the CPU dispatcher work?</h1>
                <p>NumPy dispatcher is based on multi-source compiling, which means taking a certain source and compiling it multiple times with different compiler flags and also with different <strong>C</strong> definitions that affect the code paths. This enables certain instruction-sets for each compiled object depending on the required optimizations and ends with linking the returned objects together.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. figure:: []
-    </div>
-    <pre class='not-implemented'><p>.. / figures / opt - infra.png </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. figure:: ../figures/opt-infra.png
+    </pre>
 
 
                <p>This mechanism should support all compilers and it doesn&#39;t require any compiler-specific extension, but at the same time it adds a few steps to normal compilation that are explained as follows.</p>
@@ -158,12 +155,38 @@
  and         <code class='verbatim'>--cpu-dispatch=&#34;ssse3 sse41&#34;</code>
 , and the result is below.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ / The header should be located at numpy / numpy / core / src / common / _cpu_dispatch.h / **NOTE ** C definitions prefixed with &#34; NPY_HAVE_ &#34; represent ** the required optimzations. ** ** C definitions prefixed with &#39; NPY__CPU_TARGET_ &#39; are protected and ** shouldn &#39; t be used by any NumPy C sources. * / / ******* baseline features ******* / / ** SSE ** / #define NPY_HAVE_SSE 1 #include &lt; xmmintrin.h&gt; / ** SSE2 ** / #define NPY_HAVE_SSE2 1 #include &lt; emmintrin.h&gt; / ** SSE3 ** / #define NPY_HAVE_SSE3 1 #include &lt; pmmintrin.h&gt; / ******* dispatch - able features ******* / #ifdef NPY__CPU_TARGET_SSSE3 / ** SSSE3 ** / #define NPY_HAVE_SSSE3 1 #include &lt; tmmintrin.h&gt; #endif #ifdef NPY__CPU_TARGET_SSE41 / ** SSE41 ** / #define NPY_HAVE_SSE41 1 #include &lt; smmintrin.h&gt; #endif </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    // The header should be located at numpy/numpy/core/src/common/_cpu_dispatch.h
+    /**NOTE
+     ** C definitions prefixed with &#34;NPY_HAVE_&#34; represent
+     ** the required optimzations.
+     **
+     ** C definitions prefixed with &#39;NPY__CPU_TARGET_&#39; are protected and
+     ** shouldn&#39;t be used by any NumPy C sources.
+     */
+    /******* baseline features *******/
+    /** SSE **/
+    #define NPY_HAVE_SSE 1
+    #include &lt;xmmintrin.h&gt;
+    /** SSE2 **/
+    #define NPY_HAVE_SSE2 1
+    #include &lt;emmintrin.h&gt;
+    /** SSE3 **/
+    #define NPY_HAVE_SSE3 1
+    #include &lt;pmmintrin.h&gt;
+
+    /******* dispatch-able features *******/
+    #ifdef NPY__CPU_TARGET_SSSE3
+      /** SSSE3 **/
+      #define NPY_HAVE_SSSE3 1
+      #include &lt;tmmintrin.h&gt;
+    #endif
+    #ifdef NPY__CPU_TARGET_SSE41
+      /** SSE41 **/
+      #define NPY_HAVE_SSE41 1
+      #include &lt;smmintrin.h&gt;
+    #endif</pre>
 
 
                <p><strong>Baseline features</strong> are the minimal set of required optimizations configured via         <code class='verbatim'>--cpu-baseline</code>
@@ -183,8 +206,10 @@
 . C definitions         <code class='verbatim'>NPY__CPU_TARGET_</code>
  are only enabled within <strong>dispatch-able sources</strong>.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _dispatchable-sources:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _dispatchable-sources:&#39;&gt;
+           </pre>
+
 
 <h1>5- Dispatch-able sources and configuration statements</h1>
                <p>Dispatch-able sources are special <strong>C</strong> files that can be compiled multiple times with different compiler flags and also with different <strong>C</strong> definitions. These affect code paths to enable certain instruction-sets for each compiled object according to &#34;<strong>the
@@ -198,12 +223,10 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
 
                <p>Example:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ *@targets avx2 avx512f vsx2 vsx3 asimd asimdhp * / / / C code </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    /*@targets avx2 avx512f vsx2 vsx3 asimd asimdhp */
+    // C code</pre>
 
 
                <p>The keywords mainly represent the additional optimizations configured through         <code class='verbatim'>--cpu-dispatch</code>
@@ -242,12 +265,32 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
 
                           <ul>               <li>               <p><strong>(C) Wrapping</strong>: This is the approach taken by NumPy&#39;s   infrastructure, which has proved to be sufficiently flexible in order   to compile a single source multiple times with different <strong>C</strong>   definitions and flags that affect the code paths. The process is   achieved by creating a temporary <strong>C</strong> source for each required   optimization that related to the additional optimization, which   contains the declarations of the <strong>C</strong> definitions and includes the   involved source via the <strong>C</strong> directive <strong>#include</strong>. For more   clarification take a look at the following code for AVX512F :</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ * * this definition is used by NumPy utilities as suffixes for the * exported symbols * / #define NPY__CPU_TARGET_CURRENT AVX512F / * * The following definitions enable * definitions of the dispatch - able features that are defined within the main * configuration header. These are definitions for the implied features. * / #define NPY__CPU_TARGET_SSE #define NPY__CPU_TARGET_SSE2 #define NPY__CPU_TARGET_SSE3 #define NPY__CPU_TARGET_SSSE3 #define NPY__CPU_TARGET_SSE41 #define NPY__CPU_TARGET_POPCNT #define NPY__CPU_TARGET_SSE42 #define NPY__CPU_TARGET_AVX #define NPY__CPU_TARGET_F16C #define NPY__CPU_TARGET_FMA3 #define NPY__CPU_TARGET_AVX2 #define NPY__CPU_TARGET_AVX512F / / our dispatch - able source #include &#34; / the / absuolate / path / of / hello.dispatch.c &#34; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    /*
+       * this definition is used by NumPy utilities as suffixes for the
+       * exported symbols
+       */
+      #define NPY__CPU_TARGET_CURRENT AVX512F
+      /*
+       * The following definitions enable
+       * definitions of the dispatch-able features that are defined within the main
+       * configuration header. These are definitions for the implied features.
+       */
+      #define NPY__CPU_TARGET_SSE
+      #define NPY__CPU_TARGET_SSE2
+      #define NPY__CPU_TARGET_SSE3
+      #define NPY__CPU_TARGET_SSSE3
+      #define NPY__CPU_TARGET_SSE41
+      #define NPY__CPU_TARGET_POPCNT
+      #define NPY__CPU_TARGET_SSE42
+      #define NPY__CPU_TARGET_AVX
+      #define NPY__CPU_TARGET_F16C
+      #define NPY__CPU_TARGET_FMA3
+      #define NPY__CPU_TARGET_AVX2
+      #define NPY__CPU_TARGET_AVX512F
+      // our dispatch-able source
+      #include &#34;/the/absuolate/path/of/hello.dispatch.c&#34;</pre>
 
 
 </li>
@@ -259,32 +302,137 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
 , for example   assume we have a dispatch-able source called         <code class='verbatim'>hello.dispatch.c</code>
  and   contains the following:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ / hello.dispatch.c / *@targets baseline sse42 avx512f * / #include &lt; stdio.h&gt; #include &#34; numpy / utils.h &#34; / / NPY_CAT, NPY_TOSTR #ifndef NPY__CPU_TARGET_CURRENT / / wrapping the dispatch - able source only happens to the additional optimizations / / but if the keyword &#39; baseline &#39; provided within the configuration statements, / / the infrastructure will add extra compiling for the dispatch - able source by / / passing it as - is to the compiler without any changes. #define CURRENT_TARGET ( X) X #define NPY__CPU_TARGET_CURRENT baseline / / for printing only #else / / since we reach to this point, that &#39; s mean we &#39; re dealing with / / the additional optimizations, so it could be SSE42 or AVX512F #define CURRENT_TARGET ( X) NPY_CAT ( NPY_CAT ( X, _), NPY__CPU_TARGET_CURRENT) #endif / / Macro &#39; CURRENT_TARGET &#39; adding the current target as suffux to the exported symbols, / / to avoid linking duplications, NumPy already has a macro called / / &#39; NPY_CPU_DISPATCH_CURFX &#39; similar to it, located at / / numpy / numpy / core / src / common / npy_cpu_dispatch.h / / NOTE : we tend to not adding suffixes to the baseline exported symbols void CURRENT_TARGET ( simd_whoami) ( const char *extra_info) { printf ( &#34; I &#39; m &#34; NPY_TOSTR ( NPY__CPU_TARGET_CURRENT) &#34; , %s\n &#34; , extra_info); } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    // hello.dispatch.c
+      /*@targets baseline sse42 avx512f */
+      #include &lt;stdio.h&gt;
+      #include &#34;numpy/utils.h&#34; // NPY_CAT, NPY_TOSTR
+
+      #ifndef NPY__CPU_TARGET_CURRENT
+        // wrapping the dispatch-able source only happens to the additional optimizations
+        // but if the keyword &#39;baseline&#39; provided within the configuration statements,
+        // the infrastructure will add extra compiling for the dispatch-able source by
+        // passing it as-is to the compiler without any changes.
+        #define CURRENT_TARGET(X) X
+        #define NPY__CPU_TARGET_CURRENT baseline // for printing only
+      #else
+        // since we reach to this point, that&#39;s mean we&#39;re dealing with
+          // the additional optimizations, so it could be SSE42 or AVX512F
+        #define CURRENT_TARGET(X) NPY_CAT(NPY_CAT(X, _), NPY__CPU_TARGET_CURRENT)
+      #endif
+      // Macro &#39;CURRENT_TARGET&#39; adding the current target as suffux to the exported symbols,
+      // to avoid linking duplications, NumPy already has a macro called
+      // &#39;NPY_CPU_DISPATCH_CURFX&#39; similar to it, located at
+      // numpy/numpy/core/src/common/npy_cpu_dispatch.h
+      // NOTE: we tend to not adding suffixes to the baseline exported symbols
+      void CURRENT_TARGET(simd_whoami)(const char *extra_info)
+      {
+          printf(&#34;I&#39;m &#34; NPY_TOSTR(NPY__CPU_TARGET_CURRENT) &#34;, %s\n&#34;, extra_info);
+      }</pre>
 
 
                <p>Now assume you attached <strong>hello.dispatch.c</strong> to the source tree, then   the infrastructure should generate a temporary config header called   <strong>hello.dispatch.h</strong> that can be reached by any source in the source   tree, and it should contain the following code :</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>#ifndef NPY__CPU_DISPATCH_EXPAND_ / / To expand the macro calls in this header #define NPY__CPU_DISPATCH_EXPAND_ ( X) X #endif / / Undefining the following macros, due to the possibility of including config headers / / multiple times within the same source and since each config header represents / / different required optimizations according to the specified configuration / / statements in the dispatch - able source that derived from it. #undef NPY__CPU_DISPATCH_BASELINE_CALL #undef NPY__CPU_DISPATCH_CALL / / nothing strange here, just a normal preprocessor callback / / enabled only if &#39; baseline &#39; specified within the configuration statements #define NPY__CPU_DISPATCH_BASELINE_CALL ( CB, ...) \ NPY__CPU_DISPATCH_EXPAND_ ( CB ( __VA_ARGS__)) / / &#39; NPY__CPU_DISPATCH_CALL &#39; is an abstract macro is used for dispatching / / the required optimizations that specified within the configuration statements. / / / / @param CHK, Expected a macro that can be used to detect CPU features / / in runtime, which takes a CPU feature name without string quotes and / / returns the testing result in a shape of boolean value. / / NumPy already has macro called &#34; NPY_CPU_HAVE &#34; , which fits this requirement. / / / / @param CB, a callback macro that expected to be called multiple times depending / / on the required optimizations, the callback should receive the following arguments : / / 1 - The pending calls of @param CHK filled up with the required CPU features, / / that need to be tested first in runtime before executing call belong to / / the compiled object. / / 2 - The required optimization name, same as in &#39; NPY__CPU_TARGET_CURRENT &#39; / / 3 - Extra arguments in the macro itself / / / / By default the callback calls are sorted depending on the highest interest / / unless the policy &#34; $keep_sort &#34; was in place within the configuration statements / / see &#34; Dive into the CPU dispatcher &#34; for more clarification. #define NPY__CPU_DISPATCH_CALL ( CHK, CB, ...) \ NPY__CPU_DISPATCH_EXPAND_ ( CB ( ( CHK ( AVX512F)), AVX512F, __VA_ARGS__)) \ NPY__CPU_DISPATCH_EXPAND_ ( CB ( ( CHK ( SSE)&amp;&amp;CHK ( SSE2)&amp;&amp;CHK ( SSE3)&amp;&amp;CHK ( SSSE3)&amp;&amp;CHK ( SSE41)), SSE41, __VA_ARGS__)) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    #ifndef NPY__CPU_DISPATCH_EXPAND_
+        // To expand the macro calls in this header
+          #define NPY__CPU_DISPATCH_EXPAND_(X) X
+      #endif
+      // Undefining the following macros, due to the possibility of including config headers
+      // multiple times within the same source and since each config header represents
+      // different required optimizations according to the specified configuration
+      // statements in the dispatch-able source that derived from it.
+      #undef NPY__CPU_DISPATCH_BASELINE_CALL
+      #undef NPY__CPU_DISPATCH_CALL
+      // nothing strange here, just a normal preprocessor callback
+      // enabled only if &#39;baseline&#39; specified within the configuration statements
+      #define NPY__CPU_DISPATCH_BASELINE_CALL(CB, ...) \
+        NPY__CPU_DISPATCH_EXPAND_(CB(__VA_ARGS__))
+      // &#39;NPY__CPU_DISPATCH_CALL&#39; is an abstract macro is used for dispatching
+      // the required optimizations that specified within the configuration statements.
+      //
+      // @param CHK, Expected a macro that can be used to detect CPU features
+      // in runtime, which takes a CPU feature name without string quotes and
+      // returns the testing result in a shape of boolean value.
+      // NumPy already has macro called &#34;NPY_CPU_HAVE&#34;, which fits this requirement.
+      //
+      // @param CB, a callback macro that expected to be called multiple times depending
+      // on the required optimizations, the callback should receive the following arguments:
+      //  1- The pending calls of @param CHK filled up with the required CPU features,
+      //     that need to be tested first in runtime before executing call belong to
+      //     the compiled object.
+      //  2- The required optimization name, same as in &#39;NPY__CPU_TARGET_CURRENT&#39;
+      //  3- Extra arguments in the macro itself
+      //
+      // By default the callback calls are sorted depending on the highest interest
+      // unless the policy &#34;$keep_sort&#34; was in place within the configuration statements
+      // see &#34;Dive into the CPU dispatcher&#34; for more clarification.
+      #define NPY__CPU_DISPATCH_CALL(CHK, CB, ...) \
+        NPY__CPU_DISPATCH_EXPAND_(CB((CHK(AVX512F)), AVX512F, __VA_ARGS__)) \
+        NPY__CPU_DISPATCH_EXPAND_(CB((CHK(SSE)&amp;&amp;CHK(SSE2)&amp;&amp;CHK(SSE3)&amp;&amp;CHK(SSSE3)&amp;&amp;CHK(SSE41)), SSE41, __VA_ARGS__))</pre>
 
 
                <p>An example of using the config header in light of the above:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ / NOTE : The following macros are only defined for demonstration purposes only. / / NumPy already has a collections of macros located at / / numpy / numpy / core / src / common / npy_cpu_dispatch.h, that covers all dispatching / / and declarations scenarios. #include &#34; numpy / npy_cpu_features.h &#34; / / NPY_CPU_HAVE #include &#34; numpy / utils.h &#34; / / NPY_CAT, NPY_EXPAND / / An example for setting a macro that calls all the exported symbols at once / / after checking if they &#39; re supported by the running machine. #define DISPATCH_CALL_ALL ( FN, ARGS) \ NPY__CPU_DISPATCH_CALL ( NPY_CPU_HAVE, DISPATCH_CALL_ALL_CB, FN, ARGS) \ NPY__CPU_DISPATCH_BASELINE_CALL ( DISPATCH_CALL_BASELINE_ALL_CB, FN, ARGS) / / The preprocessor callbacks. / / The same suffixes as we define it in the dispatch - able source. #define DISPATCH_CALL_ALL_CB ( CHECK, TARGET_NAME, FN, ARGS) \ if ( CHECK) { NPY_CAT ( NPY_CAT ( FN, _), TARGET_NAME) ARGS; } #define DISPATCH_CALL_BASELINE_ALL_CB ( FN, ARGS) \ FN NPY_EXPAND ( ARGS); / / An example for setting a macro that calls the exported symbols of highest / / interest optimization, after checking if they &#39; re supported by the running machine. #define DISPATCH_CALL_HIGH ( FN, ARGS) \ if ( 0) { } \ NPY__CPU_DISPATCH_CALL ( NPY_CPU_HAVE, DISPATCH_CALL_HIGH_CB, FN, ARGS) \ NPY__CPU_DISPATCH_BASELINE_CALL ( DISPATCH_CALL_BASELINE_HIGH_CB, FN, ARGS) / / The preprocessor callbacks / / The same suffixes as we define it in the dispatch - able source. #define DISPATCH_CALL_HIGH_CB ( CHECK, TARGET_NAME, FN, ARGS) \ else if ( CHECK) { NPY_CAT ( NPY_CAT ( FN, _), TARGET_NAME) ARGS; } #define DISPATCH_CALL_BASELINE_HIGH_CB ( FN, ARGS) \ else { FN NPY_EXPAND ( ARGS); } / / NumPy has a macro called &#39; NPY_CPU_DISPATCH_DECLARE &#39; can be used / / for forward declrations any kind of prototypes based on / / &#39; NPY__CPU_DISPATCH_CALL &#39; and &#39; NPY__CPU_DISPATCH_BASELINE_CALL &#39; . / / However in this example, we just handle it manually. void simd_whoami ( const char *extra_info); void simd_whoami_AVX512F ( const char *extra_info); void simd_whoami_SSE41 ( const char *extra_info); void trigger_me ( void) { / / bring the auto - gernreated config header / / which contains config macros &#39; NPY__CPU_DISPATCH_CALL &#39; and / / &#39; NPY__CPU_DISPATCH_BASELINE_CALL &#39; . / / it highely recomaned to include the config header before exectuing / / the dispatching macros in case if there &#39; s another header in the scope. #include &#34; hello.dispatch.h &#34; DISPATCH_CALL_ALL ( simd_whoami, ( &#34; all &#34; )) DISPATCH_CALL_HIGH ( simd_whoami, ( &#34; the highest interest &#34; )) / / An example of including multiple config headers in the same source / / #include &#34; hello2.dispatch.h &#34; / / DISPATCH_CALL_HIGH ( another_function, ( &#34; the highest interest &#34; )) } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code:: c
+    // NOTE: The following macros are only defined for demonstration purposes only.
+      // NumPy already has a collections of macros located at
+      // numpy/numpy/core/src/common/npy_cpu_dispatch.h, that covers all dispatching
+      // and declarations scenarios.
+
+      #include &#34;numpy/npy_cpu_features.h&#34; // NPY_CPU_HAVE
+      #include &#34;numpy/utils.h&#34; // NPY_CAT, NPY_EXPAND
+
+      // An example for setting a macro that calls all the exported symbols at once
+      // after checking if they&#39;re supported by the running machine.
+      #define DISPATCH_CALL_ALL(FN, ARGS) \
+          NPY__CPU_DISPATCH_CALL(NPY_CPU_HAVE, DISPATCH_CALL_ALL_CB, FN, ARGS) \
+          NPY__CPU_DISPATCH_BASELINE_CALL(DISPATCH_CALL_BASELINE_ALL_CB, FN, ARGS)
+      // The preprocessor callbacks.
+      // The same suffixes as we define it in the dispatch-able source.
+      #define DISPATCH_CALL_ALL_CB(CHECK, TARGET_NAME, FN, ARGS) \
+        if (CHECK) { NPY_CAT(NPY_CAT(FN, _), TARGET_NAME) ARGS; }
+      #define DISPATCH_CALL_BASELINE_ALL_CB(FN, ARGS) \
+        FN NPY_EXPAND(ARGS);
+
+      // An example for setting a macro that calls the exported symbols of highest
+      // interest optimization, after checking if they&#39;re supported by the running machine.
+      #define DISPATCH_CALL_HIGH(FN, ARGS) \
+        if (0) {} \
+          NPY__CPU_DISPATCH_CALL(NPY_CPU_HAVE, DISPATCH_CALL_HIGH_CB, FN, ARGS) \
+          NPY__CPU_DISPATCH_BASELINE_CALL(DISPATCH_CALL_BASELINE_HIGH_CB, FN, ARGS)
+      // The preprocessor callbacks
+      // The same suffixes as we define it in the dispatch-able source.
+      #define DISPATCH_CALL_HIGH_CB(CHECK, TARGET_NAME, FN, ARGS) \
+        else if (CHECK) { NPY_CAT(NPY_CAT(FN, _), TARGET_NAME) ARGS; }
+      #define DISPATCH_CALL_BASELINE_HIGH_CB(FN, ARGS) \
+        else { FN NPY_EXPAND(ARGS); }
+
+      // NumPy has a macro called &#39;NPY_CPU_DISPATCH_DECLARE&#39; can be used
+      // for forward declrations any kind of prototypes based on
+      // &#39;NPY__CPU_DISPATCH_CALL&#39; and &#39;NPY__CPU_DISPATCH_BASELINE_CALL&#39;.
+      // However in this example, we just handle it manually.
+      void simd_whoami(const char *extra_info);
+      void simd_whoami_AVX512F(const char *extra_info);
+      void simd_whoami_SSE41(const char *extra_info);
+
+      void trigger_me(void)
+      {
+          // bring the auto-gernreated config header
+          // which contains config macros &#39;NPY__CPU_DISPATCH_CALL&#39; and
+          // &#39;NPY__CPU_DISPATCH_BASELINE_CALL&#39;.
+          // it highely recomaned to include the config header before exectuing
+        // the dispatching macros in case if there&#39;s another header in the scope.
+          #include &#34;hello.dispatch.h&#34;
+          DISPATCH_CALL_ALL(simd_whoami, (&#34;all&#34;))
+          DISPATCH_CALL_HIGH(simd_whoami, (&#34;the highest interest&#34;))
+          // An example of including multiple config headers in the same source
+          // #include &#34;hello2.dispatch.h&#34;
+          // DISPATCH_CALL_HIGH(another_function, (&#34;the highest interest&#34;))
+      }</pre>
 
 
 </li>

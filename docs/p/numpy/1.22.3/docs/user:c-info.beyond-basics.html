@@ -109,18 +109,17 @@
 <h1>Beyond the Basics</h1>
 
 <h1>Iterating over elements in the array</h1>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _`sec:array_iterator`:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`sec:array_iterator`:&#39;&gt;
+           </pre>
+
 
 <h1>Basic Iteration</h1>
                <p>One common algorithmic requirement is to be able to walk over all elements in a multidimensional array. The array iterator object makes this easy to do in a generic way that works for arrays of any dimension. Naturally, if you know the number of dimensions you will be using, then you can always write nested for loops to accomplish the iteration. If, however, you want to write code that works with any number of dimensions, then you can make use of the array iterator. An array iterator object is returned when accessing the .flat attribute of an array.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : array iterator </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: array iterator</pre>
 
 
                <p>Basic usage is to call         <code class='verbatim'>PyArray_IterNew</code>
@@ -143,12 +142,18 @@
  ) which will jump to the 1-d index given by the value of         <code class='verbatim'>index</code>
 . The most common usage, however, is given in the following example.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>PyObject *obj; / * assumed to be some ndarray object * / PyArrayIterObject *iter; ... iter = ( PyArrayIterObject *)PyArray_IterNew ( obj); if ( iter == NULL) goto fail; / * Assume fail has clean - up code * / while ( iter - &gt;index &lt; iter - &gt;size) { / * do something with the data at it - &gt;dataptr * / PyArray_ITER_NEXT ( it); } ... </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    PyObject *obj; /* assumed to be some ndarray object */
+    PyArrayIterObject *iter;
+    ...
+    iter = (PyArrayIterObject *)PyArray_IterNew(obj);
+    if (iter == NULL) goto fail;   /* Assume fail has clean-up code */
+    while (iter-&gt;index &lt; iter-&gt;size) {
+        /* do something with the data at it-&gt;dataptr */
+        PyArray_ITER_NEXT(it);
+    }
+    ...</pre>
 
 
                <p>You can also use         <code class='verbatim'>PyArrayIter_Check</code>
@@ -159,12 +164,16 @@
 
                <p>It should be emphasized at this point that you may not need the array iterator if your array is already contiguous (using an array iterator will work but will be slower than the fastest code you could write). The major purpose of array iterators is to encapsulate iteration over N-dimensional arrays with arbitrary strides. They are used in many, many places in the NumPy source code itself. If you already know your array is contiguous (Fortran or C), then simply adding the element- size to a running pointer variable will step you through the array very efficiently. In other words, code like this will probably be faster for you in the contiguous case (assuming doubles).</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>npy_intp size; double *dptr; / * could make this any variable type * / size = PyArray_SIZE ( obj); dptr = PyArray_DATA ( obj); while ( size - - ) { / * do something with the data at dptr * / dptr++; } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    npy_intp size;
+    double *dptr;  /* could make this any variable type */
+    size = PyArray_SIZE(obj);
+    dptr = PyArray_DATA(obj);
+    while(size--) {
+       /* do something with the data at dptr */
+       dptr++;
+    }</pre>
 
 
 
@@ -184,22 +193,27 @@
 <h1>Iterating over multiple arrays</h1>
                <p>Very often, it is desirable to iterate over several arrays at the same time. The universal functions are an example of this kind of behavior. If all you want to do is iterate over arrays with the same shape, then simply creating several iterator objects is the standard procedure. For example, the following code iterates over two arrays assumed to be the same shape and size (actually obj1 just has to have at least as many total elements as does obj2):</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ * It is already assumed that obj1 and obj2 are ndarrays of the same shape and size. * / iter1 = ( PyArrayIterObject *)PyArray_IterNew ( obj1); if ( iter1 == NULL) goto fail; iter2 = ( PyArrayIterObject *)PyArray_IterNew ( obj2); if ( iter2 == NULL) goto fail; / * assume iter1 is DECREF &#39; d at fail * / while ( iter2 - &gt;index &lt; iter2 - &gt;size) { / * process with iter1 - &gt;dataptr and iter2 - &gt;dataptr * / PyArray_ITER_NEXT ( iter1); PyArray_ITER_NEXT ( iter2); } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    /* It is already assumed that obj1 and obj2
+       are ndarrays of the same shape and size.
+    */
+    iter1 = (PyArrayIterObject *)PyArray_IterNew(obj1);
+    if (iter1 == NULL) goto fail;
+    iter2 = (PyArrayIterObject *)PyArray_IterNew(obj2);
+    if (iter2 == NULL) goto fail;  /* assume iter1 is DECREF&#39;d at fail */
+    while (iter2-&gt;index &lt; iter2-&gt;size)  {
+        /* process with iter1-&gt;dataptr and iter2-&gt;dataptr */
+        PyArray_ITER_NEXT(iter1);
+        PyArray_ITER_NEXT(iter2);
+    }</pre>
 
 
 
 <h1>Broadcasting over multiple arrays</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : broadcasting </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: broadcasting</pre>
 
 
                <p>When multiple arrays are involved in an operation, you may want to use the same broadcasting rules that the math operations (<em>i.e.</em> the ufuncs) use. This can be done easily using the         <code class='verbatim'>PyArrayMultiIterObject</code>
@@ -219,30 +233,33 @@
 ,         <code class='verbatim'>i</code>
  ). An example of using this feature follows.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>mobj = PyArray_MultiIterNew ( 2, obj1, obj2); size = mobj - &gt;size; while ( size - - ) { ptr1 = PyArray_MultiIter_DATA ( mobj, 0); ptr2 = PyArray_MultiIter_DATA ( mobj, 1); / * code using contents of ptr1 and ptr2 * / PyArray_MultiIter_NEXT ( mobj); } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    mobj = PyArray_MultiIterNew(2, obj1, obj2);
+    size = mobj-&gt;size;
+    while(size--) {
+        ptr1 = PyArray_MultiIter_DATA(mobj, 0);
+        ptr2 = PyArray_MultiIter_DATA(mobj, 1);
+        /* code using contents of ptr1 and ptr2 */
+        PyArray_MultiIter_NEXT(mobj);
+    }</pre>
 
 
                <p>The function         <code class='verbatim'>PyArray_RemoveSmallest</code>
  (         <code class='verbatim'>multi</code>
  ) can be used to take a multi-iterator object and adjust all the iterators so that iteration does not take place over the largest dimension (it makes that dimension of size 1). The code being looped over that makes use of the pointers will very-likely also need the strides data for each of the iterators. This information is stored in multi-&gt;iters[i]-&gt;strides.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : array iterator </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: array iterator</pre>
 
 
                <p>There are several examples of using the multi-iterator in the NumPy source code as it makes N-dimensional broadcasting-code very simple to write. Browse the source for more examples.</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _user.user-defined-data-types:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _user.user-defined-data-types:&#39;&gt;
+           </pre>
+
 
 <h1>User-defined data-types</h1>
                <p>NumPy comes with 24 builtin data-types. While this covers a large majority of possible use cases, it is conceivable that a user may have a need for an additional data-type. There is some support for adding an additional data-type into the NumPy system. This additional data- type will behave much like a regular data-type except ufuncs must have 1-d loops registered to handle it separately. Also checking for whether or not other data-types can be cast &#34;safely&#34; to and from this new type or not will always return &#34;can cast&#34; unless you also register which types your new data-type can be cast to and from.</p>
@@ -251,24 +268,22 @@
  in the source code directory          <code class='verbatim'>numpy/numpy/core/src/umath/</code>
  contains an implementation of a data-type that represents a rational number as the ratio of two 32 bit integers.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>pair : dtype; adding new </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    pair: dtype; adding new</pre>
 
 
 
 <h1>Adding the new data-type</h1>
                <p>To begin to make use of the new data-type, you need to first define a new Python type to hold the scalars of your new data-type. It should be acceptable to inherit from one of the array scalars if your new type has a binary compatible layout. This will allow your new data type to have the methods and attributes of array scalars. New data- types must have a fixed memory size (if you want to define a data-type that needs a flexible representation, like a variable-precision number, then use a pointer to the object as the data-type). The memory layout of the object structure for the new Python type must be PyObject_HEAD followed by the fixed-size memory needed for the data- type. For example, a suitable structure for the new Python type is:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>typedef struct { PyObject_HEAD; some_data_type obval; / * the name can be whatever you want * / } PySomeDataTypeObject; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    typedef struct {
+       PyObject_HEAD;
+       some_data_type obval;
+       /* the name can be whatever you want */
+    } PySomeDataTypeObject;</pre>
 
 
                <p>After you have defined a new Python type object, you must then define a new         <code class='verbatim'>PyArray_Descr</code>
@@ -284,12 +299,9 @@
 <h1>Registering a casting function</h1>
                <p>You may want to allow builtin (and other user-defined) data-types to be cast automatically to your data-type. In order to make this possible, you must register a casting function with the data-type you want to be able to cast from. This requires writing low-level casting functions for each conversion you want to support and then registering these functions with the data-type descriptor. A low-level casting function has the signature.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. c:function:: [&#39;void castfunc( \\&#39;]
-    </div>
-    <pre class='not-implemented'><p>void* from, void* to, npy_intp n, void* fromarr, void* toarr) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. c:function:: void castfunc( \
+    void* from, void* to, npy_intp n, void* fromarr, void* toarr)</pre>
 
 
                            <pre>Cast ``n`` elements ``from`` one type ``to`` another. The data to
@@ -300,25 +312,27 @@ arguments should only be used for flexible-element-sized arrays
 (string, unicode, void).
 </pre>
 
-
                <p>An example castfunc is:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>static void double_to_float ( double *from, float* to, npy_intp n, void* ignore1, void* ignore2) { while ( n - - ) { ( *to++) = ( double) * ( from++); } } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    static void
+    double_to_float(double *from, float* to, npy_intp n,
+                    void* ignore1, void* ignore2) {
+        while (n--) {
+              (*to++) = (double) *(from++);
+        }
+    }</pre>
 
 
                <p>This could then be registered to convert doubles to floats using the code:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>doub = PyArray_DescrFromType ( NPY_DOUBLE); PyArray_RegisterCastFunc ( doub, NPY_FLOAT, ( PyArray_VectorUnaryFunc *)double_to_float); Py_DECREF ( doub); </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    doub = PyArray_DescrFromType(NPY_DOUBLE);
+    PyArray_RegisterCastFunc(doub, NPY_FLOAT,
+         (PyArray_VectorUnaryFunc *)double_to_float);
+    Py_DECREF(doub);</pre>
 
 
 
@@ -339,24 +353,18 @@ arguments should only be used for flexible-element-sized arrays
  if the process was successful and         <code class='verbatim'>-1</code>
  with an error condition set if it was not successful.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>pair : dtype; adding new </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    pair: dtype; adding new</pre>
 
 
 
 <h1>Subtyping the ndarray in C</h1>
                <p>One of the lesser-used features that has been lurking in Python since 2.2 is the ability to sub-class types in C. This facility is one of the important reasons for basing NumPy off of the Numeric code-base which was already in C. A sub-type in C allows much more flexibility with regards to memory management. Sub-typing in C is not difficult even if you have only a rudimentary understanding of how to create new types for Python. While it is easiest to sub-type from a single parent type, sub-typing from multiple parent types is also possible. Multiple inheritance in C is generally less useful than it is in Python because a restriction on Python sub-types is that they have a binary compatible memory layout. Perhaps for this reason, it is somewhat easier to sub-type from a single parent type.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>pair : ndarray; subtyping </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    pair: ndarray; subtyping</pre>
 
 
                <p>All C-structures corresponding to Python objects must begin with         <code class='verbatim'>PyObject_HEAD</code>
@@ -377,12 +385,12 @@ arguments should only be used for flexible-element-sized arrays
 
                           <ol>               <li>               <p>If needed create a new C-structure to handle each instance of your    type. A typical C-structure would be:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>typedef _new_struct { PyArrayObject base; / * new things here * / } NewArrayObject; </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    typedef _new_struct {
+           PyArrayObject base;
+           /* new things here */
+       } NewArrayObject;</pre>
 
 
                <p>Notice that the full PyArrayObject is used as the first entry in order    to ensure that the binary layout of instances of the new type is    identical to the PyArrayObject.</p>
@@ -402,48 +410,83 @@ arguments should only be used for flexible-element-sized arrays
 
                <p>More information on creating sub-types in C can be learned by reading PEP 253 (available at https://www.python.org/dev/peps/pep-0253).</p>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _specific-array-subtyping:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _specific-array-subtyping:&#39;&gt;
+           </pre>
+
 
 <h1>Specific features of ndarray sub-typing</h1>
                <p>Some special methods and attributes are used by arrays in order to facilitate the interoperation of sub-types with the base ndarray type.</p>
 
 
 <h1>The __array_finalize\__ method</h1>
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;ndarray.__array_finalize__&#39;]
-    </div>
-    <pre class='not-implemented'><p>Several array - creation functions of the ndarray allow specification of a particular sub - type to be created. This allows sub - types to be handled seamlessly in many routines. When a sub - type is created in such a fashion, however, neither the __new_\_ method nor the __init\__ method gets called. Instead, the sub - type is allocated and the appropriate instance - structure members are filled in. Finally, the : obj : `~numpy.class.__array_finalize__` attribute is looked - up in the object dictionary. If it is present and not None, then it can be either a CObject containing a pointer to a : c : func : `PyArray_FinalizeFunc` or it can be a method taking a single argument ( which could be None) If the : obj : `~numpy.class.__array_finalize__` attribute is a CObject, then the pointer must be a pointer to a function with the signature : .. code - block : : c ( int) ( PyArrayObject *, PyObject *) The first argument is the newly created sub - type. The second argument ( if not NULL) is the &#34; parent &#34; array ( if the array was created using slicing or some other operation where a clearly - distinguishable parent is present). This routine can do anything it wants to. It should return a - 1 on error and 0 otherwise. If the : obj : `~numpy.class.__array_finalize__` attribute is not None nor a CObject, then it must be a Python method that takes the parent array as an argument ( which could be None if there is no parent), and returns nothing. Errors in this method will be caught and handled. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: ndarray.__array_finalize__
+    Several array-creation functions of the ndarray allow
+    specification of a particular sub-type to be created. This allows
+    sub-types to be handled seamlessly in many routines. When a
+    sub-type is created in such a fashion, however, neither the
+    __new_\_ method nor the __init\__ method gets called. Instead, the
+    sub-type is allocated and the appropriate instance-structure
+    members are filled in. Finally, the :obj:`~numpy.class.__array_finalize__`
+    attribute is looked-up in the object dictionary. If it is present
+    and not None, then it can be either a CObject containing a pointer
+    to a :c:func:`PyArray_FinalizeFunc` or it can be a method taking a
+    single argument (which could be None)
+
+    If the :obj:`~numpy.class.__array_finalize__` attribute is a CObject, then the pointer
+    must be a pointer to a function with the signature:
+
+    .. code-block:: c
+
+        (int) (PyArrayObject *, PyObject *)
+
+    The first argument is the newly created sub-type. The second argument
+    (if not NULL) is the &#34;parent&#34; array (if the array was created using
+    slicing or some other operation where a clearly-distinguishable parent
+    is present). This routine can do anything it wants to. It should
+    return a -1 on error and 0 otherwise.
+
+    If the :obj:`~numpy.class.__array_finalize__` attribute is not None nor a CObject,
+    then it must be a Python method that takes the parent array as an
+    argument (which could be None if there is no parent), and returns
+    nothing. Errors in this method will be caught and handled.</pre>
 
 
 
 <h1>The __array_priority\__ attribute</h1>
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;ndarray.__array_priority__&#39;]
-    </div>
-    <pre class='not-implemented'><p>This attribute allows simple but flexible determination of which sub - type should be considered &#34; primary &#34; when an operation involving two or more sub - types arises. In operations where different sub - types are being used, the sub - type with the largest : obj : `~numpy.class.__array_priority__` attribute will determine the sub - type of the output ( s). If two sub - types have the same : obj : `~numpy.class.__array_priority__` then the sub - type of the first argument determines the output. The default : obj : `~numpy.class.__array_priority__` attribute returns a value of 0.0 for the base ndarray type and 1.0 for a sub - type. This attribute can also be defined by objects that are not sub - types of the ndarray and can be used to determine which : obj : `~numpy.class.__array_wrap__` method should be called for the return output. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: ndarray.__array_priority__
+    This attribute allows simple but flexible determination of which sub-
+    type should be considered &#34;primary&#34; when an operation involving two or
+    more sub-types arises. In operations where different sub-types are
+    being used, the sub-type with the largest :obj:`~numpy.class.__array_priority__`
+    attribute will determine the sub-type of the output(s). If two sub-
+    types have the same :obj:`~numpy.class.__array_priority__` then the sub-type of the
+    first argument determines the output. The default
+    :obj:`~numpy.class.__array_priority__` attribute returns a value of 0.0 for the base
+    ndarray type and 1.0 for a sub-type. This attribute can also be
+    defined by objects that are not sub-types of the ndarray and can be
+    used to determine which :obj:`~numpy.class.__array_wrap__` method should be called for
+    the return output.</pre>
 
 
 
 <h1>The __array_wrap\__ method</h1>
-               <div class='block_directive'>
-    <div class='head'>.. attribute:: [&#39;ndarray.__array_wrap__&#39;]
-    </div>
-    <pre class='not-implemented'><p>Any class or type can define this method which should take an ndarray argument and return an instance of the type. It can be seen as the opposite of the : obj : `~numpy.class.__array__` method. This method is used by the ufuncs ( and other NumPy functions) to allow other objects to pass through. For Python &gt;2.4, it can also be used to write a decorator that converts a function that works only with ndarrays to one that works with any type with : obj : `~numpy.class.__array__` and : obj : `~numpy.class.__array_wrap__` methods. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. attribute:: ndarray.__array_wrap__
+    Any class or type can define this method which should take an ndarray
+    argument and return an instance of the type. It can be seen as the
+    opposite of the :obj:`~numpy.class.__array__` method. This method is used by the
+    ufuncs (and other NumPy functions) to allow other objects to pass
+    through. For Python &gt;2.4, it can also be used to write a decorator
+    that converts a function that works only with ndarrays to one that
+    works with any type with :obj:`~numpy.class.__array__` and :obj:`~numpy.class.__array_wrap__` methods.</pre>
 
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>pair : ndarray; subtyping </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    pair: ndarray; subtyping</pre>
 
 
 

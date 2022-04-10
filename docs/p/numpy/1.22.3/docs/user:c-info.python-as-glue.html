@@ -121,7 +121,7 @@
 
                            <div class='admonition'>
     <div>warning</div>
-        <p>Calling C - code from Python can result in Python crashes if you are not careful. None of the approaches in this chapter are immune. You have to know something about the way data is handled by both NumPy and by the third - party library being used. </p>
+        <p>Calling C-code from Python can result in Python crashes if you are not careful. None of the approaches in this chapter are immune. You have to know something about the way data is handled by both NumPy and by the third-party library being used.</p>
 
 </div>
 
@@ -146,12 +146,9 @@
 
                <p>The f2py method of linking compiled code is currently the most sophisticated and integrated approach. It allows clean separation of Python with compiled code while still allowing for separate distribution of the extension module. The only draw-back is that it requires the existence of a Fortran compiler in order for a user to install the code. However, with the existence of the free-compilers g77, gfortran, and g95, as well as high-quality commercial compilers, this restriction is not particularly onerous. In our opinion, Fortran is still the easiest way to write fast and clear code for scientific computing. It handles complex numbers, and multi-dimensional indexing in the most straightforward way. Be aware, however, that some Fortran compilers will not be able to optimize code as well as good hand- written C-code.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : f2py </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: f2py</pre>
 
 
 
@@ -160,12 +157,9 @@
 
                <p>If you are writing an extension module that will include quite a bit of your own algorithmic code as well, then Cython is a good match. Among its features is the ability to easily and quickly work with multidimensional arrays.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : cython </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: cython</pre>
 
 
                <p>Notice that Cython is an extension-module generator only. Unlike f2py, it includes no automatic facility for compiling and linking the extension module (which must be done in the usual fashion). It does provide a modified distutils class called         <code class='verbatim'>build_ext</code>
@@ -173,12 +167,17 @@
  source. Thus, you could write in a         <code class='verbatim'>setup.py</code>
  file:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>from Cython.Distutils import build_ext from distutils.extension import Extension from distutils.core import setup import numpy setup ( name= &#39; mine &#39; , description= &#39; Nothing &#39; , ext_modules= [ Extension ( &#39; filter &#39; , [ &#39; filter.pyx &#39; ], include_dirs= [ numpy.get_include ( )])], cmdclass = { &#39; build_ext &#39; : build_ext}) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    from Cython.Distutils import build_ext
+    from distutils.extension import Extension
+    from distutils.core import setup
+    import numpy
+
+    setup(name=&#39;mine&#39;, description=&#39;Nothing&#39;,
+          ext_modules=[Extension(&#39;filter&#39;, [&#39;filter.pyx&#39;],
+                                 include_dirs=[numpy.get_include()])],
+          cmdclass = {&#39;build_ext&#39;:build_ext})</pre>
 
 
                <p>Adding the NumPy include directory is, of course, only necessary if you are using NumPy arrays in the extension module (which is what we assume you are using Cython for). The distutils extensions in NumPy also include support for automatically producing the extension-module and linking it from a         <code class='verbatim'>.pyx</code>
@@ -196,12 +195,28 @@
                <p>Here is part of a Cython module named         <code class='verbatim'>add.pyx</code>
  which implements the complex addition functions we previously implemented using f2py:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;cython&#39;]
-    </div>
-    <pre class='not-implemented'><p>cimport cython cimport numpy as np import numpy as np # We need to initialize NumPy. np.import_array ( ) #@cython.boundscheck ( False) def zadd ( in1, in2) : cdef double complex [ : ] a = in1.ravel ( ) cdef double complex [ : ] b = in2.ravel ( ) out = np.empty ( a.shape [ 0], np.complex64) cdef double complex [ : ] c = out.ravel ( ) for i in range ( c.shape [ 0]) : c [ i].real = a [ i].real + b [ i].real c [ i].imag = a [ i].imag + b [ i].imag return out </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: cython
+    cimport cython
+    cimport numpy as np
+    import numpy as np
+
+    # We need to initialize NumPy.
+    np.import_array()
+
+    #@cython.boundscheck(False)
+    def zadd(in1, in2):
+        cdef double complex[:] a = in1.ravel()
+        cdef double complex[:] b = in2.ravel()
+
+        out = np.empty(a.shape[0], np.complex64)
+        cdef double complex[:] c = out.ravel()
+
+        for i in range(c.shape[0]):
+            c[i].real = a[i].real + b[i].real
+            c[i].imag = a[i].imag + b[i].imag
+
+        return out</pre>
 
 
                <p>This module shows use of the         <code class='verbatim'>cimport</code>
@@ -225,24 +240,39 @@
 <h1>Image filter in Cython</h1>
                <p>The two-dimensional example we created using Fortran is just as easy to write in Cython:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;cython&#39;]
-    </div>
-    <pre class='not-implemented'><p>cimport numpy as np import numpy as np np.import_array ( ) def filter ( img) : cdef double [ : , : ] a = np.asarray ( img, dtype=np.double) out = np.zeros ( img.shape, dtype=np.double) cdef double [ : , : : 1] b = out cdef np.npy_intp i, j for i in range ( 1, a.shape [ 0] - 1) : for j in range ( 1, a.shape [ 1] - 1) : b [ i, j] = ( a [ i, j] + .5 * ( a [ i - 1, j] + a [ i+1, j] + a [ i, j - 1] + a [ i, j+1]) + .25 * ( a [ i - 1, j - 1] + a [ i - 1, j+1] + a [ i+1, j - 1] + a [ i+1, j+1])) return out </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: cython
+    cimport numpy as np
+    import numpy as np
+
+    np.import_array()
+
+    def filter(img):
+        cdef double[:, :] a = np.asarray(img, dtype=np.double)
+        out = np.zeros(img.shape, dtype=np.double)
+        cdef double[:, ::1] b = out
+
+        cdef np.npy_intp i, j
+
+        for i in range(1, a.shape[0] - 1):
+            for j in range(1, a.shape[1] - 1):
+                b[i, j] = (a[i, j]
+                           + .5 * (  a[i-1, j] + a[i+1, j]
+                                   + a[i, j-1] + a[i, j+1])
+                           + .25 * (  a[i-1, j-1] + a[i-1, j+1]
+                                    + a[i+1, j-1] + a[i+1, j+1]))
+
+        return out</pre>
 
 
                <p>This 2-d averaging filter runs quickly because the loop is in C and the pointer computations are done only as needed. If the code above is compiled as a module         <code class='verbatim'>image</code>
 , then a 2-d image,         <code class='verbatim'>img</code>
 , can be filtered using this code very quickly using:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>import image out = image.filter ( img) </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    import image
+    out = image.filter(img)</pre>
 
 
                <p>Regarding the code, two things are of note: firstly, it is impossible to return a memory view to Python. Instead, a NumPy array         <code class='verbatim'>out</code>
@@ -272,24 +302,18 @@
 
                <p>One big advantage of Cython-generated extension modules is that they are easy to distribute. In summary, Cython is a very capable tool for either gluing C code or generating an extension module quickly and should not be over-looked. It is especially useful for people that can&#39;t or won&#39;t write C or Fortran code.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : cython </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: cython</pre>
 
 
 
 <h1>ctypes</h1>
                <p><a link href="https://docs.python.org/3/library/ctypes.html" class='external'>Ctypes</a> is a Python extension module, included in the stdlib, that allows you to call an arbitrary function in a shared library directly from Python. This approach allows you to interface with C-code directly from Python. This opens up an enormous number of libraries for use from Python. The drawback, however, is that coding mistakes can lead to ugly program crashes very easily (just as can happen in C) because there is little type or bounds checking done on the parameters. This is especially true when array data is passed in as a pointer to a raw memory location. The responsibility is then on you that the subroutine will not access memory outside the actual array area. But, if you don&#39;t mind living a little dangerously ctypes can be an effective tool for quickly taking advantage of a large shared library (or writing extended functionality in your own shared library).</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : ctypes </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: ctypes</pre>
 
 
                <p>Because the ctypes approach exposes a raw interface to the compiled code it is not always tolerant of user mistakes. Robust use of the ctypes module typically involves an additional layer of Python code in order to check the data types and array bounds of objects passed to the underlying subroutine. This additional layer of checking (not to mention the conversion from ctypes objects to C-data-types that ctypes itself performs), will make the interface slower than a hand-written extension-module interface. However, this overhead should be negligible if the C-routine being called is doing any significant amount of work. If you are a great Python programmer with weak C skills, ctypes is an easy way to write a useful interface to a (shared) library of compiled code.</p>
@@ -339,12 +363,9 @@ cool_function2</pre>
 <h1>Loading the shared library</h1>
                <p>A simple, but robust way to load the shared library is to get the absolute path name and load it using the cdll object of ctypes:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>lib = ctypes.cdll [ &lt; full_path_name&gt;] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    lib = ctypes.cdll[&lt;full_path_name&gt;]</pre>
 
 
                <p>However, on Windows accessing an attribute of the         <code class='verbatim'>cdll</code>
@@ -403,34 +424,37 @@ ctype&gt;)</code>
  has a function named         <code class='verbatim'>cool_function1</code>
 , it may be accessed either as:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>lib = numpy.ctypeslib.load_library ( &#39; mylib &#39; , &#39; . &#39; ) func1 = lib.cool_function1 # or equivalently func1 = lib [ &#39; cool_function1 &#39; ] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    lib = numpy.ctypeslib.load_library(&#39;mylib&#39;,&#39;.&#39;)
+    func1 = lib.cool_function1  # or equivalently
+    func1 = lib[&#39;cool_function1&#39;]</pre>
 
 
                <p>In ctypes, the return-value of a function is set to be &#39;int&#39; by default. This behavior can be changed by setting the restype attribute of the function. Use None for the restype if the function has no return value (&#39;void&#39;):</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>func1.restype = None </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    func1.restype = None</pre>
 
 
                <p>As previously discussed, you can also set the argtypes attribute of the function in order to have ctypes check the types of the input arguments when the function is called. Use the         <code class='verbatim'>ndpointer</code>
  factory function to generate a ready-made class for data-type, shape, and flags checking on your new function. The         <code class='verbatim'>ndpointer</code>
  function has the signature</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. function:: [&#39;ndpointer(dtype=None, ndim=None, shape=None, flags=None)&#39;]
-    </div>
-    <pre class='not-implemented'><p>Keyword arguments with the value ``None`` are not checked. Specifying a keyword enforces checking of that aspect of the ndarray on conversion to a ctypes - compatible object. The dtype keyword can be any object understood as a data - type object. The ndim keyword should be an integer, and the shape keyword should be an integer or a sequence of integers. The flags keyword specifies the minimal flags that are required on any array passed in. This can be specified as a string of comma separated requirements, an integer indicating the requirement bits OR &#39; d together, or a flags object returned from the flags attribute of an array with the necessary requirements. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. function:: ndpointer(dtype=None, ndim=None, shape=None, flags=None)
+    Keyword arguments with the value ``None`` are not checked.
+    Specifying a keyword enforces checking of that aspect of the
+    ndarray on conversion to a ctypes-compatible object. The dtype
+    keyword can be any object understood as a data-type object. The
+    ndim keyword should be an integer, and the shape keyword should be
+    an integer or a sequence of integers. The flags keyword specifies
+    the minimal flags that are required on any array passed in. This
+    can be specified as a string of comma separated requirements, an
+    integer indicating the requirement bits OR&#39;d together, or a flags
+    object returned from the flags attribute of an array with the
+    necessary requirements.</pre>
 
 
                <p>Using an ndpointer class in the argtypes method can make it significantly safer to call a C function using ctypes and the data- area of an ndarray. You may still want to wrap the function in an additional Python wrapper to make it user-friendly (hiding some obvious arguments and making some arguments output arguments). In this process, the         <code class='verbatim'>requires</code>
@@ -446,12 +470,19 @@ ctype&gt;)</code>
 . The         <code class='verbatim'>zadd</code>
  function is:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ * Add arrays of contiguous data * / typedef struct { double real; double imag;} cdouble; typedef struct { float real; float imag;} cfloat; void zadd ( cdouble *a, cdouble *b, cdouble *c, long n) { while ( n - - ) { c - &gt;real = a - &gt;real + b - &gt;real; c - &gt;imag = a - &gt;imag + b - &gt;imag; a++; b++; c++; } } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    /* Add arrays of contiguous data */
+    typedef struct {double real; double imag;} cdouble;
+    typedef struct {float real; float imag;} cfloat;
+    void zadd(cdouble *a, cdouble *b, cdouble *c, long n)
+    {
+        while (n--) {
+            c-&gt;real = a-&gt;real + b-&gt;real;
+            c-&gt;imag = a-&gt;imag + b-&gt;imag;
+            a++; b++; c++;
+        }
+    }</pre>
 
 
                <p>with similar code for         <code class='verbatim'>cadd</code>
@@ -459,24 +490,65 @@ ctype&gt;)</code>
 , and         <code class='verbatim'>sadd</code>
  that handles complex float, double, and float data-types, respectively:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>void cadd ( cfloat *a, cfloat *b, cfloat *c, long n) { while ( n - - ) { c - &gt;real = a - &gt;real + b - &gt;real; c - &gt;imag = a - &gt;imag + b - &gt;imag; a++; b++; c++; } } void dadd ( double *a, double *b, double *c, long n) { while ( n - - ) { *c++ = *a++ + *b++; } } void sadd ( float *a, float *b, float *c, long n) { while ( n - - ) { *c++ = *a++ + *b++; } } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    void cadd(cfloat *a, cfloat *b, cfloat *c, long n)
+    {
+            while (n--) {
+                    c-&gt;real = a-&gt;real + b-&gt;real;
+                    c-&gt;imag = a-&gt;imag + b-&gt;imag;
+                    a++; b++; c++;
+            }
+    }
+    void dadd(double *a, double *b, double *c, long n)
+    {
+            while (n--) {
+                    *c++ = *a++ + *b++;
+            }
+    }
+    void sadd(float *a, float *b, float *c, long n)
+    {
+            while (n--) {
+                    *c++ = *a++ + *b++;
+            }
+    }</pre>
 
 
                <p>The         <code class='verbatim'>code.c</code>
  file also contains the function         <code class='verbatim'>dfilter2d</code>
 :</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;c&#39;]
-    </div>
-    <pre class='not-implemented'><p>/ * * Assumes b is contiguous and has strides that are multiples of * sizeof ( double) * / void dfilter2d ( double *a, double *b, ssize_t *astrides, ssize_t *dims) { ssize_t i, j, M, N, S0, S1; ssize_t r, c, rm1, rp1, cp1, cm1; M = dims [ 0]; N = dims [ 1]; S0 = astrides [ 0] / sizeof ( double); S1 = astrides [ 1] / sizeof ( double); for ( i = 1; i &lt; M - 1; i++) { r = i*S0; rp1 = r + S0; rm1 = r - S0; for ( j = 1; j &lt; N - 1; j++) { c = j*S1; cp1 = j + S1; cm1 = j - S1; b [ i*N + j] = a [ r + c] + ( a [ rp1 + c] + a [ rm1 + c] + a [ r + cp1] + a [ r + cm1])*0.5 + ( a [ rp1 + cp1] + a [ rp1 + cm1] + a [ rm1 + cp1] + a [ rm1 + cp1])*0.25; } } } </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: c
+    /*
+     * Assumes b is contiguous and has strides that are multiples of
+     * sizeof(double)
+     */
+    void
+    dfilter2d(double *a, double *b, ssize_t *astrides, ssize_t *dims)
+    {
+        ssize_t i, j, M, N, S0, S1;
+        ssize_t r, c, rm1, rp1, cp1, cm1;
+
+        M = dims[0]; N = dims[1];
+        S0 = astrides[0]/sizeof(double);
+        S1 = astrides[1]/sizeof(double);
+        for (i = 1; i &lt; M - 1; i++) {
+            r = i*S0;
+            rp1 = r + S0;
+            rm1 = r - S0;
+            for (j = 1; j &lt; N - 1; j++) {
+                c = j*S1;
+                cp1 = j + S1;
+                cm1 = j - S1;
+                b[i*N + j] = a[r + c] +
+                    (a[rp1 + c] + a[rm1 + c] +
+                     a[r + cp1] + a[r + cm1])*0.5 +
+                    (a[rp1 + cp1] + a[rp1 + cm1] +
+                     a[rm1 + cp1] + a[rm1 + cp1])*0.25;
+            }
+        }
+    }</pre>
 
 
                <p>A possible advantage this code has over the Fortran-equivalent code is that it takes arbitrarily strided (i.e. non-contiguous arrays) and may also run faster depending on the optimization capability of your compiler. But, it is an obviously more complicated than the simple code in         <code class='verbatim'>filter.f</code>
@@ -489,12 +561,29 @@ ctype&gt;)</code>
 
                <p>A suitable Python interface to this shared library should be constructed. To do this create a file named interface.py with the following lines at the top:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>__all__ = [ &#39; add &#39; , &#39; filter2d &#39; ] import numpy as np import os _path = os.path.dirname ( &#39; __file__ &#39; ) lib = np.ctypeslib.load_library ( &#39; code &#39; , _path) _typedict = { &#39; zadd &#39; : complex, &#39; sadd &#39; : np.single, &#39; cadd &#39; : np.csingle, &#39; dadd &#39; : float} for name in _typedict.keys ( ) : val = getattr ( lib, name) val.restype = None _type = _typedict [ name] val.argtypes = [ np.ctypeslib.ndpointer ( _type, flags= &#39; aligned, contiguous &#39; ), np.ctypeslib.ndpointer ( _type, flags= &#39; aligned, contiguous &#39; ), np.ctypeslib.ndpointer ( _type, flags= &#39; aligned, contiguous, &#39; \ &#39; writeable &#39; ), np.ctypeslib.c_intp] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    __all__ = [&#39;add&#39;, &#39;filter2d&#39;]
+
+    import numpy as np
+    import os
+
+    _path = os.path.dirname(&#39;__file__&#39;)
+    lib = np.ctypeslib.load_library(&#39;code&#39;, _path)
+    _typedict = {&#39;zadd&#39; : complex, &#39;sadd&#39; : np.single,
+                 &#39;cadd&#39; : np.csingle, &#39;dadd&#39; : float}
+    for name in _typedict.keys():
+        val = getattr(lib, name)
+        val.restype = None
+        _type = _typedict[name]
+        val.argtypes = [np.ctypeslib.ndpointer(_type,
+                          flags=&#39;aligned, contiguous&#39;),
+                        np.ctypeslib.ndpointer(_type,
+                          flags=&#39;aligned, contiguous&#39;),
+                        np.ctypeslib.ndpointer(_type,
+                          flags=&#39;aligned, contiguous,&#39;\
+                                &#39;writeable&#39;),
+                        np.ctypeslib.c_intp]</pre>
 
 
                <p>This code loads the shared library named         <code class='verbatim'>code.{ext}</code>
@@ -502,52 +591,65 @@ ctype&gt;)</code>
 
                <p>Setting up the filtering function is similar and allows the filtering function to be called with ndarray arguments as the first two arguments and with pointers to integers (large enough to handle the strides and shape of an ndarray) as the last two arguments.:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>lib.dfilter2d.restype=None lib.dfilter2d.argtypes = [ np.ctypeslib.ndpointer ( float, ndim=2, flags= &#39; aligned &#39; ), np.ctypeslib.ndpointer ( float, ndim=2, flags= &#39; aligned, contiguous, &#39; \ &#39; writeable &#39; ), ctypes.POINTER ( np.ctypeslib.c_intp), ctypes.POINTER ( np.ctypeslib.c_intp)] </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    lib.dfilter2d.restype=None
+    lib.dfilter2d.argtypes = [np.ctypeslib.ndpointer(float, ndim=2,
+                                           flags=&#39;aligned&#39;),
+                              np.ctypeslib.ndpointer(float, ndim=2,
+                                     flags=&#39;aligned, contiguous,&#39;\
+                                           &#39;writeable&#39;),
+                              ctypes.POINTER(np.ctypeslib.c_intp),
+                              ctypes.POINTER(np.ctypeslib.c_intp)]</pre>
 
 
                <p>Next, define a simple selection function that chooses which addition function to call in the shared library based on the data-type:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>def select ( dtype) : if dtype.char in [ &#39; ?bBhHf &#39; ] : return lib.sadd, single elif dtype.char in [ &#39; F &#39; ] : return lib.cadd, csingle elif dtype.char in [ &#39; DG &#39; ] : return lib.zadd, complex else : return lib.dadd, float return func, ntype </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    def select(dtype):
+        if dtype.char in [&#39;?bBhHf&#39;]:
+            return lib.sadd, single
+        elif dtype.char in [&#39;F&#39;]:
+            return lib.cadd, csingle
+        elif dtype.char in [&#39;DG&#39;]:
+            return lib.zadd, complex
+        else:
+            return lib.dadd, float
+        return func, ntype</pre>
 
 
                <p>Finally, the two functions to be exported by the interface can be written simply as:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>def add ( a, b) : requires = [ &#39; CONTIGUOUS &#39; , &#39; ALIGNED &#39; ] a = np.asanyarray ( a) func, dtype = select ( a.dtype) a = np.require ( a, dtype, requires) b = np.require ( b, dtype, requires) c = np.empty_like ( a) func ( a,b,c,a.size) return c </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    def add(a, b):
+        requires = [&#39;CONTIGUOUS&#39;, &#39;ALIGNED&#39;]
+        a = np.asanyarray(a)
+        func, dtype = select(a.dtype)
+        a = np.require(a, dtype, requires)
+        b = np.require(b, dtype, requires)
+        c = np.empty_like(a)
+        func(a,b,c,a.size)
+        return c</pre>
 
 
                <p>and:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. code-block:: [&#39;python&#39;]
-    </div>
-    <pre class='not-implemented'><p>def filter2d ( a) : a = np.require ( a, float, [ &#39; ALIGNED &#39; ]) b = np.zeros_like ( a) lib.dfilter2d ( a, b, a.ctypes.strides, a.ctypes.shape) return b </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. code-block:: python
+    def filter2d(a):
+        a = np.require(a, float, [&#39;ALIGNED&#39;])
+        b = np.zeros_like(a)
+        lib.dfilter2d(a, b, a.ctypes.strides, a.ctypes.shape)
+        return b</pre>
 
 
 
 <h1>Conclusion</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : ctypes </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: ctypes</pre>
 
 
                <p>Using ctypes is a powerful way to connect Python with arbitrary C-code. Its advantages for extending Python include</p>
@@ -561,7 +663,6 @@ ctype&gt;)</code>
 - functionality in shared libraries written for other purposes can be
   obtained with a simple Python wrapper and search for the library.
 </pre>
-
 
 </li>
             </ul>
@@ -601,12 +702,9 @@ ctype&gt;)</code>
 
 
 <h1>SWIG</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : swig </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: swig</pre>
 
 
                <p>Simplified Wrapper and Interface Generator (SWIG) is an old and fairly stable method for wrapping C/C++-libraries to a large variety of other languages. It does not specifically understand NumPy arrays but can be made usable with NumPy through the use of typemaps. There are some sample typemaps in the numpy/tools/swig directory under numpy.i together with an example module that makes use of them. SWIG excels at wrapping large C/C++ libraries because it can (almost) parse their headers and auto-produce an interface. Technically, you need to generate a         <code class='verbatim'>.i</code>
@@ -617,24 +715,18 @@ ctype&gt;)</code>
 
 
 <h1>SIP</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : SIP </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: SIP</pre>
 
 
                <p>SIP is another tool for wrapping C/C++ libraries that is Python specific and appears to have very good support for C++. Riverbank Computing developed SIP in order to create Python bindings to the QT library. An interface file must be written to generate the binding, but the interface file looks a lot like a C/C++ header file. While SIP is not a full C++ parser, it understands quite a bit of C++ syntax as well as its own special directives that allow modification of how the Python binding is accomplished. It also allows the user to define mappings between Python types and C/C++ structures and classes.</p>
 
 
 <h1>Boost Python</h1>
-               <div class='block_directive'>
-    <div class='head'>.. index:: []
-    </div>
-    <pre class='not-implemented'><p>single : Boost.Python </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. index:: 
+    single: Boost.Python</pre>
 
 
                <p>Boost is a repository of C++ libraries and Boost.Python is one of those libraries which provides a concise interface for binding C++ classes and functions to Python. The amazing part of the Boost.Python approach is that it works entirely in pure C++ without introducing a new syntax. Many users of C++ report that Boost.Python makes it possible to combine the best of both worlds in a seamless fashion. Using Boost to wrap simple C-subroutines is usually over-kill. Its primary purpose is to make C++ classes available in Python. So, if you have a set of C++ classes that need to be integrated cleanly into Python, consider learning about and using Boost.Python.</p>

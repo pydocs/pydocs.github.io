@@ -108,8 +108,8 @@
 
 <h1>Interoperability with NumPy</h1>
                <p>NumPy&#39;s ndarray objects provide both a high-level API for operations on array-structured data and a concrete implementation of the API based on         <code class='verbatim'>strided in-RAM storage &lt;arrays&gt;</code>
-. While this API is powerful and fairly general, its concrete implementation has limitations. As datasets grow and NumPy becomes used in a variety of new environments and architectures, there are cases where the strided in-RAM storage strategy is inappropriate, which has caused different libraries to reimplement this API for their own uses. This includes GPU arrays (<code>:None:None:`CuPy_`</code>), Sparse arrays (<code><a link href="/p/scipy/*/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
-, <code>:None:None:`PyData/Sparse &lt;Sparse_&gt;`</code>) and parallel arrays (<code>:None:None:`Dask_`</code> arrays) as well as various NumPy-like implementations in deep learning frameworks, like <code>:None:None:`TensorFlow_`</code> and <code>:None:None:`PyTorch_`</code>. Similarly, there are many projects that build on top of the NumPy API for labeled and indexed arrays (<code>:None:None:`XArray_`</code>), automatic differentiation (<code>:None:None:`JAX_`</code>), masked arrays (<code><a link href="/p/numpy/*/api/numpy.ma.html" class='exists'>numpy.ma</a></code>
+. While this API is powerful and fairly general, its concrete implementation has limitations. As datasets grow and NumPy becomes used in a variety of new environments and architectures, there are cases where the strided in-RAM storage strategy is inappropriate, which has caused different libraries to reimplement this API for their own uses. This includes GPU arrays (<code>:None:None:`CuPy_`</code>), Sparse arrays (<code><a href="/p/scipy/*/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
+, <code>:None:None:`PyData/Sparse &lt;Sparse_&gt;`</code>) and parallel arrays (<code>:None:None:`Dask_`</code> arrays) as well as various NumPy-like implementations in deep learning frameworks, like <code>:None:None:`TensorFlow_`</code> and <code>:None:None:`PyTorch_`</code>. Similarly, there are many projects that build on top of the NumPy API for labeled and indexed arrays (<code>:None:None:`XArray_`</code>), automatic differentiation (<code>:None:None:`JAX_`</code>), masked arrays (<code><a href="/p/numpy/*/api/numpy.ma.html" class='exists'>numpy.ma</a></code>
 ), physical units (<code>:None:None:`astropy.units_`</code>, <code>:None:None:`pint_`</code>, <code>:None:None:`unyt_`</code>), among others that add additional functionality on top of the NumPy API.</p>
 
                <p>Yet, users still want to work with these arrays using the familiar NumPy API and re-use existing code with minimal (ideally zero) porting overhead. With this goal in mind, various protocols are defined for implementations of multi-dimensional arrays with high-level APIs matching NumPy.</p>
@@ -190,7 +190,6 @@
 {&#39;data&#39;: (94708397920832, False), &#39;strides&#39;: None, &#39;descr&#39;: [(&#39;&#39;, &#39;&lt;f8&#39;)], &#39;typestr&#39;: &#39;&lt;f8&#39;, &#39;shape&#39;: (4,), &#39;version&#39;: 3}
 </pre>
 
-
                <p>The         <code class='verbatim'>__array_interface__</code>
  attribute can also be used to manipulate the object data in place:</p>
 
@@ -210,7 +209,6 @@ array([[1, 2],
        [3, 4]])
 </pre>
 
-
                <p>We can check that         <code class='verbatim'>arr</code>
  and         <code class='verbatim'>new_arr</code>
  share the same data buffer:</p>
@@ -222,7 +220,6 @@ array([[1000,    2],
 &gt;&gt;&gt; arr
 array([1000, 2, 3, 4])
 </pre>
-
 
 
 <h1>The ``__array__()`` method</h1>
@@ -272,7 +269,6 @@ array([1000, 2, 3, 4])
 ...     return np.mean(np.exp(x))
 </pre>
 
-
                <p>Note that <code>:None:None:`np.exp &lt;numpy.exp&gt;`</code> is a         <code class='verbatim'>ufunc &lt;ufuncs-basics&gt;</code>
 , which means that it operates on ndarrays in an element-by-element fashion. On the other hand, <code>:None:None:`np.mean &lt;numpy.mean&gt;`</code> operates along one of the array&#39;s axes.</p>
 
@@ -283,7 +279,6 @@ array([1000, 2, 3, 4])
 &gt;&gt;&gt; f(x)
 21.1977562209304
 </pre>
-
 
                <p>We would like this function to work equally well with any NumPy-like array object.</p>
 
@@ -366,9 +361,9 @@ array([1000, 2, 3, 4])
 pandas.core.series.Series
 </pre>
 
-
                <p>Now,         <code class='verbatim'>ser</code>
- is <strong>not</strong> a ndarray, but because it <a link href="https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe-interoperability-with-numpy-functions" class='external'>implements the __array_ufunc__ protocol</a>, we can apply ufuncs to it as if it were a ndarray:</p>
+ is <strong>not</strong> a ndarray, but because it <code>:None:None:`implements the __array_ufunc__ protocol
+&lt;https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe-interoperability-with-numpy-functions&gt;`</code>, we can apply ufuncs to it as if it were a ndarray:</p>
 
                            <pre>&gt;&gt;&gt; np.exp(ser)
    0     2.718282
@@ -383,7 +378,6 @@ pandas.core.series.Series
    3   -0.756802
    dtype: float64
 </pre>
-
 
                <p>We can even do operations with other ndarrays:</p>
 
@@ -401,7 +395,6 @@ numpy.ndarray
 </pre>
 
 
-
 <h1>Example: PyTorch tensors</h1>
                <p><a link href="https://pytorch.org/" class='external'>PyTorch</a> is an optimized tensor library for deep learning using GPUs and CPUs. PyTorch arrays are commonly called <em>tensors</em>. Tensors are similar to NumPy&#39;s ndarrays, except that tensors can run on GPUs or other hardware accelerators. In fact, tensors and NumPy arrays can often share the same underlying memory, eliminating the need to copy data.</p>
 
@@ -410,7 +403,6 @@ numpy.ndarray
 &gt;&gt;&gt; x_np = np.array(data)
 &gt;&gt;&gt; x_tensor = torch.tensor(data)
 </pre>
-
 
                <p>Note that         <code class='verbatim'>x_np</code>
  and         <code class='verbatim'>x_tensor</code>
@@ -424,7 +416,6 @@ tensor([[1, 2],
         [3, 4]])
 </pre>
 
-
                <p>However, we can treat PyTorch tensors as NumPy arrays without the need for explicit conversion:</p>
 
                            <pre>&gt;&gt;&gt; np.exp(x_tensor)
@@ -432,20 +423,24 @@ tensor([[ 2.7183,  7.3891],
         [20.0855, 54.5982]], dtype=torch.float64)
 </pre>
 
-
                <p>Also, note that the return type of this function is compatible with the initial data type.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. admonition:: [&#39;Warning&#39;]
-    </div>
-    <pre class='not-implemented'><p>While this mixing of ndarrays and tensors may be convenient, it is not recommended. It will not work for non - CPU tensors, and will have unexpected behavior in corner cases. Users should prefer explicitly converting the ndarray to a tensor. </p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. admonition:: Warning
+    While this mixing of ndarrays and tensors may be convenient, it is not
+    recommended. It will not work for non-CPU tensors, and will have unexpected
+    behavior in corner cases. Users should prefer explicitly converting the
+    ndarray to a tensor.</pre>
 
 
                            <div class='admonition'>
     <div>note</div>
-        <p>PyTorch does not implement ``__array_function__`` or ``__array_ufunc__``. Under the hood, the ``Tensor.__array__ ( )`` method returns a NumPy ndarray as a view of the tensor data buffer. See `this issue &lt; https : / / github.com / pytorch / pytorch / issues / 24015&gt;`__ and the `__torch_function__ implementation &lt; https : / / github.com / pytorch / pytorch / blob / master / torch / overrides.py&gt;`__ for details. </p>
+        <p>PyTorch does not implement         <code class='verbatim'>__array_function__</code>
+ or         <code class='verbatim'>__array_ufunc__</code>
+. Under the hood, the         <code class='verbatim'>Tensor.__array__()</code>
+ method returns a NumPy ndarray as a view of the tensor data buffer. See <code>:None:None:`this issue
+&lt;https://github.com/pytorch/pytorch/issues/24015&gt;`</code> and the <code>:None:None:`__torch_function__ implementation
+&lt;https://github.com/pytorch/pytorch/blob/master/torch/overrides.py&gt;`</code> for details.</p>
 
 </div>
 
@@ -464,12 +459,12 @@ tensor([0, 1, 2, 3])</pre>
 
 <h1>Example: CuPy arrays</h1>
                <p>CuPy is a NumPy/SciPy-compatible array library for GPU-accelerated computing with Python. CuPy implements a subset of the NumPy interface by implementing         <code class='verbatim'>cupy.ndarray</code>
-, <a link href="https://docs.cupy.dev/en/stable/reference/ndarray.html" class='external'>a counterpart to NumPy ndarrays</a>.</p>
+, <code>:None:None:`a counterpart to NumPy ndarrays
+&lt;https://docs.cupy.dev/en/stable/reference/ndarray.html&gt;`</code>.</p>
 
                            <pre>&gt;&gt;&gt; import cupy as cp
 &gt;&gt;&gt; x_gpu = cp.array([1, 2, 3, 4])
 </pre>
-
 
                <p>The         <code class='verbatim'>cupy.ndarray</code>
  object implements the         <code class='verbatim'>__array_ufunc__</code>
@@ -479,7 +474,6 @@ tensor([0, 1, 2, 3])</pre>
 array(21.19775622)
 </pre>
 
-
                <p>Note that the return type of these operations is still consistent with the initial type:</p>
 
                            <pre>&gt;&gt;&gt; arr = cp.random.randn(1, 2, 3, 4).astype(cp.float32)
@@ -488,8 +482,8 @@ array(21.19775622)
 &lt;class &#39;cupy._core.core.ndarray&#39;&gt;
 </pre>
 
-
-               <p>See <a link href="https://docs.cupy.dev/en/stable/reference/ufunc.html" class='external'>this page in the CuPy documentation for details</a>.</p>
+               <p>See <code>:None:None:`this page in the CuPy documentation for details
+&lt;https://docs.cupy.dev/en/stable/reference/ufunc.html&gt;`</code>.</p>
 
                <p>        <code class='verbatim'>cupy.ndarray</code>
  also implements the         <code class='verbatim'>__array_function__</code>
@@ -500,9 +494,9 @@ array(21.19775622)
 &gt;&gt;&gt; qr_gpu = np.linalg.qr(a_gpu)
 </pre>
 
-
                <p>CuPy implements many NumPy functions on         <code class='verbatim'>cupy.ndarray</code>
- objects, but not all. See <a link href="https://docs.cupy.dev/en/stable/user_guide/difference.html" class='external'>the CuPy documentation</a> for details.</p>
+ objects, but not all. See <code>:None:None:`the CuPy documentation
+&lt;https://docs.cupy.dev/en/stable/user_guide/difference.html&gt;`</code> for details.</p>
 
 
 <h1>Example: Dask arrays</h1>
@@ -520,15 +514,17 @@ dask.array&lt;mean_agg-aggregate, shape=(), dtype=float64, chunksize=(), chunkty
 5.090097550553843
 </pre>
 
-
                            <div class='admonition'>
     <div>note</div>
-        <p>Dask is lazily evaluated, and the result from a computation isn &#39; t computed until you ask for it by invoking ``compute ( )``. </p>
+        <p>Dask is lazily evaluated, and the result from a computation isn&#39;t computed until you ask for it by invoking         <code class='verbatim'>compute()</code>
+.</p>
 
 </div>
 
 
-               <p>See <a link href="https://docs.dask.org/en/stable/array.html" class='external'>the Dask array documentation</a> and the <a link href="https://docs.dask.org/en/stable/array.html#scope" class='external'>scope of Dask arrays interoperability with NumPy arrays</a> for details.</p>
+               <p>See <code>:None:None:`the Dask array documentation
+&lt;https://docs.dask.org/en/stable/array.html&gt;`</code> and the <code>:None:None:`scope of Dask arrays interoperability with NumPy arrays
+&lt;https://docs.dask.org/en/stable/array.html#scope&gt;`</code> for details.</p>
 
 
 <h1>Example: DLPack</h1>
@@ -553,7 +549,6 @@ tensor([  0, 100,   2,   3,   4])
 array([  0, 100,   2,   3,   4])
 </pre>
 
-
                <p>The imported arrays are read-only so writing or operating in-place will fail:</p>
 
                            <pre>&gt;&gt;&gt; x.flags.writeable
@@ -564,17 +559,29 @@ Traceback (most recent call last):
 ValueError: assignment destination is read-only
 </pre>
 
-
                <p>A copy must be created in order to operate on the imported arrays in-place, but will mean duplicating the memory. Do not do this for very large arrays:</p>
 
                            <pre>&gt;&gt;&gt; x_np_copy = x_np.copy()
 &gt;&gt;&gt; x_np_copy.sort()  # works
 </pre>
 
-
                            <div class='admonition'>
     <div>note</div>
-        <p>Note that GPU tensors can &#39; t be converted to NumPy arrays since NumPy doesn &#39; t support GPU devices : &gt;&gt;&gt; x_torch = torch.arange ( 5, device= &#39; cuda &#39; ) &gt;&gt;&gt; np.from_dlpack ( x_torch) Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; RuntimeError : Unsupported device in DLTensor. But, if both libraries support the device the data buffer is on, it is possible to use the ``__dlpack__`` protocol ( e.g. PyTorch_ and CuPy_) : &gt;&gt;&gt; x_torch = torch.arange ( 5, device= &#39; cuda &#39; ) &gt;&gt;&gt; x_cupy = cupy.from_dlpack ( x_torch) </p>
+        <p>Note that GPU tensors can&#39;t be converted to NumPy arrays since NumPy doesn&#39;t support GPU devices:</p>
+
+                    <pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
+&gt;&gt;&gt; np.from_dlpack(x_torch)
+Traceback (most recent call last):
+  File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+RuntimeError: Unsupported device in DLTensor.
+</pre>
+
+        <p>But, if both libraries support the device the data buffer is on, it is possible to use the         <code class='verbatim'>__dlpack__</code>
+ protocol (e.g. <code>:None:None:`PyTorch_`</code> and <code>:None:None:`CuPy_`</code>):</p>
+
+                    <pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
+&gt;&gt;&gt; x_cupy = cupy.from_dlpack(x_torch)
+</pre>
 
 </div>
 
@@ -584,7 +591,6 @@ ValueError: assignment destination is read-only
                            <pre>&gt;&gt;&gt; x_np = np.arange(5)
 &gt;&gt;&gt; x_torch = torch.from_dlpack(x_np)
 </pre>
-
 
                <p>Read-only arrays cannot be exported:</p>
 
@@ -597,7 +603,6 @@ Traceback (most recent call last):
     dlpack = ext_tensor.__dlpack__()
 TypeError: NumPy currently only supports dlpack for writeable arrays
 </pre>
-
 
 
 <h1>Further reading</h1>
@@ -637,26 +642,46 @@ TypeError: NumPy currently only supports dlpack for writeable arrays
 </li>
             </ul>
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _CuPy: https://cupy.dev/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _Sparse: https://sparse.pydata.org/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _Dask: https://docs.dask.org/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _TensorFlow: https://www.tensorflow.org/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _PyTorch: https://pytorch.org/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _XArray: http://xarray.pydata.org/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _JAX: https://jax.readthedocs.io/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _astropy.units: https://docs.astropy.org/en/stable/units/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _pint: https://pint.readthedocs.io/&#39;&gt;</pre>
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _unyt: https://unyt.readthedocs.io/&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _CuPy: https://cupy.dev/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Sparse: https://sparse.pydata.org/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Dask: https://docs.dask.org/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _TensorFlow: https://www.tensorflow.org/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _PyTorch: https://pytorch.org/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _XArray: http://xarray.pydata.org/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _JAX: https://jax.readthedocs.io/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _astropy.units: https://docs.astropy.org/en/stable/units/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _pint: https://pint.readthedocs.io/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _unyt: https://unyt.readthedocs.io/&#39;&gt;
+           </pre>
+
 
 <h3 id="section-Examples">Examples</h3>
          See :

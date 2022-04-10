@@ -106,8 +106,10 @@
 
 
 
-                          <code class='not-implemented'>Type Unimplemented (A) Not implemented yet</code>
-           <pre class='not-implemented'>&lt;Unimplemented &#39;target&#39; &#39;.. _f2py-getting-started:&#39;&gt;</pre>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _f2py-getting-started:&#39;&gt;
+           </pre>
+
 
 <h1>Three ways to wrap - getting started</h1>
                <p>Wrapping Fortran or C functions to Python using F2PY consists of the following steps:</p>
@@ -145,17 +147,15 @@
                <p>The following example Fortran 77 code will be used for illustration, save it as         <code class='verbatim'>fib1.f</code>
 :</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./code/fib1.f&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/fib1.f
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
 
 
                            <div class='admonition'>
     <div>note</div>
-        <p>F2PY parses Fortran / C signatures to build wrapper functions to be used with Python. However, it is not a compiler, and does not check for additional errors in source code, nor does it implement the entire language standards. Some errors may pass silently ( or as warnings) and need to be verified by the user. </p>
+        <p>F2PY parses Fortran/C signatures to build wrapper functions to be used with Python. However, it is not a compiler, and does not check for additional errors in source code, nor does it implement the entire language standards. Some errors may pass silently (or as warnings) and need to be verified by the user.</p>
 
 </div>
 
@@ -172,7 +172,9 @@
                <pre>f2py -c fib1.f -m fib1</pre>
                            <div class='admonition'>
     <div>note</div>
-        <p>Because the ``f2py`` command might not be available in all system, notably on Windows, we will use the ``python - m numpy.f2py`` command throughout this guide. </p>
+        <p>Because the         <code class='verbatim'>f2py</code>
+ command might not be available in all system, notably on Windows, we will use the         <code class='verbatim'>python -m numpy.f2py</code>
+ command throughout this guide.</p>
 
 </div>
 
@@ -208,7 +210,75 @@ n : input int, optional
 [  0.   1.   1.   2.   3.   5.   8.  13.]</pre>
                            <div class='admonition'>
     <div>note</div>
-        <p>* Note that F2PY recognized that the second argument ``n`` is the dimension of the first array argument ``a``. Since by default all arguments are input - only arguments, F2PY concludes that ``n`` can be optional with the default value ``len ( a)``. * One can use different values for optional ``n`` : : &gt;&gt;&gt; a1 = np.zeros ( 8, &#39; d &#39; ) &gt;&gt;&gt; fib1.fib ( a1, 6) &gt;&gt;&gt; print ( a1) [ 0. 1. 1. 2. 3. 5. 0. 0.] but an exception is raised when it is incompatible with the input array ``a`` : : &gt;&gt;&gt; fib1.fib ( a, 10) Traceback ( most recent call last) : File &#34; &lt; stdin&gt; &#34; , line 1, in &lt; module&gt; fib.error : ( len ( a)&gt;=n) failed for 1st keyword n : fib : n=10 &gt;&gt;&gt; F2PY implements basic compatibility checks between related arguments in order to avoid unexpected crashes. * When a NumPy array that is : term : `Fortran &lt; Fortran order&gt;` : term : `contiguous` and has a ``dtype`` corresponding to a presumed Fortran type is used as an input array argument, then its C pointer is directly passed to Fortran. Otherwise, F2PY makes a contiguous copy ( with the proper ``dtype``) of the input array and passes a C pointer of the copy to the Fortran subroutine. As a result, any possible changes to the ( copy of) input array have no effect on the original argument, as demonstrated below : : &gt;&gt;&gt; a = np.ones ( 8, &#39; i &#39; ) &gt;&gt;&gt; fib1.fib ( a) &gt;&gt;&gt; print ( a) [ 1 1 1 1 1 1 1 1] Clearly, this is unexpected, as Fortran typically passes by reference. That the above example worked with ``dtype=float`` is considered accidental. F2PY provides an ``intent ( inplace)`` attribute that modifies the attributes of an input array so that any changes made by the Fortran routine will be reflected in the input argument. For example, if one specifies the ``intent ( inplace) a`` directive ( see : ref : `f2py - attributes` for details), then the example above would read : : &gt;&gt;&gt; a = np.ones ( 8, &#39; i &#39; ) &gt;&gt;&gt; fib1.fib ( a) &gt;&gt;&gt; print ( a) [ 0. 1. 1. 2. 3. 5. 8. 13.] However, the recommended way to have changes made by Fortran subroutine propagate to Python is to use the ``intent ( out)`` attribute. That approach is more efficient and also cleaner. * The usage of ``fib1.fib`` in Python is very similar to using ``FIB`` in Fortran. However, using *in situ* output arguments in Python is poor style, as there are no safety mechanisms in Python to protect against wrong argument types. When using Fortran or C, compilers discover any type mismatches during the compilation process, but in Python the types must be checked at runtime. Consequently, using *in situ* output arguments in Python may lead to difficult to find bugs, not to mention the fact that the codes will be less readable when all required type checks are implemented. Though the approach to wrapping Fortran routines for Python discussed so far is very straightforward, it has several drawbacks ( see the comments above). The drawbacks are due to the fact that there is no way for F2PY to determine the actual intention of the arguments; that is, there is ambiguity in distinguishing between input and output arguments. Consequently, F2PY assumes that all arguments are input arguments by default. There are ways ( see below) to remove this ambiguity by &#34; teaching &#34; F2PY about the true intentions of function arguments, and F2PY is then able to generate more explicit, easier to use, and less error prone wrappers for Fortran functions. </p>
+                   <ul>               <li>               <p>Note that F2PY recognized that the second argument         <code class='verbatim'>n</code>
+ is the   dimension of the first array argument         <code class='verbatim'>a</code>
+. Since by default all   arguments are input-only arguments, F2PY concludes that         <code class='verbatim'>n</code>
+ can   be optional with the default value         <code class='verbatim'>len(a)</code>
+.</p>
+
+</li>
+            </ul>
+
+                   <ul>               <li>               <p>One can use different values for optional         <code class='verbatim'>n</code>
+      </p>
+
+               <pre>&gt;&gt;&gt; a1 = np.zeros(8, &#39;d&#39;)
+&gt;&gt;&gt; fib1.fib(a1, 6)
+&gt;&gt;&gt; print(a1)
+[ 0.  1.  1.  2.  3.  5.  0.  0.]</pre>
+               <p>but an exception is raised when it is incompatible with the input   array         <code class='verbatim'>a</code>
+      </p>
+
+               <pre>&gt;&gt;&gt; fib1.fib(a, 10)
+Traceback (most recent call last):
+  File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+fib.error: (len(a)&gt;=n) failed for 1st keyword n: fib:n=10
+&gt;&gt;&gt;</pre>
+               <p>F2PY implements basic compatibility checks between related   arguments in order to avoid unexpected crashes.</p>
+
+</li>
+            </ul>
+
+                   <ul>               <li>               <p>When a NumPy array that is         <code class='verbatim'>Fortran &lt;Fortran order&gt;</code>
+           <code class='verbatim'>contiguous</code>
+ and has a         <code class='verbatim'>dtype</code>
+ corresponding to a presumed Fortran   type is used as an input array argument, then its C pointer is directly   passed to Fortran.</p>
+
+               <p>Otherwise, F2PY makes a contiguous copy (with the proper         <code class='verbatim'>dtype</code>
+) of the   input array and passes a C pointer of the copy to the Fortran subroutine. As   a result, any possible changes to the (copy of) input array have no effect   on the original argument, as demonstrated below::      </p>
+
+               <pre>&gt;&gt;&gt; a = np.ones(8, &#39;i&#39;)
+&gt;&gt;&gt; fib1.fib(a)
+&gt;&gt;&gt; print(a)
+[1 1 1 1 1 1 1 1]</pre>
+               <p>Clearly, this is unexpected, as Fortran typically passes by reference. That   the above example worked with         <code class='verbatim'>dtype=float</code>
+ is considered accidental.</p>
+
+               <p>F2PY provides an         <code class='verbatim'>intent(inplace)</code>
+ attribute that modifies the attributes   of an input array so that any changes made by the Fortran routine will be   reflected in the input argument. For example, if one specifies the           <code class='verbatim'>intent(inplace) a</code>
+ directive (see         <code class='verbatim'>f2py-attributes</code>
+ for details),   then the example above would read::      </p>
+
+               <pre>&gt;&gt;&gt; a = np.ones(8, &#39;i&#39;)
+&gt;&gt;&gt; fib1.fib(a)
+&gt;&gt;&gt; print(a)
+[  0.   1.   1.   2.   3.   5.   8.  13.]</pre>
+               <p>However, the recommended way to have changes made by Fortran subroutine   propagate to Python is to use the         <code class='verbatim'>intent(out)</code>
+ attribute. That approach   is more efficient and also cleaner.</p>
+
+</li>
+            </ul>
+
+                   <ul>               <li>               <p>The usage of         <code class='verbatim'>fib1.fib</code>
+ in Python is very similar to using         <code class='verbatim'>FIB</code>
+ in   Fortran. However, using <em>in situ</em> output arguments in Python is poor style,   as there are no safety mechanisms in Python to protect against wrong   argument types. When using Fortran or C, compilers discover any type   mismatches during the compilation process, but in Python the types must be   checked at runtime. Consequently, using <em>in situ</em> output arguments in Python   may lead to difficult to find bugs, not to mention the fact that the   codes will be less readable when all required type checks are implemented.</p>
+
+</li>
+            </ul>
+
+        <p>Though the approach to wrapping Fortran routines for Python discussed so far is very straightforward, it has several drawbacks (see the comments above). The drawbacks are due to the fact that there is no way for F2PY to determine the actual intention of the arguments; that is, there is ambiguity in distinguishing between input and output arguments. Consequently, F2PY assumes that all arguments are input arguments by default.</p>
+
+        <p>There are ways (see below) to remove this ambiguity by &#34;teaching&#34; F2PY about the true intentions of function arguments, and F2PY is then able to generate more explicit, easier to use, and less error prone wrappers for Fortran functions.</p>
 
 </div>
 
@@ -225,12 +295,10 @@ n : input int, optional
  (see the         <code class='verbatim'>-h</code>
  flag) and its   contents are shown below.</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./code/fib1.pyf&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/fib1.pyf
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
 
 
 </li>
@@ -250,12 +318,10 @@ n : input int, optional
  (saved as           <code class='verbatim'>fib2.pyf</code>
 ) are as follows:</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./code/fib2.pyf&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/fib2.pyf
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
 
 
 </li>
@@ -288,7 +354,28 @@ a : rank-1 array(&#39;d&#39;) with bounds (n)
 [  0.   1.   1.   2.   3.   5.   8.  13.]</pre>
                            <div class='admonition'>
     <div>note</div>
-        <p>* The signature of ``fib2.fib`` now more closely corresponds to the intention of the Fortran subroutine ``FIB`` : given the number ``n``, ``fib2.fib`` returns the first ``n`` Fibonacci numbers as a NumPy array. The new Python signature ``fib2.fib`` also rules out the unexpected behaviour in ``fib1.fib``. * Note that by default, using a single ``intent ( out)`` also implies ``intent ( hide)``. Arguments that have the ``intent ( hide)`` attribute specified will not be listed in the argument list of a wrapper function. For more details, see : doc : `signature - file`. </p>
+                   <ul>               <li>               <p>The signature of         <code class='verbatim'>fib2.fib</code>
+ now more closely corresponds to the intention   of the Fortran subroutine         <code class='verbatim'>FIB</code>
+: given the number         <code class='verbatim'>n</code>
+,         <code class='verbatim'>fib2.fib</code>
+   returns the first         <code class='verbatim'>n</code>
+ Fibonacci numbers as a NumPy array. The new Python   signature         <code class='verbatim'>fib2.fib</code>
+ also rules out the unexpected behaviour in           <code class='verbatim'>fib1.fib</code>
+.</p>
+
+</li>
+            </ul>
+
+                   <ul>               <li>               <p>Note that by default, using a single         <code class='verbatim'>intent(out)</code>
+ also implies           <code class='verbatim'>intent(hide)</code>
+. Arguments that have the         <code class='verbatim'>intent(hide)</code>
+ attribute   specified will not be listed in the argument list of a wrapper function.</p>
+
+</li>
+            </ul>
+
+        <p>For more details, see         <code class='verbatim'>signature-file</code>
+.</p>
 
 </div>
 
@@ -304,12 +391,10 @@ a : rank-1 array(&#39;d&#39;) with bounds (n)
                <p>Consider a modified version of the previous Fortran code with F2PY directives, saved as         <code class='verbatim'>fib3.f</code>
 :</p>
 
-               <div class='block_directive'>
-    <div class='head'>.. literalinclude:: [&#39;./code/fib3.f&#39;]
-    </div>
-    <pre class='not-implemented'><p></p>
-</pre>
-</div>
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/fib3.f
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
 
 
                <p>Building the extension module can be now carried out in one command::    </p>
