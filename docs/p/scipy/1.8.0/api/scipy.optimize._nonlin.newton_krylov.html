@@ -227,8 +227,7 @@
     <hr/>
         <a class='external' href="https://docs.scipy.org/doc/scipy/">Other Docs</a>
     <hr/>
-<a href="#section-Notes">Notes</a><a href="#section-Parameters">Parameters</a><a href="#section-Raises">Raises</a><a href="#section-Returns">Returns</a><a href="#section-backrefs">BackRef</a>
-    </div><!--end sidenav-->
+<a href="#section-Notes">Notes</a><a href="#section-Parameters">Parameters</a><a href="#section-Raises">Raises</a><a href="#section-Returns">Returns</a>    </div><!--end sidenav-->
 
 
 
@@ -238,7 +237,6 @@
 
 <code class='signature'>newton_krylov(F, xin, iter=None, rdiff=None, method=&#39;lgmres&#39;, inner_maxiter=20, inner_M=None, outer_k=10, verbose=False, maxiter=None, f_tol=None, f_rtol=None, x_tol=None, x_rtol=None, tol_norm=None, line_search=&#39;armijo&#39;, callback=None, **kw)</code><!-- rendering Extended Summary -->
                        <p>This method is suitable for solving large-scale problems.</p>
-
 
 <h3 id="section-Notes">Notes</h3>
 <!-- rendering Notes -->
@@ -253,7 +251,6 @@
 , which is a variant of restarted GMRES iteration that reuses some of the information obtained in the previous Newton steps to invert Jacobians in subsequent steps.</p>
 
                <p>For a review on Newton-Krylov methods, see for example , and for the LGMRES sparse inverse method, see .</p>
-
 
 <h3 id="section-Parameters">Parameters</h3>
 <dl>
@@ -308,7 +305,8 @@
 </dd>
 <dt><a id="inner_kwargs">inner_kwargs</a> : kwargs</dt>
 <dd>
-<p>Keyword parameters for the &#34;inner&#34; Krylov solver (defined with <code><a href="#method" class='local'>method</a></code>). Parameter names must start with the <code>:None:None:`inner_`</code> prefix which will be stripped before passing on the inner method. See, e.g., <code><a href="/p/scipy/*/api/scipy.sparse.linalg._isolve.iterative.gmres.html.html" class='exists'>scipy.sparse.linalg.gmres</a></code>
+<p>Keyword parameters for the &#34;inner&#34; Krylov solver (defined with <code><a href="/p/scipy/1.8.0/api/scipy.sparse._data._create_method.&lt;locals&gt;.method.html" class='exists'>method</a></code>
+). Parameter names must start with the <code>:None:None:`inner_`</code> prefix which will be stripped before passing on the inner method. See, e.g., <code><a href="/p/scipy/*/api/scipy.sparse.linalg._isolve.iterative.gmres.html.html" class='exists'>scipy.sparse.linalg.gmres</a></code>
  for details.</p>
 
 </dd>
@@ -361,8 +359,7 @@
 <dt><a id="callback">callback</a> : function, optional</dt>
 <dd>
 <p>Optional callback function. It is called on every iteration as         <code class='verbatim'>callback(x, f)</code>
- where <code>:None:None:`x`</code> is the current solution and <code><a href="/p/scipy/1.8.0/api/scipy.optimize._bglu_dense._consider_refactor.&lt;locals&gt;.f.html" class='exists'>f</a></code>
- the corresponding residual.</p>
+ where <code><a href="#x" class='local'>x</a></code> is the current solution and <code><a href="#f" class='local'>f</a></code> the corresponding residual.</p>
 
 </dd>
 </dl>
@@ -388,28 +385,43 @@
 <!-- rendering Summary -->
                        <p>Find a root of a function, using Krylov approximation for inverse Jacobian.</p>
 
-
+<h3> See Also</h3>
+<dl>
+            <dt><code><a href="/p/scipy/1.8.0/api/scipy.optimize._root.root.html" class='exists'>root</a></code>
+</dt>
+            <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+            <dd>        <p>Interface to root finding algorithms for multivariate functions. See         <code class='verbatim'>method==&#39;krylov&#39;</code>
+ in particular.</p>
+</dd>
+        </dl>
+<dl>
+            <dt><code><a href="/p/current-module/current-version/to-resolve/scipy.sparse.linalg.gmres.html.html" class='exists'>scipy.sparse.linalg.gmres</a></code>
+</dt>
+            <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+            <dd></dd>
+        </dl>
+<dl>
+            <dt><code><a href="/p/current-module/current-version/to-resolve/scipy.sparse.linalg.lgmres.html.html" class='exists'>scipy.sparse.linalg.lgmres</a></code>
+</dt>
+            <!-- This See also will be incorrect as the SeeAlsoItems are improperly deserialised. -->
+            <dd></dd>
+        </dl>
 <h3 id="section-Examples">Examples</h3>
                 <p>The following functions define a system of nonlinear equations</p>
 
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><span class="nf">fun</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><a class="foo k" href="/p/scipy/1.8.0/api/scipy.integrate._ode.ode.get_return_code.html">return</a><span class=""> </span><span class="">[</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">0.5</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mf">1.0</span><span class="">,</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="mf">0.5</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">)</span><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">2</span><span class="">]</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="k">def</span><span class=""> </span><a class="foo nf" href="/p/__main__/*/api/__main__.fun.html">fun</a><span class="">(</span><span class="">x</span><span class="">)</span><span class="">:</span><br><span class='nsl'>...&nbsp;</span><span class="">    </span><span class="k">return</span><span class=""> </span><span class="">[</span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class=""> </span><span class="o">+</span><span class=""> </span><span class="mf">0.5</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="mf">1.0</span><span class="">,</span><br><span class='nsl'>...&nbsp;</span><span class="">            </span><span class="mf">0.5</span><span class=""> </span><span class="o">*</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">[</span><span class="mi">1</span><span class="">]</span><span class=""> </span><span class="o">-</span><span class=""> </span><span class="">x</span><span class="">[</span><span class="mi">0</span><span class="">]</span><span class="">)</span><span class=""> </span><span class="o">*</span><span class="o">*</span><span class=""> </span><span class="mi">2</span><span class="">]</span>
 </pre>
             
                 <p>A solution can be obtained as follows.</p>
 
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.optimize.html">optimize</a><br><span class='nsl'>...&nbsp;</span><span class="">sol</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.optimize.html">optimize</a><span class="o">.</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.optimize._nonlin.newton_krylov.html">newton_krylov</a><span class="">(</span><span class="">fun</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">sol</a>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.optimize.html">optimize</a><br><span class='nsl'>...&nbsp;</span><span class="">sol</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.optimize.html">optimize</a><span class="o">.</span><span class="">newton_krylov</span><span class="">(</span><a class="foo " href="/p/__main__/*/api/__main__.fun.html">fun</a><span class="">,</span><span class=""> </span><span class="">[</span><span class="mi">0</span><span class="">,</span><span class=""> </span><span class="mi">0</span><span class="">]</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">sol</a>
 array([0.66731771, 0.66536458])</pre>
             
          See :
     
 
-    <h3 id='section-backrefs'>Back References</h3>
-    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
-
-        <code><a link href="/p/scipy/1.8.0/api/scipy.optimize._nonlin.KrylovJacobian.html" class='exists'>scipy.optimize._nonlin.KrylovJacobian</a></code>
-        <code><a link href="/p/scipy/1.8.0/api/scipy.optimize._nonlin.newton_krylov.html" class='exists'>scipy.optimize._nonlin.newton_krylov</a></code>
 
 <h3>Local connectivity graph</h3>
 <p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
@@ -440,7 +452,7 @@ Commit: <br/>
         .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
     </style>
 <script>
-    window._data_graph = {"nodes": [{"id": 1, "val": 31.958297101421877, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.22.3/api/numpy.ndarray"}, {"id": 2, "val": 14.855654600401044, "label": "scipy.optimize", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.optimize"}, {"id": 3, "val": 15.416198487095663, "label": "scipy.integrate._ode.ode.get_return_code", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.integrate._ode.ode.get_return_code"}, {"id": 5, "val": 8.0, "label": "scipy.optimize._nonlin.KrylovJacobian", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.optimize._nonlin.KrylovJacobian"}, {"id": 6, "val": 32.331050121192874, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy"}], "links": [{"source": 3, "target": 5, "id": 45}, {"source": 6, "target": 5, "id": 127}, {"source": 1, "target": 5, "id": 718}, {"source": 2, "target": 5, "id": 1261}]};
+    window._data_graph = {"nodes": [], "links": []};
 </script>
 <script type="text/javascript" src='/graph_canvas.js'></script>
 <script type="text/javascript" src='/graph_svg.js'></script>

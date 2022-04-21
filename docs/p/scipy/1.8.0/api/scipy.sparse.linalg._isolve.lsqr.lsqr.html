@@ -187,8 +187,7 @@
     <hr/>
         <a class='external' href="https://docs.scipy.org/doc/scipy/">Other Docs</a>
     <hr/>
-<a href="#section-Notes">Notes</a><a href="#section-Parameters">Parameters</a><a href="#section-Returns">Returns</a><a href="#section-backrefs">BackRef</a>
-    </div><!--end sidenav-->
+<a href="#section-Notes">Notes</a><a href="#section-Parameters">Parameters</a><a href="#section-Returns">Returns</a>    </div><!--end sidenav-->
 
 
 
@@ -212,7 +211,6 @@
 3. Damped least squares  --    solve  (   A    )*x = (    b    )
                                       ( damp*I )     ( damp*x0 )
                                in the least-squares sense</pre>
-
 <h3 id="section-Notes">Notes</h3>
 <!-- rendering Notes -->
                        <p>LSQR uses an iterative method to approximate the solution.  The number of iterations required to reach a certain accuracy depends strongly on the scaling of the problem.  Poor scaling of the rows or columns of A should therefore be avoided where possible.</p>
@@ -245,7 +243,6 @@ b</code>
                <p>If A is symmetric, LSQR should not be used!</p>
 
                <p>Alternatives are the symmetric conjugate-gradient method (cg) and/or SYMMLQ.  SYMMLQ is an implementation of symmetric cg that applies to any symmetric A and will converge more rapidly than LSQR.  If A is positive definite, there are other implementations of symmetric cg that require slightly less work per iteration than SYMMLQ (but will take the same number of iterations).</p>
-
 
 <h3 id="section-Parameters">Parameters</h3>
 <dl>
@@ -283,7 +280,8 @@ atol * norm(A) * norm(r)</code>
 .  If both tolerances are 1.0e-6 (default), the final         <code class='verbatim'>norm(r)</code>
  should be accurate to about 6 digits. (The final         <code class='verbatim'>x</code>
  will usually have fewer correct digits, depending on         <code class='verbatim'>cond(A)</code>
- and the size of LAMBDA.)  If <code><a href="#atol" class='local'>atol</a></code> or <code><a href="#btol" class='local'>btol</a></code> is None, a default value of 1.0e-6 will be used. Ideally, they should be estimates of the relative error in the entries of         <code class='verbatim'>A</code>
+ and the size of LAMBDA.)  If <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
+ or <code>:None:None:`btol`</code> is None, a default value of 1.0e-6 will be used. Ideally, they should be estimates of the relative error in the entries of         <code class='verbatim'>A</code>
  and         <code class='verbatim'>b</code>
  respectively.  For example, if the entries of         <code class='verbatim'>A</code>
  have 7 correct digits, set         <code class='verbatim'>atol = 1e-7</code>
@@ -293,9 +291,9 @@ atol * norm(A) * norm(r)</code>
 <dt><a id="conlim">conlim</a> : float, optional</dt>
 <dd>
 <p>Another stopping tolerance.  lsqr terminates if an estimate of         <code class='verbatim'>cond(A)</code>
- exceeds <code><a href="#conlim" class='local'>conlim</a></code>.  For compatible systems         <code class='verbatim'>Ax =
+ exceeds <code>:None:None:`conlim`</code>.  For compatible systems         <code class='verbatim'>Ax =
 b</code>
-, <code><a href="#conlim" class='local'>conlim</a></code> could be as large as 1.0e+12 (say).  For least-squares problems, conlim should be less than 1.0e+8. Maximum precision can be obtained by setting         <code class='verbatim'>atol = btol =
+, <code>:None:None:`conlim`</code> could be as large as 1.0e+12 (say).  For least-squares problems, conlim should be less than 1.0e+8. Maximum precision can be obtained by setting         <code class='verbatim'>atol = btol =
 conlim = zero</code>
 , but the number of iterations may then be excessive. Default is 1e8.</p>
 
@@ -355,7 +353,7 @@ conlim = zero</code>
 <dt><a id="r2norm">r2norm</a> : float</dt>
 <dd>
 <p>        <code class='verbatim'>sqrt( norm(r)^2  +  damp^2 * norm(x - x0)^2 )</code>
-.  Equal to <code><a href="#r1norm" class='local'>r1norm</a></code> if         <code class='verbatim'>damp == 0</code>
+.  Equal to <code>:None:None:`r1norm`</code> if         <code class='verbatim'>damp == 0</code>
 .</p>
 
 </dd>
@@ -402,61 +400,56 @@ damp^2*I)^{-1}</code>
 <!-- rendering Summary -->
                        <p>Find the least-squares solution to a large, sparse, linear system of equations.</p>
 
-
 <h3 id="section-Examples">Examples</h3>
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.sparse.html">sparse</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">csc_matrix</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.sparse.html">sparse</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.linalg.html">linalg</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><br><span class='nsl'>...&nbsp;</span><span class="">A</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">csc_matrix</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">1.</span><span class="">]</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.sparse.html">sparse</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">csc_matrix</a><br><span class='nsl'>...&nbsp;</span><span class="kn">from</span><span class=""> </span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.html">scipy</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.sparse.html">sparse</a><span class="nn">.</span><a class="foo nn" href="/p/scipy/1.8.0/api/scipy.sparse.linalg.html">linalg</a><span class=""> </span><span class="kn">import</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">A</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">csc_matrix</a><span class="">(</span><span class="">[</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">[</span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">1.</span><span class="">]</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><a class="foo nb" href="/p/builtins/*/api/builtins.float.html">float</a><span class="">)</span>
 </pre>
             
                 <p>The first example has the trivial solution <code>:None:None:`[0, 0]`</code></p>
 
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/1.22.3/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">normr</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><span class="">A</span><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">istop</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/*/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><a class="foo nb" href="/p/builtins/*/api/builtins.float.html">float</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">normr</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a>
 0</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a>
 array([ 0.,  0.])</pre>
             
                 <p>The stopping code <code>:None:None:`istop=0`</code> returned indicates that a vector of zeros was found as a solution. The returned solution <code><a href="#x" class='local'>x</a></code> indeed contains <code>:None:None:`[0., 0.]`</code>. The next example has a non-trivial solution:</p>
 
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/1.22.3/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><span class="">A</span><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">istop</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/*/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><a class="foo nb" href="/p/builtins/*/api/builtins.float.html">float</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a>
 1</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a>
 array([ 1., -1.])</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">itn</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">itn</a>
 1</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">r1norm</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.float.html">r1norm</a>
 4.440892098500627e-16</pre>
             
                 <p>As indicated by <code>:None:None:`istop=1`</code>, <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html" class='exists'>lsqr</a></code>
  found a solution obeying the tolerance limits. The given solution <code>:None:None:`[1., -1.]`</code> obviously solves the equation. The remaining return values include information about the number of iterations (<code>:None:None:`itn=1`</code>) and the remaining difference of left and right side of the solved equation. The final example demonstrates the behavior in the case where there is no solution for the equation:</p>
 
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/1.22.3/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.01</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><span class="nb">float</span><span class="">)</span><br><span class='nsl'>...&nbsp;</span><span class="">x</span><span class="">,</span><span class=""> </span><span class="">istop</span><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><span class="">A</span><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><span class="">istop</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.html">np</a><span class="o">.</span><a class="foo " href="/p/numpy/*/api/numpy.array.html">array</a><span class="">(</span><span class="">[</span><span class="mf">1.</span><span class="">,</span><span class=""> </span><span class="mf">0.01</span><span class="">,</span><span class=""> </span><span class="o">-</span><span class="mf">1.</span><span class="">]</span><span class="">,</span><span class=""> </span><span class="">dtype</span><span class="o">=</span><a class="foo nb" href="/p/builtins/*/api/builtins.float.html">float</a><span class="">)</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a><span class="">,</span><span class=""> </span><span class="">itn</span><span class="">,</span><span class=""> </span><span class="">r1norm</span><span class=""> </span><span class="o">=</span><span class=""> </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html">lsqr</a><span class="">(</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">A</a><span class="">,</span><span class=""> </span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a><span class="">)</span><span class="">[</span><span class="">:</span><span class="mi">4</span><span class="">]</span><br><span class='nsl'>...&nbsp;</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">istop</a>
 2</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">x</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a>
 array([ 1.00333333, -0.99666667])</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">A</span><span class="o">.</span><span class="">dot</span><span class="">(</span><span class="">x</span><span class="">)</span><span class="o">-</span><a class="foo " href="/p/numpy/1.22.3/api/numpy.ndarray.html">b</a>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix.html">A</a><span class="o">.</span><a class="foo " href="/p/scipy/1.8.0/api/scipy.sparse._base.spmatrix.dot.html">dot</a><span class="">(</span><a class="foo " href="/p/builtins/*/api/builtins.int.html">x</a><span class="">)</span><span class="o">-</span><a class="foo " href="/p/numpy/*/api/numpy.ndarray.html">b</a>
 array([ 0.00333333, -0.00333333,  0.00333333])</pre>
             
-<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><span class="">r1norm</span>
+<pre class='highlight execed'><span class='nsl'>&gt;&gt;&gt; </span><a class="foo " href="/p/builtins/*/api/builtins.float.html">r1norm</a>
 0.005773502691896255</pre>
             
-                <p><code><a href="#istop" class='local'>istop</a></code> indicates that the system is inconsistent and thus <code><a href="#x" class='local'>x</a></code> is rather an approximate solution to the corresponding least-squares problem. <code><a href="#r1norm" class='local'>r1norm</a></code> contains the norm of the minimal residual that was found.</p>
+                <p><code>:None:None:`istop`</code> indicates that the system is inconsistent and thus <code><a href="#x" class='local'>x</a></code> is rather an approximate solution to the corresponding least-squares problem. <code>:None:None:`r1norm`</code> contains the norm of the minimal residual that was found.</p>
 
             
          See :
     
 
-    <h3 id='section-backrefs'>Back References</h3>
-    <p>The following pages refer to to this document either explicitly or contain code examples using this.</p>
-
-        <code><a link href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.lsqr.lsqr.html" class='exists'>scipy.sparse.linalg._isolve.lsqr.lsqr</a></code>
 
 <h3>Local connectivity graph</h3>
 <p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
@@ -487,7 +480,7 @@ Commit: <br/>
         .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
     </style>
 <script>
-    window._data_graph = {"nodes": [{"id": 2, "val": 17.539392014169458, "label": "scipy.sparse", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.sparse"}, {"id": 3, "val": 31.958297101421877, "label": "numpy.ndarray", "mod": "numpy", "url": "/p/numpy/1.22.3/api/numpy.ndarray"}, {"id": 4, "val": 45.57658845611187, "label": "numpy", "mod": "numpy", "url": "/p/numpy/1.22.3/api/numpy"}, {"id": 5, "val": 12.47213595499958, "label": "scipy.sparse._csc.csc_matrix", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.sparse._csc.csc_matrix"}, {"id": 6, "val": 31.473389188611005, "label": "numpy.array", "mod": "numpy", "url": "/p/numpy/1.22.3/api/numpy.array"}, {"id": 7, "val": 19.04536101718726, "label": "scipy.linalg", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy.linalg"}, {"id": 8, "val": 32.331050121192874, "label": "scipy", "mod": "scipy", "url": "/p/scipy/1.8.0/api/scipy"}], "links": [{"source": 4, "target": 5, "id": 1068}, {"source": 8, "target": 5, "id": 1435}, {"source": 3, "target": 5, "id": 2025}, {"source": 6, "target": 5, "id": 2620}, {"source": 6, "target": 3, "id": 3069}, {"source": 2, "target": 5, "id": 3164}]};
+    window._data_graph = {"nodes": [], "links": []};
 </script>
 <script type="text/javascript" src='/graph_canvas.js'></script>
 <script type="text/javascript" src='/graph_svg.js'></script>

@@ -442,8 +442,7 @@ array([(0, 0.), (0, 0.), (0, 0.)],
 
                            <div class='admonition'>
     <div>warning</div>
-        <p>In Numpy 1.15, indexing an array with a multi-field index returned a copy of the result above, but with fields packed together in memory as if passed through         <code class='verbatim'>numpy.lib.recfunctions.repack_fields</code>
-.</p>
+        <p>In Numpy 1.15, indexing an array with a multi-field index returned a copy of the result above, but with fields packed together in memory as if passed through <code>:None:func:`numpy.lib.recfunctions.repack_fields`</code>.</p>
 
         <p>The new behavior as of Numpy 1.16 leads to extra &#34;padding&#34; bytes at the location of unindexed fields compared to 1.15. You will need to update any code which depends on the data having a &#34;packed&#34; layout. For instance code such as::   </p>
 
@@ -455,25 +454,16 @@ ValueError: When changing to a smaller dtype, its size must be a divisor of the 
  since Numpy 1.12, and similar code has raised         <code class='verbatim'>FutureWarning</code>
  since 1.7.</p>
 
-        <p>In 1.16 a number of functions have been introduced in the         <code class='verbatim'>numpy.lib.recfunctions</code>
- module to help users account for this change. These are         <code class='verbatim'>numpy.lib.recfunctions.repack_fields</code>
-.         <code class='verbatim'>numpy.lib.recfunctions.structured_to_unstructured</code>
-,         <code class='verbatim'>numpy.lib.recfunctions.unstructured_to_structured</code>
-,         <code class='verbatim'>numpy.lib.recfunctions.apply_along_fields</code>
-,         <code class='verbatim'>numpy.lib.recfunctions.assign_fields_by_name</code>
-,  and         <code class='verbatim'>numpy.lib.recfunctions.require_fields</code>
-.</p>
+        <p>In 1.16 a number of functions have been introduced in the <code>:None:mod:`numpy.lib.recfunctions`</code> module to help users account for this change. These are <code>:None:func:`numpy.lib.recfunctions.repack_fields`</code>. <code>:None:func:`numpy.lib.recfunctions.structured_to_unstructured`</code>, <code>:None:func:`numpy.lib.recfunctions.unstructured_to_structured`</code>, <code>:None:func:`numpy.lib.recfunctions.apply_along_fields`</code>, <code>:None:func:`numpy.lib.recfunctions.assign_fields_by_name`</code>,  and <code>:None:func:`numpy.lib.recfunctions.require_fields`</code>.</p>
 
-        <p>The function         <code class='verbatim'>numpy.lib.recfunctions.repack_fields</code>
- can always be used to reproduce the old behavior, as it will return a packed copy of the structured array. The code above, for example, can be replaced with:</p>
+        <p>The function <code>:None:func:`numpy.lib.recfunctions.repack_fields`</code> can always be used to reproduce the old behavior, as it will return a packed copy of the structured array. The code above, for example, can be replaced with:</p>
 
                     <pre>&gt;&gt;&gt; from numpy.lib.recfunctions import repack_fields
 &gt;&gt;&gt; repack_fields(a[[&#39;a&#39;, &#39;c&#39;]]).view(&#39;i8&#39;)  # supported in 1.16
 array([0, 0, 0])
 </pre>
 
-        <p>Furthermore, numpy now provides a new function         <code class='verbatim'>numpy.lib.recfunctions.structured_to_unstructured</code>
- which is a safer and more efficient alternative for users who wish to convert structured arrays to unstructured arrays, as the view above is often indeded to do. This function allows safe conversion to an unstructured type taking into account padding, often avoids a copy, and also casts the datatypes as needed, unlike the view. Code such as:</p>
+        <p>Furthermore, numpy now provides a new function <code>:None:func:`numpy.lib.recfunctions.structured_to_unstructured`</code> which is a safer and more efficient alternative for users who wish to convert structured arrays to unstructured arrays, as the view above is often indeded to do. This function allows safe conversion to an unstructured type taking into account padding, often avoids a copy, and also casts the datatypes as needed, unlike the view. Code such as:</p>
 
                     <pre>&gt;&gt;&gt; b = np.zeros(3, dtype=[(&#39;x&#39;, &#39;f4&#39;), (&#39;y&#39;, &#39;f4&#39;), (&#39;z&#39;, &#39;f4&#39;)])
 &gt;&gt;&gt; b[[&#39;x&#39;, &#39;z&#39;]].view(&#39;f4&#39;)
