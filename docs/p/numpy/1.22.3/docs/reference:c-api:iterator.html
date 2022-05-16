@@ -345,52 +345,50 @@
     NPY_CASTING casting, PyArray_Descr* dtype)</pre>
 
 
-                           <pre>Creates an iterator for the given numpy array object ``op``.
-
-Flags that may be passed in ``flags`` are any combination
-of the global and per-operand flags documented in
-:c:func:`NpyIter_MultiNew`, except for :c:data:`NPY_ITER_ALLOCATE`.
-
-Any of the :c:type:`NPY_ORDER` enum values may be passed to ``order``.  For
-efficient iteration, :c:type:`NPY_KEEPORDER` is the best option, and
-the other orders enforce the particular iteration pattern.
-
-Any of the :c:type:`NPY_CASTING` enum values may be passed to ``casting``.
-The values include :c:data:`NPY_NO_CASTING`, :c:data:`NPY_EQUIV_CASTING`,
-:c:data:`NPY_SAFE_CASTING`, :c:data:`NPY_SAME_KIND_CASTING`, and
-:c:data:`NPY_UNSAFE_CASTING`.  To allow the casts to occur, copying or
-buffering must also be enabled.
-
-If ``dtype`` isn&#39;t ``NULL``, then it requires that data type.
-If copying is allowed, it will make a temporary copy if the data
-is castable.  If :c:data:`NPY_ITER_UPDATEIFCOPY` is enabled, it will
-also copy the data back with another cast upon iterator destruction.
-
-Returns NULL if there is an error, otherwise returns the allocated
-iterator.
-
-To make an iterator similar to the old iterator, this should work.
-
+                           <blockquote><p>Creates an iterator for the given numpy array object         <code class='verbatim'>op</code>
+.</p>
+<p>Flags that may be passed in         <code class='verbatim'>flags</code>
+ are any combination     of the global and per-operand flags documented in             <code class='verbatim'>NpyIter_MultiNew</code>
+, except for         <code class='verbatim'>NPY_ITER_ALLOCATE</code>
+.</p>
+<p>Any of the         <code class='verbatim'>NPY_ORDER</code>
+ enum values may be passed to         <code class='verbatim'>order</code>
+.  For     efficient iteration,         <code class='verbatim'>NPY_KEEPORDER</code>
+ is the best option, and     the other orders enforce the particular iteration pattern.</p>
+<p>Any of the         <code class='verbatim'>NPY_CASTING</code>
+ enum values may be passed to         <code class='verbatim'>casting</code>
+.     The values include         <code class='verbatim'>NPY_NO_CASTING</code>
+,         <code class='verbatim'>NPY_EQUIV_CASTING</code>
+,             <code class='verbatim'>NPY_SAFE_CASTING</code>
+,         <code class='verbatim'>NPY_SAME_KIND_CASTING</code>
+, and             <code class='verbatim'>NPY_UNSAFE_CASTING</code>
+.  To allow the casts to occur, copying or     buffering must also be enabled.</p>
+<p>If         <code class='verbatim'>dtype</code>
+ isn&#39;t         <code class='verbatim'>NULL</code>
+, then it requires that data type.     If copying is allowed, it will make a temporary copy if the data     is castable.  If         <code class='verbatim'>NPY_ITER_UPDATEIFCOPY</code>
+ is enabled, it will     also copy the data back with another cast upon iterator destruction.</p>
+<p>Returns NULL if there is an error, otherwise returns the allocated     iterator.</p>
+<p>To make an iterator similar to the old iterator, this should work.</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     iter = NpyIter_New(op, NPY_ITER_READWRITE,
-                        NPY_CORDER, NPY_NO_CASTING, NULL);
+                            NPY_CORDER, NPY_NO_CASTING, NULL);</pre>
 
-If you want to edit an array with aligned ``double`` code,
-but the order doesn&#39;t matter, you would use this.
-
+<p>If you want to edit an array with aligned         <code class='verbatim'>double</code>
+ code,     but the order doesn&#39;t matter, you would use this.</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     dtype = PyArray_DescrFromType(NPY_DOUBLE);
-    iter = NpyIter_New(op, NPY_ITER_READWRITE|
-                        NPY_ITER_BUFFERED|
-                        NPY_ITER_NBO|
-                        NPY_ITER_ALIGNED,
-                        NPY_KEEPORDER,
-                        NPY_SAME_KIND_CASTING,
-                        dtype);
-    Py_DECREF(dtype);
-</pre>
+        iter = NpyIter_New(op, NPY_ITER_READWRITE|
+                            NPY_ITER_BUFFERED|
+                            NPY_ITER_NBO|
+                            NPY_ITER_ALIGNED,
+                            NPY_KEEPORDER,
+                            NPY_SAME_KIND_CASTING,
+                            dtype);
+        Py_DECREF(dtype);</pre>
+
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: NpyIter* NpyIter_MultiNew( \
@@ -398,31 +396,32 @@ but the order doesn&#39;t matter, you would use this.
     NPY_CASTING casting, npy_uint32* op_flags, PyArray_Descr** op_dtypes)</pre>
 
 
-                           <pre>Creates an iterator for broadcasting the ``nop`` array objects provided
-in ``op``, using regular NumPy broadcasting rules.
-
-Any of the :c:type:`NPY_ORDER` enum values may be passed to ``order``.  For
-efficient iteration, :c:data:`NPY_KEEPORDER` is the best option, and the
-other orders enforce the particular iteration pattern.  When using
-:c:data:`NPY_KEEPORDER`, if you also want to ensure that the iteration is
-not reversed along an axis, you should pass the flag
-:c:data:`NPY_ITER_DONT_NEGATE_STRIDES`.
-
-Any of the :c:type:`NPY_CASTING` enum values may be passed to ``casting``.
-The values include :c:data:`NPY_NO_CASTING`, :c:data:`NPY_EQUIV_CASTING`,
-:c:data:`NPY_SAFE_CASTING`, :c:data:`NPY_SAME_KIND_CASTING`, and
-:c:data:`NPY_UNSAFE_CASTING`.  To allow the casts to occur, copying or
-buffering must also be enabled.
-
-If ``op_dtypes`` isn&#39;t ``NULL``, it specifies a data type or ``NULL``
-for each ``op[i]``.
-
-Returns NULL if there is an error, otherwise returns the allocated
-iterator.
-
-Flags that may be passed in ``flags``, applying to the whole
-iterator, are:
-</pre>
+                           <blockquote><p>Creates an iterator for broadcasting the         <code class='verbatim'>nop</code>
+ array objects provided     in         <code class='verbatim'>op</code>
+, using regular NumPy broadcasting rules.</p>
+<p>Any of the         <code class='verbatim'>NPY_ORDER</code>
+ enum values may be passed to         <code class='verbatim'>order</code>
+.  For     efficient iteration,         <code class='verbatim'>NPY_KEEPORDER</code>
+ is the best option, and the     other orders enforce the particular iteration pattern.  When using             <code class='verbatim'>NPY_KEEPORDER</code>
+, if you also want to ensure that the iteration is     not reversed along an axis, you should pass the flag             <code class='verbatim'>NPY_ITER_DONT_NEGATE_STRIDES</code>
+.</p>
+<p>Any of the         <code class='verbatim'>NPY_CASTING</code>
+ enum values may be passed to         <code class='verbatim'>casting</code>
+.     The values include         <code class='verbatim'>NPY_NO_CASTING</code>
+,         <code class='verbatim'>NPY_EQUIV_CASTING</code>
+,             <code class='verbatim'>NPY_SAFE_CASTING</code>
+,         <code class='verbatim'>NPY_SAME_KIND_CASTING</code>
+, and             <code class='verbatim'>NPY_UNSAFE_CASTING</code>
+.  To allow the casts to occur, copying or     buffering must also be enabled.</p>
+<p>If         <code class='verbatim'>op_dtypes</code>
+ isn&#39;t         <code class='verbatim'>NULL</code>
+, it specifies a data type or         <code class='verbatim'>NULL</code>
+     for each         <code class='verbatim'>op[i]</code>
+.</p>
+<p>Returns NULL if there is an error, otherwise returns the allocated     iterator.</p>
+<p>Flags that may be passed in         <code class='verbatim'>flags</code>
+, applying to the whole     iterator, are:</p>
+</blockquote>
 
                           <pre class='not-implemented'>
             &lt;Comment: 
@@ -795,53 +794,49 @@ iterator, are:
     int oa_ndim, int** op_axes, npy_intp const* itershape, npy_intp buffersize)</pre>
 
 
-                           <pre>Extends :c:func:`NpyIter_MultiNew` with several advanced options providing
-more control over broadcasting and buffering.
-
-If -1/NULL values are passed to ``oa_ndim``, ``op_axes``, ``itershape``,
-and ``buffersize``, it is equivalent to :c:func:`NpyIter_MultiNew`.
-
-The parameter ``oa_ndim``, when not zero or -1, specifies the number of
-dimensions that will be iterated with customized broadcasting.
-If it is provided, ``op_axes`` must and ``itershape`` can also be provided.
-The ``op_axes`` parameter let you control in detail how the
-axes of the operand arrays get matched together and iterated.
-In ``op_axes``, you must provide an array of ``nop`` pointers
-to ``oa_ndim``-sized arrays of type ``npy_intp``.  If an entry
-in ``op_axes`` is NULL, normal broadcasting rules will apply.
-In ``op_axes[j][i]`` is stored either a valid axis of ``op[j]``, or
--1 which means ``newaxis``.  Within each ``op_axes[j]`` array, axes
-may not be repeated.  The following example is how normal broadcasting
-applies to a 3-D array, a 2-D array, a 1-D array and a scalar.
-
-**Note**: Before NumPy 1.8 ``oa_ndim == 0` was used for signalling
-that ``op_axes`` and ``itershape`` are unused. This is deprecated and
-should be replaced with -1. Better backward compatibility may be
-achieved by using :c:func:`NpyIter_MultiNew` for this case.
-
+                           <blockquote><p>Extends         <code class='verbatim'>NpyIter_MultiNew</code>
+ with several advanced options providing     more control over broadcasting and buffering.</p>
+<p>If -1/NULL values are passed to         <code class='verbatim'>oa_ndim</code>
+,         <code class='verbatim'>op_axes</code>
+,         <code class='verbatim'>itershape</code>
+,     and         <code class='verbatim'>buffersize</code>
+, it is equivalent to         <code class='verbatim'>NpyIter_MultiNew</code>
+.</p>
+<p>The parameter         <code class='verbatim'>oa_ndim</code>
+, when not zero or -1, specifies the number of     dimensions that will be iterated with customized broadcasting.     If it is provided,         <code class='verbatim'>op_axes</code>
+ must and         <code class='verbatim'>itershape</code>
+ can also be provided.     The         <code class='verbatim'>op_axes</code>
+ parameter let you control in detail how the     axes of the operand arrays get matched together and iterated.     In         <code class='verbatim'>op_axes</code>
+, you must provide an array of         <code class='verbatim'>nop</code>
+ pointers     to         <code class='verbatim'>oa_ndim</code>
+-sized arrays of type         <code class='verbatim'>npy_intp</code>
+.  If an entry     in         <code class='verbatim'>op_axes</code>
+ is NULL, normal broadcasting rules will apply.     In         <code class='verbatim'>op_axes[j][i]</code>
+ is stored either a valid axis of         <code class='verbatim'>op[j]</code>
+, or     -1 which means         <code class='verbatim'>newaxis</code>
+.  Within each         <code class='verbatim'>op_axes[j]</code>
+ array, axes     may not be repeated.  The following example is how normal broadcasting     applies to a 3-D array, a 2-D array, a 1-D array and a scalar.</p>
+<p><strong>Note</strong>: Before NumPy 1.8         <code class='verbatim'>oa_ndim == 0` was used for signalling
+    that ``op_axes</code>
+ and         <code class='verbatim'>itershape</code>
+ are unused. This is deprecated and     should be replaced with -1. Better backward compatibility may be     achieved by using         <code class='verbatim'>NpyIter_MultiNew</code>
+ for this case.</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     int oa_ndim = 3;               /* # iteration axes */
-    int op0_axes[] = {0, 1, 2};    /* 3-D operand */
-    int op1_axes[] = {-1, 0, 1};   /* 2-D operand */
-    int op2_axes[] = {-1, -1, 0};  /* 1-D operand */
-    int op3_axes[] = {-1, -1, -1}  /* 0-D (scalar) operand */
-    int* op_axes[] = {op0_axes, op1_axes, op2_axes, op3_axes};
+        int op0_axes[] = {0, 1, 2};    /* 3-D operand */
+        int op1_axes[] = {-1, 0, 1};   /* 2-D operand */
+        int op2_axes[] = {-1, -1, 0};  /* 1-D operand */
+        int op3_axes[] = {-1, -1, -1}  /* 0-D (scalar) operand */
+        int* op_axes[] = {op0_axes, op1_axes, op2_axes, op3_axes};</pre>
 
-The ``itershape`` parameter allows you to force the iterator
-to have a specific iteration shape. It is an array of length
-``oa_ndim``. When an entry is negative, its value is determined
-from the operands. This parameter allows automatically allocated
-outputs to get additional dimensions which don&#39;t match up with
-any dimension of an input.
-
-If ``buffersize`` is zero, a default buffer size is used,
-otherwise it specifies how big of a buffer to use.  Buffers
-which are powers of 2 such as 4096 or 8192 are recommended.
-
-Returns NULL if there is an error, otherwise returns the allocated
-iterator.
-</pre>
+<p>The         <code class='verbatim'>itershape</code>
+ parameter allows you to force the iterator     to have a specific iteration shape. It is an array of length             <code class='verbatim'>oa_ndim</code>
+. When an entry is negative, its value is determined     from the operands. This parameter allows automatically allocated     outputs to get additional dimensions which don&#39;t match up with     any dimension of an input.</p>
+<p>If         <code class='verbatim'>buffersize</code>
+ is zero, a default buffer size is used,     otherwise it specifies how big of a buffer to use.  Buffers     which are powers of 2 such as 4096 or 8192 are recommended.</p>
+<p>Returns NULL if there is an error, otherwise returns the allocated     iterator.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: NpyIter* NpyIter_Copy(NpyIter* iter)
@@ -950,97 +945,73 @@ iterator.
     NpyIter* iter, npy_intp istart, npy_intp iend, char** errmsg)</pre>
 
 
-                           <pre>Resets the iterator and restricts it to the ``iterindex`` range
-``[istart, iend)``.  See :c:func:`NpyIter_Copy` for an explanation of
-how to use this for multi-threaded iteration.  This requires that
-the flag :c:data:`NPY_ITER_RANGED` was passed to the iterator constructor.
-
-If you want to reset both the ``iterindex`` range and the base
-pointers at the same time, you can do the following to avoid
-extra buffer copying (be sure to add the return code error checks
-when you copy this code).
-
+                           <blockquote><p>Resets the iterator and restricts it to the         <code class='verbatim'>iterindex</code>
+ range             <code class='verbatim'>[istart, iend)</code>
+.  See         <code class='verbatim'>NpyIter_Copy</code>
+ for an explanation of     how to use this for multi-threaded iteration.  This requires that     the flag         <code class='verbatim'>NPY_ITER_RANGED</code>
+ was passed to the iterator constructor.</p>
+<p>If you want to reset both the         <code class='verbatim'>iterindex</code>
+ range and the base     pointers at the same time, you can do the following to avoid     extra buffer copying (be sure to add the return code error checks     when you copy this code).</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     /* Set to a trivial empty range */
-    NpyIter_ResetToIterIndexRange(iter, 0, 0);
-    /* Set the base pointers */
-    NpyIter_ResetBasePointers(iter, baseptrs);
-    /* Set to the desired range */
-    NpyIter_ResetToIterIndexRange(iter, istart, iend);
+        NpyIter_ResetToIterIndexRange(iter, 0, 0);
+        /* Set the base pointers */
+        NpyIter_ResetBasePointers(iter, baseptrs);
+        /* Set to the desired range */
+        NpyIter_ResetToIterIndexRange(iter, istart, iend);</pre>
 
-Returns ``NPY_SUCCEED`` or ``NPY_FAIL``.  If errmsg is non-NULL,
-no Python exception is set when ``NPY_FAIL`` is returned.
-Instead, \*errmsg is set to an error message.  When errmsg is
-non-NULL, the function may be safely called without holding
-the Python GIL.
-</pre>
+<p>Returns         <code class='verbatim'>NPY_SUCCEED</code>
+ or         <code class='verbatim'>NPY_FAIL</code>
+.  If errmsg is non-NULL,     no Python exception is set when         <code class='verbatim'>NPY_FAIL</code>
+ is returned.     Instead, \*errmsg is set to an error message.  When errmsg is     non-NULL, the function may be safely called without holding     the Python GIL.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: int NpyIter_ResetBasePointers( \
     NpyIter *iter, char** baseptrs, char** errmsg)</pre>
 
 
-                           <pre>Resets the iterator back to its initial state, but using the values
-in ``baseptrs`` for the data instead of the pointers from the arrays
-being iterated.  This functions is intended to be used, together with
-the ``op_axes`` parameter, by nested iteration code with two or more
-iterators.
-
-Returns ``NPY_SUCCEED`` or ``NPY_FAIL``.  If errmsg is non-NULL,
-no Python exception is set when ``NPY_FAIL`` is returned.
-Instead, \*errmsg is set to an error message.  When errmsg is
-non-NULL, the function may be safely called without holding
-the Python GIL.
-
-*TODO*: Move the following into a special section on nested iterators.
-
-Creating iterators for nested iteration requires some care.  All
-the iterator operands must match exactly, or the calls to
-:c:func:`NpyIter_ResetBasePointers` will be invalid.  This means that
-automatic copies and output allocation should not be used haphazardly.
-It is possible to still use the automatic data conversion and casting
-features of the iterator by creating one of the iterators with
-all the conversion parameters enabled, then grabbing the allocated
-operands with the :c:func:`NpyIter_GetOperandArray` function and passing
-them into the constructors for the rest of the iterators.
-
-**WARNING**: When creating iterators for nested iteration,
-the code must not use a dimension more than once in the different
-iterators.  If this is done, nested iteration will produce
-out-of-bounds pointers during iteration.
-
-**WARNING**: When creating iterators for nested iteration, buffering
-can only be applied to the innermost iterator.  If a buffered iterator
-is used as the source for ``baseptrs``, it will point into a small buffer
-instead of the array and the inner iteration will be invalid.
-
-The pattern for using nested iterators is as follows.
-
+                           <blockquote><p>Resets the iterator back to its initial state, but using the values     in         <code class='verbatim'>baseptrs</code>
+ for the data instead of the pointers from the arrays     being iterated.  This functions is intended to be used, together with     the         <code class='verbatim'>op_axes</code>
+ parameter, by nested iteration code with two or more     iterators.</p>
+<p>Returns         <code class='verbatim'>NPY_SUCCEED</code>
+ or         <code class='verbatim'>NPY_FAIL</code>
+.  If errmsg is non-NULL,     no Python exception is set when         <code class='verbatim'>NPY_FAIL</code>
+ is returned.     Instead, \*errmsg is set to an error message.  When errmsg is     non-NULL, the function may be safely called without holding     the Python GIL.</p>
+<p><em>TODO</em>: Move the following into a special section on nested iterators.</p>
+<p>Creating iterators for nested iteration requires some care.  All     the iterator operands must match exactly, or the calls to             <code class='verbatim'>NpyIter_ResetBasePointers</code>
+ will be invalid.  This means that     automatic copies and output allocation should not be used haphazardly.     It is possible to still use the automatic data conversion and casting     features of the iterator by creating one of the iterators with     all the conversion parameters enabled, then grabbing the allocated     operands with the         <code class='verbatim'>NpyIter_GetOperandArray</code>
+ function and passing     them into the constructors for the rest of the iterators.</p>
+<p><strong>WARNING</strong>: When creating iterators for nested iteration,     the code must not use a dimension more than once in the different     iterators.  If this is done, nested iteration will produce     out-of-bounds pointers during iteration.</p>
+<p><strong>WARNING</strong>: When creating iterators for nested iteration, buffering     can only be applied to the innermost iterator.  If a buffered iterator     is used as the source for         <code class='verbatim'>baseptrs</code>
+, it will point into a small buffer     instead of the array and the inner iteration will be invalid.</p>
+<p>The pattern for using nested iterators is as follows.</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     NpyIter *iter1, *iter1;
-    NpyIter_IterNextFunc *iternext1, *iternext2;
-    char **dataptrs1;
+        NpyIter_IterNextFunc *iternext1, *iternext2;
+        char **dataptrs1;
 
-    /*
-     * With the exact same operands, no copies allowed, and
-     * no axis in op_axes used both in iter1 and iter2.
-     * Buffering may be enabled for iter2, but not for iter1.
-     */
-    iter1 = ...; iter2 = ...;
+        /*
+         * With the exact same operands, no copies allowed, and
+         * no axis in op_axes used both in iter1 and iter2.
+         * Buffering may be enabled for iter2, but not for iter1.
+         */
+        iter1 = ...; iter2 = ...;
 
-    iternext1 = NpyIter_GetIterNext(iter1);
-    iternext2 = NpyIter_GetIterNext(iter2);
-    dataptrs1 = NpyIter_GetDataPtrArray(iter1);
+        iternext1 = NpyIter_GetIterNext(iter1);
+        iternext2 = NpyIter_GetIterNext(iter2);
+        dataptrs1 = NpyIter_GetDataPtrArray(iter1);
 
-    do {
-        NpyIter_ResetBasePointers(iter2, dataptrs1);
         do {
-            /* Use the iter2 values */
-        } while (iternext2(iter2));
-    } while (iternext1(iter1));
-</pre>
+            NpyIter_ResetBasePointers(iter2, dataptrs1);
+            do {
+                /* Use the iter2 values */
+            } while (iternext2(iter2));
+        } while (iternext1(iter1));</pre>
+
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: int NpyIter_GotoMultiIndex(NpyIter* iter, npy_intp const* multi_index)
@@ -1086,10 +1057,11 @@ The pattern for using nested iterators is as follows.
     NpyIter* iter, npy_intp* istart, npy_intp* iend)</pre>
 
 
-                           <pre>Gets the ``iterindex`` sub-range that is being iterated.  If
-:c:data:`NPY_ITER_RANGED` was not specified, this always returns the
-range ``[0, NpyIter_IterSize(iter))``.
-</pre>
+                           <blockquote><p>Gets the         <code class='verbatim'>iterindex</code>
+ sub-range that is being iterated.  If             <code class='verbatim'>NPY_ITER_RANGED</code>
+ was not specified, this always returns the     range         <code class='verbatim'>[0, NpyIter_IterSize(iter))</code>
+.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: int NpyIter_GotoIterIndex(NpyIter* iter, npy_intp iterindex)
@@ -1238,31 +1210,19 @@ range ``[0, NpyIter_IterSize(iter))``.
     NpyIter* iter, npy_intp itemsize, npy_intp* outstrides)</pre>
 
 
-                           <pre>Builds a set of strides which are the same as the strides of an
-output array created using the :c:data:`NPY_ITER_ALLOCATE` flag, where NULL
-was passed for op_axes.  This is for data packed contiguously,
-but not necessarily in C or Fortran order. This should be used
-together with :c:func:`NpyIter_GetShape` and :c:func:`NpyIter_GetNDim`
-with the flag :c:data:`NPY_ITER_MULTI_INDEX` passed into the constructor.
-
-A use case for this function is to match the shape and layout of
-the iterator and tack on one or more dimensions.  For example,
-in order to generate a vector per input value for a numerical gradient,
-you pass in ndim*itemsize for itemsize, then add another dimension to
-the end with size ndim and stride itemsize.  To do the Hessian matrix,
-you do the same thing but add two dimensions, or take advantage of
-the symmetry and pack it into 1 dimension with a particular encoding.
-
-This function may only be called if the iterator is tracking a multi-index
-and if :c:data:`NPY_ITER_DONT_NEGATE_STRIDES` was used to prevent an axis
-from being iterated in reverse order.
-
-If an array is created with this method, simply adding &#39;itemsize&#39;
-for each iteration will traverse the new array matching the
-iterator.
-
-Returns ``NPY_SUCCEED`` or ``NPY_FAIL``.
-</pre>
+                           <blockquote><p>Builds a set of strides which are the same as the strides of an     output array created using the         <code class='verbatim'>NPY_ITER_ALLOCATE</code>
+ flag, where NULL     was passed for op_axes.  This is for data packed contiguously,     but not necessarily in C or Fortran order. This should be used     together with         <code class='verbatim'>NpyIter_GetShape</code>
+ and         <code class='verbatim'>NpyIter_GetNDim</code>
+     with the flag         <code class='verbatim'>NPY_ITER_MULTI_INDEX</code>
+ passed into the constructor.</p>
+<p>A use case for this function is to match the shape and layout of     the iterator and tack on one or more dimensions.  For example,     in order to generate a vector per input value for a numerical gradient,     you pass in ndim*itemsize for itemsize, then add another dimension to     the end with size ndim and stride itemsize.  To do the Hessian matrix,     you do the same thing but add two dimensions, or take advantage of     the symmetry and pack it into 1 dimension with a particular encoding.</p>
+<p>This function may only be called if the iterator is tracking a multi-index     and if         <code class='verbatim'>NPY_ITER_DONT_NEGATE_STRIDES</code>
+ was used to prevent an axis     from being iterated in reverse order.</p>
+<p>If an array is created with this method, simply adding &#39;itemsize&#39;     for each iteration will traverse the new array matching the     iterator.</p>
+<p>Returns         <code class='verbatim'>NPY_SUCCEED</code>
+ or         <code class='verbatim'>NPY_FAIL</code>
+.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: npy_bool NpyIter_IsFirstVisit(NpyIter* iter, int iop)
@@ -1296,120 +1256,96 @@ Returns ``NPY_SUCCEED`` or ``NPY_FAIL``.
     NpyIter* iter, char** errmsg)</pre>
 
 
-                           <pre>Returns a function pointer for iteration.  A specialized version
-of the function pointer may be calculated by this function
-instead of being stored in the iterator structure. Thus, to
-get good performance, it is required that the function pointer
-be saved in a variable rather than retrieved for each loop iteration.
-
-Returns NULL if there is an error.  If errmsg is non-NULL,
-no Python exception is set when ``NPY_FAIL`` is returned.
-Instead, \*errmsg is set to an error message.  When errmsg is
-non-NULL, the function may be safely called without holding
-the Python GIL.
-
-The typical looping construct is as follows.
-
+                           <blockquote><p>Returns a function pointer for iteration.  A specialized version     of the function pointer may be calculated by this function     instead of being stored in the iterator structure. Thus, to     get good performance, it is required that the function pointer     be saved in a variable rather than retrieved for each loop iteration.</p>
+<p>Returns NULL if there is an error.  If errmsg is non-NULL,     no Python exception is set when         <code class='verbatim'>NPY_FAIL</code>
+ is returned.     Instead, \*errmsg is set to an error message.  When errmsg is     non-NULL, the function may be safely called without holding     the Python GIL.</p>
+<p>The typical looping construct is as follows.</p>
+<pre class='not-implemented'>
 .. code-block:: c
-
     NpyIter_IterNextFunc *iternext = NpyIter_GetIterNext(iter, NULL);
-    char** dataptr = NpyIter_GetDataPtrArray(iter);
+        char** dataptr = NpyIter_GetDataPtrArray(iter);
 
-    do {
-        /* use the addresses dataptr[0], ... dataptr[nop-1] */
-    } while(iternext(iter));
-
-When :c:data:`NPY_ITER_EXTERNAL_LOOP` is specified, the typical
-inner loop construct is as follows.
-
-.. code-block:: c
-
-    NpyIter_IterNextFunc *iternext = NpyIter_GetIterNext(iter, NULL);
-    char** dataptr = NpyIter_GetDataPtrArray(iter);
-    npy_intp* stride = NpyIter_GetInnerStrideArray(iter);
-    npy_intp* size_ptr = NpyIter_GetInnerLoopSizePtr(iter), size;
-    npy_intp iop, nop = NpyIter_GetNOp(iter);
-
-    do {
-        size = *size_ptr;
-        while (size--) {
+        do {
             /* use the addresses dataptr[0], ... dataptr[nop-1] */
-            for (iop = 0; iop &lt; nop; ++iop) {
-                dataptr[iop] += stride[iop];
-            }
-        }
-    } while (iternext());
+        } while(iternext(iter));</pre>
 
-Observe that we are using the dataptr array inside the iterator, not
-copying the values to a local temporary.  This is possible because
-when ``iternext()`` is called, these pointers will be overwritten
-with fresh values, not incrementally updated.
-
-If a compile-time fixed buffer is being used (both flags
-:c:data:`NPY_ITER_BUFFERED` and :c:data:`NPY_ITER_EXTERNAL_LOOP`), the
-inner size may be used as a signal as well.  The size is guaranteed
-to become zero when ``iternext()`` returns false, enabling the
-following loop construct.  Note that if you use this construct,
-you should not pass :c:data:`NPY_ITER_GROWINNER` as a flag, because it
-will cause larger sizes under some circumstances.
-
+<p>When         <code class='verbatim'>NPY_ITER_EXTERNAL_LOOP</code>
+ is specified, the typical     inner loop construct is as follows.</p>
+<pre class='not-implemented'>
 .. code-block:: c
+    NpyIter_IterNextFunc *iternext = NpyIter_GetIterNext(iter, NULL);
+        char** dataptr = NpyIter_GetDataPtrArray(iter);
+        npy_intp* stride = NpyIter_GetInnerStrideArray(iter);
+        npy_intp* size_ptr = NpyIter_GetInnerLoopSizePtr(iter), size;
+        npy_intp iop, nop = NpyIter_GetNOp(iter);
 
+        do {
+            size = *size_ptr;
+            while (size--) {
+                /* use the addresses dataptr[0], ... dataptr[nop-1] */
+                for (iop = 0; iop &lt; nop; ++iop) {
+                    dataptr[iop] += stride[iop];
+                }
+            }
+        } while (iternext());</pre>
+
+<p>Observe that we are using the dataptr array inside the iterator, not     copying the values to a local temporary.  This is possible because     when         <code class='verbatim'>iternext()</code>
+ is called, these pointers will be overwritten     with fresh values, not incrementally updated.</p>
+<p>If a compile-time fixed buffer is being used (both flags             <code class='verbatim'>NPY_ITER_BUFFERED</code>
+ and         <code class='verbatim'>NPY_ITER_EXTERNAL_LOOP</code>
+), the     inner size may be used as a signal as well.  The size is guaranteed     to become zero when         <code class='verbatim'>iternext()</code>
+ returns false, enabling the     following loop construct.  Note that if you use this construct,     you should not pass         <code class='verbatim'>NPY_ITER_GROWINNER</code>
+ as a flag, because it     will cause larger sizes under some circumstances.</p>
+<pre class='not-implemented'>
+.. code-block:: c
     /* The constructor should have buffersize passed as this value */
-    #define FIXED_BUFFER_SIZE 1024
+        #define FIXED_BUFFER_SIZE 1024
 
-    NpyIter_IterNextFunc *iternext = NpyIter_GetIterNext(iter, NULL);
-    char **dataptr = NpyIter_GetDataPtrArray(iter);
-    npy_intp *stride = NpyIter_GetInnerStrideArray(iter);
-    npy_intp *size_ptr = NpyIter_GetInnerLoopSizePtr(iter), size;
-    npy_intp i, iop, nop = NpyIter_GetNOp(iter);
+        NpyIter_IterNextFunc *iternext = NpyIter_GetIterNext(iter, NULL);
+        char **dataptr = NpyIter_GetDataPtrArray(iter);
+        npy_intp *stride = NpyIter_GetInnerStrideArray(iter);
+        npy_intp *size_ptr = NpyIter_GetInnerLoopSizePtr(iter), size;
+        npy_intp i, iop, nop = NpyIter_GetNOp(iter);
 
-    /* One loop with a fixed inner size */
-    size = *size_ptr;
-    while (size == FIXED_BUFFER_SIZE) {
-        /*
-         * This loop could be manually unrolled by a factor
-         * which divides into FIXED_BUFFER_SIZE
-         */
-        for (i = 0; i &lt; FIXED_BUFFER_SIZE; ++i) {
-            /* use the addresses dataptr[0], ... dataptr[nop-1] */
-            for (iop = 0; iop &lt; nop; ++iop) {
-                dataptr[iop] += stride[iop];
-            }
-        }
-        iternext();
+        /* One loop with a fixed inner size */
         size = *size_ptr;
-    }
-
-    /* Finish-up loop with variable inner size */
-    if (size &gt; 0) do {
-        size = *size_ptr;
-        while (size--) {
-            /* use the addresses dataptr[0], ... dataptr[nop-1] */
-            for (iop = 0; iop &lt; nop; ++iop) {
-                dataptr[iop] += stride[iop];
+        while (size == FIXED_BUFFER_SIZE) {
+            /*
+             * This loop could be manually unrolled by a factor
+             * which divides into FIXED_BUFFER_SIZE
+             */
+            for (i = 0; i &lt; FIXED_BUFFER_SIZE; ++i) {
+                /* use the addresses dataptr[0], ... dataptr[nop-1] */
+                for (iop = 0; iop &lt; nop; ++iop) {
+                    dataptr[iop] += stride[iop];
+                }
             }
+            iternext();
+            size = *size_ptr;
         }
-    } while (iternext());
-</pre>
+
+        /* Finish-up loop with variable inner size */
+        if (size &gt; 0) do {
+            size = *size_ptr;
+            while (size--) {
+                /* use the addresses dataptr[0], ... dataptr[nop-1] */
+                for (iop = 0; iop &lt; nop; ++iop) {
+                    dataptr[iop] += stride[iop];
+                }
+            }
+        } while (iternext());</pre>
+
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: NpyIter_GetMultiIndexFunc *NpyIter_GetGetMultiIndex( \
     NpyIter* iter, char** errmsg)</pre>
 
 
-                           <pre>Returns a function pointer for getting the current multi-index
-of the iterator.  Returns NULL if the iterator is not tracking
-a multi-index.  It is recommended that this function
-pointer be cached in a local variable before the iteration
-loop.
-
-Returns NULL if there is an error.  If errmsg is non-NULL,
-no Python exception is set when ``NPY_FAIL`` is returned.
-Instead, \*errmsg is set to an error message.  When errmsg is
-non-NULL, the function may be safely called without holding
-the Python GIL.
-</pre>
+                           <blockquote><p>Returns a function pointer for getting the current multi-index     of the iterator.  Returns NULL if the iterator is not tracking     a multi-index.  It is recommended that this function     pointer be cached in a local variable before the iteration     loop.</p>
+<p>Returns NULL if there is an error.  If errmsg is non-NULL,     no Python exception is set when         <code class='verbatim'>NPY_FAIL</code>
+ is returned.     Instead, \*errmsg is set to an error message.  When errmsg is     non-NULL, the function may be safely called without holding     the Python GIL.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:function:: char** NpyIter_GetDataPtrArray(NpyIter* iter)
@@ -1476,20 +1412,11 @@ the Python GIL.
     NpyIter* iter, npy_intp* out_strides)</pre>
 
 
-                           <pre>Gets an array of strides which are fixed, or will not change during
-the entire iteration.  For strides that may change, the value
-NPY_MAX_INTP is placed in the stride.
-
-Once the iterator is prepared for iteration (after a reset if
-:c:data:`NPY_ITER_DELAY_BUFALLOC` was used), call this to get the strides
-which may be used to select a fast inner loop function.  For example,
-if the stride is 0, that means the inner loop can always load its
-value into a variable once, then use the variable throughout the loop,
-or if the stride equals the itemsize, a contiguous version for that
-operand may be used.
-
-This function may be safely called without holding the Python GIL.
-</pre>
+                           <blockquote><p>Gets an array of strides which are fixed, or will not change during     the entire iteration.  For strides that may change, the value     NPY_MAX_INTP is placed in the stride.</p>
+<p>Once the iterator is prepared for iteration (after a reset if             <code class='verbatim'>NPY_ITER_DELAY_BUFALLOC</code>
+ was used), call this to get the strides     which may be used to select a fast inner loop function.  For example,     if the stride is 0, that means the inner loop can always load its     value into a variable once, then use the variable throughout the loop,     or if the stride equals the itemsize, a contiguous version for that     operand may be used.</p>
+<p>This function may be safely called without holding the Python GIL.</p>
+</blockquote>
 
                <pre class='not-implemented'>
 .. index:: 

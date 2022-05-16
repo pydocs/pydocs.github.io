@@ -134,6 +134,34 @@
 
                <p>The last two are characteristics of ndarrays - in order to support things like array slicing.  The complications of subclassing ndarray are due to the mechanisms numpy has to support these latter two routes of instance creation.</p>
 
+
+<h1>When to use subclassing</h1>
+               <p>Besides the additional complexities of subclassing a NumPy array, subclasses can run into unexpected behaviour because some functions may convert the subclass to a baseclass and &#34;forget&#34; any additional information associated with the subclass. This can result in surprising behavior if you use NumPy methods or functions you have not explicitly tested.</p>
+
+               <p>On the other hand, compared to other interoperability approaches, subclassing can be a useful because many thing will &#34;just work&#34;.</p>
+
+               <p>This means that subclassing can be a convenient approach and for a long time it was also often the only available approach. However, NumPy now provides additional interoperability protocols described in &#34;        <code class='verbatim'>Interoperability with NumPy &lt;basics.interoperability&gt;</code>
+&#34;. For many use-cases these interoperability protocols may now be a better fit or supplement the use of subclassing.</p>
+
+               <p>Subclassing can be a good fit if:</p>
+
+                          <ul>               <li>               <p>you are less worried about maintainability or users other than yourself:   Subclass will be faster to implement and additional interoperability   can be added &#34;as-needed&#34;.  And with few users, possible surprises are not   an issue.</p>
+
+</li>
+               <li>               <p>you do not think it is problematic if the subclass information is   ignored or lost silently.  An example is         <code class='verbatim'>np.memmap</code>
+ where &#34;forgetting&#34;   about data being memory mapped cannot lead to a wrong result.   An example of a subclass that sometimes confuses users are NumPy&#39;s masked   arrays.  When they were introduced, subclassing was the only approach for   implementation.  However, today we would possibly try to avoid subclassing   and rely only on interoperability protocols.</p>
+
+</li>
+            </ul>
+
+               <p>Note that also subclass authors may wish to study         <code class='verbatim'>Interoperability with NumPy &lt;basics.interoperability&gt;</code>
+ to support more complex use-cases or work around the surprising behavior.</p>
+
+               <p>        <code class='verbatim'>astropy.units.Quantity</code>
+ and         <code class='verbatim'>xarray</code>
+ are examples for array-like objects that interoperate well with NumPy.  Astropy&#39;s         <code class='verbatim'>Quantity</code>
+ is an example which uses a dual approach of both subclassing and interoperability protocols.</p>
+
                           <pre class='not-implemented'>
             &lt;Unimplemented &#39;target&#39; &#39;.. _view-casting:&#39;&gt;
            </pre>
@@ -196,7 +224,7 @@ False</pre>
 <h1>A brief Python primer on ``__new__`` and ``__init__``</h1>
                <p>        <code class='verbatim'>__new__</code>
  is a standard Python method, and, if present, is called before         <code class='verbatim'>__init__</code>
- when we create a class instance. See the <code>:None:None:`python
+ when we create a class instance. See the <code class='not-implemented'>:None:None:`python
 __new__ documentation
 &lt;https://docs.python.org/reference/datamodel.html#object.__new__&gt;`</code> for more detail.</p>
 
@@ -452,7 +480,7 @@ In array_finalize:
 
                <p>Using the object looks like this:</p>
 
-                           <pre>&gt;&gt;&gt; obj = InfoArray(shape=(3,)) # explicit constructor
+                           <blockquote><pre>&gt;&gt;&gt; obj = InfoArray(shape=(3,)) # explicit constructor
 &gt;&gt;&gt; type(obj)
 &lt;class &#39;InfoArray&#39;&gt;
 &gt;&gt;&gt; obj.info is None
@@ -470,8 +498,7 @@ True
 &gt;&gt;&gt; type(cast_arr)
 &lt;class &#39;InfoArray&#39;&gt;
 &gt;&gt;&gt; cast_arr.info is None
-True
-</pre>
+True</pre></blockquote>
 
                <p>This class isn&#39;t very useful, because it has the same constructor as the bare ndarray object, including passing in buffers and shapes and so on. We would probably prefer the constructor to be able to take an already formed ndarray from the usual numpy calls to         <code class='verbatim'>np.array</code>
  and return an object.</p>
@@ -503,7 +530,7 @@ True
 
                <p>So:</p>
 
-                           <pre>&gt;&gt;&gt; arr = np.arange(5)
+                           <blockquote><pre>&gt;&gt;&gt; arr = np.arange(5)
 &gt;&gt;&gt; obj = RealisticInfoArray(arr, info=&#39;information&#39;)
 &gt;&gt;&gt; type(obj)
 &lt;class &#39;RealisticInfoArray&#39;&gt;
@@ -513,8 +540,7 @@ True
 &gt;&gt;&gt; type(v)
 &lt;class &#39;RealisticInfoArray&#39;&gt;
 &gt;&gt;&gt; v.info
-&#39;information&#39;
-</pre>
+&#39;information&#39;</pre></blockquote>
 
                           <pre class='not-implemented'>
             &lt;Unimplemented &#39;target&#39; &#39;.. _array-ufunc:&#39;&gt;
@@ -522,8 +548,11 @@ True
 
 
 <h1>``__array_ufunc__`` for ufuncs</h1>
-                           <pre>.. versionadded:: 1.13
-</pre>
+                           <blockquote>            <div class='admonition'>
+    <div>versionadded</div>
+</div>
+
+</blockquote>
 
                <p>A subclass can override what happens when executing numpy ufuncs on it by overriding the default         <code class='verbatim'>ndarray.__array_ufunc__</code>
  method. This method is executed <em>instead</em> of the ufunc and should return either the result of the operation, or         <code class='verbatim'>NotImplemented</code>
@@ -632,9 +661,9 @@ methods)(*inputs, **kwargs)</code>
  that has an override.  If you use         <code class='verbatim'>super</code>
  as in the example,         <code class='verbatim'>ndarray.__array_ufunc__</code>
  will notice that         <code class='verbatim'>b</code>
- has an override, which means it cannot evaluate the result itself. Thus, it will return <code>:None:None:`NotImplemented`</code> and so will our class         <code class='verbatim'>A</code>
+ has an override, which means it cannot evaluate the result itself. Thus, it will return <code class='not-implemented'>:None:None:`NotImplemented`</code> and so will our class         <code class='verbatim'>A</code>
 . Then, control will be passed over to         <code class='verbatim'>b</code>
-, which either knows how to deal with us and produces a result, or does not and returns <code>:None:None:`NotImplemented`</code>, raising a         <code class='verbatim'>TypeError</code>
+, which either knows how to deal with us and produces a result, or does not and returns <code class='not-implemented'>:None:None:`NotImplemented`</code>, raising a         <code class='verbatim'>TypeError</code>
 .</p>
 
                <p>If instead, we replace our         <code class='verbatim'>super</code>

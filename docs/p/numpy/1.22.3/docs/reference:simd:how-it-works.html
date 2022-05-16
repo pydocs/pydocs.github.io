@@ -123,9 +123,7 @@
 : minimal set of required optimizations.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>        <code class='verbatim'>--cpu-dispatch</code>
+               <li>               <p>        <code class='verbatim'>--cpu-dispatch</code>
 : dispatched set of additional optimizations.</p>
 
 </li>
@@ -157,7 +155,7 @@
                <pre>// The header should be located at numpy/numpy/core/src/common/_cpu_dispatch.h
 /**NOTE
  ** C definitions prefixed with &#34;NPY_HAVE_&#34; represent
- ** the required optimzations.
+ ** the required optimizations.
  **
  ** C definitions prefixed with &#39;NPY__CPU_TARGET_&#39; are protected and
  ** shouldn&#39;t be used by any NumPy C sources.
@@ -226,14 +224,10 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
                           <ul>               <li>               <p>Target groups: pre-configured configuration statements used for   managing the required optimizations from outside the dispatch-able source.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>Policies: collections of options used for changing the default   behaviors or forcing the compilers to perform certain things.</p>
+               <li>               <p>Policies: collections of options used for changing the default   behaviors or forcing the compilers to perform certain things.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>&#34;baseline&#34;: a unique keyword represents the minimal optimizations   that configured through         <code class='verbatim'>--cpu-baseline</code>
+               <li>               <p>&#34;baseline&#34;: a unique keyword represents the minimal optimizations   that configured through         <code class='verbatim'>--cpu-baseline</code>
 </p>
 
 </li>
@@ -247,14 +241,10 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
    <strong>NOTE</strong>: C++ not supported yet.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p><strong>(B) Parsing and validating</strong>: In this step, the   dispatch-able sources that had been filtered by the previous step   are parsed and validated by the configuration statements for each one   of them one by one in order to determine the required optimizations.</p>
+               <li>               <p><strong>(B) Parsing and validating</strong>: In this step, the   dispatch-able sources that had been filtered by the previous step   are parsed and validated by the configuration statements for each one   of them one by one in order to determine the required optimizations.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p><strong>(C) Wrapping</strong>: This is the approach taken by NumPy&#39;s   infrastructure, which has proved to be sufficiently flexible in order   to compile a single source multiple times with different <strong>C</strong>   definitions and flags that affect the code paths. The process is   achieved by creating a temporary <strong>C</strong> source for each required   optimization that related to the additional optimization, which   contains the declarations of the <strong>C</strong> definitions and includes the   involved source via the <strong>C</strong> directive <strong>#include</strong>. For more   clarification take a look at the following code for AVX512F :</p>
+               <li>               <p><strong>(C) Wrapping</strong>: This is the approach taken by NumPy&#39;s   infrastructure, which has proved to be sufficiently flexible in order   to compile a single source multiple times with different <strong>C</strong>   definitions and flags that affect the code paths. The process is   achieved by creating a temporary <strong>C</strong> source for each required   optimization that related to the additional optimization, which   contains the declarations of the <strong>C</strong> definitions and includes the   involved source via the <strong>C</strong> directive <strong>#include</strong>. For more   clarification take a look at the following code for AVX512F :</p>
 
                <pre>/*
    * this definition is used by NumPy utilities as suffixes for the
@@ -281,9 +271,7 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
   // our dispatch-able source
   #include &#34;/the/absuolate/path/of/hello.dispatch.c&#34;</pre>
 </li>
-            </ul>
-
-                          <ul>               <li>               <p><strong>(D) Dispatch-able configuration header</strong>: The infrastructure   generates a config header for each dispatch-able source, this header   mainly contains two abstract <strong>C</strong> macros used for identifying the   generated objects, so they can be used for runtime dispatching   certain symbols from the generated objects by any <strong>C</strong> source. It is   also used for forward declarations.</p>
+               <li>               <p><strong>(D) Dispatch-able configuration header</strong>: The infrastructure   generates a config header for each dispatch-able source, this header   mainly contains two abstract <strong>C</strong> macros used for identifying the   generated objects, so they can be used for runtime dispatching   certain symbols from the generated objects by any <strong>C</strong> source. It is   also used for forward declarations.</p>
 
                <p>The generated header takes the name of the dispatch-able source after   excluding the extension and replace it with         <code class='verbatim'>.h</code>
 , for example   assume we have a dispatch-able source called         <code class='verbatim'>hello.dispatch.c</code>
@@ -389,7 +377,7 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
     else { FN NPY_EXPAND(ARGS); }
 
   // NumPy has a macro called &#39;NPY_CPU_DISPATCH_DECLARE&#39; can be used
-  // for forward declrations any kind of prototypes based on
+  // for forward declarations any kind of prototypes based on
   // &#39;NPY__CPU_DISPATCH_CALL&#39; and &#39;NPY__CPU_DISPATCH_BASELINE_CALL&#39;.
   // However in this example, we just handle it manually.
   void simd_whoami(const char *extra_info);
@@ -398,10 +386,10 @@ configuration statements</strong>&#34; that must be declared between a <strong>C
 
   void trigger_me(void)
   {
-      // bring the auto-gernreated config header
+      // bring the auto-generated config header
       // which contains config macros &#39;NPY__CPU_DISPATCH_CALL&#39; and
       // &#39;NPY__CPU_DISPATCH_BASELINE_CALL&#39;.
-      // it highely recomaned to include the config header before exectuing
+      // it is highly recommended to include the config header before executing
     // the dispatching macros in case if there&#39;s another header in the scope.
       #include &#34;hello.dispatch.h&#34;
       DISPATCH_CALL_ALL(simd_whoami, (&#34;all&#34;))

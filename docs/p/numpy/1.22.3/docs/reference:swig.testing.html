@@ -113,7 +113,7 @@
  is run in the         <code class='verbatim'>numpy/tools/swig</code>
  subdirectory.</p>
 
-               <p>To facilitate this many similar unit tests, some high-level programming techniques are employed, including C and <code>:None:None:`SWIG`</code> macros, as well as Python inheritance.  The purpose of this document is to describe the testing infrastructure employed to verify that the         <code class='verbatim'>numpy.i</code>
+               <p>To facilitate this many similar unit tests, some high-level programming techniques are employed, including C and <code class='not-implemented'>:None:None:`SWIG`</code> macros, as well as Python inheritance.  The purpose of this document is to describe the testing infrastructure employed to verify that the         <code class='verbatim'>numpy.i</code>
  typemaps are working as expected.</p>
 
 
@@ -125,7 +125,7 @@ Vector.cxx</pre>
                <p>that contain prototypes and code for a variety of functions that have one-dimensional arrays as function arguments.  The file::      </p>
 
                <pre>Vector.i</pre>
-               <p>is a <code>:None:None:`SWIG`</code> interface file that defines a python module         <code class='verbatim'>Vector</code>
+               <p>is a <code class='not-implemented'>:None:None:`SWIG`</code> interface file that defines a python module         <code class='verbatim'>Vector</code>
  that wraps the functions in         <code class='verbatim'>Vector.h</code>
  while utilizing the typemaps in         <code class='verbatim'>numpy.i</code>
  to correctly handle the C arrays.</p>
@@ -183,19 +183,56 @@ Vector.cxx</pre>
  is then implemented for all of the data types supported by         <code class='verbatim'>numpy.i</code>
 :</p>
 
-                           <pre>* ``signed char``
-* ``unsigned char``
-* ``short``
-* ``unsigned short``
-* ``int``
-* ``unsigned int``
-* ``long``
-* ``unsigned long``
-* ``long long``
-* ``unsigned long long``
-* ``float``
-* ``double``
-</pre>
+                           <blockquote>           <ul>               <li>               <p>        <code class='verbatim'>signed char</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned char</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>short</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned short</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>int</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned int</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>long long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned long long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>float</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>double</code>
+</p>
+
+</li>
+            </ul>
+</blockquote>
 
 
 <h1>Testing Source Files</h1>
@@ -210,11 +247,11 @@ Vector.cxx</pre>
 
 <h1>Testing SWIG Interface Files</h1>
                <p>        <code class='verbatim'>Vector.i</code>
- is a <code>:None:None:`SWIG`</code> interface file that defines python module         <code class='verbatim'>Vector</code>
+ is a <code class='not-implemented'>:None:None:`SWIG`</code> interface file that defines python module         <code class='verbatim'>Vector</code>
 .  It follows the conventions for using         <code class='verbatim'>numpy.i</code>
- as described in this chapter.  It defines a <code>:None:None:`SWIG`</code> macro         <code class='verbatim'>%apply_numpy_typemaps</code>
+ as described in this chapter.  It defines a <code class='not-implemented'>:None:None:`SWIG`</code> macro         <code class='verbatim'>%apply_numpy_typemaps</code>
  that has a single argument         <code class='verbatim'>TYPE</code>
-. It uses the <code>:None:None:`SWIG`</code> directive         <code class='verbatim'>%apply</code>
+. It uses the <code class='not-implemented'>:None:None:`SWIG`</code> directive         <code class='verbatim'>%apply</code>
  to apply the provided typemaps to the argument signatures found in         <code class='verbatim'>Vector.h</code>
 .  This macro is then implemented for all of the data types supported by         <code class='verbatim'>numpy.i</code>
 .  It then does a         <code class='verbatim'>%include &#34;Vector.h&#34;</code>
@@ -235,16 +272,27 @@ Vector.cxx</pre>
                <p>However, this class is not run directly.  Rather, it serves as a base class to several other python classes, each one specific to a particular data type.  The         <code class='verbatim'>VectorTestCase</code>
  class stores two strings for typing information:</p>
 
-                           <pre>**self.typeStr**
-  A string that matches one of the ``SNAME`` prefixes used in
-  ``Vector.h`` and ``Vector.cxx``.  For example, ``&#34;double&#34;``.
-
-**self.typeCode**
-  A short (typically single-character) string that represents a
-  data type in numpy and corresponds to ``self.typeStr``.  For
-  example, if ``self.typeStr`` is ``&#34;double&#34;``, then
-  ``self.typeCode`` should be ``&#34;d&#34;``.
-</pre>
+                           <blockquote><!-- deflist -->
+           <dl>
+               <dt><p><strong>self.typeStr</strong></p>
+</dt>
+               <dd><p>A string that matches one of the         <code class='verbatim'>SNAME</code>
+ prefixes used in               <code class='verbatim'>Vector.h</code>
+ and         <code class='verbatim'>Vector.cxx</code>
+.  For example,         <code class='verbatim'>&#34;double&#34;</code>
+.</p>
+</dd>
+               <dt><p><strong>self.typeCode</strong></p>
+</dt>
+               <dd><p>A short (typically single-character) string that represents a       data type in numpy and corresponds to         <code class='verbatim'>self.typeStr</code>
+.  For       example, if         <code class='verbatim'>self.typeStr</code>
+ is         <code class='verbatim'>&#34;double&#34;</code>
+, then               <code class='verbatim'>self.typeCode</code>
+ should be         <code class='verbatim'>&#34;d&#34;</code>
+.</p>
+</dd>
+           </dl>
+</blockquote>
 
                <p>Each test defined by the         <code class='verbatim'>VectorTestCase</code>
  class extracts the python function it is trying to test by accessing the         <code class='verbatim'>Vector</code>

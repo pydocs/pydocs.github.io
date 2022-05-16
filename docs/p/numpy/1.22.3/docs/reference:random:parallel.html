@@ -119,15 +119,15 @@
 
 
 <h1>`~SeedSequence` spawning</h1>
-               <p><code>:None:None:`~SeedSequence`</code> <code>:None:None:`implements an algorithm`</code> to process a user-provided seed, typically as an integer of some size, and to convert it into an initial state for a <code>:None:None:`~BitGenerator`</code>. It uses hashing techniques to ensure that low-quality seeds are turned into high quality initial states (at least, with very high probability).</p>
+               <p><code class='not-implemented'>:None:None:`~SeedSequence`</code> <code class='not-implemented'>:None:None:`implements an algorithm`</code> to process a user-provided seed, typically as an integer of some size, and to convert it into an initial state for a <code class='not-implemented'>:None:None:`~BitGenerator`</code>. It uses hashing techniques to ensure that low-quality seeds are turned into high quality initial states (at least, with very high probability).</p>
 
-               <p>For example, <code>:None:None:`MT19937`</code> has a state consisting of 624 <code>:None:None:`uint32`</code> integers. A naive way to take a 32-bit integer seed would be to just set the last element of the state to the 32-bit seed and leave the rest 0s. This is a valid state for <code>:None:None:`MT19937`</code>, but not a good one. The Mersenne Twister algorithm <code>:None:None:`suffers if there are too many 0s`</code>. Similarly, two adjacent 32-bit integer seeds (i.e.         <code class='verbatim'>12345</code>
+               <p>For example, <code class='not-implemented'>:None:None:`MT19937`</code> has a state consisting of 624 <code class='not-implemented'>:None:None:`uint32`</code> integers. A naive way to take a 32-bit integer seed would be to just set the last element of the state to the 32-bit seed and leave the rest 0s. This is a valid state for <code class='not-implemented'>:None:None:`MT19937`</code>, but not a good one. The Mersenne Twister algorithm <code class='not-implemented'>:None:None:`suffers if there are too many 0s`</code>. Similarly, two adjacent 32-bit integer seeds (i.e.         <code class='verbatim'>12345</code>
  and         <code class='verbatim'>12346</code>
 ) would produce very similar streams.</p>
 
-               <p><code>:None:None:`~SeedSequence`</code> avoids these problems by using successions of integer hashes with good <code>:None:None:`avalanche properties`</code> to ensure that flipping any bit in the input has about a 50% chance of flipping any bit in the output. Two input seeds that are very close to each other will produce initial states that are very far from each other (with very high probability). It is also constructed in such a way that you can provide arbitrary-sized integers or lists of integers. <code>:None:None:`~SeedSequence`</code> will take all of the bits that you provide and mix them together to produce however many bits the consuming <code>:None:None:`~BitGenerator`</code> needs to initialize itself.</p>
+               <p><code class='not-implemented'>:None:None:`~SeedSequence`</code> avoids these problems by using successions of integer hashes with good <code class='not-implemented'>:None:None:`avalanche properties`</code> to ensure that flipping any bit in the input has about a 50% chance of flipping any bit in the output. Two input seeds that are very close to each other will produce initial states that are very far from each other (with very high probability). It is also constructed in such a way that you can provide arbitrary-sized integers or lists of integers. <code class='not-implemented'>:None:None:`~SeedSequence`</code> will take all of the bits that you provide and mix them together to produce however many bits the consuming <code class='not-implemented'>:None:None:`~BitGenerator`</code> needs to initialize itself.</p>
 
-               <p>These properties together mean that we can safely mix together the usual user-provided seed with simple incrementing counters to get <code>:None:None:`~BitGenerator`</code> states that are (to very high probability) independent of each other. We can wrap this together into an API that is easy to use and difficult to misuse.</p>
+               <p>These properties together mean that we can safely mix together the usual user-provided seed with simple incrementing counters to get <code class='not-implemented'>:None:None:`~BitGenerator`</code> states that are (to very high probability) independent of each other. We can wrap this together into an API that is easy to use and difficult to misuse.</p>
 
                <pre class='not-implemented'>
 .. code-block:: python
@@ -146,7 +146,7 @@
    |&gt;
            </pre>
 
-               <p>Child <code>:None:None:`~SeedSequence`</code> objects can also spawn to make grandchildren, and so on. Each <code>:None:None:`~SeedSequence`</code> has its position in the tree of spawned <code>:None:None:`~SeedSequence`</code> objects mixed in with the user-provided seed to generate independent (with very high probability) streams.</p>
+               <p>Child <code class='not-implemented'>:None:None:`~SeedSequence`</code> objects can also spawn to make grandchildren, and so on. Each <code class='not-implemented'>:None:None:`~SeedSequence`</code> has its position in the tree of spawned <code class='not-implemented'>:None:None:`~SeedSequence`</code> objects mixed in with the user-provided seed to generate independent (with very high probability) streams.</p>
 
                <pre class='not-implemented'>
 .. code-block:: python
@@ -160,10 +160,10 @@
    |&gt;
            </pre>
 
-               <p>This feature lets you make local decisions about when and how to split up streams without coordination between processes. You do not have to preallocate space to avoid overlapping or request streams from a common global service. This general &#34;tree-hashing&#34; scheme is <code>:None:None:`not unique to numpy`</code> but not yet widespread. Python has increasingly-flexible mechanisms for parallelization available, and this scheme fits in very well with that kind of use.</p>
+               <p>This feature lets you make local decisions about when and how to split up streams without coordination between processes. You do not have to preallocate space to avoid overlapping or request streams from a common global service. This general &#34;tree-hashing&#34; scheme is <code class='not-implemented'>:None:None:`not unique to numpy`</code> but not yet widespread. Python has increasingly-flexible mechanisms for parallelization available, and this scheme fits in very well with that kind of use.</p>
 
-               <p>Using this scheme, an upper bound on the probability of a collision can be estimated if one knows the number of streams that you derive. <code>:None:None:`~SeedSequence`</code> hashes its inputs, both the seed and the spawn-tree-path, down to a 128-bit pool by default. The probability that there is a collision in that pool, pessimistically-estimated (), will be about         <span class="tex2jax_process">$n^2*2^{-128}$</span>
- where <code>:None:None:`n`</code> is the number of streams spawned. If a program uses an aggressive million streams, about         <span class="tex2jax_process">$2^{20}$</span>
+               <p>Using this scheme, an upper bound on the probability of a collision can be estimated if one knows the number of streams that you derive. <code class='not-implemented'>:None:None:`~SeedSequence`</code> hashes its inputs, both the seed and the spawn-tree-path, down to a 128-bit pool by default. The probability that there is a collision in that pool, pessimistically-estimated (), will be about         <span class="tex2jax_process">$n^2*2^{-128}$</span>
+ where <code class='not-implemented'>:None:None:`n`</code> is the number of streams spawned. If a program uses an aggressive million streams, about         <span class="tex2jax_process">$2^{20}$</span>
 , then the probability that at least one pair of them are identical is about         <span class="tex2jax_process">$2^{-88}$</span>
 , which is in solidly-ignorable territory ().</p>
 
@@ -197,7 +197,7 @@
 
 
 <h1>Independent Streams</h1>
-               <p><code>:None:None:`Philox`</code> is a counter-based RNG based which generates values by encrypting an incrementing counter using weak cryptographic primitives. The seed determines the key that is used for the encryption. Unique keys create unique, independent streams. <code>:None:None:`Philox`</code> lets you bypass the seeding algorithm to directly set the 128-bit key. Similar, but different, keys will still create independent streams.</p>
+               <p><code class='not-implemented'>:None:None:`Philox`</code> is a counter-based RNG based which generates values by encrypting an incrementing counter using weak cryptographic primitives. The seed determines the key that is used for the encryption. Unique keys create unique, independent streams. <code class='not-implemented'>:None:None:`Philox`</code> lets you bypass the seeding algorithm to directly set the 128-bit key. Similar, but different, keys will still create independent streams.</p>
 
                <pre class='not-implemented'>
 .. code-block:: python

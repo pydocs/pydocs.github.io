@@ -105,11 +105,16 @@
 
 
 
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _basics.interoperability:&#39;&gt;
+           </pre>
+
+
 <h1>Interoperability with NumPy</h1>
                <p>NumPy&#39;s ndarray objects provide both a high-level API for operations on array-structured data and a concrete implementation of the API based on         <code class='verbatim'>strided in-RAM storage &lt;arrays&gt;</code>
-. While this API is powerful and fairly general, its concrete implementation has limitations. As datasets grow and NumPy becomes used in a variety of new environments and architectures, there are cases where the strided in-RAM storage strategy is inappropriate, which has caused different libraries to reimplement this API for their own uses. This includes GPU arrays (<code>:None:None:`CuPy_`</code>), Sparse arrays (<code><a href="/p/scipy/*/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
-, <code>:None:None:`PyData/Sparse &lt;Sparse_&gt;`</code>) and parallel arrays (<code>:None:None:`Dask_`</code> arrays) as well as various NumPy-like implementations in deep learning frameworks, like <code>:None:None:`TensorFlow_`</code> and <code>:None:None:`PyTorch_`</code>. Similarly, there are many projects that build on top of the NumPy API for labeled and indexed arrays (<code>:None:None:`XArray_`</code>), automatic differentiation (<code>:None:None:`JAX_`</code>), masked arrays (<code><a href="/p/numpy/*/api/numpy.ma.html" class='exists'>numpy.ma</a></code>
-), physical units (<code>:None:None:`astropy.units_`</code>, <code>:None:None:`pint_`</code>, <code>:None:None:`unyt_`</code>), among others that add additional functionality on top of the NumPy API.</p>
+. While this API is powerful and fairly general, its concrete implementation has limitations. As datasets grow and NumPy becomes used in a variety of new environments and architectures, there are cases where the strided in-RAM storage strategy is inappropriate, which has caused different libraries to reimplement this API for their own uses. This includes GPU arrays (<code class='not-implemented'>:None:None:`CuPy_`</code>), Sparse arrays (<code><a href="/p/scipy/*/api/scipy.sparse.html" class='exists'>scipy.sparse</a></code>
+, <code class='not-implemented'>:None:None:`PyData/Sparse &lt;Sparse_&gt;`</code>) and parallel arrays (<code class='not-implemented'>:None:None:`Dask_`</code> arrays) as well as various NumPy-like implementations in deep learning frameworks, like <code class='not-implemented'>:None:None:`TensorFlow_`</code> and <code class='not-implemented'>:None:None:`PyTorch_`</code>. Similarly, there are many projects that build on top of the NumPy API for labeled and indexed arrays (<code class='not-implemented'>:None:None:`XArray_`</code>), automatic differentiation (<code class='not-implemented'>:None:None:`JAX_`</code>), masked arrays (<code><a href="/p/numpy/*/api/numpy.ma.html" class='exists'>numpy.ma</a></code>
+), physical units (<code class='not-implemented'>:None:None:`astropy.units_`</code>, <code class='not-implemented'>:None:None:`pint_`</code>, <code class='not-implemented'>:None:None:`unyt_`</code>), among others that add additional functionality on top of the NumPy API.</p>
 
                <p>Yet, users still want to work with these arrays using the familiar NumPy API and re-use existing code with minimal (ideally zero) porting overhead. With this goal in mind, various protocols are defined for implementations of multi-dimensional arrays with high-level APIs matching NumPy.</p>
 
@@ -160,7 +165,7 @@
 .</p>
 
                <p>        <code class='verbatim'>DLPack &lt;dlpack:index&gt;</code>
- is yet another protocol to convert foriegn objects to NumPy arrays in a language and device agnostic manner. NumPy doesn&#39;t implicitly convert objects to ndarrays using DLPack. It provides the function <code>:None:None:`numpy.from_dlpack`</code> that accepts any object implementing the         <code class='verbatim'>__dlpack__</code>
+ is yet another protocol to convert foreign objects to NumPy arrays in a language and device agnostic manner. NumPy doesn&#39;t implicitly convert objects to ndarrays using DLPack. It provides the function <code class='not-implemented'>:None:None:`numpy.from_dlpack`</code> that accepts any object implementing the         <code class='verbatim'>__dlpack__</code>
  method and outputs a NumPy ndarray (which is generally a view of the input object&#39;s data buffer). The         <code class='verbatim'>dlpack:python-spec</code>
  page explains the         <code class='verbatim'>__dlpack__</code>
  protocol in detail.</p>
@@ -183,18 +188,17 @@
                <p>The         <code class='verbatim'>__array_interface__</code>
  attribute can be inspected directly:</p>
 
-                           <pre>&gt;&gt;&gt; import numpy as np
+                           <blockquote><pre>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; x = np.array([1, 2, 5.0, 8])
 &gt;&gt;&gt; x.__array_interface__
-{&#39;data&#39;: (94708397920832, False), &#39;strides&#39;: None, &#39;descr&#39;: [(&#39;&#39;, &#39;&lt;f8&#39;)], &#39;typestr&#39;: &#39;&lt;f8&#39;, &#39;shape&#39;: (4,), &#39;version&#39;: 3}
-</pre>
+{&#39;data&#39;: (94708397920832, False), &#39;strides&#39;: None, &#39;descr&#39;: [(&#39;&#39;, &#39;&lt;f8&#39;)], &#39;typestr&#39;: &#39;&lt;f8&#39;, &#39;shape&#39;: (4,), &#39;version&#39;: 3}</pre></blockquote>
 
                <p>The         <code class='verbatim'>__array_interface__</code>
  attribute can also be used to manipulate the object data in place:</p>
 
-                           <pre>&gt;&gt;&gt; class wrapper():
+                           <blockquote><pre>&gt;&gt;&gt; class wrapper():
 ...     pass
-... 
+...
 &gt;&gt;&gt; arr = np.array([1, 2, 3, 4])
 &gt;&gt;&gt; buf = arr.__array_interface__
 &gt;&gt;&gt; buf
@@ -205,20 +209,18 @@
 &gt;&gt;&gt; new_arr = np.array(w, copy=False)
 &gt;&gt;&gt; new_arr
 array([[1, 2],
-       [3, 4]])
-</pre>
+       [3, 4]])</pre></blockquote>
 
                <p>We can check that         <code class='verbatim'>arr</code>
  and         <code class='verbatim'>new_arr</code>
  share the same data buffer:</p>
 
-                           <pre>&gt;&gt;&gt; new_arr[0, 0] = 1000
+                           <blockquote><pre>&gt;&gt;&gt; new_arr[0, 0] = 1000
 &gt;&gt;&gt; new_arr
 array([[1000,    2],
        [   3,    4]])
 &gt;&gt;&gt; arr
-array([1000, 2, 3, 4])
-</pre>
+array([1000, 2, 3, 4])</pre></blockquote>
 
 
 <h1>The ``__array__()`` method</h1>
@@ -236,7 +238,7 @@ array([1000, 2, 3, 4])
                <p>The         <code class='verbatim'>DLPack &lt;dlpack:index&gt;</code>
  protocol defines a memory-layout of strided n-dimensional array objects. It offers the following syntax for data exchange:</p>
 
-                          <ol>               <li>               <p>A <code>:None:None:`numpy.from_dlpack`</code> function, which accepts (array) objects with a            <code class='verbatim'>__dlpack__</code>
+                          <ol>               <li>               <p>A <code class='not-implemented'>:None:None:`numpy.from_dlpack`</code> function, which accepts (array) objects with a            <code class='verbatim'>__dlpack__</code>
  method and uses that method to construct a new array    containing the data from         <code class='verbatim'>x</code>
 .</p>
 
@@ -249,7 +251,7 @@ array([1000, 2, 3, 4])
 </li>
             </ol>
 
-               <p>Unlike the buffer protocol, DLPack allows exchanging arrays containing data on devices other than the CPU (e.g. Vulkan or GPU). Since NumPy only supports CPU, it can only convert objects whose data exists on the CPU. But other libraries, like <code>:None:None:`PyTorch_`</code> and <code>:None:None:`CuPy_`</code>, may exchange data on GPU using this protocol.</p>
+               <p>Unlike the buffer protocol, DLPack allows exchanging arrays containing data on devices other than the CPU (e.g. Vulkan or GPU). Since NumPy only supports CPU, it can only convert objects whose data exists on the CPU. But other libraries, like <code class='not-implemented'>:None:None:`PyTorch_`</code> and <code class='not-implemented'>:None:None:`CuPy_`</code>, may exchange data on GPU using this protocol.</p>
 
                           <ol>               <li>               <p>Operating on foreign objects without converting</p>
 
@@ -263,21 +265,19 @@ array([1000, 2, 3, 4])
 
                <p>Consider the following function.</p>
 
-                           <pre>&gt;&gt;&gt; import numpy as np
+                           <blockquote><pre>&gt;&gt;&gt; import numpy as np
 &gt;&gt;&gt; def f(x):
-...     return np.mean(np.exp(x))
-</pre>
+...     return np.mean(np.exp(x))</pre></blockquote>
 
-               <p>Note that <code>:None:None:`np.exp &lt;numpy.exp&gt;`</code> is a         <code class='verbatim'>ufunc &lt;ufuncs-basics&gt;</code>
-, which means that it operates on ndarrays in an element-by-element fashion. On the other hand, <code>:None:None:`np.mean &lt;numpy.mean&gt;`</code> operates along one of the array&#39;s axes.</p>
+               <p>Note that <code class='not-implemented'>:None:None:`np.exp &lt;numpy.exp&gt;`</code> is a         <code class='verbatim'>ufunc &lt;ufuncs-basics&gt;</code>
+, which means that it operates on ndarrays in an element-by-element fashion. On the other hand, <code class='not-implemented'>:None:None:`np.mean &lt;numpy.mean&gt;`</code> operates along one of the array&#39;s axes.</p>
 
                <p>We can apply         <code class='verbatim'>f</code>
  to a NumPy ndarray object directly:</p>
 
-                           <pre>&gt;&gt;&gt; x = np.array([1, 2, 3, 4])
+                           <blockquote><pre>&gt;&gt;&gt; x = np.array([1, 2, 3, 4])
 &gt;&gt;&gt; f(x)
-21.1977562209304
-</pre>
+21.1977562209304</pre></blockquote>
 
                <p>We would like this function to work equally well with any NumPy-like array object.</p>
 
@@ -354,17 +354,16 @@ array([1000, 2, 3, 4])
 <h1>Example: Pandas ``Series`` objects</h1>
                <p>Consider the following:</p>
 
-                           <pre>&gt;&gt;&gt; import pandas as pd
+                           <blockquote><pre>&gt;&gt;&gt; import pandas as pd
 &gt;&gt;&gt; ser = pd.Series([1, 2, 3, 4])
 &gt;&gt;&gt; type(ser)
-pandas.core.series.Series
-</pre>
+pandas.core.series.Series</pre></blockquote>
 
                <p>Now,         <code class='verbatim'>ser</code>
- is <strong>not</strong> a ndarray, but because it <code>:None:None:`implements the __array_ufunc__ protocol
+ is <strong>not</strong> a ndarray, but because it <code class='not-implemented'>:None:None:`implements the __array_ufunc__ protocol
 &lt;https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe-interoperability-with-numpy-functions&gt;`</code>, we can apply ufuncs to it as if it were a ndarray:</p>
 
-                           <pre>&gt;&gt;&gt; np.exp(ser)
+                           <blockquote><pre>&gt;&gt;&gt; np.exp(ser)
    0     2.718282
    1     7.389056
    2    20.085537
@@ -375,12 +374,11 @@ pandas.core.series.Series
    1    0.909297
    2    0.141120
    3   -0.756802
-   dtype: float64
-</pre>
+   dtype: float64</pre></blockquote>
 
                <p>We can even do operations with other ndarrays:</p>
 
-                           <pre>&gt;&gt;&gt; np.add(ser, np.array([5, 6, 7, 8]))
+                           <blockquote><pre>&gt;&gt;&gt; np.add(ser, np.array([5, 6, 7, 8]))
    0     6
    1     8
    2    10
@@ -390,37 +388,33 @@ pandas.core.series.Series
 21.1977562209304
 &gt;&gt;&gt; result = ser.__array__()
 &gt;&gt;&gt; type(result)
-numpy.ndarray
-</pre>
+numpy.ndarray</pre></blockquote>
 
 
 <h1>Example: PyTorch tensors</h1>
                <p><a link href="https://pytorch.org/" class='external'>PyTorch</a> is an optimized tensor library for deep learning using GPUs and CPUs. PyTorch arrays are commonly called <em>tensors</em>. Tensors are similar to NumPy&#39;s ndarrays, except that tensors can run on GPUs or other hardware accelerators. In fact, tensors and NumPy arrays can often share the same underlying memory, eliminating the need to copy data.</p>
 
-                           <pre>&gt;&gt;&gt; import torch
+                           <blockquote><pre>&gt;&gt;&gt; import torch
 &gt;&gt;&gt; data = [[1, 2],[3, 4]]
 &gt;&gt;&gt; x_np = np.array(data)
-&gt;&gt;&gt; x_tensor = torch.tensor(data)
-</pre>
+&gt;&gt;&gt; x_tensor = torch.tensor(data)</pre></blockquote>
 
                <p>Note that         <code class='verbatim'>x_np</code>
  and         <code class='verbatim'>x_tensor</code>
  are different kinds of objects:</p>
 
-                           <pre>&gt;&gt;&gt; x_np
+                           <blockquote><pre>&gt;&gt;&gt; x_np
 array([[1, 2],
        [3, 4]])
 &gt;&gt;&gt; x_tensor
 tensor([[1, 2],
-        [3, 4]])
-</pre>
+        [3, 4]])</pre></blockquote>
 
                <p>However, we can treat PyTorch tensors as NumPy arrays without the need for explicit conversion:</p>
 
-                           <pre>&gt;&gt;&gt; np.exp(x_tensor)
+                           <blockquote><pre>&gt;&gt;&gt; np.exp(x_tensor)
 tensor([[ 2.7183,  7.3891],
-        [20.0855, 54.5982]], dtype=torch.float64)
-</pre>
+        [20.0855, 54.5982]], dtype=torch.float64)</pre></blockquote>
 
                <p>Also, note that the return type of this function is compatible with the initial data type.</p>
 
@@ -437,8 +431,8 @@ tensor([[ 2.7183,  7.3891],
         <p>PyTorch does not implement         <code class='verbatim'>__array_function__</code>
  or         <code class='verbatim'>__array_ufunc__</code>
 . Under the hood, the         <code class='verbatim'>Tensor.__array__()</code>
- method returns a NumPy ndarray as a view of the tensor data buffer. See <code>:None:None:`this issue
-&lt;https://github.com/pytorch/pytorch/issues/24015&gt;`</code> and the <code>:None:None:`__torch_function__ implementation
+ method returns a NumPy ndarray as a view of the tensor data buffer. See <code class='not-implemented'>:None:None:`this issue
+&lt;https://github.com/pytorch/pytorch/issues/24015&gt;`</code> and the <code class='not-implemented'>:None:None:`__torch_function__ implementation
 &lt;https://github.com/pytorch/pytorch/blob/master/torch/overrides.py&gt;`</code> for details.</p>
 
 </div>
@@ -458,43 +452,39 @@ tensor([0, 1, 2, 3])</pre>
 
 <h1>Example: CuPy arrays</h1>
                <p>CuPy is a NumPy/SciPy-compatible array library for GPU-accelerated computing with Python. CuPy implements a subset of the NumPy interface by implementing         <code class='verbatim'>cupy.ndarray</code>
-, <code>:None:None:`a counterpart to NumPy ndarrays
+, <code class='not-implemented'>:None:None:`a counterpart to NumPy ndarrays
 &lt;https://docs.cupy.dev/en/stable/reference/ndarray.html&gt;`</code>.</p>
 
-                           <pre>&gt;&gt;&gt; import cupy as cp
-&gt;&gt;&gt; x_gpu = cp.array([1, 2, 3, 4])
-</pre>
+                           <blockquote><pre>&gt;&gt;&gt; import cupy as cp
+&gt;&gt;&gt; x_gpu = cp.array([1, 2, 3, 4])</pre></blockquote>
 
                <p>The         <code class='verbatim'>cupy.ndarray</code>
  object implements the         <code class='verbatim'>__array_ufunc__</code>
  interface. This enables NumPy ufuncs to be applied to CuPy arrays (this will defer operation to the matching CuPy CUDA/ROCm implementation of the ufunc):</p>
 
-                           <pre>&gt;&gt;&gt; np.mean(np.exp(x_gpu))
-array(21.19775622)
-</pre>
+                           <blockquote><pre>&gt;&gt;&gt; np.mean(np.exp(x_gpu))
+array(21.19775622)</pre></blockquote>
 
                <p>Note that the return type of these operations is still consistent with the initial type:</p>
 
-                           <pre>&gt;&gt;&gt; arr = cp.random.randn(1, 2, 3, 4).astype(cp.float32)
+                           <blockquote><pre>&gt;&gt;&gt; arr = cp.random.randn(1, 2, 3, 4).astype(cp.float32)
 &gt;&gt;&gt; result = np.sum(arr)
 &gt;&gt;&gt; print(type(result))
-&lt;class &#39;cupy._core.core.ndarray&#39;&gt;
-</pre>
+&lt;class &#39;cupy._core.core.ndarray&#39;&gt;</pre></blockquote>
 
-               <p>See <code>:None:None:`this page in the CuPy documentation for details
+               <p>See <code class='not-implemented'>:None:None:`this page in the CuPy documentation for details
 &lt;https://docs.cupy.dev/en/stable/reference/ufunc.html&gt;`</code>.</p>
 
                <p>        <code class='verbatim'>cupy.ndarray</code>
  also implements the         <code class='verbatim'>__array_function__</code>
  interface, meaning it is possible to do operations such as</p>
 
-                           <pre>&gt;&gt;&gt; a = np.random.randn(100, 100)
+                           <blockquote><pre>&gt;&gt;&gt; a = np.random.randn(100, 100)
 &gt;&gt;&gt; a_gpu = cp.asarray(a)
-&gt;&gt;&gt; qr_gpu = np.linalg.qr(a_gpu)
-</pre>
+&gt;&gt;&gt; qr_gpu = np.linalg.qr(a_gpu)</pre></blockquote>
 
                <p>CuPy implements many NumPy functions on         <code class='verbatim'>cupy.ndarray</code>
- objects, but not all. See <code>:None:None:`the CuPy documentation
+ objects, but not all. See <code class='not-implemented'>:None:None:`the CuPy documentation
 &lt;https://docs.cupy.dev/en/stable/user_guide/difference.html&gt;`</code> for details.</p>
 
 
@@ -505,13 +495,12 @@ array(21.19775622)
  and         <code class='verbatim'>__array_ufunc__</code>
 .</p>
 
-                           <pre>&gt;&gt;&gt; import dask.array as da
+                           <blockquote><pre>&gt;&gt;&gt; import dask.array as da
 &gt;&gt;&gt; x = da.random.normal(1, 0.1, size=(20, 20), chunks=(10, 10))
 &gt;&gt;&gt; np.mean(np.exp(x))
 dask.array&lt;mean_agg-aggregate, shape=(), dtype=float64, chunksize=(), chunktype=numpy.ndarray&gt;
 &gt;&gt;&gt; np.mean(np.exp(x)).compute()
-5.090097550553843
-</pre>
+5.090097550553843</pre></blockquote>
 
                            <div class='admonition'>
     <div>note</div>
@@ -521,19 +510,19 @@ dask.array&lt;mean_agg-aggregate, shape=(), dtype=float64, chunksize=(), chunkty
 </div>
 
 
-               <p>See <code>:None:None:`the Dask array documentation
-&lt;https://docs.dask.org/en/stable/array.html&gt;`</code> and the <code>:None:None:`scope of Dask arrays interoperability with NumPy arrays
+               <p>See <code class='not-implemented'>:None:None:`the Dask array documentation
+&lt;https://docs.dask.org/en/stable/array.html&gt;`</code> and the <code class='not-implemented'>:None:None:`scope of Dask arrays interoperability with NumPy arrays
 &lt;https://docs.dask.org/en/stable/array.html#scope&gt;`</code> for details.</p>
 
 
 <h1>Example: DLPack</h1>
                <p>Several Python data science libraries implement the         <code class='verbatim'>__dlpack__</code>
- protocol. Among them are <code>:None:None:`PyTorch_`</code> and <code>:None:None:`CuPy_`</code>. A full list of libraries that implement this protocol can be found on         <code class='verbatim'>this page of DLPack documentation &lt;dlpack:index&gt;</code>
+ protocol. Among them are <code class='not-implemented'>:None:None:`PyTorch_`</code> and <code class='not-implemented'>:None:None:`CuPy_`</code>. A full list of libraries that implement this protocol can be found on         <code class='verbatim'>this page of DLPack documentation &lt;dlpack:index&gt;</code>
 .</p>
 
                <p>Convert a PyTorch CPU tensor to NumPy array:</p>
 
-                           <pre>&gt;&gt;&gt; import torch
+                           <blockquote><pre>&gt;&gt;&gt; import torch
 &gt;&gt;&gt; x_torch = torch.arange(5)
 &gt;&gt;&gt; x_torch
 tensor([0, 1, 2, 3, 4])
@@ -545,63 +534,56 @@ array([0, 1, 2, 3, 4])
 &gt;&gt;&gt; x_torch
 tensor([  0, 100,   2,   3,   4])
 &gt;&gt;&gt; x_np
-array([  0, 100,   2,   3,   4])
-</pre>
+array([  0, 100,   2,   3,   4])</pre></blockquote>
 
                <p>The imported arrays are read-only so writing or operating in-place will fail:</p>
 
-                           <pre>&gt;&gt;&gt; x.flags.writeable
+                           <blockquote><pre>&gt;&gt;&gt; x.flags.writeable
 False
 &gt;&gt;&gt; x_np[1] = 1
 Traceback (most recent call last):
   File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
-ValueError: assignment destination is read-only
-</pre>
+ValueError: assignment destination is read-only</pre></blockquote>
 
                <p>A copy must be created in order to operate on the imported arrays in-place, but will mean duplicating the memory. Do not do this for very large arrays:</p>
 
-                           <pre>&gt;&gt;&gt; x_np_copy = x_np.copy()
-&gt;&gt;&gt; x_np_copy.sort()  # works
-</pre>
+                           <blockquote><pre>&gt;&gt;&gt; x_np_copy = x_np.copy()
+&gt;&gt;&gt; x_np_copy.sort()  # works</pre></blockquote>
 
                            <div class='admonition'>
     <div>note</div>
         <p>Note that GPU tensors can&#39;t be converted to NumPy arrays since NumPy doesn&#39;t support GPU devices:</p>
 
-                    <pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
+                    <blockquote><pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
 &gt;&gt;&gt; np.from_dlpack(x_torch)
 Traceback (most recent call last):
   File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
-RuntimeError: Unsupported device in DLTensor.
-</pre>
+RuntimeError: Unsupported device in DLTensor.</pre></blockquote>
 
         <p>But, if both libraries support the device the data buffer is on, it is possible to use the         <code class='verbatim'>__dlpack__</code>
- protocol (e.g. <code>:None:None:`PyTorch_`</code> and <code>:None:None:`CuPy_`</code>):</p>
+ protocol (e.g. <code class='not-implemented'>:None:None:`PyTorch_`</code> and <code class='not-implemented'>:None:None:`CuPy_`</code>):</p>
 
-                    <pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
-&gt;&gt;&gt; x_cupy = cupy.from_dlpack(x_torch)
-</pre>
+                    <blockquote><pre>&gt;&gt;&gt; x_torch = torch.arange(5, device=&#39;cuda&#39;)
+&gt;&gt;&gt; x_cupy = cupy.from_dlpack(x_torch)</pre></blockquote>
 
 </div>
 
 
                <p>Similarly, a NumPy array can be converted to a PyTorch tensor:</p>
 
-                           <pre>&gt;&gt;&gt; x_np = np.arange(5)
-&gt;&gt;&gt; x_torch = torch.from_dlpack(x_np)
-</pre>
+                           <blockquote><pre>&gt;&gt;&gt; x_np = np.arange(5)
+&gt;&gt;&gt; x_torch = torch.from_dlpack(x_np)</pre></blockquote>
 
                <p>Read-only arrays cannot be exported:</p>
 
-                           <pre>&gt;&gt;&gt; x_np = np.arange(5)
+                           <blockquote><pre>&gt;&gt;&gt; x_np = np.arange(5)
 &gt;&gt;&gt; x_np.flags.writeable = False
 &gt;&gt;&gt; torch.from_dlpack(x_np)  # doctest: +ELLIPSIS
 Traceback (most recent call last):
   File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
   File &#34;.../site-packages/torch/utils/dlpack.py&#34;, line 63, in from_dlpack
     dlpack = ext_tensor.__dlpack__()
-TypeError: NumPy currently only supports dlpack for writeable arrays
-</pre>
+TypeError: NumPy currently only supports dlpack for writeable arrays</pre></blockquote>
 
 
 <h1>Further reading</h1>

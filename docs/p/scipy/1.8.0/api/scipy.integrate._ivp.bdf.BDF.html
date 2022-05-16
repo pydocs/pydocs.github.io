@@ -260,7 +260,7 @@
 : It can either have shape (n,); then         <code class='verbatim'>fun</code>
  must return array_like with shape (n,). Alternatively it can have shape (n, k); then         <code class='verbatim'>fun</code>
  must return an array_like with shape (n, k), i.e. each column corresponds to a single column in         <code class='verbatim'>y</code>
-. The choice between the two options is determined by <code>:None:None:`vectorized`</code> argument (see below). The vectorized implementation allows a faster approximation of the Jacobian by finite differences (required for this solver).</p>
+. The choice between the two options is determined by <code class='not-implemented'>:None:None:`vectorized`</code> argument (see below). The vectorized implementation allows a faster approximation of the Jacobian by finite differences (required for this solver).</p>
 
 </dd>
 <dt><a id="t0">t0</a> : float</dt>
@@ -292,17 +292,17 @@
 <dt><a id="rtol, atol">rtol, atol</a> : float and array_like, optional</dt>
 <dd>
 <p>Relative and absolute tolerances. The solver keeps the local error estimates less than         <code class='verbatim'>atol + rtol * abs(y)</code>
-. Here <code>:None:None:`rtol`</code> controls a relative accuracy (number of correct digits), while <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
- controls absolute accuracy (number of correct decimal places). To achieve the desired <code>:None:None:`rtol`</code>, set <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
+. Here <code class='not-implemented'>:None:None:`rtol`</code> controls a relative accuracy (number of correct digits), while <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
+ controls absolute accuracy (number of correct decimal places). To achieve the desired <code class='not-implemented'>:None:None:`rtol`</code>, set <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
  to be lower than the lowest value that can be expected from         <code class='verbatim'>rtol * abs(y)</code>
- so that <code>:None:None:`rtol`</code> dominates the allowable error. If <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
+ so that <code class='not-implemented'>:None:None:`rtol`</code> dominates the allowable error. If <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
  is larger than         <code class='verbatim'>rtol * abs(y)</code>
  the number of correct digits is not guaranteed. Conversely, to achieve the desired <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
- set <code>:None:None:`rtol`</code> such that         <code class='verbatim'>rtol * abs(y)</code>
+ set <code class='not-implemented'>:None:None:`rtol`</code> such that         <code class='verbatim'>rtol * abs(y)</code>
  is always lower than <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
 . If components of y have different scales, it might be beneficial to set different <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
  values for different components by passing array_like with shape (n,) for <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
-. Default values are 1e-3 for <code>:None:None:`rtol`</code> and 1e-6 for <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
+. Default values are 1e-3 for <code class='not-implemented'>:None:None:`rtol`</code> and 1e-6 for <code><a href="/p/scipy/1.8.0/api/scipy.sparse.linalg._isolve.iterative._get_atol.html" class='exists'>atol</a></code>
 .</p>
 
 </dd>
@@ -311,27 +311,30 @@
 <p>Jacobian matrix of the right-hand side of the system with respect to y, required by this method. The Jacobian matrix has shape (n, n) and its element (i, j) is equal to         <code class='verbatim'>d f_i / d y_j</code>
 . There are three ways to define the Jacobian:</p>
 
-            <pre>* If array_like or sparse_matrix, the Jacobian is assumed to
-  be constant.
-* If callable, the Jacobian is assumed to depend on both
-  t and y; it will be called as ``jac(t, y)`` as necessary.
-  For the &#39;Radau&#39; and &#39;BDF&#39; methods, the return value might be a
-  sparse matrix.
-* If None (default), the Jacobian will be approximated by
-  finite differences.
-</pre>
+            <blockquote>           <ul>               <li>               <p>If array_like or sparse_matrix, the Jacobian is assumed to       be constant.</p>
+
+</li>
+               <li>               <p>If callable, the Jacobian is assumed to depend on both       t and y; it will be called as         <code class='verbatim'>jac(t, y)</code>
+ as necessary.       For the &#39;Radau&#39; and &#39;BDF&#39; methods, the return value might be a       sparse matrix.</p>
+
+</li>
+               <li>               <p>If None (default), the Jacobian will be approximated by       finite differences.</p>
+
+</li>
+            </ul>
+</blockquote>
 
 <p>It is generally recommended to provide the Jacobian rather than relying on a finite-difference approximation.</p>
 
 </dd>
 <dt><a id="jac_sparsity">jac_sparsity</a> : {None, array_like, sparse matrix}, optional</dt>
 <dd>
-<p>Defines a sparsity structure of the Jacobian matrix for a finite-difference approximation. Its shape must be (n, n). This argument is ignored if <code>:None:None:`jac`</code> is not <code>:None:None:`None`</code>. If the Jacobian has only few non-zero elements in <em>each</em> row, providing the sparsity structure will greatly speed up the computations . A zero entry means that a corresponding element in the Jacobian is always zero. If None (default), the Jacobian is assumed to be dense.</p>
+<p>Defines a sparsity structure of the Jacobian matrix for a finite-difference approximation. Its shape must be (n, n). This argument is ignored if <code class='not-implemented'>:None:None:`jac`</code> is not <code class='not-implemented'>:None:None:`None`</code>. If the Jacobian has only few non-zero elements in <em>each</em> row, providing the sparsity structure will greatly speed up the computations . A zero entry means that a corresponding element in the Jacobian is always zero. If None (default), the Jacobian is assumed to be dense.</p>
 
 </dd>
 <dt><a id="vectorized">vectorized</a> : bool, optional</dt>
 <dd>
-<p>Whether <code>:None:None:`fun`</code> is implemented in a vectorized fashion. Default is False.</p>
+<p>Whether <code class='not-implemented'>:None:None:`fun`</code> is implemented in a vectorized fashion. Default is False.</p>
 
 </dd>
 </dl>

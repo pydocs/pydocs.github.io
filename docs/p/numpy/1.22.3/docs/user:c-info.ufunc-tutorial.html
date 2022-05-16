@@ -117,7 +117,7 @@
     pair: ufunc; adding new</pre>
 
 
-               <p>Before reading this, it may help to familiarize yourself with the basics of C extensions for Python by reading/skimming the tutorials in Section 1 of <code>:None:None:`Extending and Embedding the Python Interpreter
+               <p>Before reading this, it may help to familiarize yourself with the basics of C extensions for Python by reading/skimming the tutorials in Section 1 of <code class='not-implemented'>:None:None:`Extending and Embedding the Python Interpreter
 &lt;https://docs.python.org/extending/index.html&gt;`</code> and in         <code class='verbatim'>How to extend
 NumPy &lt;c-info.how-to-extend&gt;</code>
 </p>
@@ -127,19 +127,13 @@ NumPy &lt;c-info.how-to-extend&gt;</code>
                           <ul>               <li>               <p>broadcasting</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>N-dimensional looping</p>
+               <li>               <p>N-dimensional looping</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>automatic type-conversions with minimal memory usage</p>
+               <li>               <p>automatic type-conversions with minimal memory usage</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>optional output arrays</p>
+               <li>               <p>optional output arrays</p>
 
 </li>
             </ul>
@@ -175,85 +169,86 @@ nan</pre>
                <p>To do this we need two files. The first is the C file which contains the actual code, and the second is the         <code class='verbatim'>setup.py</code>
  file used to create the module.</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     #define PY_SSIZE_T_CLEAN
-    #include &lt;Python.h&gt;
-    #include &lt;math.h&gt;
+        #include &lt;Python.h&gt;
+        #include &lt;math.h&gt;
 
-    /*
-     * spammodule.c
-     * This is the C code for a non-numpy Python extension to
-     * define the logit function, where logit(p) = log(p/(1-p)).
-     * This function will not work on numpy arrays automatically.
-     * numpy.vectorize must be called in python to generate
-     * a numpy-friendly function.
-     *
-     * Details explaining the Python-C API can be found under
-     * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
-     * docs.python.org .
-     */
+        /*
+         * spammodule.c
+         * This is the C code for a non-numpy Python extension to
+         * define the logit function, where logit(p) = log(p/(1-p)).
+         * This function will not work on numpy arrays automatically.
+         * numpy.vectorize must be called in python to generate
+         * a numpy-friendly function.
+         *
+         * Details explaining the Python-C API can be found under
+         * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
+         * docs.python.org .
+         */
 
 
-    /* This declares the logit function */
-    static PyObject *spam_logit(PyObject *self, PyObject *args);
+        /* This declares the logit function */
+        static PyObject *spam_logit(PyObject *self, PyObject *args);
 
-    /*
-     * This tells Python what methods this module has.
-     * See the Python-C API for more information.
-     */
-    static PyMethodDef SpamMethods[] = {
-        {&#34;logit&#34;,
-            spam_logit,
-            METH_VARARGS, &#34;compute logit&#34;},
-        {NULL, NULL, 0, NULL}
-    };
+        /*
+         * This tells Python what methods this module has.
+         * See the Python-C API for more information.
+         */
+        static PyMethodDef SpamMethods[] = {
+            {&#34;logit&#34;,
+                spam_logit,
+                METH_VARARGS, &#34;compute logit&#34;},
+            {NULL, NULL, 0, NULL}
+        };
 
-    /*
-     * This actually defines the logit function for
-     * input args from Python.
-     */
+        /*
+         * This actually defines the logit function for
+         * input args from Python.
+         */
 
-    static PyObject *spam_logit(PyObject *self, PyObject *args)
-    {
-        double p;
+        static PyObject *spam_logit(PyObject *self, PyObject *args)
+        {
+            double p;
 
-        /* This parses the Python argument into a double */
-        if(!PyArg_ParseTuple(args, &#34;d&#34;, &amp;p)) {
-            return NULL;
+            /* This parses the Python argument into a double */
+            if(!PyArg_ParseTuple(args, &#34;d&#34;, &amp;p)) {
+                return NULL;
+            }
+
+            /* THE ACTUAL LOGIT FUNCTION */
+            p = p/(1-p);
+            p = log(p);
+
+            /*This builds the answer back into a python object */
+            return Py_BuildValue(&#34;d&#34;, p);
         }
 
-        /* THE ACTUAL LOGIT FUNCTION */
-        p = p/(1-p);
-        p = log(p);
+        /* This initiates the module using the above definitions. */
+        static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            &#34;spam&#34;,
+            NULL,
+            -1,
+            SpamMethods,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+        };
 
-        /*This builds the answer back into a python object */
-        return Py_BuildValue(&#34;d&#34;, p);
-    }
+        PyMODINIT_FUNC PyInit_spam(void)
+        {
+            PyObject *m;
+            m = PyModule_Create(&amp;moduledef);
+            if (!m) {
+                return NULL;
+            }
+            return m;
+        }</pre>
 
-    /* This initiates the module using the above definitions. */
-    static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        &#34;spam&#34;,
-        NULL,
-        -1,
-        SpamMethods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    };
-
-    PyMODINIT_FUNC PyInit_spam(void)
-    {
-        PyObject *m;
-        m = PyModule_Create(&amp;moduledef);
-        if (!m) {
-            return NULL;
-        }
-        return m;
-    }
-</pre>
+</blockquote>
 
                <p>To use the         <code class='verbatim'>setup.py file</code>
 , place         <code class='verbatim'>setup.py</code>
@@ -262,42 +257,43 @@ nan</pre>
  will build the module to import, or         <code class='verbatim'>python setup.py install</code>
  will install the module to your site-packages directory.</p>
 
-                           <pre>.. code-block:: python
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
     &#39;&#39;&#39;
-        setup.py file for spammodule.c
+            setup.py file for spammodule.c
 
-        Calling
-        $python setup.py build_ext --inplace
-        will build the extension library in the current file.
+            Calling
+            $python setup.py build_ext --inplace
+            will build the extension library in the current file.
 
-        Calling
-        $python setup.py build
-        will build a file that looks like ./build/lib*, where
-        lib* is a file that begins with lib. The library will
-        be in this file and end with a C library extension,
-        such as .so
+            Calling
+            $python setup.py build
+            will build a file that looks like ./build/lib*, where
+            lib* is a file that begins with lib. The library will
+            be in this file and end with a C library extension,
+            such as .so
 
-        Calling
-        $python setup.py install
-        will install the module in your site-packages file.
+            Calling
+            $python setup.py install
+            will install the module in your site-packages file.
 
-        See the distutils section of
-        &#39;Extending and Embedding the Python Interpreter&#39;
-        at docs.python.org for more information.
-    &#39;&#39;&#39;
+            See the distutils section of
+            &#39;Extending and Embedding the Python Interpreter&#39;
+            at docs.python.org for more information.
+        &#39;&#39;&#39;
 
 
-    from distutils.core import setup, Extension
+        from distutils.core import setup, Extension
 
-    module1 = Extension(&#39;spam&#39;, sources=[&#39;spammodule.c&#39;],
-                            include_dirs=[&#39;/usr/local/lib&#39;])
+        module1 = Extension(&#39;spam&#39;, sources=[&#39;spammodule.c&#39;],
+                                include_dirs=[&#39;/usr/local/lib&#39;])
 
-    setup(name = &#39;spam&#39;,
-            version=&#39;1.0&#39;,
-            description=&#39;This is my spam package&#39;,
-            ext_modules = [module1])
-</pre>
+        setup(name = &#39;spam&#39;,
+                version=&#39;1.0&#39;,
+                description=&#39;This is my spam package&#39;,
+                ext_modules = [module1])</pre>
+
+</blockquote>
 
                <p>Once the spam module is imported into python, you can call logit via         <code class='verbatim'>spam.logit</code>
 . Note that the function used above cannot be applied as-is to numpy arrays. To do so we must call         <code class='verbatim'>numpy.vectorize</code>
@@ -344,100 +340,101 @@ array([       -inf, -2.07944154, -1.25276297, -0.69314718, -0.22314355,
  and         <code class='verbatim'>/\* END main ufunc computation \*/</code>
 . The code in between those lines is the primary thing that must be changed to create your own ufunc.</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     #define PY_SSIZE_T_CLEAN
-    #include &lt;Python.h&gt;
-    #include &#34;numpy/ndarraytypes.h&#34;
-    #include &#34;numpy/ufuncobject.h&#34;
-    #include &#34;numpy/npy_3kcompat.h&#34;
-    #include &lt;math.h&gt;
+        #include &lt;Python.h&gt;
+        #include &#34;numpy/ndarraytypes.h&#34;
+        #include &#34;numpy/ufuncobject.h&#34;
+        #include &#34;numpy/npy_3kcompat.h&#34;
+        #include &lt;math.h&gt;
 
-    /*
-     * single_type_logit.c
-     * This is the C code for creating your own
-     * NumPy ufunc for a logit function.
-     *
-     * In this code we only define the ufunc for
-     * a single dtype. The computations that must
-     * be replaced to create a ufunc for
-     * a different function are marked with BEGIN
-     * and END.
-     *
-     * Details explaining the Python-C API can be found under
-     * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
-     * docs.python.org .
-     */
+        /*
+         * single_type_logit.c
+         * This is the C code for creating your own
+         * NumPy ufunc for a logit function.
+         *
+         * In this code we only define the ufunc for
+         * a single dtype. The computations that must
+         * be replaced to create a ufunc for
+         * a different function are marked with BEGIN
+         * and END.
+         *
+         * Details explaining the Python-C API can be found under
+         * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
+         * docs.python.org .
+         */
 
-    static PyMethodDef LogitMethods[] = {
-        {NULL, NULL, 0, NULL}
-    };
+        static PyMethodDef LogitMethods[] = {
+            {NULL, NULL, 0, NULL}
+        };
 
-    /* The loop definition must precede the PyMODINIT_FUNC. */
+        /* The loop definition must precede the PyMODINIT_FUNC. */
 
-    static void double_logit(char **args, const npy_intp *dimensions,
-                             const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in = args[0], *out = args[1];
-        npy_intp in_step = steps[0], out_step = steps[1];
+        static void double_logit(char **args, const npy_intp *dimensions,
+                                 const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in = args[0], *out = args[1];
+            npy_intp in_step = steps[0], out_step = steps[1];
 
-        double tmp;
+            double tmp;
 
-        for (i = 0; i &lt; n; i++) {
-            /* BEGIN main ufunc computation */
-            tmp = *(double *)in;
-            tmp /= 1 - tmp;
-            *((double *)out) = log(tmp);
-            /* END main ufunc computation */
+            for (i = 0; i &lt; n; i++) {
+                /* BEGIN main ufunc computation */
+                tmp = *(double *)in;
+                tmp /= 1 - tmp;
+                *((double *)out) = log(tmp);
+                /* END main ufunc computation */
 
-            in += in_step;
-            out += out_step;
-        }
-    }
-
-    /* This a pointer to the above function */
-    PyUFuncGenericFunction funcs[1] = {&amp;double_logit};
-
-    /* These are the input and return dtypes of logit.*/
-    static char types[2] = {NPY_DOUBLE, NPY_DOUBLE};
-
-    static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        &#34;npufunc&#34;,
-        NULL,
-        -1,
-        LogitMethods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    };
-
-    PyMODINIT_FUNC PyInit_npufunc(void)
-    {
-        PyObject *m, *logit, *d;
-        m = PyModule_Create(&amp;moduledef);
-        if (!m) {
-            return NULL;
+                in += in_step;
+                out += out_step;
+            }
         }
 
-        import_array();
-        import_umath();
+        /* This a pointer to the above function */
+        PyUFuncGenericFunction funcs[1] = {&amp;double_logit};
 
-        logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 1, 1, 1,
-                                        PyUFunc_None, &#34;logit&#34;,
-                                        &#34;logit_docstring&#34;, 0);
+        /* These are the input and return dtypes of logit.*/
+        static char types[2] = {NPY_DOUBLE, NPY_DOUBLE};
 
-        d = PyModule_GetDict(m);
+        static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            &#34;npufunc&#34;,
+            NULL,
+            -1,
+            LogitMethods,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+        };
 
-        PyDict_SetItemString(d, &#34;logit&#34;, logit);
-        Py_DECREF(logit);
+        PyMODINIT_FUNC PyInit_npufunc(void)
+        {
+            PyObject *m, *logit, *d;
+            m = PyModule_Create(&amp;moduledef);
+            if (!m) {
+                return NULL;
+            }
 
-        return m;
-    }
-</pre>
+            import_array();
+            import_umath();
+
+            logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 1, 1, 1,
+                                            PyUFunc_None, &#34;logit&#34;,
+                                            &#34;logit_docstring&#34;, 0);
+
+            d = PyModule_GetDict(m);
+
+            PyDict_SetItemString(d, &#34;logit&#34;, logit);
+            Py_DECREF(logit);
+
+            return m;
+        }</pre>
+
+</blockquote>
 
                <p>This is a         <code class='verbatim'>setup.py file</code>
  for the above code. As before, the module can be build via calling         <code class='verbatim'>python setup.py build</code>
@@ -446,50 +443,51 @@ array([       -inf, -2.07944154, -1.25276297, -0.69314718, -0.22314355,
  below using         <code class='verbatim'>python setup.py build_ext --inplace</code>
 .</p>
 
-                           <pre>.. code-block:: python
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
     &#39;&#39;&#39;
-        setup.py file for single_type_logit.c
-        Note that since this is a numpy extension
-        we use numpy.distutils instead of
-        distutils from the python standard library.
+            setup.py file for single_type_logit.c
+            Note that since this is a numpy extension
+            we use numpy.distutils instead of
+            distutils from the python standard library.
 
-        Calling
-        $python setup.py build_ext --inplace
-        will build the extension library in the npufunc_directory.
+            Calling
+            $python setup.py build_ext --inplace
+            will build the extension library in the npufunc_directory.
 
-        Calling
-        $python setup.py build
-        will build a file that looks like ./build/lib*, where
-        lib* is a file that begins with lib. The library will
-        be in this file and end with a C library extension,
-        such as .so
+            Calling
+            $python setup.py build
+            will build a file that looks like ./build/lib*, where
+            lib* is a file that begins with lib. The library will
+            be in this file and end with a C library extension,
+            such as .so
 
-        Calling
-        $python setup.py install
-        will install the module in your site-packages file.
+            Calling
+            $python setup.py install
+            will install the module in your site-packages file.
 
-        See the distutils section of
-        &#39;Extending and Embedding the Python Interpreter&#39;
-        at docs.python.org  and the documentation
-        on numpy.distutils for more information.
-    &#39;&#39;&#39;
+            See the distutils section of
+            &#39;Extending and Embedding the Python Interpreter&#39;
+            at docs.python.org  and the documentation
+            on numpy.distutils for more information.
+        &#39;&#39;&#39;
 
 
-    def configuration(parent_package=&#39;&#39;, top_path=None):
-        from numpy.distutils.misc_util import Configuration
+        def configuration(parent_package=&#39;&#39;, top_path=None):
+            from numpy.distutils.misc_util import Configuration
 
-        config = Configuration(&#39;npufunc_directory&#39;,
-                               parent_package,
-                               top_path)
-        config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])
+            config = Configuration(&#39;npufunc_directory&#39;,
+                                   parent_package,
+                                   top_path)
+            config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])
 
-        return config
+            return config
 
-    if __name__ == &#34;__main__&#34;:
-        from numpy.distutils.core import setup
-        setup(configuration=configuration)
-</pre>
+        if __name__ == &#34;__main__&#34;:
+            from numpy.distutils.core import setup
+            setup(configuration=configuration)</pre>
+
+</blockquote>
 
                <p>After the above has been installed, it can be imported and used as follows.</p>
 
@@ -519,233 +517,235 @@ array([       -inf, -1.09861229,  0.        ,  1.09861229,         inf])</pre>
  and         <code class='verbatim'>/\* END main ufunc computation \*/</code>
 . The code in between those lines is the primary thing that must be changed to create your own ufunc.</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     #define PY_SSIZE_T_CLEAN
-    #include &lt;Python.h&gt;
-    #include &#34;numpy/ndarraytypes.h&#34;
-    #include &#34;numpy/ufuncobject.h&#34;
-    #include &#34;numpy/halffloat.h&#34;
-    #include &lt;math.h&gt;
+        #include &lt;Python.h&gt;
+        #include &#34;numpy/ndarraytypes.h&#34;
+        #include &#34;numpy/ufuncobject.h&#34;
+        #include &#34;numpy/halffloat.h&#34;
+        #include &lt;math.h&gt;
 
-    /*
-     * multi_type_logit.c
-     * This is the C code for creating your own
-     * NumPy ufunc for a logit function.
-     *
-     * Each function of the form type_logit defines the
-     * logit function for a different numpy dtype. Each
-     * of these functions must be modified when you
-     * create your own ufunc. The computations that must
-     * be replaced to create a ufunc for
-     * a different function are marked with BEGIN
-     * and END.
-     *
-     * Details explaining the Python-C API can be found under
-     * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
-     * docs.python.org .
-     *
-     */
+        /*
+         * multi_type_logit.c
+         * This is the C code for creating your own
+         * NumPy ufunc for a logit function.
+         *
+         * Each function of the form type_logit defines the
+         * logit function for a different numpy dtype. Each
+         * of these functions must be modified when you
+         * create your own ufunc. The computations that must
+         * be replaced to create a ufunc for
+         * a different function are marked with BEGIN
+         * and END.
+         *
+         * Details explaining the Python-C API can be found under
+         * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
+         * docs.python.org .
+         *
+         */
 
-    static PyMethodDef LogitMethods[] = {
-        {NULL, NULL, 0, NULL}
-    };
+        static PyMethodDef LogitMethods[] = {
+            {NULL, NULL, 0, NULL}
+        };
 
-    /* The loop definitions must precede the PyMODINIT_FUNC. */
+        /* The loop definitions must precede the PyMODINIT_FUNC. */
 
-    static void long_double_logit(char **args, const npy_intp *dimensions,
-                                  const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in = args[0], *out = args[1];
-        npy_intp in_step = steps[0], out_step = steps[1];
+        static void long_double_logit(char **args, const npy_intp *dimensions,
+                                      const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in = args[0], *out = args[1];
+            npy_intp in_step = steps[0], out_step = steps[1];
 
-        long double tmp;
+            long double tmp;
 
-        for (i = 0; i &lt; n; i++) {
-            /* BEGIN main ufunc computation */
-            tmp = *(long double *)in;
-            tmp /= 1 - tmp;
-            *((long double *)out) = logl(tmp);
-            /* END main ufunc computation */
+            for (i = 0; i &lt; n; i++) {
+                /* BEGIN main ufunc computation */
+                tmp = *(long double *)in;
+                tmp /= 1 - tmp;
+                *((long double *)out) = logl(tmp);
+                /* END main ufunc computation */
 
-            in += in_step;
-            out += out_step;
-        }
-    }
-
-    static void double_logit(char **args, const npy_intp *dimensions,
-                             const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in = args[0], *out = args[1];
-        npy_intp in_step = steps[0], out_step = steps[1];
-
-        double tmp;
-
-        for (i = 0; i &lt; n; i++) {
-            /* BEGIN main ufunc computation */
-            tmp = *(double *)in;
-            tmp /= 1 - tmp;
-            *((double *)out) = log(tmp);
-            /* END main ufunc computation */
-
-            in += in_step;
-            out += out_step;
-        }
-    }
-
-    static void float_logit(char **args, const npy_intp *dimensions,
-                           const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in = args[0], *out = args[1];
-        npy_intp in_step = steps[0], out_step = steps[1];
-
-        float tmp;
-
-        for (i = 0; i &lt; n; i++) {
-            /* BEGIN main ufunc computation */
-            tmp = *(float *)in;
-            tmp /= 1 - tmp;
-            *((float *)out) = logf(tmp);
-            /* END main ufunc computation */
-
-            in += in_step;
-            out += out_step;
-        }
-    }
-
-
-    static void half_float_logit(char **args, const npy_intp *dimensions,
-                                const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in = args[0], *out = args[1];
-        npy_intp in_step = steps[0], out_step = steps[1];
-
-        float tmp;
-
-        for (i = 0; i &lt; n; i++) {
-
-            /* BEGIN main ufunc computation */
-            tmp = npy_half_to_float(*(npy_half *)in);
-            tmp /= 1 - tmp;
-            tmp = logf(tmp);
-            *((npy_half *)out) = npy_float_to_half(tmp);
-            /* END main ufunc computation */
-
-            in += in_step;
-            out += out_step;
-        }
-    }
-
-
-    /*This gives pointers to the above functions*/
-    PyUFuncGenericFunction funcs[4] = {&amp;half_float_logit,
-                                       &amp;float_logit,
-                                       &amp;double_logit,
-                                       &amp;long_double_logit};
-
-    static char types[8] = {NPY_HALF, NPY_HALF,
-                            NPY_FLOAT, NPY_FLOAT,
-                            NPY_DOUBLE, NPY_DOUBLE,
-                            NPY_LONGDOUBLE, NPY_LONGDOUBLE};
-
-    static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        &#34;npufunc&#34;,
-        NULL,
-        -1,
-        LogitMethods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    };
-
-    PyMODINIT_FUNC PyInit_npufunc(void)
-    {
-        PyObject *m, *logit, *d;
-        m = PyModule_Create(&amp;moduledef);
-        if (!m) {
-            return NULL;
+                in += in_step;
+                out += out_step;
+            }
         }
 
-        import_array();
-        import_umath();
+        static void double_logit(char **args, const npy_intp *dimensions,
+                                 const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in = args[0], *out = args[1];
+            npy_intp in_step = steps[0], out_step = steps[1];
 
-        logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 4, 1, 1,
-                                        PyUFunc_None, &#34;logit&#34;,
-                                        &#34;logit_docstring&#34;, 0);
+            double tmp;
 
-        d = PyModule_GetDict(m);
+            for (i = 0; i &lt; n; i++) {
+                /* BEGIN main ufunc computation */
+                tmp = *(double *)in;
+                tmp /= 1 - tmp;
+                *((double *)out) = log(tmp);
+                /* END main ufunc computation */
 
-        PyDict_SetItemString(d, &#34;logit&#34;, logit);
-        Py_DECREF(logit);
+                in += in_step;
+                out += out_step;
+            }
+        }
 
-        return m;
-    }
-</pre>
+        static void float_logit(char **args, const npy_intp *dimensions,
+                               const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in = args[0], *out = args[1];
+            npy_intp in_step = steps[0], out_step = steps[1];
+
+            float tmp;
+
+            for (i = 0; i &lt; n; i++) {
+                /* BEGIN main ufunc computation */
+                tmp = *(float *)in;
+                tmp /= 1 - tmp;
+                *((float *)out) = logf(tmp);
+                /* END main ufunc computation */
+
+                in += in_step;
+                out += out_step;
+            }
+        }
+
+
+        static void half_float_logit(char **args, const npy_intp *dimensions,
+                                    const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in = args[0], *out = args[1];
+            npy_intp in_step = steps[0], out_step = steps[1];
+
+            float tmp;
+
+            for (i = 0; i &lt; n; i++) {
+
+                /* BEGIN main ufunc computation */
+                tmp = npy_half_to_float(*(npy_half *)in);
+                tmp /= 1 - tmp;
+                tmp = logf(tmp);
+                *((npy_half *)out) = npy_float_to_half(tmp);
+                /* END main ufunc computation */
+
+                in += in_step;
+                out += out_step;
+            }
+        }
+
+
+        /*This gives pointers to the above functions*/
+        PyUFuncGenericFunction funcs[4] = {&amp;half_float_logit,
+                                           &amp;float_logit,
+                                           &amp;double_logit,
+                                           &amp;long_double_logit};
+
+        static char types[8] = {NPY_HALF, NPY_HALF,
+                                NPY_FLOAT, NPY_FLOAT,
+                                NPY_DOUBLE, NPY_DOUBLE,
+                                NPY_LONGDOUBLE, NPY_LONGDOUBLE};
+
+        static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            &#34;npufunc&#34;,
+            NULL,
+            -1,
+            LogitMethods,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+        };
+
+        PyMODINIT_FUNC PyInit_npufunc(void)
+        {
+            PyObject *m, *logit, *d;
+            m = PyModule_Create(&amp;moduledef);
+            if (!m) {
+                return NULL;
+            }
+
+            import_array();
+            import_umath();
+
+            logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 4, 1, 1,
+                                            PyUFunc_None, &#34;logit&#34;,
+                                            &#34;logit_docstring&#34;, 0);
+
+            d = PyModule_GetDict(m);
+
+            PyDict_SetItemString(d, &#34;logit&#34;, logit);
+            Py_DECREF(logit);
+
+            return m;
+        }</pre>
+
+</blockquote>
 
                <p>This is a         <code class='verbatim'>setup.py</code>
  file for the above code. As before, the module can be build via calling         <code class='verbatim'>python setup.py build</code>
  at the command prompt, or installed to site-packages via         <code class='verbatim'>python setup.py install</code>
 .</p>
 
-                           <pre>.. code-block:: python
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
     &#39;&#39;&#39;
-        setup.py file for multi_type_logit.c
-        Note that since this is a numpy extension
-        we use numpy.distutils instead of
-        distutils from the python standard library.
+            setup.py file for multi_type_logit.c
+            Note that since this is a numpy extension
+            we use numpy.distutils instead of
+            distutils from the python standard library.
 
-        Calling
-        $python setup.py build_ext --inplace
-        will build the extension library in the current file.
+            Calling
+            $python setup.py build_ext --inplace
+            will build the extension library in the current file.
 
-        Calling
-        $python setup.py build
-        will build a file that looks like ./build/lib*, where
-        lib* is a file that begins with lib. The library will
-        be in this file and end with a C library extension,
-        such as .so
+            Calling
+            $python setup.py build
+            will build a file that looks like ./build/lib*, where
+            lib* is a file that begins with lib. The library will
+            be in this file and end with a C library extension,
+            such as .so
 
-        Calling
-        $python setup.py install
-        will install the module in your site-packages file.
+            Calling
+            $python setup.py install
+            will install the module in your site-packages file.
 
-        See the distutils section of
-        &#39;Extending and Embedding the Python Interpreter&#39;
-        at docs.python.org  and the documentation
-        on numpy.distutils for more information.
-    &#39;&#39;&#39;
+            See the distutils section of
+            &#39;Extending and Embedding the Python Interpreter&#39;
+            at docs.python.org  and the documentation
+            on numpy.distutils for more information.
+        &#39;&#39;&#39;
 
 
-    def configuration(parent_package=&#39;&#39;, top_path=None):
-        from numpy.distutils.misc_util import Configuration, get_info
+        def configuration(parent_package=&#39;&#39;, top_path=None):
+            from numpy.distutils.misc_util import Configuration, get_info
 
-        #Necessary for the half-float d-type.
-        info = get_info(&#39;npymath&#39;)
+            #Necessary for the half-float d-type.
+            info = get_info(&#39;npymath&#39;)
 
-        config = Configuration(&#39;npufunc_directory&#39;,
-                                parent_package,
-                                top_path)
-        config.add_extension(&#39;npufunc&#39;,
-                                [&#39;multi_type_logit.c&#39;],
-                                extra_info=info)
+            config = Configuration(&#39;npufunc_directory&#39;,
+                                    parent_package,
+                                    top_path)
+            config.add_extension(&#39;npufunc&#39;,
+                                    [&#39;multi_type_logit.c&#39;],
+                                    extra_info=info)
 
-        return config
+            return config
 
-    if __name__ == &#34;__main__&#34;:
-        from numpy.distutils.core import setup
-        setup(configuration=configuration)
-</pre>
+        if __name__ == &#34;__main__&#34;:
+            from numpy.distutils.core import setup
+            setup(configuration=configuration)</pre>
+
+</blockquote>
 
                <p>After the above has been installed, it can be imported and used as follows.</p>
 
@@ -766,19 +766,21 @@ array([       -inf, -1.09861229,  0.        ,  1.09861229,         inf])</pre>
 .</p>
 
                <p>We only give the C code as the setup.py file is exactly the same as the         <code class='verbatim'>setup.py</code>
- file in <code>:None:None:`Example NumPy ufunc for one dtype`</code>, except that the line</p>
+ file in <code class='not-implemented'>:None:None:`Example NumPy ufunc for one dtype`</code>, except that the line</p>
 
-                           <pre>.. code-block:: python
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
+    config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])</pre>
 
-    config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])
-</pre>
+</blockquote>
 
                <p>is replaced with</p>
 
-                           <pre>.. code-block:: python
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
+    config.add_extension(&#39;npufunc&#39;, [&#39;multi_arg_logit.c&#39;])</pre>
 
-    config.add_extension(&#39;npufunc&#39;, [&#39;multi_arg_logit.c&#39;])
-</pre>
+</blockquote>
 
                <p>The C file is given below. The ufunc generated takes two arguments         <code class='verbatim'>A</code>
  and         <code class='verbatim'>B</code>
@@ -786,104 +788,105 @@ array([       -inf, -1.09861229,  0.        ,  1.09861229,         inf])</pre>
  and whose second element is         <code class='verbatim'>logit(A * B)</code>
 . Note that it automatically supports broadcasting, as well as all other properties of a ufunc.</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     #define PY_SSIZE_T_CLEAN
-    #include &lt;Python.h&gt;
-    #include &#34;numpy/ndarraytypes.h&#34;
-    #include &#34;numpy/ufuncobject.h&#34;
-    #include &#34;numpy/halffloat.h&#34;
-    #include &lt;math.h&gt;
+        #include &lt;Python.h&gt;
+        #include &#34;numpy/ndarraytypes.h&#34;
+        #include &#34;numpy/ufuncobject.h&#34;
+        #include &#34;numpy/halffloat.h&#34;
+        #include &lt;math.h&gt;
 
-    /*
-     * multi_arg_logit.c
-     * This is the C code for creating your own
-     * NumPy ufunc for a multiple argument, multiple
-     * return value ufunc. The places where the
-     * ufunc computation is carried out are marked
-     * with comments.
-     *
-     * Details explaining the Python-C API can be found under
-     * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
-     * docs.python.org.
-     */
+        /*
+         * multi_arg_logit.c
+         * This is the C code for creating your own
+         * NumPy ufunc for a multiple argument, multiple
+         * return value ufunc. The places where the
+         * ufunc computation is carried out are marked
+         * with comments.
+         *
+         * Details explaining the Python-C API can be found under
+         * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
+         * docs.python.org.
+         */
 
-    static PyMethodDef LogitMethods[] = {
-        {NULL, NULL, 0, NULL}
-    };
+        static PyMethodDef LogitMethods[] = {
+            {NULL, NULL, 0, NULL}
+        };
 
-    /* The loop definition must precede the PyMODINIT_FUNC. */
+        /* The loop definition must precede the PyMODINIT_FUNC. */
 
-    static void double_logitprod(char **args, const npy_intp *dimensions,
-                                 const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp n = dimensions[0];
-        char *in1 = args[0], *in2 = args[1];
-        char *out1 = args[2], *out2 = args[3];
-        npy_intp in1_step = steps[0], in2_step = steps[1];
-        npy_intp out1_step = steps[2], out2_step = steps[3];
+        static void double_logitprod(char **args, const npy_intp *dimensions,
+                                     const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp n = dimensions[0];
+            char *in1 = args[0], *in2 = args[1];
+            char *out1 = args[2], *out2 = args[3];
+            npy_intp in1_step = steps[0], in2_step = steps[1];
+            npy_intp out1_step = steps[2], out2_step = steps[3];
 
-        double tmp;
+            double tmp;
 
-        for (i = 0; i &lt; n; i++) {
-            /* BEGIN main ufunc computation */
-            tmp = *(double *)in1;
-            tmp *= *(double *)in2;
-            *((double *)out1) = tmp;
-            *((double *)out2) = log(tmp / (1 - tmp));
-            /* END main ufunc computation */
+            for (i = 0; i &lt; n; i++) {
+                /* BEGIN main ufunc computation */
+                tmp = *(double *)in1;
+                tmp *= *(double *)in2;
+                *((double *)out1) = tmp;
+                *((double *)out2) = log(tmp / (1 - tmp));
+                /* END main ufunc computation */
 
-            in1 += in1_step;
-            in2 += in2_step;
-            out1 += out1_step;
-            out2 += out2_step;
-        }
-    }
-
-    /*This a pointer to the above function*/
-    PyUFuncGenericFunction funcs[1] = {&amp;double_logitprod};
-
-    /* These are the input and return dtypes of logit.*/
-
-    static char types[4] = {NPY_DOUBLE, NPY_DOUBLE,
-                            NPY_DOUBLE, NPY_DOUBLE};
-
-    static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        &#34;npufunc&#34;,
-        NULL,
-        -1,
-        LogitMethods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    };
-
-    PyMODINIT_FUNC PyInit_npufunc(void)
-    {
-        PyObject *m, *logit, *d;
-        m = PyModule_Create(&amp;moduledef);
-        if (!m) {
-            return NULL;
+                in1 += in1_step;
+                in2 += in2_step;
+                out1 += out1_step;
+                out2 += out2_step;
+            }
         }
 
-        import_array();
-        import_umath();
+        /*This a pointer to the above function*/
+        PyUFuncGenericFunction funcs[1] = {&amp;double_logitprod};
 
-        logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 1, 2, 2,
-                                        PyUFunc_None, &#34;logit&#34;,
-                                        &#34;logit_docstring&#34;, 0);
+        /* These are the input and return dtypes of logit.*/
 
-        d = PyModule_GetDict(m);
+        static char types[4] = {NPY_DOUBLE, NPY_DOUBLE,
+                                NPY_DOUBLE, NPY_DOUBLE};
 
-        PyDict_SetItemString(d, &#34;logit&#34;, logit);
-        Py_DECREF(logit);
+        static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            &#34;npufunc&#34;,
+            NULL,
+            -1,
+            LogitMethods,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+        };
 
-        return m;
-    }
-</pre>
+        PyMODINIT_FUNC PyInit_npufunc(void)
+        {
+            PyObject *m, *logit, *d;
+            m = PyModule_Create(&amp;moduledef);
+            if (!m) {
+                return NULL;
+            }
+
+            import_array();
+            import_umath();
+
+            logit = PyUFunc_FromFuncAndData(funcs, NULL, types, 1, 2, 2,
+                                            PyUFunc_None, &#34;logit&#34;,
+                                            &#34;logit_docstring&#34;, 0);
+
+            d = PyModule_GetDict(m);
+
+            PyDict_SetItemString(d, &#34;logit&#34;, logit);
+            Py_DECREF(logit);
+
+            return m;
+        }</pre>
+
+</blockquote>
 
                           <pre class='not-implemented'>
             &lt;Unimplemented &#39;target&#39; &#39;.. _`sec:NumPy-struct-dtype`:&#39;&gt;
@@ -898,139 +901,142 @@ array([       -inf, -1.09861229,  0.        ,  1.09861229,         inf])</pre>
 
                <p>We only give the C code as the         <code class='verbatim'>setup.py</code>
  file is exactly the same as the         <code class='verbatim'>setup.py</code>
- file in <code>:None:None:`Example NumPy ufunc for one dtype`</code>, except that the line</p>
+ file in <code class='not-implemented'>:None:None:`Example NumPy ufunc for one dtype`</code>, except that the line</p>
 
-                           <pre>.. code-block:: python
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
+    config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])</pre>
 
-    config.add_extension(&#39;npufunc&#39;, [&#39;single_type_logit.c&#39;])
-</pre>
+</blockquote>
 
                <p>is replaced with</p>
 
-                           <pre>.. code-block:: python
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: python
+    config.add_extension(&#39;npufunc&#39;, [&#39;add_triplet.c&#39;])</pre>
 
-    config.add_extension(&#39;npufunc&#39;, [&#39;add_triplet.c&#39;])
-</pre>
+</blockquote>
 
                <p>The C file is given below.</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     #define PY_SSIZE_T_CLEAN
-    #include &lt;Python.h&gt;
-    #include &#34;numpy/ndarraytypes.h&#34;
-    #include &#34;numpy/ufuncobject.h&#34;
-    #include &#34;numpy/npy_3kcompat.h&#34;
-    #include &lt;math.h&gt;
+        #include &lt;Python.h&gt;
+        #include &#34;numpy/ndarraytypes.h&#34;
+        #include &#34;numpy/ufuncobject.h&#34;
+        #include &#34;numpy/npy_3kcompat.h&#34;
+        #include &lt;math.h&gt;
 
-    /*
-     * add_triplet.c
-     * This is the C code for creating your own
-     * NumPy ufunc for a structured array dtype.
-     *
-     * Details explaining the Python-C API can be found under
-     * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
-     * docs.python.org.
-     */
+        /*
+         * add_triplet.c
+         * This is the C code for creating your own
+         * NumPy ufunc for a structured array dtype.
+         *
+         * Details explaining the Python-C API can be found under
+         * &#39;Extending and Embedding&#39; and &#39;Python/C API&#39; at
+         * docs.python.org.
+         */
 
-    static PyMethodDef StructUfuncTestMethods[] = {
-        {NULL, NULL, 0, NULL}
-    };
+        static PyMethodDef StructUfuncTestMethods[] = {
+            {NULL, NULL, 0, NULL}
+        };
 
-    /* The loop definition must precede the PyMODINIT_FUNC. */
+        /* The loop definition must precede the PyMODINIT_FUNC. */
 
-    static void add_uint64_triplet(char **args, const npy_intp *dimensions,
-                                   const npy_intp *steps, void *data)
-    {
-        npy_intp i;
-        npy_intp is1 = steps[0];
-        npy_intp is2 = steps[1];
-        npy_intp os = steps[2];
-        npy_intp n = dimensions[0];
-        uint64_t *x, *y, *z;
+        static void add_uint64_triplet(char **args, const npy_intp *dimensions,
+                                       const npy_intp *steps, void *data)
+        {
+            npy_intp i;
+            npy_intp is1 = steps[0];
+            npy_intp is2 = steps[1];
+            npy_intp os = steps[2];
+            npy_intp n = dimensions[0];
+            uint64_t *x, *y, *z;
 
-        char *i1 = args[0];
-        char *i2 = args[1];
-        char *op = args[2];
+            char *i1 = args[0];
+            char *i2 = args[1];
+            char *op = args[2];
 
-        for (i = 0; i &lt; n; i++) {
+            for (i = 0; i &lt; n; i++) {
 
-            x = (uint64_t *)i1;
-            y = (uint64_t *)i2;
-            z = (uint64_t *)op;
+                x = (uint64_t *)i1;
+                y = (uint64_t *)i2;
+                z = (uint64_t *)op;
 
-            z[0] = x[0] + y[0];
-            z[1] = x[1] + y[1];
-            z[2] = x[2] + y[2];
+                z[0] = x[0] + y[0];
+                z[1] = x[1] + y[1];
+                z[2] = x[2] + y[2];
 
-            i1 += is1;
-            i2 += is2;
-            op += os;
-        }
-    }
-
-    /* This a pointer to the above function */
-    PyUFuncGenericFunction funcs[1] = {&amp;add_uint64_triplet};
-
-    /* These are the input and return dtypes of add_uint64_triplet. */
-    static char types[3] = {NPY_UINT64, NPY_UINT64, NPY_UINT64};
-
-    static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        &#34;struct_ufunc_test&#34;,
-        NULL,
-        -1,
-        StructUfuncTestMethods,
-        NULL,
-        NULL,
-        NULL,
-        NULL
-    };
-
-    PyMODINIT_FUNC PyInit_struct_ufunc_test(void)
-    {
-        PyObject *m, *add_triplet, *d;
-        PyObject *dtype_dict;
-        PyArray_Descr *dtype;
-        PyArray_Descr *dtypes[3];
-
-        m = PyModule_Create(&amp;moduledef);
-
-        if (m == NULL) {
-            return NULL;
+                i1 += is1;
+                i2 += is2;
+                op += os;
+            }
         }
 
-        import_array();
-        import_umath();
+        /* This a pointer to the above function */
+        PyUFuncGenericFunction funcs[1] = {&amp;add_uint64_triplet};
 
-        /* Create a new ufunc object */
-        add_triplet = PyUFunc_FromFuncAndData(NULL, NULL, NULL, 0, 2, 1,
-                                              PyUFunc_None, &#34;add_triplet&#34;,
-                                              &#34;add_triplet_docstring&#34;, 0);
+        /* These are the input and return dtypes of add_uint64_triplet. */
+        static char types[3] = {NPY_UINT64, NPY_UINT64, NPY_UINT64};
 
-        dtype_dict = Py_BuildValue(&#34;[(s, s), (s, s), (s, s)]&#34;,
-                                   &#34;f0&#34;, &#34;u8&#34;, &#34;f1&#34;, &#34;u8&#34;, &#34;f2&#34;, &#34;u8&#34;);
-        PyArray_DescrConverter(dtype_dict, &amp;dtype);
-        Py_DECREF(dtype_dict);
+        static struct PyModuleDef moduledef = {
+            PyModuleDef_HEAD_INIT,
+            &#34;struct_ufunc_test&#34;,
+            NULL,
+            -1,
+            StructUfuncTestMethods,
+            NULL,
+            NULL,
+            NULL,
+            NULL
+        };
 
-        dtypes[0] = dtype;
-        dtypes[1] = dtype;
-        dtypes[2] = dtype;
+        PyMODINIT_FUNC PyInit_struct_ufunc_test(void)
+        {
+            PyObject *m, *add_triplet, *d;
+            PyObject *dtype_dict;
+            PyArray_Descr *dtype;
+            PyArray_Descr *dtypes[3];
 
-        /* Register ufunc for structured dtype */
-        PyUFunc_RegisterLoopForDescr(add_triplet,
-                                     dtype,
-                                     &amp;add_uint64_triplet,
-                                     dtypes,
-                                     NULL);
+            m = PyModule_Create(&amp;moduledef);
 
-        d = PyModule_GetDict(m);
+            if (m == NULL) {
+                return NULL;
+            }
 
-        PyDict_SetItemString(d, &#34;add_triplet&#34;, add_triplet);
-        Py_DECREF(add_triplet);
-        return m;
-    }
-</pre>
+            import_array();
+            import_umath();
+
+            /* Create a new ufunc object */
+            add_triplet = PyUFunc_FromFuncAndData(NULL, NULL, NULL, 0, 2, 1,
+                                                  PyUFunc_None, &#34;add_triplet&#34;,
+                                                  &#34;add_triplet_docstring&#34;, 0);
+
+            dtype_dict = Py_BuildValue(&#34;[(s, s), (s, s), (s, s)]&#34;,
+                                       &#34;f0&#34;, &#34;u8&#34;, &#34;f1&#34;, &#34;u8&#34;, &#34;f2&#34;, &#34;u8&#34;);
+            PyArray_DescrConverter(dtype_dict, &amp;dtype);
+            Py_DECREF(dtype_dict);
+
+            dtypes[0] = dtype;
+            dtypes[1] = dtype;
+            dtypes[2] = dtype;
+
+            /* Register ufunc for structured dtype */
+            PyUFunc_RegisterLoopForDescr(add_triplet,
+                                         dtype,
+                                         &amp;add_uint64_triplet,
+                                         dtypes,
+                                         NULL);
+
+            d = PyModule_GetDict(m);
+
+            PyDict_SetItemString(d, &#34;add_triplet&#34;, add_triplet);
+            Py_DECREF(add_triplet);
+            return m;
+        }</pre>
+
+</blockquote>
 
                <pre class='not-implemented'>
 .. index:: 
@@ -1039,33 +1045,34 @@ array([       -inf, -1.09861229,  0.        ,  1.09861229,         inf])</pre>
 
                <p>The returned ufunc object is a callable Python object. It should be placed in a (module) dictionary under the same name as was used in the name argument to the ufunc-creation routine. The following example is adapted from the umath module</p>
 
-                           <pre>.. code-block:: c
-
+                           <blockquote><pre class='not-implemented'>
+.. code-block:: c
     static PyUFuncGenericFunction atan2_functions[] = {
-                          PyUFunc_ff_f, PyUFunc_dd_d,
-                          PyUFunc_gg_g, PyUFunc_OO_O_method};
-    static void *atan2_data[] = {
-                          (void *)atan2f, (void *)atan2,
-                          (void *)atan2l, (void *)&#34;arctan2&#34;};
-    static char atan2_signatures[] = {
-                  NPY_FLOAT, NPY_FLOAT, NPY_FLOAT,
-                  NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE,
-                  NPY_LONGDOUBLE, NPY_LONGDOUBLE, NPY_LONGDOUBLE
-                  NPY_OBJECT, NPY_OBJECT, NPY_OBJECT};
-    ...
-    /* in the module initialization code */
-    PyObject *f, *dict, *module;
-    ...
-    dict = PyModule_GetDict(module);
-    ...
-    f = PyUFunc_FromFuncAndData(atan2_functions,
-        atan2_data, atan2_signatures, 4, 2, 1,
-        PyUFunc_None, &#34;arctan2&#34;,
-        &#34;a safe and correct arctan(x1/x2)&#34;, 0);
-    PyDict_SetItemString(dict, &#34;arctan2&#34;, f);
-    Py_DECREF(f);
-    ...
-</pre>
+                              PyUFunc_ff_f, PyUFunc_dd_d,
+                              PyUFunc_gg_g, PyUFunc_OO_O_method};
+        static void *atan2_data[] = {
+                              (void *)atan2f, (void *)atan2,
+                              (void *)atan2l, (void *)&#34;arctan2&#34;};
+        static char atan2_signatures[] = {
+                      NPY_FLOAT, NPY_FLOAT, NPY_FLOAT,
+                      NPY_DOUBLE, NPY_DOUBLE, NPY_DOUBLE,
+                      NPY_LONGDOUBLE, NPY_LONGDOUBLE, NPY_LONGDOUBLE
+                      NPY_OBJECT, NPY_OBJECT, NPY_OBJECT};
+        ...
+        /* in the module initialization code */
+        PyObject *f, *dict, *module;
+        ...
+        dict = PyModule_GetDict(module);
+        ...
+        f = PyUFunc_FromFuncAndData(atan2_functions,
+            atan2_data, atan2_signatures, 4, 2, 1,
+            PyUFunc_None, &#34;arctan2&#34;,
+            &#34;a safe and correct arctan(x1/x2)&#34;, 0);
+        PyDict_SetItemString(dict, &#34;arctan2&#34;, f);
+        Py_DECREF(f);
+        ...</pre>
+
+</blockquote>
 
 
 <h3 id="section-Examples">Examples</h3>

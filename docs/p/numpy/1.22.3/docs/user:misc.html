@@ -154,182 +154,208 @@ nan
  for         <code class='verbatim'>underflow</code>
 .  But this can be changed, and it can be set individually for different kinds of exceptions. The different behaviors are:</p>
 
-                           <pre>- &#39;ignore&#39; : Take no action when the exception occurs.
-- &#39;warn&#39;   : Print a `RuntimeWarning` (via the Python `warnings` module).
-- &#39;raise&#39;  : Raise a `FloatingPointError`.
-- &#39;call&#39;   : Call a function specified using the `seterrcall` function.
-- &#39;print&#39;  : Print a warning directly to ``stdout``.
-- &#39;log&#39;    : Record error in a Log object specified by `seterrcall`.
+                           <blockquote>           <ul>               <li>                          <ul>               <li>               <p>Reference counting often difficult to get right.</p>
 
-hese behaviors can be set for all kinds of errors or specific ones:
+                          <ul>               <li>               <p>getting it wrong leads to memory leaks, and worse, segfaults</p>
 
-- all       : apply to all numeric exceptions
-- invalid   : when NaNs are generated
-- divide    : divide by zero (for integers as well!)
-- overflow  : floating point overflows
-- underflow : floating point underflows
+</li>
+            </ul>
 
-ote that integer divide-by-zero is handled by the same machinery.
-hese behaviors are set on a per-thread basis.
+</li>
+               <li>               <p>API will change for Python 3.0!</p>
 
-xamples
--------
+</li>
+            </ul>
 
-:
-
-&gt;&gt;&gt; oldsettings = np.seterr(all=&#39;warn&#39;)
-&gt;&gt;&gt; np.zeros(5,dtype=np.float32)/0.
-Traceback (most recent call last):
-...
-RuntimeWarning: invalid value encountered in divide
-&gt;&gt;&gt; j = np.seterr(under=&#39;ignore&#39;)
-&gt;&gt;&gt; np.array([1.e-100])**10
-array([0.])
-&gt;&gt;&gt; j = np.seterr(invalid=&#39;raise&#39;)
-&gt;&gt;&gt; np.sqrt(np.array([-1.]))
-Traceback (most recent call last):
-...
-FloatingPointError: invalid value encountered in sqrt
-&gt;&gt;&gt; def errorhandler(errstr, errflag):
-...      print(&#34;saw stupid error!&#34;)
-&gt;&gt;&gt; np.seterrcall(errorhandler)
-&gt;&gt;&gt; j = np.seterr(all=&#39;call&#39;)
-&gt;&gt;&gt; np.zeros(5, dtype=np.int32)/0
-saw stupid error!
-array([nan, nan, nan, nan, nan])
-&gt;&gt;&gt; j = np.seterr(**oldsettings) # restore previous
-...                              # error-handling settings
-
-nterfacing to C
----------------
-nly a survey of the choices. Little detail on how each works.
-
-) Bare metal, wrap your own C-code manually.
-
-- Plusses:
-
-  - Efficient
-  - No dependencies on other tools
-
-- Minuses:
-
-  - Lots of learning overhead:
-
-    - need to learn basics of Python C API
-    - need to learn basics of numpy C API
-    - need to learn how to handle reference counting and love it.
-
-  - Reference counting often difficult to get right.
-
-    - getting it wrong leads to memory leaks, and worse, segfaults
-
-  - API will change for Python 3.0!
-</pre>
+</li>
+            </ul>
+</blockquote>
 
                           <ol>               <li>               <p>Cython</p>
 
 </li>
             </ol>
 
-                           <pre>- Plusses:
+                           <blockquote>           <ul>               <li>               <p>Plusses:</p>
 
-  - avoid learning C API&#39;s
-  - no dealing with reference counting
-  - can code in pseudo python and generate C code
-  - can also interface to existing C code
-  - should shield you from changes to Python C api
-  - has become the de-facto standard within the scientific Python community
-  - fast indexing support for arrays
+                          <ul>               <li>               <p>avoid learning C API&#39;s</p>
 
-- Minuses:
+</li>
+               <li>               <p>no dealing with reference counting</p>
 
-  - Can write code in non-standard form which may become obsolete
-  - Not as flexible as manual wrapping
-</pre>
+</li>
+               <li>               <p>can code in pseudo python and generate C code</p>
+
+</li>
+               <li>               <p>can also interface to existing C code</p>
+
+</li>
+               <li>               <p>should shield you from changes to Python C api</p>
+
+</li>
+               <li>               <p>has become the de-facto standard within the scientific Python community</p>
+
+</li>
+               <li>               <p>fast indexing support for arrays</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Minuses:</p>
+
+                          <ul>               <li>               <p>Can write code in non-standard form which may become obsolete</p>
+
+</li>
+               <li>               <p>Not as flexible as manual wrapping</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
 
                           <ol>               <li>               <p>ctypes</p>
 
 </li>
             </ol>
 
-                           <pre>- Plusses:
+                           <blockquote>           <ul>               <li>               <p>Plusses:</p>
 
-  - part of Python standard library
-  - good for interfacing to existing shareable libraries, particularly
-    Windows DLLs
-  - avoids API/reference counting issues
-  - good numpy support: arrays have all these in their ctypes
-    attribute: ::
+                          <ul>               <li>               <p>part of Python standard library</p>
 
-      a.ctypes.data
-      a.ctypes.data_as
-      a.ctypes.shape
-      a.ctypes.shape_as
-      a.ctypes.strides
-      a.ctypes.strides_as
+</li>
+               <li>               <p>good for interfacing to existing shareable libraries, particularly      Windows DLLs</p>
 
-- Minuses:
+</li>
+               <li>               <p>avoids API/reference counting issues</p>
 
-  - can&#39;t use for writing code to be turned into C extensions, only a wrapper
-    tool.
-</pre>
+</li>
+               <li>               <p>good numpy support: arrays have all these in their ctypes      attribute: ::         </p>
+
+               <pre>a.ctypes.data
+a.ctypes.data_as
+a.ctypes.shape
+a.ctypes.shape_as
+a.ctypes.strides
+a.ctypes.strides_as</pre>
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Minuses:</p>
+
+                          <ul>               <li>               <p>can&#39;t use for writing code to be turned into C extensions, only a wrapper      tool.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
 
                           <ol>               <li>               <p>SWIG (automatic wrapper generator)</p>
 
 </li>
             </ol>
 
-                           <pre>- Plusses:
+                           <blockquote>           <ul>               <li>               <p>Plusses:</p>
 
-  - around a long time
-  - multiple scripting language support
-  - C++ support
-  - Good for wrapping large (many functions) existing C libraries
+                          <ul>               <li>               <p>around a long time</p>
 
-- Minuses:
+</li>
+               <li>               <p>multiple scripting language support</p>
 
-  - generates lots of code between Python and the C code
-  - can cause performance problems that are nearly impossible to optimize
-    out
-  - interface files can be hard to write
-  - doesn&#39;t necessarily avoid reference counting issues or needing to know
-    API&#39;s
-</pre>
+</li>
+               <li>               <p>C++ support</p>
+
+</li>
+               <li>               <p>Good for wrapping large (many functions) existing C libraries</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Minuses:</p>
+
+                          <ul>               <li>               <p>generates lots of code between Python and the C code</p>
+
+</li>
+               <li>               <p>can cause performance problems that are nearly impossible to optimize      out</p>
+
+</li>
+               <li>               <p>interface files can be hard to write</p>
+
+</li>
+               <li>               <p>doesn&#39;t necessarily avoid reference counting issues or needing to know      API&#39;s</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
 
                           <ol>               <li>               <p>scipy.weave</p>
 
 </li>
             </ol>
 
-                           <pre>- Plusses:
+                           <blockquote>           <ul>               <li>               <p>Plusses:</p>
 
-  - can turn many numpy expressions into C code
-  - dynamic compiling and loading of generated C code
-  - can embed pure C code in Python module and have weave extract, generate
-    interfaces and compile, etc.
+                          <ul>               <li>               <p>can turn many numpy expressions into C code</p>
 
-- Minuses:
+</li>
+               <li>               <p>dynamic compiling and loading of generated C code</p>
 
-  - Future very uncertain: it&#39;s the only part of Scipy not ported to Python 3
-    and is effectively deprecated in favor of Cython.
-</pre>
+</li>
+               <li>               <p>can embed pure C code in Python module and have weave extract, generate      interfaces and compile, etc.</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Minuses:</p>
+
+                          <ul>               <li>               <p>Future very uncertain: it&#39;s the only part of Scipy not ported to Python 3      and is effectively deprecated in favor of Cython.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
 
                           <ol>               <li>               <p>Psyco</p>
 
 </li>
             </ol>
 
-                           <pre>- Plusses:
+                           <blockquote>           <ul>               <li>               <p>Plusses:</p>
 
-  - Turns pure python into efficient machine code through jit-like
-    optimizations
-  - very fast when it optimizes well
+                          <ul>               <li>               <p>Turns pure python into efficient machine code through jit-like      optimizations</p>
 
-- Minuses:
+</li>
+               <li>               <p>very fast when it optimizes well</p>
 
-  - Only on intel (windows?)
-  - Doesn&#39;t do much for numpy?
-</pre>
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Minuses:</p>
+
+                          <ul>               <li>               <p>Only on intel (windows?)</p>
+
+</li>
+               <li>               <p>Doesn&#39;t do much for numpy?</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
 
 
 <h1>Interfacing to Fortran:</h1>
@@ -339,12 +365,23 @@ nly a survey of the choices. Little detail on how each works.
 
 
 <h1>Interfacing to C++:</h1>
-                           <pre>1) Cython
-2) CXX
-3) Boost.python
-4) SWIG
-5) SIP (used mainly in PyQT)
-</pre>
+                           <blockquote>           <ol>               <li>               <p>Cython</p>
+
+</li>
+               <li>               <p>CXX</p>
+
+</li>
+               <li>               <p>Boost.python</p>
+
+</li>
+               <li>               <p>SWIG</p>
+
+</li>
+               <li>               <p>SIP (used mainly in PyQT)</p>
+
+</li>
+            </ol>
+</blockquote>
 
 
 <h3 id="section-Examples">Examples</h3>

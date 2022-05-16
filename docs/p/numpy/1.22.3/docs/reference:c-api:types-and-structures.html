@@ -162,131 +162,127 @@
     NPY_AO</pre>
 
 
-                           <pre>The :c:type:`PyArrayObject` C-structure contains all of the required
-information for an array. All instances of an ndarray (and its
-subclasses) will have this structure.  For future compatibility,
-these structure members should normally be accessed using the
-provided macros. If you need a shorter name, then you can make use
-of :c:type:`NPY_AO` (deprecated) which is defined to be equivalent to
-:c:type:`PyArrayObject`. Direct access to the struct fields are
-deprecated. Use the ``PyArray_*(arr)`` form instead.
-As of NumPy 1.20, the size of this struct is not considered part of
-the NumPy ABI (see note at the end of the member list).
-
+                           <blockquote><p>The         <code class='verbatim'>PyArrayObject</code>
+ C-structure contains all of the required    information for an array. All instances of an ndarray (and its    subclasses) will have this structure.  For future compatibility,    these structure members should normally be accessed using the    provided macros. If you need a shorter name, then you can make use    of         <code class='verbatim'>NPY_AO</code>
+ (deprecated) which is defined to be equivalent to            <code class='verbatim'>PyArrayObject</code>
+. Direct access to the struct fields are    deprecated. Use the         <code class='verbatim'>PyArray_*(arr)</code>
+ form instead.    As of NumPy 1.20, the size of this struct is not considered part of    the NumPy ABI (see note at the end of the member list).</p>
+<pre class='not-implemented'>
 .. code-block:: c
+    typedef struct PyArrayObject {
+           PyObject_HEAD
+           char *data;
+           int nd;
+           npy_intp *dimensions;
+           npy_intp *strides;
+           PyObject *base;
+           PyArray_Descr *descr;
+           int flags;
+           PyObject *weakreflist;
+           /* version dependent private members */
+       } PyArrayObject;</pre>
 
-   typedef struct PyArrayObject {
-       PyObject_HEAD
-       char *data;
-       int nd;
-       npy_intp *dimensions;
-       npy_intp *strides;
-       PyObject *base;
-       PyArray_Descr *descr;
-       int flags;
-       PyObject *weakreflist;
-       /* version dependent private members */
-   } PyArrayObject;
-
+<pre class='not-implemented'>
 .. c:macro:: PyObject_HEAD
-
     This is needed by all Python objects. It consists of (at least)
-    a reference count member ( ``ob_refcnt`` ) and a pointer to the
-    typeobject ( ``ob_type`` ). (Other elements may also be present
-    if Python was compiled with special options see
-    Include/object.h in the Python source tree for more
-    information). The ob_type member points to a Python type
-    object.
+       a reference count member ( ``ob_refcnt`` ) and a pointer to the
+       typeobject ( ``ob_type`` ). (Other elements may also be present
+       if Python was compiled with special options see
+       Include/object.h in the Python source tree for more
+       information). The ob_type member points to a Python type
+       object.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: char *data
-
     Accessible via :c:data:`PyArray_DATA`, this data member is a
-    pointer to the first element of the array. This pointer can
-    (and normally should) be recast to the data type of the array.
+       pointer to the first element of the array. This pointer can
+       (and normally should) be recast to the data type of the array.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: int nd
-
     An integer providing the number of dimensions for this
-    array. When nd is 0, the array is sometimes called a rank-0
-    array. Such arrays have undefined dimensions and strides and
-    cannot be accessed. Macro :c:data:`PyArray_NDIM` defined in
-    ``ndarraytypes.h`` points to this data member. :c:data:`NPY_MAXDIMS`
-    is the largest number of dimensions for any array.
+       array. When nd is 0, the array is sometimes called a rank-0
+       array. Such arrays have undefined dimensions and strides and
+       cannot be accessed. Macro :c:data:`PyArray_NDIM` defined in
+       ``ndarraytypes.h`` points to this data member. :c:data:`NPY_MAXDIMS`
+       is the largest number of dimensions for any array.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: npy_intp dimensions
-
     An array of integers providing the shape in each dimension as
-    long as nd :math:`\geq` 1. The integer is always large enough
-    to hold a pointer on the platform, so the dimension size is
-    only limited by memory. :c:data:`PyArray_DIMS` is the macro
-    associated with this data member.
+       long as nd :math:`\geq` 1. The integer is always large enough
+       to hold a pointer on the platform, so the dimension size is
+       only limited by memory. :c:data:`PyArray_DIMS` is the macro
+       associated with this data member.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: npy_intp *strides
-
     An array of integers providing for each dimension the number of
-    bytes that must be skipped to get to the next element in that
-    dimension. Associated with macro :c:data:`PyArray_STRIDES`.
+       bytes that must be skipped to get to the next element in that
+       dimension. Associated with macro :c:data:`PyArray_STRIDES`.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyObject *base
-
     Pointed to by :c:data:`PyArray_BASE`, this member is used to hold a
-    pointer to another Python object that is related to this array.
-    There are two use cases:
+       pointer to another Python object that is related to this array.
+       There are two use cases:
 
-    - If this array does not own its own memory, then base points to the
-      Python object that owns it (perhaps another array object)
-    - If this array has the :c:data:`NPY_ARRAY_WRITEBACKIFCOPY` flag set,
-      then this array is a working copy of a &#34;misbehaved&#34; array.
+       - If this array does not own its own memory, then base points to the
+         Python object that owns it (perhaps another array object)
+       - If this array has the :c:data:`NPY_ARRAY_WRITEBACKIFCOPY` flag set,
+         then this array is a working copy of a &#34;misbehaved&#34; array.
 
-    When ``PyArray_ResolveWritebackIfCopy`` is called, the array pointed to
-    by base will be updated with the contents of this array.
+       When ``PyArray_ResolveWritebackIfCopy`` is called, the array pointed to
+       by base will be updated with the contents of this array.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyArray_Descr *descr
-
     A pointer to a data-type descriptor object (see below). The
-    data-type descriptor object is an instance of a new built-in
-    type which allows a generic description of memory. There is a
-    descriptor structure for each data type supported. This
-    descriptor structure contains useful information about the type
-    as well as a pointer to a table of function pointers to
-    implement specific functionality. As the name suggests, it is
-    associated with the macro :c:data:`PyArray_DESCR`.
+       data-type descriptor object is an instance of a new built-in
+       type which allows a generic description of memory. There is a
+       descriptor structure for each data type supported. This
+       descriptor structure contains useful information about the type
+       as well as a pointer to a table of function pointers to
+       implement specific functionality. As the name suggests, it is
+       associated with the macro :c:data:`PyArray_DESCR`.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: int flags
-
     Pointed to by the macro :c:data:`PyArray_FLAGS`, this data member represents
-    the flags indicating how the memory pointed to by data is to be
-    interpreted. Possible flags are :c:data:`NPY_ARRAY_C_CONTIGUOUS`,
-    :c:data:`NPY_ARRAY_F_CONTIGUOUS`, :c:data:`NPY_ARRAY_OWNDATA`,
-    :c:data:`NPY_ARRAY_ALIGNED`, :c:data:`NPY_ARRAY_WRITEABLE`,
-    :c:data:`NPY_ARRAY_WRITEBACKIFCOPY`.
+       the flags indicating how the memory pointed to by data is to be
+       interpreted. Possible flags are :c:data:`NPY_ARRAY_C_CONTIGUOUS`,
+       :c:data:`NPY_ARRAY_F_CONTIGUOUS`, :c:data:`NPY_ARRAY_OWNDATA`,
+       :c:data:`NPY_ARRAY_ALIGNED`, :c:data:`NPY_ARRAY_WRITEABLE`,
+       :c:data:`NPY_ARRAY_WRITEBACKIFCOPY`.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyObject *weakreflist
-
     This member allows array objects to have weak references (using the
-    weakref module).
+       weakref module).</pre>
 
-.. note::
+            <div class='admonition'>
+    <div>note</div>
+        <!-- deflist -->
+           <dl>
+               <dt><p>Further members are considered private and version dependent. If the size</p>
+</dt>
+               <dd><p>of the struct is important for your code, special care must be taken.    A possible use-case when this is relevant is subclassing in C.    If your code relies on         <code class='verbatim'>sizeof(PyArrayObject)</code>
+ to be constant,    you must add the following check at import time:</p>
+<pre class='not-implemented'>
+.. code-block:: c
+    if (sizeof(PyArrayObject) &lt; PyArray_Type.tp_basicsize) {
+           PyErr_SetString(PyExc_ImportError,
+              &#34;Binary incompatibility with NumPy, must recompile/update X.&#34;);
+           return NULL;
+       }</pre>
 
-   Further members are considered private and version dependent. If the size
-   of the struct is important for your code, special care must be taken.
-   A possible use-case when this is relevant is subclassing in C.
-   If your code relies on ``sizeof(PyArrayObject)`` to be constant,
-   you must add the following check at import time:
+<p>To ensure that your code does not have to be compiled for a specific    NumPy version, you may add a constant, leaving room for changes in NumPy.    A solution guaranteed to be compatible with any future NumPy version    requires the use of a runtime calculate offset and allocation size.</p>
+</dd>
+           </dl>
 
-   .. code-block:: c
+</div>
 
-      if (sizeof(PyArrayObject) &lt; PyArray_Type.tp_basicsize) {
-          PyErr_SetString(PyExc_ImportError,
-             &#34;Binary incompatibility with NumPy, must recompile/update X.&#34;);
-          return NULL;
-      }
-
-   To ensure that your code does not have to be compiled for a specific
-   NumPy version, you may add a constant, leaving room for changes in NumPy.
-   A solution guaranteed to be compatible with any future NumPy version
-   requires the use of a runtime calculate offset and allocation size.
-</pre>
+</blockquote>
 
 
 <h1>PyArrayDescr_Type and PyArray_Descr</h1>
@@ -467,95 +463,99 @@ the NumPy ABI (see note at the end of the member list).
            :c:data:`NPY_ITEM_REFCOUNT`).</pre>
 
 
-                           <pre>.. c:member:: int type_num
-
+                           <blockquote><pre class='not-implemented'>
+.. c:member:: int type_num
     A number that uniquely identifies the data type. For new data-types,
-    this number is assigned when the data-type is registered.
+       this number is assigned when the data-type is registered.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: int elsize
-
     For data types that are always the same size (such as long), this
-    holds the size of the data type. For flexible data types where
-    different arrays can have a different elementsize, this should be
-    0.
+       holds the size of the data type. For flexible data types where
+       different arrays can have a different elementsize, this should be
+       0.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: int alignment
-
     A number providing alignment information for this data type.
-    Specifically, it shows how far from the start of a 2-element
-    structure (whose first element is a ``char`` ), the compiler
-    places an item of this type: ``offsetof(struct {char c; type v;},
-    v)``
+       Specifically, it shows how far from the start of a 2-element
+       structure (whose first element is a ``char`` ), the compiler
+       places an item of this type: ``offsetof(struct {char c; type v;},
+       v)``</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyArray_ArrayDescr *subarray
-
     If this is non- ``NULL``, then this data-type descriptor is a
-    C-style contiguous array of another data-type descriptor. In
-    other-words, each element that this descriptor describes is
-    actually an array of some other base descriptor. This is most
-    useful as the data-type descriptor for a field in another
-    data-type descriptor. The fields member should be ``NULL`` if this
-    is non- ``NULL`` (the fields member of the base descriptor can be
-    non- ``NULL`` however).
+       C-style contiguous array of another data-type descriptor. In
+       other-words, each element that this descriptor describes is
+       actually an array of some other base descriptor. This is most
+       useful as the data-type descriptor for a field in another
+       data-type descriptor. The fields member should be ``NULL`` if this
+       is non- ``NULL`` (the fields member of the base descriptor can be
+       non- ``NULL`` however).
 
-    .. c:type:: PyArray_ArrayDescr
+       .. c:type:: PyArray_ArrayDescr
 
-        .. code-block:: c
+           .. code-block:: c
 
-           typedef struct {
-               PyArray_Descr *base;
-               PyObject *shape;
-           } PyArray_ArrayDescr;
+              typedef struct {
+                  PyArray_Descr *base;
+                  PyObject *shape;
+              } PyArray_ArrayDescr;
 
-        .. c:member:: PyArray_Descr *base
+           .. c:member:: PyArray_Descr *base
 
-            The data-type-descriptor object of the base-type.
+               The data-type-descriptor object of the base-type.
 
-        .. c:member:: PyObject *shape
+           .. c:member:: PyObject *shape
 
-            The shape (always C-style contiguous) of the sub-array as a Python
-            tuple.
+               The shape (always C-style contiguous) of the sub-array as a Python
+               tuple.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyObject *fields
-
     If this is non-NULL, then this data-type-descriptor has fields
-    described by a Python dictionary whose keys are names (and also
-    titles if given) and whose values are tuples that describe the
-    fields. Recall that a data-type-descriptor always describes a
-    fixed-length set of bytes. A field is a named sub-region of that
-    total, fixed-length collection. A field is described by a tuple
-    composed of another data- type-descriptor and a byte
-    offset. Optionally, the tuple may contain a title which is
-    normally a Python string. These tuples are placed in this
-    dictionary keyed by name (and also title if given).
+       described by a Python dictionary whose keys are names (and also
+       titles if given) and whose values are tuples that describe the
+       fields. Recall that a data-type-descriptor always describes a
+       fixed-length set of bytes. A field is a named sub-region of that
+       total, fixed-length collection. A field is described by a tuple
+       composed of another data- type-descriptor and a byte
+       offset. Optionally, the tuple may contain a title which is
+       normally a Python string. These tuples are placed in this
+       dictionary keyed by name (and also title if given).</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyObject *names
-
     An ordered tuple of field names. It is NULL if no field is
-    defined.
+       defined.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyArray_ArrFuncs *f
-
     A pointer to a structure containing functions that the type needs
-    to implement internal features. These functions are not the same
-    thing as the universal functions (ufuncs) described later. Their
-    signatures can vary arbitrarily.
+       to implement internal features. These functions are not the same
+       thing as the universal functions (ufuncs) described later. Their
+       signatures can vary arbitrarily.</pre>
 
+<pre class='not-implemented'>
 .. c:member:: PyObject *metadata
+    Metadata about this dtype.</pre>
 
-    Metadata about this dtype.
-
+<pre class='not-implemented'>
 .. c:member:: NpyAuxData *c_metadata
-
     Metadata specific to the C implementation
-    of the particular dtype. Added for NumPy 1.7.0.
+       of the particular dtype. Added for NumPy 1.7.0.</pre>
 
+<pre class='not-implemented'>
 .. c:type:: npy_hash_t
-.. c:member:: npy_hash_t *hash
+    </pre>
 
+<pre class='not-implemented'>
+.. c:member:: npy_hash_t *hash
     Currently unused. Reserved for future use in caching
-    hash values.
-</pre>
+       hash values.</pre>
+
+</blockquote>
 
                <pre class='not-implemented'>
 .. c:type:: PyArray_ArrFuncs
@@ -1127,11 +1127,12 @@ the NumPy ABI (see note at the end of the member list).
     and not from a :ref:`frozen &lt;frozen&gt;` signature</pre>
 
 
-                           <pre>.. c:member:: PyObject *identity_value
-
+                           <blockquote><pre class='not-implemented'>
+.. c:member:: PyObject *identity_value
     Identity for reduction, when :c:member:`PyUFuncObject.identity`
-    is equal to :c:data:`PyUFunc_IdentityValue`.
-</pre>
+       is equal to :c:data:`PyUFunc_IdentityValue`.</pre>
+
+</blockquote>
 
 
 <h1>PyArrayIter_Type and PyArrayIterObject</h1>
@@ -1370,12 +1371,8 @@ the NumPy ABI (see note at the end of the member list).
  where         <code class='verbatim'>{TYPE}</code>
  can be</p>
 
-                           <pre>**Bool**, **Byte**, **Short**, **Int**, **Long**, **LongLong**,
-**UByte**, **UShort**, **UInt**, **ULong**, **ULongLong**,
-**Half**, **Float**, **Double**, **LongDouble**, **CFloat**,
-**CDouble**, **CLongDouble**, **String**, **Unicode**, **Void**, and
-**Object**.
-</pre>
+                           <blockquote><p><strong>Bool</strong>, <strong>Byte</strong>, <strong>Short</strong>, <strong>Int</strong>, <strong>Long</strong>, <strong>LongLong</strong>,     <strong>UByte</strong>, <strong>UShort</strong>, <strong>UInt</strong>, <strong>ULong</strong>, <strong>ULongLong</strong>,     <strong>Half</strong>, <strong>Float</strong>, <strong>Double</strong>, <strong>LongDouble</strong>, <strong>CFloat</strong>,     <strong>CDouble</strong>, <strong>CLongDouble</strong>, <strong>String</strong>, <strong>Unicode</strong>, <strong>Void</strong>, and     <strong>Object</strong>.</p>
+</blockquote>
 
                <p>These type names are part of the C-API and can therefore be created in extension C-code. There is also a         <code class='verbatim'>PyIntpArrType_Type</code>
  and a         <code class='verbatim'>PyUIntpArrType_Type</code>

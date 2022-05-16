@@ -113,7 +113,7 @@
                           <ul>               <li>               <p>Numerous performance improvements in various areas, most notably indexing and   operations on small arrays are significantly faster.   Indexing operations now also release the GIL.</p>
 
 </li>
-               <li>               <p>Addition of <code>:None:None:`nanmedian`</code> and <code>:None:None:`nanpercentile`</code> rounds out the nanfunction set.</p>
+               <li>               <p>Addition of <code class='not-implemented'>:None:None:`nanmedian`</code> and <code class='not-implemented'>:None:None:`nanpercentile`</code> rounds out the nanfunction set.</p>
 
 </li>
             </ul>
@@ -151,7 +151,7 @@
                <li>               <p>The diagonal and diag functions will return writeable views in 1.10.0</p>
 
 </li>
-               <li>               <p>The <code>:None:None:`S`</code> and/or <code>:None:None:`a`</code> dtypes may be changed to represent Python strings   instead of bytes, in Python 3 these two types are very different.</p>
+               <li>               <p>The <code class='not-implemented'>:None:None:`S`</code> and/or <code class='not-implemented'>:None:None:`a`</code> dtypes may be changed to represent Python strings   instead of bytes, in Python 3 these two types are very different.</p>
 
 </li>
             </ul>
@@ -172,8 +172,9 @@
 
                <p>For example the dtype of:</p>
 
-                           <pre>``np.array([1.], dtype=np.float32) * float(&#39;nan&#39;)``
-</pre>
+                           <blockquote><p>        <code class='verbatim'>np.array([1.], dtype=np.float32) * float(&#39;nan&#39;)</code>
+</p>
+</blockquote>
 
                <p>now remains         <code class='verbatim'>float32</code>
  instead of being cast to         <code class='verbatim'>float64</code>
@@ -201,9 +202,7 @@
                           <ul>               <li>               <p>When the fill value is a string and the array type is not one of   &#39;OSUV&#39;, TypeError is raised instead of the default fill value being used.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>When the fill value overflows the array type, TypeError is raised instead   of OverflowError.</p>
+               <li>               <p>When the fill value overflows the array type, TypeError is raised instead   of OverflowError.</p>
 
 </li>
             </ul>
@@ -248,60 +247,42 @@
  and   not the original array.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>Advanced indexing into one dimensional arrays used to have   (undocumented) special handling regarding repeating the value array in   assignments when the shape of the value array was too small or did not   match.  Code using this will raise an error. For compatibility you can   use         <code class='verbatim'>arr.flat[index] = values</code>
+               <li>               <p>Advanced indexing into one dimensional arrays used to have   (undocumented) special handling regarding repeating the value array in   assignments when the shape of the value array was too small or did not   match.  Code using this will raise an error. For compatibility you can   use         <code class='verbatim'>arr.flat[index] = values</code>
 , which uses the old code branch.  (for   example         <code class='verbatim'>a = np.ones(10); a[np.arange(10)] = [1, 2, 3]</code>
 )</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>The iteration order over advanced indexes used to be always C-order.   In NumPy 1.9. the iteration order adapts to the inputs and is not   guaranteed (with the exception of a <em>single</em> advanced index which is   never reversed for compatibility reasons). This means that the result   is undefined if multiple values are assigned to the same element.  An   example for this is         <code class='verbatim'>arr[[0, 0], [1, 1]] = [1, 2]</code>
+               <li>               <p>The iteration order over advanced indexes used to be always C-order.   In NumPy 1.9. the iteration order adapts to the inputs and is not   guaranteed (with the exception of a <em>single</em> advanced index which is   never reversed for compatibility reasons). This means that the result   is undefined if multiple values are assigned to the same element.  An   example for this is         <code class='verbatim'>arr[[0, 0], [1, 1]] = [1, 2]</code>
 , which may set           <code class='verbatim'>arr[0, 1]</code>
  to either 1 or 2.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>Equivalent to the iteration order, the memory layout of the advanced   indexing result is adapted for faster indexing and cannot be predicted.</p>
+               <li>               <p>Equivalent to the iteration order, the memory layout of the advanced   indexing result is adapted for faster indexing and cannot be predicted.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>All indexing operations return a view or a copy. No indexing operation   will return the original array object. (For example         <code class='verbatim'>arr[...]</code>
+               <li>               <p>All indexing operations return a view or a copy. No indexing operation   will return the original array object. (For example         <code class='verbatim'>arr[...]</code>
 )</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>In the future Boolean array-likes (such as lists of python bools) will   always be treated as Boolean indexes and Boolean scalars (including   python         <code class='verbatim'>True</code>
+               <li>               <p>In the future Boolean array-likes (such as lists of python bools) will   always be treated as Boolean indexes and Boolean scalars (including   python         <code class='verbatim'>True</code>
 ) will be a legal <em>boolean</em> index. At this time, this is   already the case for scalar arrays to allow the general           <code class='verbatim'>positive = a[a &gt; 0]</code>
  to work when         <code class='verbatim'>a</code>
  is zero dimensional.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>In NumPy 1.8 it was possible to use         <code class='verbatim'>array(True)</code>
+               <li>               <p>In NumPy 1.8 it was possible to use         <code class='verbatim'>array(True)</code>
  and           <code class='verbatim'>array(False)</code>
  equivalent to 1 and 0 if the result of the operation   was a scalar.  This will raise an error in NumPy 1.9 and, as noted   above, treated as a boolean index in the future.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>All non-integer array-likes are deprecated, object arrays of custom   integer like objects may have to be cast explicitly.</p>
+               <li>               <p>All non-integer array-likes are deprecated, object arrays of custom   integer like objects may have to be cast explicitly.</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>The error reporting for advanced indexing is more informative, however   the error type has changed in some cases. (Broadcasting errors of   indexing arrays are reported as         <code class='verbatim'>IndexError</code>
+               <li>               <p>The error reporting for advanced indexing is more informative, however   the error type has changed in some cases. (Broadcasting errors of   indexing arrays are reported as         <code class='verbatim'>IndexError</code>
 )</p>
 
 </li>
-            </ul>
-
-                          <ul>               <li>               <p>Indexing with more then one ellipsis (        <code class='verbatim'>...</code>
+               <li>               <p>Indexing with more then one ellipsis (        <code class='verbatim'>...</code>
 ) is deprecated.</p>
 
 </li>
@@ -309,7 +290,7 @@
 
 
 <h1>Non-integer reduction axis indexes are deprecated</h1>
-               <p>Non-integer axis indexes to reduction ufuncs like <code>:None:None:`add.reduce`</code> or <code>:None:None:`sum`</code> are deprecated.</p>
+               <p>Non-integer axis indexes to reduction ufuncs like <code class='not-implemented'>:None:None:`add.reduce`</code> or <code class='not-implemented'>:None:None:`sum`</code> are deprecated.</p>
 
 
 <h1>``promote_types`` and string dtype</h1>
@@ -329,7 +310,7 @@
 
 
 <h1>`npyio.recfromcsv` keyword arguments change</h1>
-               <p><code>:None:None:`npyio.recfromcsv`</code> no longer accepts the undocumented <code>:None:None:`update`</code> keyword, which used to override the <code>:None:None:`dtype`</code> keyword.</p>
+               <p><code class='not-implemented'>:None:None:`npyio.recfromcsv`</code> no longer accepts the undocumented <code class='not-implemented'>:None:None:`update`</code> keyword, which used to override the <code class='not-implemented'>:None:None:`dtype`</code> keyword.</p>
 
 
 <h1>The ``doc/swig`` directory moved</h1>
@@ -366,7 +347,7 @@
 
 
 <h1>``zeros_like`` for string dtypes now returns empty strings</h1>
-               <p>To match the <code>:None:None:`zeros`</code> function <code>:None:None:`zeros_like`</code> now returns an array initialized with empty strings instead of an array filled with <code>:None:None:`&#39;0&#39;`</code>.</p>
+               <p>To match the <code class='not-implemented'>:None:None:`zeros`</code> function <code class='not-implemented'>:None:None:`zeros_like`</code> now returns an array initialized with empty strings instead of an array filled with <code class='not-implemented'>:None:None:`&#39;0&#39;`</code>.</p>
 
 
 <h1>New Features</h1>
@@ -435,7 +416,7 @@
 ...     print(&#39;Wow, that is an old NumPy version!&#39;)</pre>
 
 <h1>Allow saving arrays with large number of named columns</h1>
-               <p>The numpy storage format 1.0 only allowed the array header to have a total size of 65535 bytes. This can be exceeded by structured arrays with a large number of columns. A new format 2.0 has been added which extends the header size to 4 GiB. <code>:None:None:`np.save`</code> will automatically save in 2.0 format if the data requires it, else it will always use the more compatible 1.0 format.</p>
+               <p>The numpy storage format 1.0 only allowed the array header to have a total size of 65535 bytes. This can be exceeded by structured arrays with a large number of columns. A new format 2.0 has been added which extends the header size to 4 GiB. <code class='not-implemented'>:None:None:`np.save`</code> will automatically save in 2.0 format if the data requires it, else it will always use the more compatible 1.0 format.</p>
 
 
 <h1>Full broadcasting support for ``np.cross``</h1>
@@ -519,16 +500,16 @@
 
 
 <h1>Object array equality comparisons</h1>
-               <p>In the future object array comparisons both <code>:None:None:`==`</code> and <code>:None:None:`np.equal`</code> will not make use of identity checks anymore. For example:</p>
+               <p>In the future object array comparisons both <code class='not-implemented'>:None:None:`==`</code> and <code class='not-implemented'>:None:None:`np.equal`</code> will not make use of identity checks anymore. For example:</p>
 
                <pre>&gt;&gt;&gt; a = np.array([np.array([1, 2, 3]), 1])
 &gt;&gt;&gt; b = np.array([np.array([1, 2, 3]), 1])
 &gt;&gt;&gt; a == b</pre>
-               <p>will consistently return False (and in the future an error) even if the array in <code>:None:None:`a`</code> and <code>:None:None:`b`</code> was the same object.</p>
+               <p>will consistently return False (and in the future an error) even if the array in <code class='not-implemented'>:None:None:`a`</code> and <code class='not-implemented'>:None:None:`b`</code> was the same object.</p>
 
-               <p>The equality operator <code>:None:None:`==`</code> will in the future raise errors like <code>:None:None:`np.equal`</code> if broadcasting or element comparisons, etc. fails.</p>
+               <p>The equality operator <code class='not-implemented'>:None:None:`==`</code> will in the future raise errors like <code class='not-implemented'>:None:None:`np.equal`</code> if broadcasting or element comparisons, etc. fails.</p>
 
-               <p>Comparison with <code>:None:None:`arr == None`</code> will in the future do an elementwise comparison instead of just returning False. Code should be using <code>:None:None:`arr is None`</code>.</p>
+               <p>Comparison with <code class='not-implemented'>:None:None:`arr == None`</code> will in the future do an elementwise comparison instead of just returning False. Code should be using <code class='not-implemented'>:None:None:`arr is None`</code>.</p>
 
                <p>All of these changes will give Deprecation- or FutureWarnings at this time.</p>
 

@@ -120,12 +120,21 @@
 <h1>NumPy alignment goals</h1>
                <p>There are three use-cases related to memory alignment in NumPy (as of 1.14):</p>
 
-                           <pre>1. Creating :term:`structured datatypes &lt;structured data type&gt;` with
-   :term:`fields &lt;field&gt;` aligned like in a C-struct.
-2. Speeding up copy operations by using :class:`uint` assignment in instead of
-   ``memcpy``.
-3. Guaranteeing safe aligned access for ufuncs/setitem/casting code.
-</pre>
+                           <blockquote>           <ol>               <li>               <p>Creating         <code class='verbatim'>structured datatypes &lt;structured data type&gt;</code>
+ with             <code class='verbatim'>fields &lt;field&gt;</code>
+ aligned like in a C-struct.</p>
+
+</li>
+               <li>               <p>Speeding up copy operations by using         <code class='verbatim'>uint</code>
+ assignment in instead of             <code class='verbatim'>memcpy</code>
+.</p>
+
+</li>
+               <li>               <p>Guaranteeing safe aligned access for ufuncs/setitem/casting code.</p>
+
+</li>
+            </ol>
+</blockquote>
 
                <p>NumPy uses two different forms of alignment to achieve these goals: &#34;True alignment&#34; and &#34;Uint alignment&#34;.</p>
 
@@ -159,55 +168,71 @@
                <p>There are 4 relevant uses of the word         <code class='verbatim'>align</code>
  used in NumPy:</p>
 
-                           <pre>* The :attr:`dtype.alignment` attribute (``descr-&gt;alignment`` in C). This is
-  meant to reflect the &#34;true alignment&#34; of the type. It has arch-dependent
-  default values for all datatypes, except for the structured types created
-  with ``align=True`` as described below.
-* The ``ALIGNED`` flag of an ndarray, computed in ``IsAligned`` and checked
-  by :c:func:`PyArray_ISALIGNED`. This is computed from
-  :attr:`dtype.alignment`.
-  It is set to ``True`` if every item in the array is at a memory location
-  consistent with :attr:`dtype.alignment`, which is the case if the
-  ``data ptr`` and all strides of the array are multiples of that alignment.
-* The ``align`` keyword of the dtype constructor, which only affects
-  :ref:`structured_arrays`. If the structure&#39;s field offsets are not manually
-  provided, NumPy determines offsets automatically. In that case,
-  ``align=True`` pads the structure so that each field is &#34;true&#34; aligned in
-  memory and sets :attr:`dtype.alignment` to be the largest of the field
-  &#34;true&#34; alignments. This is like what C-structs usually do. Otherwise if
-  offsets or itemsize were manually provided ``align=True`` simply checks that
-  all the fields are &#34;true&#34; aligned and that the total itemsize is a multiple
-  of the largest field alignment. In either case :attr:`dtype.isalignedstruct`
-  is also set to True.
-* ``IsUintAligned`` is used to determine if an ndarray is &#34;uint aligned&#34; in
-  an analogous way to how ``IsAligned`` checks for true alignment.
-</pre>
+                           <blockquote>           <ul>               <li>               <p>The         <code class='verbatim'>dtype.alignment</code>
+ attribute (        <code class='verbatim'>descr-&gt;alignment</code>
+ in C). This is    meant to reflect the &#34;true alignment&#34; of the type. It has arch-dependent    default values for all datatypes, except for the structured types created    with         <code class='verbatim'>align=True</code>
+ as described below.</p>
+
+</li>
+               <li>               <p>The         <code class='verbatim'>ALIGNED</code>
+ flag of an ndarray, computed in         <code class='verbatim'>IsAligned</code>
+ and checked    by         <code class='verbatim'>PyArray_ISALIGNED</code>
+. This is computed from            <code class='verbatim'>dtype.alignment</code>
+.    It is set to         <code class='verbatim'>True</code>
+ if every item in the array is at a memory location    consistent with         <code class='verbatim'>dtype.alignment</code>
+, which is the case if the            <code class='verbatim'>data ptr</code>
+ and all strides of the array are multiples of that alignment.</p>
+
+</li>
+               <li>               <p>The         <code class='verbatim'>align</code>
+ keyword of the dtype constructor, which only affects            <code class='verbatim'>structured_arrays</code>
+. If the structure&#39;s field offsets are not manually    provided, NumPy determines offsets automatically. In that case,            <code class='verbatim'>align=True</code>
+ pads the structure so that each field is &#34;true&#34; aligned in    memory and sets         <code class='verbatim'>dtype.alignment</code>
+ to be the largest of the field    &#34;true&#34; alignments. This is like what C-structs usually do. Otherwise if    offsets or itemsize were manually provided         <code class='verbatim'>align=True</code>
+ simply checks that    all the fields are &#34;true&#34; aligned and that the total itemsize is a multiple    of the largest field alignment. In either case         <code class='verbatim'>dtype.isalignedstruct</code>
+    is also set to True.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>IsUintAligned</code>
+ is used to determine if an ndarray is &#34;uint aligned&#34; in    an analogous way to how         <code class='verbatim'>IsAligned</code>
+ checks for true alignment.</p>
+
+</li>
+            </ul>
+</blockquote>
 
 
 <h1>Consequences of alignment</h1>
                <p>Here is how the variables above are used:</p>
 
-                           <pre>1. Creating aligned structs: To know how to offset a field when
-   ``align=True``, NumPy looks up ``field.dtype.alignment``. This includes
-   fields that are nested structured arrays.
-2. Ufuncs: If the ``ALIGNED`` flag of an array is False, ufuncs will
-   buffer/cast the array before evaluation. This is needed since ufunc inner
-   loops access raw elements directly, which might fail on some archs if the
-   elements are not true-aligned.
-3. Getitem/setitem/copyswap function: Similar to ufuncs, these functions
-   generally have two code paths. If ``ALIGNED`` is False they will
-   use a code path that buffers the arguments so they are true-aligned.
-4. Strided copy code: Here, &#34;uint alignment&#34; is used instead.  If the itemsize
-   of an array is equal to 1, 2, 4, 8 or 16 bytes and the array is uint
-   aligned then instead NumPy will do ``*(uintN*)dst) = *(uintN*)src)`` for
-   appropriate N. Otherwise, NumPy copies by doing ``memcpy(dst, src, N)``.
-5. Nditer code: Since this often calls the strided copy code, it must
-   check for &#34;uint alignment&#34;.
-6. Cast code: This checks for &#34;true&#34; alignment, as it does
-   ``*dst = CASTFUNC(*src)`` if aligned. Otherwise, it does
-   ``memmove(srcval, src); dstval = CASTFUNC(srcval); memmove(dst, dstval)``
-   where dstval/srcval are aligned.
-</pre>
+                           <blockquote>           <ol>               <li>               <p>Creating aligned structs: To know how to offset a field when             <code class='verbatim'>align=True</code>
+, NumPy looks up         <code class='verbatim'>field.dtype.alignment</code>
+. This includes     fields that are nested structured arrays.</p>
+
+</li>
+               <li>               <p>Ufuncs: If the         <code class='verbatim'>ALIGNED</code>
+ flag of an array is False, ufuncs will     buffer/cast the array before evaluation. This is needed since ufunc inner     loops access raw elements directly, which might fail on some archs if the     elements are not true-aligned.</p>
+
+</li>
+               <li>               <p>Getitem/setitem/copyswap function: Similar to ufuncs, these functions     generally have two code paths. If         <code class='verbatim'>ALIGNED</code>
+ is False they will     use a code path that buffers the arguments so they are true-aligned.</p>
+
+</li>
+               <li>               <p>Strided copy code: Here, &#34;uint alignment&#34; is used instead.  If the itemsize     of an array is equal to 1, 2, 4, 8 or 16 bytes and the array is uint     aligned then instead NumPy will do         <code class='verbatim'>*(uintN*)dst) = *(uintN*)src)</code>
+ for     appropriate N. Otherwise, NumPy copies by doing         <code class='verbatim'>memcpy(dst, src, N)</code>
+.</p>
+
+</li>
+               <li>               <p>Nditer code: Since this often calls the strided copy code, it must     check for &#34;uint alignment&#34;.</p>
+
+</li>
+               <li>               <p>Cast code: This checks for &#34;true&#34; alignment, as it does             <code class='verbatim'>*dst = CASTFUNC(*src)</code>
+ if aligned. Otherwise, it does             <code class='verbatim'>memmove(srcval, src); dstval = CASTFUNC(srcval); memmove(dst, dstval)</code>
+     where dstval/srcval are aligned.</p>
+
+</li>
+            </ol>
+</blockquote>
 
                <p>Note that the strided-copy and strided-cast code are deeply intertwined and so any arrays being processed by them must be both uint and true aligned, even though the copy-code only needs uint alignment and the cast code only true alignment.  If there is ever a big rewrite of this code it would be good to allow them to use different alignments.</p>
 
