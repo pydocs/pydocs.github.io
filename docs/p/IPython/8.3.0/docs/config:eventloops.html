@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.3.0/api/IPython'>8.3.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.3.0/api/IPython">8.3.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.3.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.3.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.3.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.3.0/examples">Examples</a>
+                        <a href="/p/IPython/8.3.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.3.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.3.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Integrating with GUI event loops</h1>
+               <p>When the user types         <code class='verbatim'>%gui qt</code>
+, IPython integrates itself with the Qt event loop, so you can use both a GUI and an interactive prompt together. IPython supports a number of common GUI toolkits, but from IPython 3.0, it is possible to integrate other event loops without modifying IPython itself.</p>
+
+               <p>Supported event loops include         <code class='verbatim'>qt4</code>
+,         <code class='verbatim'>qt5</code>
+,         <code class='verbatim'>gtk2</code>
+,         <code class='verbatim'>gtk3</code>
+,         <code class='verbatim'>gtk4</code>
+,         <code class='verbatim'>wx</code>
+,         <code class='verbatim'>osx</code>
+ and         <code class='verbatim'>tk</code>
+. Make sure the event loop you specify matches the GUI toolkit used by your own code.</p>
+
+               <p>To make IPython GUI event loop integration occur automatically at every startup, set the         <code class='verbatim'>c.InteractiveShellApp.gui</code>
+ configuration key in your IPython profile (see         <code class='verbatim'>setting_config</code>
+).</p>
+
+               <p>If the event loop you use is supported by IPython, turning on event loop integration follows the steps just described whether you use Terminal IPython or an IPython kernel.</p>
+
+               <p>However, the way Terminal IPython handles event loops is very different from the way IPython kernel does, so if you need to integrate with a new kind of event loop, different steps are needed to integrate with each.</p>
+
+
+<h1>Integrating with a new event loop in the terminal</h1>
+                           <div class='admonition'>
+    <div>versionchanged</div>
+        <p>There is a new API for event loop integration using prompt_toolkit.</p>
+
+</div>
+
+
+               <p>In the terminal, IPython uses prompt_toolkit to prompt the user for input. prompt_toolkit provides hooks to integrate with an external event loop.</p>
+
+               <p>To integrate an event loop, define a function which runs the GUI event loop until there is input waiting for prompt_toolkit to process. There are two ways to detect this condition::      </p>
+
+               <pre># Polling for input.
+def inputhook(context):
+    while not context.input_is_ready():
+        # Replace this with the appropriate call for the event loop:
+        iterate_loop_once()
+
+# Using a file descriptor to notify the event loop to stop.
+def inputhook2(context):
+    fd = context.fileno()
+    # Replace the functions below with those for the event loop.
+    add_file_reader(fd, callback=stop_the_loop)
+    run_the_loop()</pre>
+               <p>Once you have defined this function, register it with IPython:</p>
+
+               <pre class='not-implemented'>
+.. currentmodule:: IPython.terminal.pt_inputhooks
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. function:: register(name, inputhook)
+    Register the function *inputhook* as the event loop integration for the
+    GUI *name*. If ``name=&#39;foo&#39;``, then the user can enable this integration
+    by running ``%gui foo``.</pre>
+
+
+
+<h1>Integrating with a new event loop in the kernel</h1>
+               <p>The kernel runs its own event loop, so it&#39;s simpler to integrate with others. IPython allows the other event loop to take control, but it must call         <code class='verbatim'>IPython.kernel.zmq.kernelbase.Kernel.do_one_iteration</code>
+ periodically.</p>
+
+               <p>To integrate with this, write a function that takes a single argument, the IPython kernel instance, arranges for your event loop to call         <code class='verbatim'>kernel.do_one_iteration()</code>
+ at least every         <code class='verbatim'>kernel._poll_interval</code>
+ seconds, and starts the event loop.</p>
+
+               <p>Decorate this function with         <code class='verbatim'>IPython.kernel.zmq.eventloops.register_integration</code>
+, passing in the names you wish to register it for. Here is a slightly simplified version of the Tkinter integration already included in IPython::      </p>
+
+               <pre>@register_integration(&#39;tk&#39;)
+def loop_tk(kernel):
+    &#34;&#34;&#34;Start a kernel with the Tk event loop.&#34;&#34;&#34;
+    from tkinter import Tk
+
+    # Tk uses milliseconds
+    poll_interval = int(1000*kernel._poll_interval)
+    # For Tkinter, we create a Tk object and call its withdraw method.
+    class Timer(object):
+        def __init__(self, func):
+            self.app = Tk()
+            self.app.withdraw()
+            self.func = func
+
+        def on_timer(self):
+            self.func()
+            self.app.after(poll_interval, self.on_timer)
+
+        def start(self):
+            self.on_timer()  # Call it once to get things going.
+            self.app.mainloop()
+
+    kernel.timer = Timer(kernel.do_one_iteration)
+    kernel.timer.start()</pre>
+               <p>Some event loops can go one better, and integrate checking for messages on the kernel&#39;s ZMQ sockets, making the kernel more responsive than plain polling. How to do this is outside the scope of this document; if you are interested, look at the integration with Qt in         <code class='verbatim'>IPython.kernel.zmq.eventloops</code>
+.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

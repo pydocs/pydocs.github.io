@@ -86,7 +86,8 @@
 
 </nav>
     </header>
-<div class='container'>
+    <div class='container'>
+
     <div class="sidenav">
         <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
     <a href="#">numpy</a>
@@ -222,11 +223,11 @@ dtype({&#39;names&#39;: [&#39;col1&#39;, &#39;col2&#39;], &#39;formats&#39;: [&#
 </li>
                <li>               <p>A dictionary of field names</p>
 
-               <p>The use of this form of specification is discouraged, but documented here      because older numpy code may use it. The keys of the dictionary are the      field names and the values are tuples specifying type and offset::        </p>
+               <p>The keys of the dictionary are the field names and the values are tuples      specifying type and offset::        </p>
 
                <pre>&gt;&gt;&gt; np.dtype({&#39;col1&#39;: (&#39;i1&#39;, 0), &#39;col2&#39;: (&#39;f4&#39;, 1)})
 dtype([(&#39;col1&#39;, &#39;i1&#39;), (&#39;col2&#39;, &#39;&lt;f4&#39;)])</pre>
-               <p>This form is discouraged because Python dictionaries do not preserve order      in Python versions before Python 3.6, and the order of the fields in a      structured dtype has meaning.         <code class='verbatim'>Field Titles &lt;titles&gt;</code>
+               <p>This form was discouraged because Python dictionaries did not preserve order      in Python versions before Python 3.6.         <code class='verbatim'>Field Titles &lt;titles&gt;</code>
  may be      specified by using a 3-tuple, see below.</p>
 
 </li>
@@ -517,22 +518,70 @@ array([(1, 100.), (3, 4.)],
                <p>In order to prevent clobbering object pointers in fields of         <code class='verbatim'>object</code>
  type, numpy currently does not allow views of structured arrays containing objects.</p>
 
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _structured_dtype_comparison_and_promotion:&#39;&gt;
+           </pre>
 
-<h1>Structure Comparison</h1>
+
+<h1>Structure Comparison and Promotion</h1>
                <p>If the dtypes of two void structured arrays are equal, testing the equality of the arrays will result in a boolean array with the dimensions of the original arrays, with elements set to         <code class='verbatim'>True</code>
- where all fields of the corresponding structures are equal. Structured dtypes are equal if the field names, dtypes and titles are the same, ignoring endianness, and the fields are in the same order::   </p>
+ where all fields of the corresponding structures are equal::   </p>
 
-               <pre>&gt;&gt;&gt; a = np.zeros(2, dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
-&gt;&gt;&gt; b = np.ones(2, dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
+               <pre>&gt;&gt;&gt; a = np.array([(1, 1), (2, 2)], dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
+&gt;&gt;&gt; b = np.array([(1, 1), (2, 3)], dtype=[(&#39;a&#39;, &#39;i4&#39;), (&#39;b&#39;, &#39;i4&#39;)])
 &gt;&gt;&gt; a == b
-array([False, False])</pre>
-               <p>Currently, if the dtypes of two void structured arrays are not equivalent the comparison fails, returning the scalar value         <code class='verbatim'>False</code>
-. This behavior is deprecated as of numpy 1.10 and will raise an error or perform elementwise comparison in the future.</p>
+array([True, False])</pre>
+               <p>NumPy will promote individual field datatypes to perform the comparison. So the following is also valid (note the         <code class='verbatim'>&#39;f4&#39;</code>
+ dtype for the         <code class='verbatim'>&#39;a&#39;</code>
+ field):</p>
 
+                           <blockquote><pre>&gt;&gt;&gt; b = np.array([(1.0, 1), (2.5, 2)], dtype=[(&#34;a&#34;, &#34;f4&#34;), (&#34;b&#34;, &#34;i4&#34;)])
+&gt;&gt;&gt; a == b
+array([True, False])</pre></blockquote>
+
+               <p>To compare two structured arrays, it must be possible to promote them to a common dtype as returned by <code><a href="/p/numpy/*/api/numpy.result_type.html" class='exists'>numpy.result_type</a></code>
+ and <code class='not-implemented'>:None:None:`np.promote_types`</code>. This enforces that the number of fields, the field names, and the field titles must match precisely. When promotion is not possible, for example due to mismatching field names, NumPy will raise an error. Promotion between two structured dtypes results in a canonical dtype that ensures native byte-order for all fields::      </p>
+
+               <pre>&gt;&gt;&gt; np.result_type(np.dtype(&#34;i,&gt;i&#34;))
+dtype([(&#39;f0&#39;, &#39;&lt;i4&#39;), (&#39;f1&#39;, &#39;&lt;i4&#39;)])
+&gt;&gt;&gt; np.result_type(np.dtype(&#34;i,&gt;i&#34;), np.dtype(&#34;i,i&#34;))
+dtype([(&#39;f0&#39;, &#39;&lt;i4&#39;), (&#39;f1&#39;, &#39;&lt;i4&#39;)])</pre>
+               <p>The resulting dtype from promotion is also guaranteed to be packed, meaning that all fields are ordered contiguously and any unnecessary padding is removed::      </p>
+
+               <pre>&gt;&gt;&gt; dt = np.dtype(&#34;i1,V3,i4,V1&#34;)[[&#34;f0&#34;, &#34;f2&#34;]]
+&gt;&gt;&gt; dt
+dtype({&#39;names&#39;:[&#39;f0&#39;,&#39;f2&#39;], &#39;formats&#39;:[&#39;i1&#39;,&#39;&lt;i4&#39;], &#39;offsets&#39;:[0,4], &#39;itemsize&#39;:9})
+&gt;&gt;&gt; np.result_type(dt)
+dtype([(&#39;f0&#39;, &#39;i1&#39;), (&#39;f2&#39;, &#39;&lt;i4&#39;)])</pre>
+               <p>Note that the result prints without         <code class='verbatim'>offsets</code>
+ or         <code class='verbatim'>itemsize</code>
+ indicating no additional padding. If a structured dtype is created with         <code class='verbatim'>align=True</code>
+ ensuring that         <code class='verbatim'>dtype.isalignedstruct</code>
+ is true, this property is preserved::      </p>
+
+               <pre>&gt;&gt;&gt; dt = np.dtype(&#34;i1,V3,i4,V1&#34;, align=True)[[&#34;f0&#34;, &#34;f2&#34;]]
+&gt;&gt;&gt; dt
+dtype({&#39;names&#39;:[&#39;f0&#39;,&#39;f2&#39;], &#39;formats&#39;:[&#39;i1&#39;,&#39;&lt;i4&#39;], &#39;offsets&#39;:[0,4], &#39;itemsize&#39;:12}, align=True)
+&gt;&gt;&gt; np.result_type(dt)
+dtype([(&#39;f0&#39;, &#39;i1&#39;), (&#39;f2&#39;, &#39;&lt;i4&#39;)], align=True)
+&gt;&gt;&gt; np.result_type(dt).isalignedstruct
+True</pre>
+               <p>When promoting multiple dtypes, the result is aligned if any of the inputs is::      </p>
+
+               <pre>&gt;&gt;&gt; np.result_type(np.dtype(&#34;i,i&#34;), np.dtype(&#34;i,i&#34;, align=True))
+dtype([(&#39;f0&#39;, &#39;&lt;i4&#39;), (&#39;f1&#39;, &#39;&lt;i4&#39;)], align=True)</pre>
                <p>The         <code class='verbatim'>&lt;</code>
  and         <code class='verbatim'>&gt;</code>
  operators always return         <code class='verbatim'>False</code>
  when comparing void structured arrays, and arithmetic and bitwise operations are not supported.</p>
+
+                           <div class='admonition'>
+    <div>versionchanged</div>
+        <p>Before NumPy 1.23, a warning was given and         <code class='verbatim'>False</code>
+ returned when promotion to a common dtype failed. Further, promotion was much more restrictive: It would reject the mixed float/integer comparison example above.</p>
+
+</div>
+
 
 
 <h1>Record Arrays</h1>
@@ -599,7 +648,7 @@ dtype((numpy.record, [(&#39;foo&#39;, &#39;&lt;i4&#39;), (&#39;bar&#39;, &#39;&l
 <h1>Recarray Helper Functions</h1>
                <pre class='not-implemented'>
 .. automodule:: numpy.lib.recfunctions
-    (&#39;members&#39;, &#39;&#39;)
+    [&#39;members&#39;, &#39;&#39;]
     </pre>
 
 

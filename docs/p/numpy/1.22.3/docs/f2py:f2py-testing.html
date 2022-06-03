@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _f2py-testing:&#39;&gt;
+           </pre>
+
+
+<h1>F2PY test suite</h1>
+               <p>F2PY&#39;s test suite is present in the directory         <code class='verbatim'>numpy/f2py/tests</code>
+. Its aim is to ensure that Fortran language features are correctly translated to Python. For example, the user can specify starting and ending indices of arrays in Fortran. This behaviour is translated to the generated CPython library where the arrays strictly start from 0 index.</p>
+
+               <p>The directory of the test suite looks like the following::   </p>
+
+               <pre>./tests/
+├── __init__.py
+├── src
+│   ├── abstract_interface
+│   ├── array_from_pyobj
+│   ├── // ... several test folders
+│   └── string
+├── test_abstract_interface.py
+├── test_array_from_pyobj.py
+├── // ... several test files
+├── test_symbolic.py
+└── util.py</pre>
+               <p>Files starting with         <code class='verbatim'>test_</code>
+ contain tests for various aspects of f2py from parsing Fortran files to checking modules&#39; documentation.         <code class='verbatim'>src</code>
+ directory contains the Fortran source files upon which we do the testing.         <code class='verbatim'>util.py</code>
+ contains utility  functions for building and importing Fortran modules during test time using a  temporary location.</p>
+
+
+<h1>Adding a test</h1>
+               <p>F2PY&#39;s current test suite predates         <code class='verbatim'>pytest</code>
+ and therefore does not use fixtures. Instead, the test files contain test classes that inherit from         <code class='verbatim'>F2PyTest</code>
+ class present in         <code class='verbatim'>util.py</code>
+.</p>
+
+               <pre class='not-implemented'>
+.. literalinclude:: ../../../numpy/f2py/tests/util.py
+    [&#39;language&#39;, &#39;python&#39;]
+    [&#39;lines&#39;, &#39;327-336&#39;]
+    [&#39;linenos&#39;, &#39;&#39;]
+    </pre>
+
+
+               <p>This class many helper functions for parsing and compiling test source files. Its child  classes can override its         <code class='verbatim'>sources</code>
+ data member to provide their own source files. This superclass will then compile the added source files upon object creation andtheir functions will be appended to         <code class='verbatim'>self.module</code>
+ data member. Thus, the child classes will be able to access the fortran functions specified in source file by calling         <code class='verbatim'>self.module.[fortran_function_name]</code>
+.</p>
+
+
+<h1>Example</h1>
+               <p>Consider the following subroutines, contained in a file named         <code class='verbatim'>add-test.f</code>
+</p>
+
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/add-test.f
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
+
+
+               <p>The first routine <code class='not-implemented'>:None:None:`addb`</code> simply takes an array and increases its elements by 1. The second subroutine <code class='not-implemented'>:None:None:`addc`</code> assigns a new array <code class='not-implemented'>:None:None:`k`</code> with elements greater that  the elements of the input array <code class='not-implemented'>:None:None:`w`</code> by 1.</p>
+
+               <p>A test can be implemented as follows::   </p>
+
+               <pre>class TestAdd(util.F2PyTest):
+    sources = [util.getpath(&#34;add-test.f&#34;)]
+
+    def test_module(self):
+        k = np.array([1, 2, 3], dtype=np.float64)
+        w = np.array([1, 2, 3], dtype=np.float64)
+        self.module.subb(k)
+        assert np.allclose(k, w + 1)
+        self.module.subc([w, k])
+        assert np.allclose(k, w + 1)</pre>
+               <p>We override the         <code class='verbatim'>sources</code>
+ data member to provide the source file. The source files are compiled and subroutines are attached to module data member when the class object is created. The         <code class='verbatim'>test_module</code>
+ function calls the subroutines and tests their results.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

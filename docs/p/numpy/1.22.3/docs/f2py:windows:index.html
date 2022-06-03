@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.3/api/numpy'>1.22.3</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.3/api/numpy">1.22.3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.3/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.3/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.3/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.3/examples">Examples</a>
+                        <a href="/p/numpy/1.22.3/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.3</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _f2py-windows:&#39;&gt;
+           </pre>
+
+
+<h1>F2PY and Windows</h1>
+                           <div class='admonition'>
+    <div>warning</div>
+                    <blockquote><!-- deflist -->
+           <dl>
+               <dt><p>F2PY support for Windows is not at par with Linux support, and</p>
+</dt>
+               <dd><p>OS specific flags can be seen via         <code class='verbatim'>python -m numpy.f2py</code>
+</p>
+</dd>
+           </dl>
+</blockquote>
+
+</div>
+
+
+               <p>Broadly speaking, there are two issues working with F2PY on Windows:</p>
+
+                          <ul>               <li>               <p>the lack of actively developed FOSS Fortran compilers, and,</p>
+
+</li>
+               <li>               <p>the linking issues related to the C runtime library for building Python-C extensions.</p>
+
+</li>
+            </ul>
+
+               <p>The focus of this section is to establish a guideline for developing and extending Fortran modules for Python natively, via F2PY on Windows.</p>
+
+
+<h1>Overview</h1>
+               <p>From a user perspective, the most UNIX compatible Windows development environment is through emulation, either via the Windows Subsystem on Linux, or facilitated by Docker. In a similar vein, traditional virtualization methods like VirtualBox are also reasonable methods to develop UNIX tools on Windows.</p>
+
+               <p>Native Windows support is typically stunted beyond the usage of commercial compilers. However, as of 2022, most commercial compilers have free plans which are sufficient for general use. Additionally, the Fortran language features supported by         <code class='verbatim'>f2py</code>
+ (partial coverage of Fortran 2003), means that newer toolchains are often not required. Briefly, then, for an end user, in order of use:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>Classic Intel Compilers (commercial)</p>
+</dt>
+               <dd><p>These are maintained actively, though licensing restrictions may apply as    further detailed in         <code class='verbatim'>f2py-win-intel</code>
+.</p>
+<p>Suitable for general use for those building native Windows programs by    building off of MSVC.</p>
+</dd>
+               <dt><p>MSYS2 (FOSS)</p>
+</dt>
+               <dd><p>In conjunction with the         <code class='verbatim'>mingw-w64</code>
+ project,         <code class='verbatim'>gfortran</code>
+ and         <code class='verbatim'>gcc</code>
+    toolchains can be used to natively build Windows programs.</p>
+</dd>
+               <dt><p>Windows Subsystem for Linux</p>
+</dt>
+               <dd><p>Assuming the usage of         <code class='verbatim'>gfortran</code>
+, this can be used for cross-compiling    Windows applications, but is significantly more complicated.</p>
+</dd>
+               <dt><p>Conda</p>
+</dt>
+               <dd><p>Windows support for compilers in         <code class='verbatim'>conda</code>
+ is facilitated by pulling MSYS2    binaries, however these <code class='not-implemented'>:None:None:`are outdated`</code>, and therefore not recommended (as of 30-01-2022).</p>
+</dd>
+               <dt><p>PGI Compilers (commercial)</p>
+</dt>
+               <dd><p>Unmaintained but sufficient if an existing license is present. Works    natively, but has been superseded by the Nvidia HPC SDK, with no <code class='not-implemented'>:None:None:`native
+   Windows support`</code>.</p>
+</dd>
+               <dt><p>Cygwin (FOSS)</p>
+</dt>
+               <dd><p>Can also be used for         <code class='verbatim'>gfortran</code>
+. Howeve, the POSIX API compatibility layer provided by    Cygwin is meant to compile UNIX software on Windows, instead of building    native Windows programs. This means cross compilation is required.</p>
+</dd>
+           </dl>
+
+               <p>The compilation suites described so far are compatible with the <code class='not-implemented'>:None:None:`now
+deprecated`</code>         <code class='verbatim'>np.distutils</code>
+ build backend which is exposed by the F2PY CLI. Additional build system usage (        <code class='verbatim'>meson</code>
+,         <code class='verbatim'>cmake</code>
+) as described in         <code class='verbatim'>f2py-bldsys</code>
+ allows for a more flexible set of compiler backends including:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>Intel oneAPI</p>
+</dt>
+               <dd><p>The newer Intel compilers (        <code class='verbatim'>ifx</code>
+,         <code class='verbatim'>icx</code>
+) are based on LLVM and can be    used for native compilation. Licensing requirements can be onerous.</p>
+</dd>
+               <dt><p>Classic Flang (FOSS)</p>
+</dt>
+               <dd><p>The backbone of the PGI compilers were cannibalized to form the &#34;classic&#34; or    <code class='not-implemented'>:None:None:`legacy version of Flang`</code>. This may be compiled from source and used    natively. <code class='not-implemented'>:None:None:`LLVM Flang`</code> does not support Windows yet (30-01-2022).</p>
+</dd>
+               <dt><p>LFortran (FOSS)</p>
+</dt>
+               <dd><p>One of two LLVM based compilers. Not all of F2PY supported Fortran can be    compiled yet (30-01-2022) but uses MSVC for native linking.</p>
+</dd>
+           </dl>
+
+
+<h1>Baseline</h1>
+               <p>For this document we will asume the following basic tools:</p>
+
+                          <ul>               <li>               <p>The IDE being considered is the community supported <code class='not-implemented'>:None:None:`Microsoft Visual Studio Code`</code></p>
+
+</li>
+               <li>               <p>The terminal being used is the <code class='not-implemented'>:None:None:`Windows Terminal`</code></p>
+
+</li>
+               <li>               <p>The shell environment is assumed to be <code class='not-implemented'>:None:None:`Powershell 7.x`</code></p>
+
+</li>
+               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>Python 3.10 from <code class='not-implemented'>:None:None:`the Microsoft Store`</code> and this can be tested with</p>
+</dt>
+               <dd><p>        <code class='verbatim'>Get-Command python.exe</code>
+ resolving to            <code class='verbatim'>C:\Users\$USERNAME\AppData\Local\Microsoft\WindowsApps\python.exe</code>
+</p>
+</dd>
+           </dl>
+
+</li>
+               <li>               <p>The Microsoft Visual C++ (MSVC) toolset</p>
+
+</li>
+            </ul>
+
+               <p>With this baseline configuration, we will further consider a configuration matrix as follows:</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _table-f2py-winsup-mat:&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. table:: Support matrix, exe implies a Windows installer
+    +----------------------+--------------------+-------------------+
+    | **Fortran Compiler** | **C/C++ Compiler** | **Source**        |
+    +======================+====================+===================+
+    | Intel Fortran        | MSVC / ICC         | exe               |
+    +----------------------+--------------------+-------------------+
+    | GFortran             | MSVC               | MSYS2/exe         |
+    +----------------------+--------------------+-------------------+
+    | GFortran             | GCC                | WSL               |
+    +----------------------+--------------------+-------------------+
+    | Classic Flang        | MSVC               | Source / Conda    |
+    +----------------------+--------------------+-------------------+
+    | Anaconda GFortran    | Anaconda GCC       | exe               |
+    +----------------------+--------------------+-------------------+</pre>
+
+
+               <p>For an understanding of the key issues motivating the need for such a matrix <code class='not-implemented'>:None:None:`Pauli Virtanen&#39;s in-depth post on wheels with Fortran for Windows`</code> is an excellent resource. An entertaining explanation of an application binary interface (ABI) can be found in this post by <code class='not-implemented'>:None:None:`JeanHeyd Meneide`</code>.</p>
+
+
+<h1>Powershell and MSVC</h1>
+               <p>MSVC is installed either via the Visual Studio Bundle or the lighter (preferred) <code class='not-implemented'>:None:None:`Build Tools for Visual Studio`</code> with the         <code class='verbatim'>Desktop development with C++</code>
+ setting.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This can take a significant amount of time as it includes a download of around 2GB and requires a restart.</p>
+
+</div>
+
+
+               <p>It is possible to use the resulting environment from a <code class='not-implemented'>:None:None:`standard command
+prompt`</code>. However, it is more pleasant to use a <code class='not-implemented'>:None:None:`developer powershell`</code>, with a <code class='not-implemented'>:None:None:`profile in Windows Terminal`</code>. This can be achieved by adding the following block to the         <code class='verbatim'>profiles-&gt;list</code>
+ section of the JSON file used to  configure Windows Terminal (see         <code class='verbatim'>Settings-&gt;Open JSON file</code>
+):</p>
+
+               <pre class='not-implemented'>
+.. code-block:: json
+    {
+    &#34;name&#34;: &#34;Developer PowerShell for VS 2019&#34;,
+    &#34;commandline&#34;: &#34;powershell.exe -noe -c \&#34;$vsPath = (Join-Path ${env:ProgramFiles(x86)} -ChildPath &#39;Microsoft Visual Studio\\2019\\BuildTools&#39;); Import-Module (Join-Path $vsPath &#39;Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll&#39;); Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation\&#34;&#34;,
+    &#34;icon&#34;: &#34;ms-appx:///ProfileIcons/{61c54bbd-c2c6-5271-96e7-009a87ff44bf}.png&#34;
+    }</pre>
+
+
+               <p>Now, testing the compiler toolchain could look like:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: powershell
+    # New Windows Developer Powershell instance / tab
+    # or
+    $vsPath = (Join-Path ${env:ProgramFiles(x86)} -ChildPath &#39;Microsoft Visual Studio\\2019\\BuildTools&#39;); 
+    Import-Module (Join-Path $vsPath &#39;Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll&#39;);
+    Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation
+    **********************************************************************
+    ** Visual Studio 2019 Developer PowerShell v16.11.9
+    ** Copyright (c) 2021 Microsoft Corporation
+    **********************************************************************
+    cd $HOME
+    echo &#34;#include&lt;stdio.h&gt;&#34; &gt; blah.cpp; echo &#39;int main(){printf(&#34;Hi&#34;);return 1;}&#39; &gt;&gt; blah.cpp
+    cl blah.cpp</pre>
+
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>.\blah.exe</p>
+</dt>
+               <dd><p># Hi    rm blah.cpp</p>
+</dd>
+           </dl>
+
+               <p>It is also possible to check that the environment has been updated correctly with         <code class='verbatim'>$ENV:PATH</code>
+.</p>
+
+
+<h1>Windows Store Python Paths</h1>
+               <p>The MS Windows version of Python discussed here installs to a non-deterministic path using a hash. This needs to be added to the         <code class='verbatim'>PATH</code>
+ variable.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: powershell
+    $Env:Path += &#34;;$env:LOCALAPPDATA\packages\pythonsoftwarefoundation.python.3.10_qbz5n2kfra8p0\localcache\local-packages\python310\scripts&#34;</pre>
+
+
+               <pre class='not-implemented'>
+.. toctree:: 
+    [&#39;maxdepth&#39;, &#39;2&#39;]
+    intel
+    msys2
+    conda
+    pgi</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _the Microsoft Store: https://www.microsoft.com/en-us/p/python-310/9pjpw5ldxlz5&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Microsoft Visual Studio Code: https://code.visualstudio.com/Download&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _more complete POSIX environment: https://www.cygwin.com/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _This MSYS2 document: https://www.msys2.org/wiki/How-does-MSYS2-differ-from-Cygwin/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Build Tools for Visual Studio: https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Windows Terminal: https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Powershell 7.x: https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.1&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _standard command prompt: https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160#developer_command_file_locations&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _developer powershell: https://docs.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2019&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _profile in Windows Terminal: https://techcommunity.microsoft.com/t5/microsoft-365-pnp-blog/add-developer-powershell-and-developer-command-prompt-for-visual/ba-p/2243078&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#34;.. _Pauli Virtanen&#39;s in-depth post on wheels with Fortran for Windows: https://pav.iki.fi/blog/2017-10-08/pywingfortran.html#building-python-wheels-with-fortran-for-windows&#34;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Nvidia HPC SDK: https://www.pgroup.com/index.html&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _JeanHeyd Meneide: https://thephd.dev/binary-banshees-digital-demons-abi-c-c++-help-me-god-please&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _legacy version of Flang: https://github.com/flang-compiler/flang&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _native Windows support: https://developer.nvidia.com/nvidia-hpc-sdk-downloads#collapseFour&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _are outdated: https://github.com/conda-forge/conda-forge.github.io/issues/1044&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _now deprecated: https://github.com/numpy/numpy/pull/20875&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _LLVM Flang: https://releases.llvm.org/11.0.0/tools/flang/docs/ReleaseNotes.html&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

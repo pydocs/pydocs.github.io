@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.3.0/api/IPython'>8.3.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.3.0/api/IPython">8.3.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.3.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.3.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.3.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.3.0/examples">Examples</a>
+                        <a href="/p/IPython/8.3.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.3.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.3.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>How IPython works</h1>
+
+<h1>Terminal IPython</h1>
+               <p>When you type         <code class='verbatim'>ipython</code>
+, you get the original IPython interface, running in the terminal. It does something like this::      </p>
+
+               <pre>while True:
+    code = input(&#34;&gt;&gt;&gt; &#34;)
+    exec(code)</pre>
+               <p>Of course, it&#39;s much more complex, because it has to deal with multi-line code, tab completion using         <code class='verbatim'>readline</code>
+, magic commands, and so on. But the model is like that: prompt the user for some code, and when they&#39;ve entered it, exec it in the same process. This model is often called a REPL, or Read-Eval-Print-Loop.</p>
+
+
+<h1>The IPython Kernel</h1>
+               <p>All the other interfaces—the Notebook, the Qt console,         <code class='verbatim'>ipython console</code>
+ in the terminal, and third party interfaces—use the IPython Kernel. This is a separate process which is responsible for running user code, and things like computing possible completions. Frontends communicate with it using JSON messages sent over <a link href="http://zeromq.org/" class='external'>ZeroMQ</a> sockets; the protocol they use is described in         <code class='verbatim'>jupyterclient:messaging</code>
+.</p>
+
+               <p>The core execution machinery for the kernel is shared with terminal IPython:</p>
+
+               <pre class='not-implemented'>
+.. image:: figs/ipy_kernel_and_terminal.png
+    </pre>
+
+
+               <p>A kernel process can be connected to more than one frontend simultaneously. In this case, the different frontends will have access to the same variables.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Comment: 
+   |value: &#39;.. TODO: Diagram illustrating this?&#39;
+   |&gt;
+           </pre>
+
+               <p>This design was intended to allow easy development of different frontends based on the same kernel, but it also made it possible to support new languages in the same frontends, by developing kernels in those languages, and we are refining IPython to make that more practical.</p>
+
+               <p>Today, there are two ways to develop a kernel for another language. Wrapper kernels reuse the communications machinery from IPython, and implement only the core execution part. Native kernels implement execution and communications in the target language:</p>
+
+               <pre class='not-implemented'>
+.. image:: figs/other_kernels.png
+    </pre>
+
+
+               <p>Wrapper kernels are easier to write quickly for languages that have good Python wrappers, like <a link href="https://pypi.python.org/pypi/octave_kernel" class='external'>octave_kernel</a>, or languages where it&#39;s impractical to implement the communications machinery, like <a link href="https://pypi.python.org/pypi/bash_kernel" class='external'>bash_kernel</a>. Native kernels are likely to be better maintained by the community using them, like <a link href="https://github.com/JuliaLang/IJulia.jl" class='external'>IJulia</a> or <a link href="https://github.com/gibiansky/IHaskell" class='external'>IHaskell</a>.</p>
+
+               <pre class='not-implemented'>
+.. seealso:: 
+    :ref:`jupyterclient:kernels`
+
+    :doc:`wrapperkernels`</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

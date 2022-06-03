@@ -86,7 +86,8 @@
 
 </nav>
     </header>
-<div class='container'>
+    <div class='container'>
+
     <div class="sidenav">
         <img src="/p/numpy/1.22.3/img/numpy_logo.png"/>
     <a href="#">numpy</a>
@@ -138,7 +139,7 @@
                <pre>&gt;&gt;&gt; from numpy.polynomial import Polynomial as P
 &gt;&gt;&gt; p = P([1,2,3])
 &gt;&gt;&gt; p
-Polynomial([1., 2., 3.], domain=[-1,  1], window=[-1,  1])</pre>
+Polynomial([1., 2., 3.], domain=[-1,  1], window=[-1,  1], symbol=&#39;x&#39;)</pre>
                <p>Note that there are three parts to the long version of the printout. The first is the coefficients, the second is the domain, and the third is the window::     </p>
 
                <pre>&gt;&gt;&gt; p.coef
@@ -166,34 +167,34 @@ array([-1,  1])</pre>
                <p>Addition and Subtraction::     </p>
 
                <pre>&gt;&gt;&gt; p + p
-Polynomial([2., 4., 6.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([2., 4., 6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p - p
-Polynomial([0.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([0.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Multiplication::     </p>
 
                <pre>&gt;&gt;&gt; p * p
-Polynomial([ 1.,   4.,  10.,  12.,   9.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([ 1.,   4.,  10.,  12.,   9.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Powers::     </p>
 
                <pre>&gt;&gt;&gt; p**2
-Polynomial([ 1.,   4., 10., 12.,  9.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([ 1.,   4., 10., 12.,  9.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Division:</p>
 
                <p>Floor division, &#39;//&#39;, is the division operator for the polynomial classes, polynomials are treated like integers in this regard. For Python versions &lt; 3.x the &#39;/&#39; operator maps to &#39;//&#39;, as it does for Python, for later versions the &#39;/&#39; will only work for division by scalars. At some point it will be deprecated::     </p>
 
                <pre>&gt;&gt;&gt; p // P([-1, 1])
-Polynomial([5.,  3.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([5.,  3.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Remainder::     </p>
 
                <pre>&gt;&gt;&gt; p % P([-1, 1])
-Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Divmod::     </p>
 
                <pre>&gt;&gt;&gt; quo, rem = divmod(p, P([-1, 1]))
 &gt;&gt;&gt; quo
-Polynomial([5.,  3.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([5.,  3.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; rem
-Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Evaluation::     </p>
 
                <pre>&gt;&gt;&gt; x = np.arange(5)
@@ -209,7 +210,7 @@ array([[ 1.,   6.],
                <p>Substitute a polynomial for x and expand the result. Here we substitute p in itself leading to a new polynomial of degree 4 after expansion. If the polynomials are regarded as functions this is composition of functions::     </p>
 
                <pre>&gt;&gt;&gt; p(p)
-Polynomial([ 6., 16., 36., 36., 27.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([ 6., 16., 36., 36., 27.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Roots::     </p>
 
                <pre>&gt;&gt;&gt; p.roots()
@@ -217,11 +218,11 @@ array([-0.33333333-0.47140452j, -0.33333333+0.47140452j])</pre>
                <p>It isn&#39;t always convenient to explicitly use Polynomial instances, so tuples, lists, arrays, and scalars are automatically cast in the arithmetic operations::     </p>
 
                <pre>&gt;&gt;&gt; p + [1, 2, 3]
-Polynomial([2., 4., 6.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([2., 4., 6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; [1, 2, 3] * p
-Polynomial([ 1.,  4., 10., 12.,  9.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([ 1.,  4., 10., 12.,  9.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p / 2
-Polynomial([0.5, 1. , 1.5], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([0.5, 1. , 1.5], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Polynomials that differ in domain, window, or class can&#39;t be mixed in arithmetic::      </p>
 
                <pre>&gt;&gt;&gt; from numpy.polynomial import Chebyshev as T
@@ -243,7 +244,7 @@ TypeError: Polynomial types differ</pre>
                <p>But different types can be used for substitution. In fact, this is how conversion of Polynomial classes among themselves is done for type, domain, and window casting::      </p>
 
                <pre>&gt;&gt;&gt; p(T([0, 1]))
-Chebyshev([2.5, 2. , 1.5], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Chebyshev([2.5, 2. , 1.5], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Which gives the polynomial <code class='not-implemented'>:None:None:`p`</code> in Chebyshev form. This works because         <span class="tex2jax_process">$T_1(x) = x$</span>
  and substituting         <span class="tex2jax_process">$x$</span>
  for         <span class="tex2jax_process">$x$</span>
@@ -260,22 +261,22 @@ Chebyshev([2.5, 2. , 1.5], domain=[-1.,  1.], window=[-1.,  1.])</pre>
                <pre>&gt;&gt;&gt; from numpy.polynomial import Polynomial as P
 &gt;&gt;&gt; p = P([2, 6])
 &gt;&gt;&gt; p.integ()
-Polynomial([0., 2., 3.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([0., 2., 3.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p.integ(2)
-Polynomial([0., 0., 1., 1.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([0., 0., 1., 1.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>The first example integrates <code class='not-implemented'>:None:None:`p`</code> once, the second example integrates it twice. By default, the lower bound of the integration and the integration constant are 0, but both can be specified.::      </p>
 
                <pre>&gt;&gt;&gt; p.integ(lbnd=-1)
-Polynomial([-1.,  2.,  3.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([-1.,  2.,  3.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p.integ(lbnd=-1, k=1)
-Polynomial([0., 2., 3.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([0., 2., 3.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>In the first case the lower bound of the integration is set to -1 and the integration constant is 0. In the second the constant of integration is set to 1 as well. Differentiation is simpler since the only option is the number of times the polynomial is differentiated::      </p>
 
                <pre>&gt;&gt;&gt; p = P([1, 2, 3])
 &gt;&gt;&gt; p.deriv(1)
-Polynomial([2., 6.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([2., 6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p.deriv(2)
-Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
 
 <h1>Other Polynomial Constructors</h1>
                <p>Constructing polynomials by specifying coefficients is just one way of obtaining a polynomial instance, they may also be created by specifying their roots, by conversion from other polynomial types, and by least squares fits. Fitting is discussed in its own section, the other methods are demonstrated below::      </p>
@@ -284,21 +285,21 @@ Polynomial([6.], domain=[-1.,  1.], window=[-1.,  1.])</pre>
 &gt;&gt;&gt; from numpy.polynomial import Chebyshev as T
 &gt;&gt;&gt; p = P.fromroots([1, 2, 3])
 &gt;&gt;&gt; p
-Polynomial([-6., 11., -6.,  1.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([-6., 11., -6.,  1.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p.convert(kind=T)
-Chebyshev([-9.  , 11.75, -3.  ,  0.25], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Chebyshev([-9.  , 11.75, -3.  ,  0.25], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>The convert method can also convert domain and window::      </p>
 
                <pre>&gt;&gt;&gt; p.convert(kind=T, domain=[0, 1])
-Chebyshev([-2.4375 ,  2.96875, -0.5625 ,  0.03125], domain=[0.,  1.], window=[-1.,  1.])
+Chebyshev([-2.4375 ,  2.96875, -0.5625 ,  0.03125], domain=[0.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; p.convert(kind=P, domain=[0, 1])
-Polynomial([-1.875,  2.875, -1.125,  0.125], domain=[0.,  1.], window=[-1.,  1.])</pre>
+Polynomial([-1.875,  2.875, -1.125,  0.125], domain=[0.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>In numpy versions &gt;= 1.7.0 the <code class='not-implemented'>:None:None:`basis`</code> and <code class='not-implemented'>:None:None:`cast`</code> class methods are also available. The cast method works like the convert method while the basis method returns the basis polynomial of given degree::      </p>
 
                <pre>&gt;&gt;&gt; P.basis(3)
-Polynomial([0., 0., 0., 1.], domain=[-1.,  1.], window=[-1.,  1.])
+Polynomial([0., 0., 0., 1.], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)
 &gt;&gt;&gt; T.cast(p)
-Chebyshev([-9.  , 11.75, -3. ,  0.25], domain=[-1.,  1.], window=[-1.,  1.])</pre>
+Chebyshev([-9.  , 11.75, -3. ,  0.25], domain=[-1.,  1.], window=[-1.,  1.], symbol=&#39;x&#39;)</pre>
                <p>Conversions between types can be useful, but it is <em>not</em> recommended for routine use. The loss of numerical precision in passing from a Chebyshev series of degree 50 to a Polynomial series of the same degree can make the results of numerical evaluation essentially random.</p>
 
 

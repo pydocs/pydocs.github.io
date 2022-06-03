@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.3.0/api/IPython'>8.3.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.3.0/api/IPython">8.3.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.3.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.3.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.3.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.3.0/examples">Examples</a>
+                        <a href="/p/IPython/8.3.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.3.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.3.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _events:&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _callbacks:&#39;&gt;
+           </pre>
+
+
+<h1>IPython Events</h1>
+               <p>Extension code can register callbacks functions which will be called on specific events within the IPython code. You can see the current list of available callbacks, and the parameters that will be passed with each, in the callback prototype functions defined in         <code class='verbatim'>IPython.core.events</code>
+.</p>
+
+               <p>To register callbacks, use         <code class='verbatim'>IPython.core.events.EventManager.register</code>
+. For example::      </p>
+
+               <pre>class VarWatcher(object):
+    def __init__(self, ip):
+        self.shell = ip
+        self.last_x = None
+
+    def pre_execute(self):
+        self.last_x = self.shell.user_ns.get(&#39;x&#39;, None)
+
+    def pre_run_cell(self, info):
+        print(&#39;info.raw_cell =&#39;, info.raw_cell)
+        print(&#39;info.store_history =&#39;, info.store_history)
+        print(&#39;info.silent =&#39;, info.silent)
+        print(&#39;info.shell_futures =&#39;, info.shell_futures)
+        print(&#39;info.cell_id =&#39;, info.cell_id)
+        print(dir(info))
+
+    def post_execute(self):
+        if self.shell.user_ns.get(&#39;x&#39;, None) != self.last_x:
+            print(&#34;x changed!&#34;)
+
+    def post_run_cell(self, result):
+        print(&#39;result.execution_count = &#39;, result.execution_count)
+        print(&#39;result.error_before_exec = &#39;, result.error_before_exec)
+        print(&#39;result.error_in_exec = &#39;, result.error_in_exec)
+        print(&#39;result.info = &#39;, result.info)
+        print(&#39;result.result = &#39;, result.result)
+
+def load_ipython_extension(ip):
+    vw = VarWatcher(ip)
+    ip.events.register(&#39;pre_execute&#39;, vw.pre_execute)
+    ip.events.register(&#39;pre_run_cell&#39;, vw.pre_run_cell)
+    ip.events.register(&#39;post_execute&#39;, vw.post_execute)
+    ip.events.register(&#39;post_run_cell&#39;, vw.post_run_cell)</pre>
+                           <div class='admonition'>
+    <div>versionadded</div>
+        <p>Since IPython 8.3 and ipykernel 6.12.1, the         <code class='verbatim'>info</code>
+ objects in the callback now have a the         <code class='verbatim'>cell_id</code>
+ that will be set to the value sent by the frontened, when those send it.</p>
+
+</div>
+
+
+
+<h1>Events</h1>
+               <p>These are the events IPython will emit. Callbacks will be passed no arguments, unless otherwise specified.</p>
+
+
+<h1>shell_initialized</h1>
+               <pre class='not-implemented'>
+.. code-block:: python
+    def shell_initialized(ipython):
+        ...</pre>
+
+
+               <p>This event is triggered only once, at the end of setting up IPython. Extensions registered to load by default as part of configuration can use this to execute code to finalize setup. Callbacks will be passed the InteractiveShell instance.</p>
+
+
+<h1>pre_run_cell</h1>
+               <p>        <code class='verbatim'>pre_run_cell</code>
+ fires prior to interactive execution (e.g. a cell in a notebook). It can be used to note the state prior to execution, and keep track of changes. An object containing information used for the code execution is provided as an argument.</p>
+
+
+<h1>pre_execute</h1>
+               <p>        <code class='verbatim'>pre_execute</code>
+ is like         <code class='verbatim'>pre_run_cell</code>
+, but is triggered prior to <em>any</em> execution. Sometimes code can be executed by libraries, etc. which skipping the history/display mechanisms, in which cases         <code class='verbatim'>pre_run_cell</code>
+ will not fire.</p>
+
+
+<h1>post_run_cell</h1>
+               <p>        <code class='verbatim'>post_run_cell</code>
+ runs after interactive execution (e.g. a cell in a notebook). It can be used to cleanup or notify or perform operations on any side effects produced during execution. For instance, the inline matplotlib backend uses this event to display any figures created but not explicitly displayed during the course of the cell. The object which will be returned as the execution result is provided as an argument.</p>
+
+
+<h1>post_execute</h1>
+               <p>The same as         <code class='verbatim'>pre_execute</code>
+,         <code class='verbatim'>post_execute</code>
+ is like         <code class='verbatim'>post_run_cell</code>
+, but fires for <em>all</em> executions, not just interactive ones.</p>
+
+               <pre class='not-implemented'>
+.. seealso:: 
+    Module :mod:`IPython.core.hooks`
+      The older &#39;hooks&#39; system allows end users to customise some parts of
+      IPython&#39;s behaviour.
+
+    :doc:`inputtransforms`
+      By registering input transformers that don&#39;t change code, you can monitor
+      what is being executed.</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

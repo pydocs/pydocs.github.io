@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.3.0/api/IPython'>8.3.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.3.0/api/IPython">8.3.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.3.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.3.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.3.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.3.0/examples">Examples</a>
+                        <a href="/p/IPython/8.3.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.3.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.3.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Making simple Python wrapper kernels</h1>
+                           <div class='admonition'>
+    <div>versionadded</div>
+</div>
+
+
+               <p>You can now re-use the kernel machinery in IPython to easily make new kernels. This is useful for languages that have Python bindings, such as <code class='not-implemented'>:None:None:`Octave
+&lt;http://www.gnu.org/software/octave/&gt;`</code> (via <a link href="http://blink1073.github.io/oct2py/" class='external'>Oct2Py</a>), or languages where the REPL can be controlled in a tty using <a link href="https://pexpect.readthedocs.io/en/latest/" class='external'>pexpect</a>, such as bash.</p>
+
+               <pre class='not-implemented'>
+.. seealso:: 
+    `bash_kernel &lt;https://github.com/takluyver/bash_kernel&gt;`_
+      A simple kernel for bash, written using this machinery</pre>
+
+
+
+<h1>Required steps</h1>
+               <p>Subclass         <code class='verbatim'>ipykernel.kernelbase.Kernel</code>
+, and implement the following methods and attributes:</p>
+
+               <pre class='not-implemented'>
+.. class:: MyKernel
+    .. attribute:: implementation
+                   implementation_version
+                   language
+                   language_version
+                   banner
+
+      Information for :ref:`msging_kernel_info` replies. &#39;Implementation&#39; refers
+      to the kernel (e.g. IPython), and &#39;language&#39; refers to the language it
+      interprets (e.g. Python). The &#39;banner&#39; is displayed to the user in console
+      UIs before the first prompt. All of these values are strings.
+
+    .. attribute:: language_info
+
+      Language information for :ref:`msging_kernel_info` replies, in a dictionary.
+      This should contain the key ``mimetype`` with the mimetype of code in the
+      target language (e.g. ``&#39;text/x-python&#39;``), and ``file_extension`` (e.g.
+      ``&#39;py&#39;``).
+      It may also contain keys ``codemirror_mode`` and ``pygments_lexer`` if they
+      need to differ from :attr:`language`.
+
+      Other keys may be added to this later.
+
+    .. method:: do_execute(code, silent, store_history=True, user_expressions=None, allow_stdin=False)
+
+      Execute user code.
+
+      :param str code: The code to be executed.
+      :param bool silent: Whether to display output.
+      :param bool store_history: Whether to record this code in history and
+          increase the execution count. If silent is True, this is implicitly
+          False.
+      :param dict user_expressions: Mapping of names to expressions to evaluate
+          after the code has run. You can ignore this if you need to.
+      :param bool allow_stdin: Whether the frontend can provide input on request
+          (e.g. for Python&#39;s :func:`raw_input`).
+
+      Your method should return a dict containing the fields described in
+      :ref:`execution_results`. To display output, it can send messages
+      using :meth:`~ipykernel.kernelbase.Kernel.send_response`.
+      See :doc:`messaging` for details of the different message types.</pre>
+
+
+               <p>To launch your kernel, add this at the end of your module::      </p>
+
+               <pre>if __name__ == &#39;__main__&#39;:
+    from ipykernel.kernelapp import IPKernelApp
+    IPKernelApp.launch_instance(kernel_class=MyKernel)</pre>
+
+<h1>Example</h1>
+               <p>        <code class='verbatim'>echokernel.py</code>
+ will simply echo any input it&#39;s given to stdout::      </p>
+
+               <pre>from ipykernel.kernelbase import Kernel
+
+class EchoKernel(Kernel):
+    implementation = &#39;Echo&#39;
+    implementation_version = &#39;1.0&#39;
+    language = &#39;no-op&#39;
+    language_version = &#39;0.1&#39;
+    language_info = {&#39;mimetype&#39;: &#39;text/plain&#39;}
+    banner = &#34;Echo kernel - as useful as a parrot&#34;
+
+    def do_execute(self, code, silent, store_history=True, user_expressions=None,
+                   allow_stdin=False):
+        if not silent:
+            stream_content = {&#39;name&#39;: &#39;stdout&#39;, &#39;text&#39;: code}
+            self.send_response(self.iopub_socket, &#39;stream&#39;, stream_content)
+
+        return {&#39;status&#39;: &#39;ok&#39;,
+                # The base class increments the execution count
+                &#39;execution_count&#39;: self.execution_count,
+                &#39;payload&#39;: [],
+                &#39;user_expressions&#39;: {},
+               }
+
+if __name__ == &#39;__main__&#39;:
+    from ipykernel.kernelapp import IPKernelApp
+    IPKernelApp.launch_instance(kernel_class=EchoKernel)</pre>
+               <p>Here&#39;s the Kernel spec         <code class='verbatim'>kernel.json</code>
+ file for this::      </p>
+
+               <pre>{&#34;argv&#34;:[&#34;python&#34;,&#34;-m&#34;,&#34;echokernel&#34;, &#34;-f&#34;, &#34;{connection_file}&#34;],
+ &#34;display_name&#34;:&#34;Echo&#34;
+}</pre>
+
+<h1>Optional steps</h1>
+               <p>You can override a number of other methods to improve the functionality of your kernel. All of these methods should return a dictionary as described in the relevant section of the         <code class='verbatim'>messaging spec &lt;messaging&gt;</code>
+.</p>
+
+               <pre class='not-implemented'>
+.. class:: MyBetterKernel
+    .. method:: do_complete(code, cusor_pos)
+
+      Code completion
+
+      :param str code: The code already present
+      :param int cursor_pos: The position in the code where completion is requested
+
+      .. seealso::
+
+         :ref:`msging_completion` messages
+
+    .. method:: do_inspect(code, cusor_pos, detail_level=0)
+
+      Object introspection
+
+      :param str code: The code
+      :param int cursor_pos: The position in the code where introspection is requested
+      :param int detail_level: 0 or 1 for more or less detail. In IPython, 1 gets
+          the source code.
+
+      .. seealso::
+
+         :ref:`msging_inspection` messages
+
+    .. method:: do_history(hist_access_type, output, raw, session=None, start=None, stop=None, n=None, pattern=None, unique=False)
+
+      History access. Only the relevant parameters for the type of history
+      request concerned will be passed, so your method definition must have defaults
+      for all the arguments shown with defaults here.
+
+      .. seealso::
+
+         :ref:`msging_history` messages
+
+    .. method:: do_is_complete(code)
+
+      Is code entered in a console-like interface complete and ready to execute,
+      or should a continuation prompt be shown?
+
+      :param str code: The code entered so far - possibly multiple lines
+
+      .. seealso::
+
+         :ref:`msging_is_complete` messages
+
+    .. method:: do_shutdown(restart)
+
+      Shutdown the kernel. You only need to handle your own clean up - the kernel
+      machinery will take care of cleaning up its own things before stopping.
+
+      :param bool restart: Whether the kernel will be started again afterwards
+
+      .. seealso::
+
+         :ref:`msging_shutdown` messages</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>
