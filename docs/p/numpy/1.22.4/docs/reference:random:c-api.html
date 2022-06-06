@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>C API for random</h1>
+               <pre class='not-implemented'>
+.. currentmodule:: numpy.random
+    </pre>
+
+
+                           <div class='admonition'>
+    <div>versionadded</div>
+</div>
+
+
+               <p>Access to various distributions below is available via Cython or C-wrapper libraries like CFFI. All the functions accept a         <code class='verbatim'>bitgen_t</code>
+ as their first argument.  To access these from Cython or C, you must link with the         <code class='verbatim'>npyrandom</code>
+ library which is part of the NumPy distribution, located in         <code class='verbatim'>numpy/random/lib</code>
+.</p>
+
+               <pre class='not-implemented'>
+.. c:type:: bitgen_t
+    The :c:type:`bitgen_t` holds the current state of the BitGenerator and
+    pointers to functions that return standard C types while advancing the
+    state.
+
+    .. code-block:: c
+
+        struct bitgen:
+            void *state
+            npy_uint64 (*next_uint64)(void *st) nogil
+            uint32_t (*next_uint32)(void *st) nogil
+            double (*next_double)(void *st) nogil
+            npy_uint64 (*next_raw)(void *st) nogil
+
+        ctypedef bitgen bitgen_t</pre>
+
+
+               <p>See         <code class='verbatim'>extending</code>
+ for examples of using these functions.</p>
+
+               <p>The functions are named with the following conventions:</p>
+
+                          <ul>               <li>               <p>&#34;standard&#34; refers to the reference values for any parameters. For instance   &#34;standard_uniform&#34; means a uniform distribution on the interval         <code class='verbatim'>0.0</code>
+ to           <code class='verbatim'>1.0</code>
+</p>
+
+</li>
+               <li>               <p>&#34;fill&#34; functions will fill the provided         <code class='verbatim'>out</code>
+ with         <code class='verbatim'>cnt</code>
+ values.</p>
+
+</li>
+               <li>               <p>The functions without &#34;standard&#34; in their name require additional parameters   to describe the distributions.</p>
+
+</li>
+               <li>               <p>Functions with         <code class='verbatim'>inv</code>
+ in their name are based on the slower inverse method   instead of a ziggurat lookup algorithm, which is significantly faster. The   non-ziggurat variants are used in corner cases and for legacy compatibility.</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_uniform(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_uniform_fill(bitgen_t* bitgen_state, npy_intp cnt, double *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_exponential(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_exponential_fill(bitgen_t *bitgen_state, npy_intp cnt, double *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_exponential_inv_fill(bitgen_t *bitgen_state, npy_intp cnt, double *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_normal(bitgen_t* bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_normal_fill(bitgen_t *bitgen_state, npy_intp count, double *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_normal_fill_f(bitgen_t *bitgen_state, npy_intp count, float *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_gamma(bitgen_t *bitgen_state, double shape)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: float random_standard_uniform_f(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_uniform_fill_f(bitgen_t* bitgen_state, npy_intp cnt, float *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: float random_standard_exponential_f(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_exponential_fill_f(bitgen_t *bitgen_state, npy_intp cnt, float *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_standard_exponential_inv_fill_f(bitgen_t *bitgen_state, npy_intp cnt, float *out)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: float random_standard_normal_f(bitgen_t* bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: float random_standard_gamma_f(bitgen_t *bitgen_state, float shape)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_normal(bitgen_t *bitgen_state, double loc, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_gamma(bitgen_t *bitgen_state, double shape, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: float random_gamma_f(bitgen_t *bitgen_state, float shape, float scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_exponential(bitgen_t *bitgen_state, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_uniform(bitgen_t *bitgen_state, double lower, double range)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_beta(bitgen_t *bitgen_state, double a, double b)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_chisquare(bitgen_t *bitgen_state, double df)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_f(bitgen_t *bitgen_state, double dfnum, double dfden)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_cauchy(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_pareto(bitgen_t *bitgen_state, double a)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_weibull(bitgen_t *bitgen_state, double a)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_power(bitgen_t *bitgen_state, double a)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_laplace(bitgen_t *bitgen_state, double loc, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_gumbel(bitgen_t *bitgen_state, double loc, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_logistic(bitgen_t *bitgen_state, double loc, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_lognormal(bitgen_t *bitgen_state, double mean, double sigma)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_rayleigh(bitgen_t *bitgen_state, double mode)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_standard_t(bitgen_t *bitgen_state, double df)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_noncentral_chisquare(bitgen_t *bitgen_state, double df, double nonc)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_noncentral_f(bitgen_t *bitgen_state, double dfnum, double dfden, double nonc)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_wald(bitgen_t *bitgen_state, double mean, double scale)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_vonmises(bitgen_t *bitgen_state, double mu, double kappa)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: double random_triangular(bitgen_t *bitgen_state, double left, double mode, double right)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_poisson(bitgen_t *bitgen_state, double lam)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_negative_binomial(bitgen_t *bitgen_state, double n, double p)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:type:: binomial_t
+    .. code-block:: c
+
+        typedef struct s_binomial_t {
+          int has_binomial; /* !=0: following parameters initialized for binomial */
+          double psave;
+          RAND_INT_TYPE nsave;
+          double r;
+          double q;
+          double fm;
+          RAND_INT_TYPE m;
+          double p1;
+          double xm;
+          double xl;
+          double xr;
+          double c;
+          double laml;
+          double lamr;
+          double p2;
+          double p3;
+          double p4;
+        } binomial_t;</pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_binomial(bitgen_t *bitgen_state, double p, npy_int64 n, binomial_t *binomial)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_logseries(bitgen_t *bitgen_state, double p)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_geometric_search(bitgen_t *bitgen_state, double p)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_geometric_inversion(bitgen_t *bitgen_state, double p)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_geometric(bitgen_t *bitgen_state, double p)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_zipf(bitgen_t *bitgen_state, double a)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_hypergeometric(bitgen_t *bitgen_state, npy_int64 good, npy_int64 bad, npy_int64 sample)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_uint64 random_interval(bitgen_t *bitgen_state, npy_uint64 max)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_multinomial(bitgen_t *bitgen_state, npy_int64 n, npy_int64 *mnix, double *pix, npy_intp d, binomial_t *binomial)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: int random_multivariate_hypergeometric_count(bitgen_t *bitgen_state, npy_int64 total, size_t num_colors, npy_int64 *colors, npy_int64 nsample, size_t num_variates, npy_int64 *variates)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: void random_multivariate_hypergeometric_marginals(bitgen_t *bitgen_state, npy_int64 total, size_t num_colors, npy_int64 *colors, npy_int64 nsample, size_t num_variates, npy_int64 *variates)
+    </pre>
+
+
+               <p>Generate a single integer</p>
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_positive_int64(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int32 random_positive_int32(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_int64 random_positive_int(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <pre class='not-implemented'>
+.. c:function:: npy_uint64 random_uint(bitgen_t *bitgen_state)
+    </pre>
+
+
+               <p>Generate random uint64 numbers in closed interval [off, off + rng].</p>
+
+               <pre class='not-implemented'>
+.. c:function:: npy_uint64 random_bounded_uint64(bitgen_t *bitgen_state, npy_uint64 off, npy_uint64 rng, npy_uint64 mask, bool use_masked)
+    </pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Advanced F2PY use cases</h1>
+
+<h2>Adding user-defined functions to F2PY generated modules</h2>
+               <p>User-defined Python C/API functions can be defined inside signature files using         <code class='verbatim'>usercode</code>
+ and         <code class='verbatim'>pymethoddef</code>
+ statements (they must be used inside the         <code class='verbatim'>python module</code>
+ block). For example, the following signature file         <code class='verbatim'>spam.pyf</code>
+</p>
+
+               <pre class='not-implemented'>
+.. include:: ./code/spam.pyf
+    [&#39;literal&#39;, &#39;&#39;]
+    </pre>
+
+
+               <p>wraps the C library function         <code class='verbatim'>system()</code>
+:    </p>
+
+               <pre>f2py -c spam.pyf</pre>
+               <p>In Python this can then be used as:</p>
+
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/results/spam_session.dat
+    [&#39;language&#39;, &#39;python&#39;]
+    </pre>
+
+
+
+<h2>Adding user-defined variables</h2>
+               <p>The following example illustrates how to add user-defined variables to a F2PY generated extension module by modifying the dictionary of a F2PY generated module. Consider the following signature file (compiled with         <code class='verbatim'>f2py -c var.pyf</code>
+):</p>
+
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/var.pyf
+    [&#39;language&#39;, &#39;fortran&#39;]
+    </pre>
+
+
+               <p>Notice that the second         <code class='verbatim'>usercode</code>
+ statement must be defined inside an         <code class='verbatim'>interface</code>
+ block and the module dictionary is available through the variable         <code class='verbatim'>d</code>
+ (see         <code class='verbatim'>varmodule.c</code>
+ generated by         <code class='verbatim'>f2py var.pyf</code>
+ for additional details).</p>
+
+               <p>Usage in Python:</p>
+
+               <pre class='not-implemented'>
+.. literalinclude:: ./code/results/var_session.dat
+    [&#39;language&#39;, &#39;python&#39;]
+    </pre>
+
+
+
+<h2>Dealing with KIND specifiers</h2>
+               <p>Currently, F2PY can handle only         <code class='verbatim'>&lt;type spec&gt;(kind=&lt;kindselector&gt;)</code>
+ declarations where         <code class='verbatim'>&lt;kindselector&gt;</code>
+ is a numeric integer (e.g. 1, 2, 4,...), but not a function call         <code class='verbatim'>KIND(..)</code>
+ or any other expression. F2PY needs to know what would be the corresponding C type and a general solution for that would be too complicated to implement.</p>
+
+               <p>However, F2PY provides a hook to overcome this difficulty, namely, users can define their own &lt;Fortran type&gt; to &lt;C type&gt; maps. For example, if Fortran 90 code contains:      </p>
+
+               <pre>REAL(kind=KIND(0.0D0)) ...</pre>
+               <p>then create a mapping file containing a Python dictionary:      </p>
+
+               <pre>{&#39;real&#39;: {&#39;KIND(0.0D0)&#39;: &#39;double&#39;}}</pre>
+               <p>for instance.</p>
+
+               <p>Use the         <code class='verbatim'>--f2cmap</code>
+ command-line option to pass the file name to F2PY. By default, F2PY assumes file name is         <code class='verbatim'>.f2py_f2cmap</code>
+ in the current working directory.</p>
+
+               <p>More generally, the f2cmap file must contain a dictionary with items:      </p>
+
+               <pre>&lt;Fortran typespec&gt; : {&lt;selector_expr&gt;:&lt;C type&gt;}</pre>
+               <p>that defines mapping between Fortran type:      </p>
+
+               <pre>&lt;Fortran typespec&gt;([kind=]&lt;selector_expr&gt;)</pre>
+               <p>and the corresponding &lt;C type&gt;. The &lt;C type&gt; can be one of the following:      </p>
+
+               <pre>double
+float
+long_double
+char
+signed_char
+unsigned_char
+short
+unsigned_short
+int
+long
+long_long
+unsigned
+complex_float
+complex_double
+complex_long_double
+string</pre>
+               <p>For more information, see the F2Py source code         <code class='verbatim'>numpy/f2py/capi_maps.py</code>
+.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

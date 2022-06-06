@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _how-to-io:&#39;&gt;
+           </pre>
+
+
+<h1>Reading and writing files</h1>
+               <p>This page tackles common applications; for the full collection of I/O routines, see         <code class='verbatim'>routines.io</code>
+.</p>
+
+
+<h2>Reading text and CSV_ files</h2>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _CSV: https://en.wikipedia.org/wiki/Comma-separated_values&#39;&gt;
+           </pre>
+
+
+<h3>With no missing values</h3>
+               <p>Use         <code class='verbatim'>numpy.loadtxt</code>
+.</p>
+
+
+<h3>With missing values</h3>
+               <p>Use         <code class='verbatim'>numpy.genfromtxt</code>
+.</p>
+
+               <p>        <code class='verbatim'>numpy.genfromtxt</code>
+ will either</p>
+
+                           <blockquote>           <ul>               <li>               <p>return a         <code class='verbatim'>masked array&lt;maskedarray.generic&gt;</code>
+     <strong>masking out missing values</strong> (if         <code class='verbatim'>usemask=True</code>
+), or</p>
+
+</li>
+               <li>               <p><strong>fill in the missing value</strong> with the value specified in             <code class='verbatim'>filling_values</code>
+ (default is         <code class='verbatim'>np.nan</code>
+ for float, -1 for int).</p>
+
+</li>
+            </ul>
+</blockquote>
+
+
+<h4>With non-whitespace delimiters</h4>
+               <pre>&gt;&gt;&gt; print(open(&#34;csv.txt&#34;).read())  # doctest: +SKIP
+1, 2, 3
+4,, 6
+7, 8, 9</pre>
+
+<h5>Masked-array output</h5>
+               <pre>&gt;&gt;&gt; np.genfromtxt(&#34;csv.txt&#34;, delimiter=&#34;,&#34;, usemask=True)  # doctest: +SKIP
+masked_array(
+  data=[[1.0, 2.0, 3.0],
+        [4.0, --, 6.0],
+        [7.0, 8.0, 9.0]],
+  mask=[[False, False, False],
+        [False,  True, False],
+        [False, False, False]],
+  fill_value=1e+20)</pre>
+
+<h5>Array output</h5>
+               <pre>&gt;&gt;&gt; np.genfromtxt(&#34;csv.txt&#34;, delimiter=&#34;,&#34;)  # doctest: +SKIP
+array([[ 1.,  2.,  3.],
+       [ 4., nan,  6.],
+       [ 7.,  8.,  9.]])</pre>
+
+<h5>Array output, specified fill-in value</h5>
+               <pre>&gt;&gt;&gt; np.genfromtxt(&#34;csv.txt&#34;, delimiter=&#34;,&#34;, dtype=np.int8, filling_values=99)  # doctest: +SKIP
+array([[ 1,  2,  3],
+       [ 4, 99,  6],
+       [ 7,  8,  9]], dtype=int8)</pre>
+
+<h4>Whitespace-delimited</h4>
+               <p>        <code class='verbatim'>numpy.genfromtxt</code>
+ can also parse whitespace-delimited data files that have missing values if</p>
+
+                          <ul>               <li>               <p><strong>Each field has a fixed width</strong>: Use the width as the <code class='not-implemented'>:None:None:`delimiter`</code> argument.   ::</p>
+
+                           <blockquote><p># File with width=4. The data does not have to be justified (for example,     # the 2 in row 1), the last column can be less than width (for example, the 6     # in row 2), and no delimiting character is required (for instance 8888 and 9     # in row 3)</p>
+<pre>&gt;&gt;&gt; f = open(&#34;fixedwidth.txt&#34;).read()  # doctest: +SKIP
+&gt;&gt;&gt; print(f)  # doctest: +SKIP
+1   2      3
+44      6
+7   88889</pre><p># Showing spaces as ^     &gt;&gt;&gt; print(f.replace(&#34; &#34;,&#34;^&#34;))  # doctest: +SKIP     1^^^2^^^^^^3     44^^^^^^6     7^^^88889</p>
+<pre>&gt;&gt;&gt; np.genfromtxt(&#34;fixedwidth.txt&#34;, delimiter=4)  # doctest: +SKIP
+array([[1.000e+00, 2.000e+00, 3.000e+00],
+       [4.400e+01,       nan, 6.000e+00],
+       [7.000e+00, 8.888e+03, 9.000e+00]])</pre></blockquote>
+
+</li>
+               <li>               <p><strong>A special value (e.g. &#34;x&#34;) indicates a missing field</strong>: Use it as the   <code class='not-implemented'>:None:None:`missing_values`</code> argument.   ::</p>
+
+                           <blockquote><pre>&gt;&gt;&gt; print(open(&#34;nan.txt&#34;).read())  # doctest: +SKIP
+1 2 3
+44 x 6
+7  8888 9</pre><pre>&gt;&gt;&gt; np.genfromtxt(&#34;nan.txt&#34;, missing_values=&#34;x&#34;)  # doctest: +SKIP
+array([[1.000e+00, 2.000e+00, 3.000e+00],
+       [4.400e+01,       nan, 6.000e+00],
+       [7.000e+00, 8.888e+03, 9.000e+00]])</pre></blockquote>
+
+</li>
+               <li>               <p><strong>You want to skip the rows with missing values</strong>: Set   <code class='not-implemented'>:None:None:`invalid_raise=False`</code>.   ::</p>
+
+                           <blockquote><pre>&gt;&gt;&gt; print(open(&#34;skip.txt&#34;).read())  # doctest: +SKIP
+1 2   3
+44    6
+7 888 9</pre><pre>&gt;&gt;&gt; np.genfromtxt(&#34;skip.txt&#34;, invalid_raise=False)  # doctest: +SKIP
+__main__:1: ConversionWarning: Some errors were detected !
+    Line #2 (got 2 columns instead of 3)
+array([[  1.,   2.,   3.],
+       [  7., 888.,   9.]])</pre></blockquote>
+
+</li>
+               <li>               <p><strong>The delimiter whitespace character is different from the whitespace that
+  indicates missing data</strong>. For instance, if columns are delimited by         <code class='verbatim'>\t</code>
+,   then missing data will be recognized if it consists of one   or more spaces.   ::</p>
+
+                           <blockquote><pre>&gt;&gt;&gt; f = open(&#34;tabs.txt&#34;).read()  # doctest: +SKIP
+&gt;&gt;&gt; print(f)  # doctest: +SKIP
+1       2       3
+44              6
+7       888     9</pre><p># Tabs vs. spaces     &gt;&gt;&gt; print(f.replace(&#34;\t&#34;,&#34;^&#34;))  # doctest: +SKIP     1^2^3     44^ ^6     7^888^9</p>
+<pre>&gt;&gt;&gt; np.genfromtxt(&#34;tabs.txt&#34;, delimiter=&#34;\t&#34;, missing_values=&#34; +&#34;)  # doctest: +SKIP
+array([[  1.,   2.,   3.],
+       [ 44.,  nan,   6.],
+       [  7., 888.,   9.]])</pre></blockquote>
+
+</li>
+            </ul>
+
+
+<h2>Read a file in .npy or .npz format</h2>
+               <p>Choices:</p>
+
+                           <blockquote>           <ul>               <li>               <p>Use         <code class='verbatim'>numpy.load</code>
+. It can read files generated by any of             <code class='verbatim'>numpy.save</code>
+,         <code class='verbatim'>numpy.savez</code>
+, or         <code class='verbatim'>numpy.savez_compressed</code>
+.</p>
+
+</li>
+               <li>               <p>Use memory mapping. See <code><a href="/p/numpy/*/api/numpy.lib.format.open_memmap.html" class='exists'>numpy.lib.format.open_memmap</a></code>
+.</p>
+
+</li>
+            </ul>
+</blockquote>
+
+
+<h2>Write to a file to be read back by NumPy</h2>
+
+<h3>Binary</h3>
+               <p>Use         <code class='verbatim'>numpy.save</code>
+, or to store multiple arrays         <code class='verbatim'>numpy.savez</code>
+ or         <code class='verbatim'>numpy.savez_compressed</code>
+.</p>
+
+               <p>For         <code class='verbatim'>security and portability &lt;how-to-io-pickle-file&gt;</code>
+, set         <code class='verbatim'>allow_pickle=False</code>
+ unless the dtype contains Python objects, which requires pickling.</p>
+
+               <p>Masked arrays         <code class='verbatim'>can&#39;t currently be saved &lt;MaskedArray.tofile&gt;</code>
+, nor can other arbitrary array subclasses.</p>
+
+
+<h3>Human-readable</h3>
+               <p>        <code class='verbatim'>numpy.save</code>
+ and         <code class='verbatim'>numpy.savez</code>
+ create binary files. To <strong>write a
+human-readable file</strong>, use         <code class='verbatim'>numpy.savetxt</code>
+. The array can only be 1- or 2-dimensional, and there&#39;s no ` savetxtz` for multiple files.</p>
+
+
+<h3>Large arrays</h3>
+               <p>See         <code class='verbatim'>how-to-io-large-arrays</code>
+.</p>
+
+
+<h2>Read an arbitrarily formatted binary file (&#34;binary blob&#34;)</h2>
+               <p>Use a         <code class='verbatim'>structured array &lt;basics.rec&gt;</code>
+.</p>
+
+               <p><strong>Example:</strong></p>
+
+               <p>The         <code class='verbatim'>.wav</code>
+ file header is a 44-byte block preceding         <code class='verbatim'>data_size</code>
+ bytes of the actual sound data:      </p>
+
+               <pre>chunk_id         &#34;RIFF&#34;
+chunk_size       4-byte unsigned little-endian integer
+format           &#34;WAVE&#34;
+fmt_id           &#34;fmt &#34;
+fmt_size         4-byte unsigned little-endian integer
+audio_fmt        2-byte unsigned little-endian integer
+num_channels     2-byte unsigned little-endian integer
+sample_rate      4-byte unsigned little-endian integer
+byte_rate        4-byte unsigned little-endian integer
+block_align      2-byte unsigned little-endian integer
+bits_per_sample  2-byte unsigned little-endian integer
+data_id          &#34;data&#34;
+data_size        4-byte unsigned little-endian integer</pre>
+               <p>The         <code class='verbatim'>.wav</code>
+ file header as a NumPy structured dtype:      </p>
+
+               <pre>wav_header_dtype = np.dtype([
+    (&#34;chunk_id&#34;, (bytes, 4)), # flexible-sized scalar type, item size 4
+    (&#34;chunk_size&#34;, &#34;&lt;u4&#34;),    # little-endian unsigned 32-bit integer
+    (&#34;format&#34;, &#34;S4&#34;),         # 4-byte string, alternate spelling of (bytes, 4)
+    (&#34;fmt_id&#34;, &#34;S4&#34;),
+    (&#34;fmt_size&#34;, &#34;&lt;u4&#34;),
+    (&#34;audio_fmt&#34;, &#34;&lt;u2&#34;),     #
+    (&#34;num_channels&#34;, &#34;&lt;u2&#34;),  # .. more of the same ...
+    (&#34;sample_rate&#34;, &#34;&lt;u4&#34;),   #
+    (&#34;byte_rate&#34;, &#34;&lt;u4&#34;),
+    (&#34;block_align&#34;, &#34;&lt;u2&#34;),
+    (&#34;bits_per_sample&#34;, &#34;&lt;u2&#34;),
+    (&#34;data_id&#34;, &#34;S4&#34;),
+    (&#34;data_size&#34;, &#34;&lt;u4&#34;),
+    #
+    # the sound data itself cannot be represented here:
+    # it does not have a fixed size
+])
+
+header = np.fromfile(f, dtype=wave_header_dtype, count=1)[0]</pre>
+               <p>This         <code class='verbatim'>.wav</code>
+ example is for illustration; to read a         <code class='verbatim'>.wav</code>
+ file in real life, use Python&#39;s built-in module         <code class='verbatim'>wave</code>
+.</p>
+
+               <p>(Adapted from Pauli Virtanen,         <code class='verbatim'>advanced_numpy</code>
+, licensed under <a link href="https://creativecommons.org/licenses/by/4.0/" class='external'>CC BY 4.0</a>.)</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _how-to-io-large-arrays:&#39;&gt;
+           </pre>
+
+
+<h2>Write or read large arrays</h2>
+               <p><strong>Arrays too large to fit in memory</strong> can be treated like ordinary in-memory arrays using memory mapping.</p>
+
+                          <ul>               <li>               <p>Raw array data written with         <code class='verbatim'>numpy.ndarray.tofile</code>
+ or           <code class='verbatim'>numpy.ndarray.tobytes</code>
+ can be read with         <code class='verbatim'>numpy.memmap</code>
+:        </p>
+
+               <pre>array = numpy.memmap(&#34;mydata/myarray.arr&#34;, mode=&#34;r&#34;, dtype=np.int16, shape=(1024, 1024))</pre>
+</li>
+               <li>               <p>Files output by         <code class='verbatim'>numpy.save</code>
+ (that is, using the numpy format) can be read   using         <code class='verbatim'>numpy.load</code>
+ with the         <code class='verbatim'>mmap_mode</code>
+ keyword argument:        </p>
+
+               <pre>large_array[some_slice] = np.load(&#34;path/to/small_array&#34;, mmap_mode=&#34;r&#34;)</pre>
+</li>
+            </ul>
+
+               <p>Memory mapping lacks features like data chunking and compression; more full-featured formats and libraries usable with NumPy include:</p>
+
+                          <ul>               <li>               <p><strong>HDF5</strong>: <a link href="https://www.h5py.org/" class='external'>h5py</a> or <a link href="https://www.pytables.org/" class='external'>PyTables</a>.</p>
+
+</li>
+               <li>               <p><strong>Zarr</strong>: <a link href="https://zarr.readthedocs.io/en/stable/tutorial.html#reading-and-writing-data" class='external'>here</a>.</p>
+
+</li>
+               <li>               <p><strong>NetCDF</strong>:         <code class='verbatim'>scipy.io.netcdf_file</code>
+.</p>
+
+</li>
+            </ul>
+
+               <p>For tradeoffs among memmap, Zarr, and HDF5, see <a link href="https://pythonspeed.com/articles/mmap-vs-zarr-hdf5/" class='external'>pythonspeed.com</a>.</p>
+
+
+<h2>Write files for reading by other (non-NumPy) tools</h2>
+               <p>Formats for <strong>exchanging data</strong> with other tools include HDF5, Zarr, and NetCDF (see         <code class='verbatim'>how-to-io-large-arrays</code>
+).</p>
+
+
+<h2>Write or read a JSON file</h2>
+               <p>NumPy arrays are <strong>not</strong> directly <a link href="https://github.com/numpy/numpy/issues/12481" class='external'>JSON serializable</a>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _how-to-io-pickle-file:&#39;&gt;
+           </pre>
+
+
+<h2>Save/restore using a pickle file</h2>
+               <p>Avoid when possible;         <code class='verbatim'>pickles &lt;python:library/pickle&gt;</code>
+ are not secure against erroneous or maliciously constructed data.</p>
+
+               <p>Use         <code class='verbatim'>numpy.save</code>
+ and         <code class='verbatim'>numpy.load</code>
+.  Set         <code class='verbatim'>allow_pickle=False</code>
+, unless the array dtype includes Python objects, in which case pickling is required.</p>
+
+
+<h2>Convert from a pandas DataFrame to a NumPy array</h2>
+               <p>See         <code class='verbatim'>pandas.DataFrame.to_numpy</code>
+.</p>
+
+
+<h2>Save/restore using `~numpy.ndarray.tofile` and `~numpy.fromfile`</h2>
+               <p>In general, prefer         <code class='verbatim'>numpy.save</code>
+ and         <code class='verbatim'>numpy.load</code>
+.</p>
+
+               <p>        <code class='verbatim'>numpy.ndarray.tofile</code>
+ and         <code class='verbatim'>numpy.fromfile</code>
+ lose information on endianness and precision and so are unsuitable for anything but scratch storage.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

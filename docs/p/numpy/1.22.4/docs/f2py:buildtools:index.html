@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _f2py-bldsys:&#39;&gt;
+           </pre>
+
+
+<h1>F2PY and Build Systems</h1>
+               <p>In this section we will cover the various popular build systems and their usage with         <code class='verbatim'>f2py</code>
+.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p><strong>As of November 2021</strong></p>
+
+        <p>The default build system for         <code class='verbatim'>F2PY</code>
+ has traditionally been the through the enhanced         <code class='verbatim'>numpy.distutils</code>
+ module. This module is based on         <code class='verbatim'>distutils</code>
+ which will be removed in         <code class='verbatim'>Python 3.12.0</code>
+ in <strong>October 2023</strong>;         <code class='verbatim'>setuptools</code>
+ does not have support for Fortran or         <code class='verbatim'>F2PY</code>
+ and it is unclear if it will be supported in the future. Alternative methods are thus increasingly more important.</p>
+
+</div>
+
+
+
+<h2>Basic Concepts</h2>
+               <p>Building an extension module which includes Python and Fortran consists of:</p>
+
+                          <ul>               <li>               <p>Fortran source(s)</p>
+
+</li>
+               <li>               <p>One or more generated files from         <code class='verbatim'>f2py</code>
+</p>
+
+                          <ul>               <li>               <p>A         <code class='verbatim'>C</code>
+ wrapper file is always created</p>
+
+</li>
+               <li>               <p>Code with modules require an additional         <code class='verbatim'>.f90</code>
+ wrapper</p>
+
+</li>
+               <li>               <p>Code with functions generate an additional         <code class='verbatim'>.f</code>
+ wrapper</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>        <code class='verbatim'>fortranobject.{c,h}</code>
+</p>
+
+                          <ul>               <li>               <p>Distributed with         <code class='verbatim'>numpy</code>
+</p>
+
+</li>
+               <li>               <p>Can be queried via         <code class='verbatim'>python -c &#34;import numpy.f2py; print(numpy.f2py.get_include())&#34;</code>
+</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>NumPy headers</p>
+
+                          <ul>               <li>               <p>Can be queried via         <code class='verbatim'>python -c &#34;import numpy; print(numpy.get_include())&#34;</code>
+</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Python libraries and development headers</p>
+
+</li>
+            </ul>
+
+               <p>Broadly speaking there are three cases which arise when considering the outputs of         <code class='verbatim'>f2py</code>
+:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>Fortran 77 programs</p>
+</dt>
+               <dd>           <ul>               <li>               <p>Input file         <code class='verbatim'>blah.f</code>
+</p>
+
+</li>
+               <li>               <p>Generates</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>blahmodule.c</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>blah-f2pywrappers.f</code>
+</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+<p>When no         <code class='verbatim'>COMMON</code>
+ blocks are present only a         <code class='verbatim'>C</code>
+ wrapper file is generated.    Wrappers are also generated to rewrite assumed shape arrays as automatic    arrays.</p>
+</dd>
+               <dt><p>Fortran 90 programs</p>
+</dt>
+               <dd>           <ul>               <li>               <p>Input file         <code class='verbatim'>blah.f90</code>
+</p>
+
+</li>
+               <li>               <p>Generates:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>blahmodule.c</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>blah-f2pywrappers.f</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>blah-f2pywrappers2.f90</code>
+</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+<p>The         <code class='verbatim'>f90</code>
+ wrapper is used to handle code which is subdivided into    modules. The         <code class='verbatim'>f</code>
+ wrapper makes         <code class='verbatim'>subroutines</code>
+ for          <code class='verbatim'>functions</code>
+. It    rewrites assumed shape arrays as automatic arrays.</p>
+</dd>
+               <dt><p>Signature files</p>
+</dt>
+               <dd>           <ul>               <li>               <p>Input file         <code class='verbatim'>blah.pyf</code>
+</p>
+
+</li>
+               <li>               <p>Generates:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>blahmodule.c</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>blah-f2pywrappers2.f90</code>
+ (occasionally)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>blah-f2pywrappers.f</code>
+ (occasionally)</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+<p>Signature files         <code class='verbatim'>.pyf</code>
+ do not signal their language standard via the file    extension, they may generate the F90 and F77 specific wrappers depending on    their contents; which shifts the burden of checking for generated files onto    the build system.</p>
+</dd>
+           </dl>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>From NumPy         <code class='verbatim'>1.22.4</code>
+ onwards,         <code class='verbatim'>f2py</code>
+ will deterministically generate wrapper files based on the input file Fortran standard (F77 or greater).         <code class='verbatim'>--skip-empty-wrappers</code>
+ can be passed to         <code class='verbatim'>f2py</code>
+ to restore the previous behaviour of only generating wrappers when needed by the input .</p>
+
+</div>
+
+
+               <p>In theory keeping the above requirements in hand, any build system can be adapted to generate         <code class='verbatim'>f2py</code>
+ extension modules. Here we will cover a subset of the more popular systems.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>        <code class='verbatim'>make</code>
+ has no place in a modern multi-language setup, and so is not discussed further.</p>
+
+</div>
+
+
+
+<h2>Build Systems</h2>
+               <pre class='not-implemented'>
+.. toctree:: 
+    [&#39;maxdepth&#39;, &#39;2&#39;]
+    distutils
+    meson
+    cmake
+    skbuild</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`issue 20385`: https://github.com/numpy/numpy/issues/20385&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

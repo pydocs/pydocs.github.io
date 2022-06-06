@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.4.0/api/IPython'>8.4.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.4.0/api/IPython">8.4.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.4.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.4.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.4.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.4.0/examples">Examples</a>
+                        <a href="/p/IPython/8.4.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.4.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.4.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _defining_magics:&#39;&gt;
+           </pre>
+
+
+<h1>Defining custom magics</h1>
+               <p>There are two main ways to define your own magic functions: from standalone functions and by inheriting from a base class provided by IPython:         <code class='verbatim'>IPython.core.magic.Magics</code>
+. Below we show code you can place in a file that you load from your configuration, such as any file in the         <code class='verbatim'>startup</code>
+ subdirectory of your default IPython profile.</p>
+
+               <p>First, let us see the simplest case. The following shows how to create a line magic, a cell one and one that works in both modes, using just plain functions:</p>
+
+               <pre class='not-implemented'>
+.. sourcecode:: python
+    from IPython.core.magic import (register_line_magic, register_cell_magic,
+                                    register_line_cell_magic)
+
+    @register_line_magic
+    def lmagic(line):
+        &#34;my line magic&#34;
+        return line
+
+    @register_cell_magic
+    def cmagic(line, cell):
+        &#34;my cell magic&#34;
+        return line, cell
+
+    @register_line_cell_magic
+    def lcmagic(line, cell=None):
+        &#34;Magic that works both as %lcmagic and as %%lcmagic&#34;
+        if cell is None:
+            print(&#34;Called as line magic&#34;)
+            return line
+        else:
+            print(&#34;Called as cell magic&#34;)
+            return line, cell
+
+    # In an interactive session, we need to delete these to avoid
+    # name conflicts for automagic to work on line magics.
+    del lmagic, lcmagic</pre>
+
+
+               <p>You can also create magics of all three kinds by inheriting from the         <code class='verbatim'>IPython.core.magic.Magics</code>
+ class.  This lets you create magics that can potentially hold state in between calls, and that have full access to the main IPython object:</p>
+
+               <pre class='not-implemented'>
+.. sourcecode:: python
+    # This code can be put in any Python module, it does not require IPython
+    # itself to be running already.  It only creates the magics subclass but
+    # doesn&#39;t instantiate it yet.
+    from __future__ import print_function
+    from IPython.core.magic import (Magics, magics_class, line_magic,
+                                    cell_magic, line_cell_magic)
+
+    # The class MUST call this class decorator at creation time
+    @magics_class
+    class MyMagics(Magics):
+
+        @line_magic
+        def lmagic(self, line):
+            &#34;my line magic&#34;
+            print(&#34;Full access to the main IPython object:&#34;, self.shell)
+            print(&#34;Variables in the user namespace:&#34;, list(self.shell.user_ns.keys()))
+            return line
+
+        @cell_magic
+        def cmagic(self, line, cell):
+            &#34;my cell magic&#34;
+            return line, cell
+
+        @line_cell_magic
+        def lcmagic(self, line, cell=None):
+            &#34;Magic that works both as %lcmagic and as %%lcmagic&#34;
+            if cell is None:
+                print(&#34;Called as line magic&#34;)
+                return line
+            else:
+                print(&#34;Called as cell magic&#34;)
+                return line, cell
+
+
+    # In order to actually use these magics, you must register them with a
+    # running IPython.
+
+    def load_ipython_extension(ipython):
+        &#34;&#34;&#34;
+        Any module file that define a function named `load_ipython_extension`
+        can be loaded via `%load_ext module.path` or be configured to be
+        autoloaded by IPython at startup time.
+        &#34;&#34;&#34;
+        # You can register the class itself without instantiating it.  IPython will
+        # call the default constructor on it.
+        ipython.register_magics(MyMagics)</pre>
+
+
+               <p>If you want to create a class with a different constructor that holds additional state, then you should always call the parent constructor and instantiate the class yourself before registration:</p>
+
+               <pre class='not-implemented'>
+.. sourcecode:: python
+    @magics_class
+    class StatefulMagics(Magics):
+        &#34;Magics that hold additional state&#34;
+
+        def __init__(self, shell, data):
+            # You must call the parent constructor
+            super(StatefulMagics, self).__init__(shell)
+            self.data = data
+
+        # etc...
+
+    def load_ipython_extension(ipython):
+        &#34;&#34;&#34;
+        Any module file that define a function named `load_ipython_extension`
+        can be loaded via `%load_ext module.path` or be configured to be
+        autoloaded by IPython at startup time.
+        &#34;&#34;&#34;
+        # This class must then be registered with a manually created instance,
+        # since its constructor has different arguments from the default:
+        magics = StatefulMagics(ipython, some_data)
+        ipython.register_magics(magics)</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>In early IPython versions 0.12 and before the line magics were created using a <code class='not-implemented'>:None:func:`define_magic`</code> API function.  This API has been replaced with the above in IPython 0.13 and then completely removed in IPython 5.  Maintainers of IPython extensions that still use the <code class='not-implemented'>:None:func:`define_magic`</code> function are advised to adjust their code for the current API.</p>
+
+</div>
+
+
+
+<h1>Accessing user namespace and local scope</h1>
+               <p>When creating line magics, you may need to access surrounding scope  to get user variables (e.g when called inside functions). IPython provide the         <code class='verbatim'>@needs_local_scope</code>
+ decorator that can be imported from         <code class='verbatim'>IPython.core.magics</code>
+. When decorated with         <code class='verbatim'>@needs_local_scope</code>
+ a magic will be passed         <code class='verbatim'>local_ns</code>
+ as an argument. As a convenience         <code class='verbatim'>@needs_local_scope</code>
+ can also be applied to cell magics even if cell magics cannot appear at local scope context.</p>
+
+
+<h1>Complete Example</h1>
+               <p>Here is a full example of a magic package. You can distribute magics using setuptools, distutils, or any other distribution tools like <code class='not-implemented'>:None:None:`flit
+&lt;https://flit.readthedocs.io&gt;`</code> for pure Python packages.</p>
+
+               <p>When distributing magics as part of a package, recommended best practice is to execute the registration inside the <code class='not-implemented'>:None:None:`load_ipython_extension`</code> as demonstrated in the example below, instead of directly in the module (as in the initial example with the         <code class='verbatim'>@register_*</code>
+ decorators). This means a user will need to explicitly choose to load your magic with         <code class='verbatim'>%load_ext</code>
+. instead implicitly getting it when importing the module. This is particularly relevant if loading your magic has  side effects, if it is slow to load, or if it might override another magic with the same name.</p>
+
+               <pre class='not-implemented'>
+.. sourcecode:: bash
+    .
+    ├── example_magic
+    │   ├── __init__.py
+    │   └── abracadabra.py
+    └── setup.py</pre>
+
+
+               <pre class='not-implemented'>
+.. sourcecode:: bash
+    $ cat example_magic/__init__.py
+    &#34;&#34;&#34;An example magic&#34;&#34;&#34;
+    __version__ = &#39;0.0.1&#39;
+
+    from .abracadabra import Abracadabra
+
+    def load_ipython_extension(ipython):
+        ipython.register_magics(Abracadabra)</pre>
+
+
+               <pre class='not-implemented'>
+.. sourcecode:: bash
+    $ cat example_magic/abracadabra.py
+    from IPython.core.magic import (Magics, magics_class, line_magic, cell_magic)
+
+    @magics_class
+    class Abracadabra(Magics):
+
+        @line_magic
+        def abra(self, line):
+            return line
+
+        @cell_magic
+        def cadabra(self, line, cell):
+            return line, cell</pre>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

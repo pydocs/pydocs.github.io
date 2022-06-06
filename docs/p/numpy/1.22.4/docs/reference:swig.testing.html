@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Testing the numpy.i Typemaps</h1>
+
+<h2>Introduction</h2>
+               <p>Writing tests for the         <code class='verbatim'>numpy.i</code>
+ <a link href="http://www.swig.org" class='external'>SWIG</a> interface file is a combinatorial headache.  At present, 12 different data types are supported, each with 74 different argument signatures, for a total of 888 typemaps supported &#34;out of the box&#34;.  Each of these typemaps, in turn, might require several unit tests in order to verify expected behavior for both proper and improper inputs.  Currently, this results in more than 1,000 individual unit tests executed when         <code class='verbatim'>make test</code>
+ is run in the         <code class='verbatim'>numpy/tools/swig</code>
+ subdirectory.</p>
+
+               <p>To facilitate this many similar unit tests, some high-level programming techniques are employed, including C and <code class='not-implemented'>:None:None:`SWIG`</code> macros, as well as Python inheritance.  The purpose of this document is to describe the testing infrastructure employed to verify that the         <code class='verbatim'>numpy.i</code>
+ typemaps are working as expected.</p>
+
+
+<h2>Testing Organization</h2>
+               <p>There are three independent testing frameworks supported, for one-, two-, and three-dimensional arrays respectively.  For one-dimensional arrays, there are two C++ files, a header and a source, named:      </p>
+
+               <pre>Vector.h
+Vector.cxx</pre>
+               <p>that contain prototypes and code for a variety of functions that have one-dimensional arrays as function arguments.  The file:      </p>
+
+               <pre>Vector.i</pre>
+               <p>is a <code class='not-implemented'>:None:None:`SWIG`</code> interface file that defines a python module         <code class='verbatim'>Vector</code>
+ that wraps the functions in         <code class='verbatim'>Vector.h</code>
+ while utilizing the typemaps in         <code class='verbatim'>numpy.i</code>
+ to correctly handle the C arrays.</p>
+
+               <p>The         <code class='verbatim'>Makefile</code>
+ calls         <code class='verbatim'>swig</code>
+ to generate         <code class='verbatim'>Vector.py</code>
+ and         <code class='verbatim'>Vector_wrap.cxx</code>
+, and also executes the         <code class='verbatim'>setup.py</code>
+ script that compiles         <code class='verbatim'>Vector_wrap.cxx</code>
+ and links together the extension module         <code class='verbatim'>_Vector.so</code>
+ or         <code class='verbatim'>_Vector.dylib</code>
+, depending on the platform.  This extension module and the proxy file         <code class='verbatim'>Vector.py</code>
+ are both placed in a subdirectory under the         <code class='verbatim'>build</code>
+ directory.</p>
+
+               <p>The actual testing takes place with a Python script named:      </p>
+
+               <pre>testVector.py</pre>
+               <p>that uses the standard Python library module         <code class='verbatim'>unittest</code>
+, which performs several tests of each function defined in         <code class='verbatim'>Vector.h</code>
+ for each data type supported.</p>
+
+               <p>Two-dimensional arrays are tested in exactly the same manner.  The above description applies, but with         <code class='verbatim'>Matrix</code>
+ substituted for         <code class='verbatim'>Vector</code>
+.  For three-dimensional tests, substitute         <code class='verbatim'>Tensor</code>
+ for         <code class='verbatim'>Vector</code>
+.  For four-dimensional tests, substitute         <code class='verbatim'>SuperTensor</code>
+ for         <code class='verbatim'>Vector</code>
+. For flat in-place array tests, substitute         <code class='verbatim'>Flat</code>
+ for         <code class='verbatim'>Vector</code>
+. For the descriptions that follow, we will reference the         <code class='verbatim'>Vector</code>
+ tests, but the same information applies to         <code class='verbatim'>Matrix</code>
+,         <code class='verbatim'>Tensor</code>
+ and         <code class='verbatim'>SuperTensor</code>
+ tests.</p>
+
+               <p>The command         <code class='verbatim'>make test</code>
+ will ensure that all of the test software is built and then run all three test scripts.</p>
+
+
+<h2>Testing Header Files</h2>
+               <p>        <code class='verbatim'>Vector.h</code>
+ is a C++ header file that defines a C macro called         <code class='verbatim'>TEST_FUNC_PROTOS</code>
+ that takes two arguments:         <code class='verbatim'>TYPE</code>
+, which is a data type name such as         <code class='verbatim'>unsigned int</code>
+; and         <code class='verbatim'>SNAME</code>
+, which is a short name for the same data type with no spaces, e.g.         <code class='verbatim'>uint</code>
+.  This macro defines several function prototypes that have the prefix         <code class='verbatim'>SNAME</code>
+ and have at least one argument that is an array of type         <code class='verbatim'>TYPE</code>
+.  Those functions that have return arguments return a         <code class='verbatim'>TYPE</code>
+ value.</p>
+
+               <p>        <code class='verbatim'>TEST_FUNC_PROTOS</code>
+ is then implemented for all of the data types supported by         <code class='verbatim'>numpy.i</code>
+:</p>
+
+                           <blockquote>           <ul>               <li>               <p>        <code class='verbatim'>signed char</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned char</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>short</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned short</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>int</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned int</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>long long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>unsigned long long</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>float</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>double</code>
+</p>
+
+</li>
+            </ul>
+</blockquote>
+
+
+<h2>Testing Source Files</h2>
+               <p>        <code class='verbatim'>Vector.cxx</code>
+ is a C++ source file that implements compilable code for each of the function prototypes specified in         <code class='verbatim'>Vector.h</code>
+.  It defines a C macro         <code class='verbatim'>TEST_FUNCS</code>
+ that has the same arguments and works in the same way as         <code class='verbatim'>TEST_FUNC_PROTOS</code>
+ does in         <code class='verbatim'>Vector.h</code>
+.         <code class='verbatim'>TEST_FUNCS</code>
+ is implemented for each of the 12 data types as above.</p>
+
+
+<h2>Testing SWIG Interface Files</h2>
+               <p>        <code class='verbatim'>Vector.i</code>
+ is a <code class='not-implemented'>:None:None:`SWIG`</code> interface file that defines python module         <code class='verbatim'>Vector</code>
+.  It follows the conventions for using         <code class='verbatim'>numpy.i</code>
+ as described in this chapter.  It defines a <code class='not-implemented'>:None:None:`SWIG`</code> macro         <code class='verbatim'>%apply_numpy_typemaps</code>
+ that has a single argument         <code class='verbatim'>TYPE</code>
+. It uses the <code class='not-implemented'>:None:None:`SWIG`</code> directive         <code class='verbatim'>%apply</code>
+ to apply the provided typemaps to the argument signatures found in         <code class='verbatim'>Vector.h</code>
+.  This macro is then implemented for all of the data types supported by         <code class='verbatim'>numpy.i</code>
+.  It then does a         <code class='verbatim'>%include &#34;Vector.h&#34;</code>
+ to wrap all of the function prototypes in         <code class='verbatim'>Vector.h</code>
+ using the typemaps in         <code class='verbatim'>numpy.i</code>
+.</p>
+
+
+<h2>Testing Python Scripts</h2>
+               <p>After         <code class='verbatim'>make</code>
+ is used to build the testing extension modules,         <code class='verbatim'>testVector.py</code>
+ can be run to execute the tests.  As with other scripts that use         <code class='verbatim'>unittest</code>
+ to facilitate unit testing,         <code class='verbatim'>testVector.py</code>
+ defines a class that inherits from         <code class='verbatim'>unittest.TestCase</code>
+:      </p>
+
+               <pre>class VectorTestCase(unittest.TestCase):</pre>
+               <p>However, this class is not run directly.  Rather, it serves as a base class to several other python classes, each one specific to a particular data type.  The         <code class='verbatim'>VectorTestCase</code>
+ class stores two strings for typing information:</p>
+
+                           <blockquote><!-- deflist -->
+           <dl>
+               <dt><p><strong>self.typeStr</strong></p>
+</dt>
+               <dd><p>A string that matches one of the         <code class='verbatim'>SNAME</code>
+ prefixes used in               <code class='verbatim'>Vector.h</code>
+ and         <code class='verbatim'>Vector.cxx</code>
+.  For example,         <code class='verbatim'>&#34;double&#34;</code>
+.</p>
+</dd>
+               <dt><p><strong>self.typeCode</strong></p>
+</dt>
+               <dd><p>A short (typically single-character) string that represents a       data type in numpy and corresponds to         <code class='verbatim'>self.typeStr</code>
+.  For       example, if         <code class='verbatim'>self.typeStr</code>
+ is         <code class='verbatim'>&#34;double&#34;</code>
+, then               <code class='verbatim'>self.typeCode</code>
+ should be         <code class='verbatim'>&#34;d&#34;</code>
+.</p>
+</dd>
+           </dl>
+</blockquote>
+
+               <p>Each test defined by the         <code class='verbatim'>VectorTestCase</code>
+ class extracts the python function it is trying to test by accessing the         <code class='verbatim'>Vector</code>
+ module&#39;s dictionary:      </p>
+
+               <pre>length = Vector.__dict__[self.typeStr + &#34;Length&#34;]</pre>
+               <p>In the case of double precision tests, this will return the python function         <code class='verbatim'>Vector.doubleLength</code>
+.</p>
+
+               <p>We then define a new test case class for each supported data type with a short definition such as:      </p>
+
+               <pre>class doubleTestCase(VectorTestCase):
+    def __init__(self, methodName=&#34;runTest&#34;):
+        VectorTestCase.__init__(self, methodName)
+        self.typeStr  = &#34;double&#34;
+        self.typeCode = &#34;d&#34;</pre>
+               <p>Each of these 12 classes is collected into a         <code class='verbatim'>unittest.TestSuite</code>
+, which is then executed.  Errors and failures are summed together and returned as the exit argument.  Any non-zero result indicates that at least one test did not pass.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

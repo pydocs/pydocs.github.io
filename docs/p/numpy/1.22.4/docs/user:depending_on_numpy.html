@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _for-downstream-package-authors:&#39;&gt;
+           </pre>
+
+
+<h1>For downstream package authors</h1>
+               <p>This document aims to explain some best practices for authoring a package that depends on NumPy.</p>
+
+
+<h2>Understanding NumPy&#39;s versioning and API/ABI stability</h2>
+               <p>NumPy uses a standard, <a link href="https://peps.python.org/pep-0440/" class='external'>Pep 440</a> compliant, versioning scheme:         <code class='verbatim'>major.minor.bugfix</code>
+. A <em>major</em> release is highly unusual (NumPy is still at version         <code class='verbatim'>1.xx</code>
+) and if it happens it will likely indicate an ABI break. <em>Minor</em> versions are released regularly, typically every 6 months. Minor versions contain new features, deprecations, and removals of previously deprecated code. <em>Bugfix</em> releases are made even more frequently; they do not contain any new features or deprecations.</p>
+
+               <p>It is important to know that NumPy, like Python itself and most other well known scientific Python projects, does <strong>not</strong> use semantic versioning. Instead, backwards incompatible API changes require deprecation warnings for at least two releases. For more details, see         <code class='verbatim'>NEP23</code>
+.</p>
+
+               <p>NumPy has both a Python API and a C API. The C API can be used directly or via Cython, f2py, or other such tools. If your package uses the C API, then ABI (application binary interface) stability of NumPy is important. NumPy&#39;s ABI is forward but not backward compatible. This means: binaries compiled against a given version of NumPy will still run correctly with newer NumPy versions, but not with older versions.</p>
+
+
+<h2>Testing against the NumPy main branch or pre-releases</h2>
+               <p>For large, actively maintained packages that depend on NumPy, we recommend testing against the development version of NumPy in CI. To make this easy, nightly builds are provided as wheels at https://anaconda.org/scipy-wheels-nightly/. This helps detect regressions in NumPy that need fixing before the next NumPy release.  Furthermore, we recommend to raise errors on warnings in CI for this job, either all warnings or otherwise at least         <code class='verbatim'>DeprecationWarning</code>
+ and         <code class='verbatim'>FutureWarning</code>
+. This gives you an early warning about changes in NumPy to adapt your code.</p>
+
+
+<h2>Adding a dependency on NumPy</h2>
+
+<h3>Build-time dependency</h3>
+               <p>If a package either uses the NumPy C API directly or it uses some other tool that depends on it like Cython or Pythran, NumPy is a <em>build-time</em> dependency of the package. Because the NumPy ABI is only forward compatible, you must build your own binaries (wheels or other package formats) against the lowest NumPy version that you support (or an even older version).</p>
+
+               <p>Picking the correct NumPy version to build against for each Python version and platform can get complicated. There are a couple of ways to do this. Build-time dependencies are specified in         <code class='verbatim'>pyproject.toml</code>
+ (see PEP 517), which is the file used to build wheels by PEP 517 compliant tools (e.g., when using         <code class='verbatim'>pip wheel</code>
+).</p>
+
+               <p>You can specify everything manually in         <code class='verbatim'>pyproject.toml</code>
+, or you can instead rely on the <a link href="https://github.com/scipy/oldest-supported-numpy/" class='external'>oldest-supported-numpy</a> metapackage.         <code class='verbatim'>oldest-supported-numpy</code>
+ will specify the correct NumPy version at build time for wheels, taking into account Python version, Python implementation (CPython or PyPy), operating system and hardware platform. It will specify the oldest NumPy version that supports that combination of characteristics.  Note: for platforms for which NumPy provides wheels on PyPI, it will be the first version with wheels (even if some older NumPy version happens to build).</p>
+
+               <p>For conda-forge it&#39;s a little less complicated: there&#39;s dedicated handling for NumPy in build-time and runtime dependencies, so typically this is enough (see <a link href="https://conda-forge.org/docs/maintainer/knowledge_base.html#building-against-numpy" class='external'>here</a> for docs):      </p>
+
+               <pre>host:
+  - numpy
+run:
+  - {{ pin_compatible(&#39;numpy&#39;) }}</pre>
+                           <div class='admonition'>
+    <div>note</div>
+        <p>        <code class='verbatim'>pip</code>
+ has         <code class='verbatim'>--no-use-pep517</code>
+ and         <code class='verbatim'>--no-build-isolation</code>
+ flags that may ignore         <code class='verbatim'>pyproject.toml</code>
+ or treat it differently - if users use those flags, they are responsible for installing the correct build dependencies themselves.</p>
+
+        <p>        <code class='verbatim'>conda</code>
+ will always use         <code class='verbatim'>-no-build-isolation</code>
+; dependencies for conda builds are given in the conda recipe (        <code class='verbatim'>meta.yaml</code>
+), the ones in         <code class='verbatim'>pyproject.toml</code>
+ have no effect.</p>
+
+        <p>Please do not use         <code class='verbatim'>setup_requires</code>
+ (it is deprecated and may invoke         <code class='verbatim'>easy_install</code>
+).</p>
+
+</div>
+
+
+               <p>Because for NumPy you have to care about ABI compatibility, you specify the version with         <code class='verbatim'>==</code>
+ to the lowest supported version. For your other build dependencies you can probably be looser, however it&#39;s still important to set lower and upper bounds for each dependency. It&#39;s fine to specify either a range or a specific version for a dependency like         <code class='verbatim'>wheel</code>
+ or         <code class='verbatim'>setuptools</code>
+. It&#39;s recommended to set the upper bound of the range to the latest already released version of         <code class='verbatim'>wheel</code>
+ and         <code class='verbatim'>setuptools</code>
+ - this prevents future releases from breaking your packages on PyPI.</p>
+
+
+<h3>Runtime dependency &amp; version ranges</h3>
+               <p>NumPy itself and many core scientific Python packages have agreed on a schedule for dropping support for old Python and NumPy versions:         <code class='verbatim'>NEP29</code>
+. We recommend all packages depending on NumPy to follow the recommendations in NEP 29.</p>
+
+               <p>For <em>run-time dependencies</em>, specify version bounds using         <code class='verbatim'>install_requires</code>
+ in         <code class='verbatim'>setup.py</code>
+ (assuming you use         <code class='verbatim'>numpy.distutils</code>
+ or         <code class='verbatim'>setuptools</code>
+ to build).</p>
+
+               <p>Most libraries that rely on NumPy will not need to set an upper version bound: NumPy is careful to preserve backward-compatibility.</p>
+
+               <p>That said, if you are (a) a project that is guaranteed to release frequently, (b) use a large part of NumPy&#39;s API surface, and (c) is worried that changes in NumPy may break your code, you can set an upper bound of         <code class='verbatim'>&lt;MAJOR.MINOR + N</code>
+ with N no less than 3, and         <code class='verbatim'>MAJOR.MINOR</code>
+ being the current release of NumPy . If you use the NumPy C API (directly or via Cython), you can also pin the current major version to prevent ABI breakage. Note that setting an upper bound on NumPy may <code class='not-implemented'>:None:None:`affect the ability of your library to be installed
+alongside other, newer packages
+&lt;https://iscinumpy.dev/post/bound-version-constraints/&gt;`</code>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;footnote&#39; &#39;.. [*] The reason for setting ``N=3`` is that NumPy will, on the\n       rare occasion where it makes breaking changes, raise warnings\n       for at least two releases. (NumPy releases about once every six\n       months, so this translates to a window of at least a year;\n       hence the subsequent requirement that your project releases at\n       least on that cadence.)&#39;&gt;
+           </pre>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>SciPy has more documentation on how it builds wheels and deals with its build-time and runtime dependencies <code class='not-implemented'>:None:None:`here &lt;https://scipy.github.io/devdocs/dev/core-dev/index.html#distributing&gt;`</code>.</p>
+
+        <p>NumPy and SciPy wheel build CI may also be useful as a reference, it can be found <code class='not-implemented'>:None:None:`here for NumPy &lt;https://github.com/MacPython/numpy-wheels&gt;`</code> and <code class='not-implemented'>:None:None:`here for SciPy &lt;https://github.com/MacPython/scipy-wheels&gt;`</code>.</p>
+
+</div>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

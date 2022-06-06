@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Advanced debugging tools</h1>
+               <p>If you reached here, you want to dive into, or use, more advanced tooling. This is usually not necessary for first time contributors and most day-to-day development. These are used more rarely, for example close to a new NumPy release, or when a large or particular complex change was made.</p>
+
+               <p>Since not all of these tools are used on a regular bases and only available on some systems, please expect differences, issues, or quirks; we will be happy to help if you get stuck and appreciate any improvements or suggestions to these workflows.</p>
+
+
+<h2>Finding C errors with additional tooling</h2>
+               <p>Most development will not require more than a typical debugging toolchain as shown in         <code class='verbatim'>Debugging &lt;debugging&gt;</code>
+.  But for example memory leaks can be particularly subtle or difficult to narrow down.</p>
+
+               <p>We do not expect any of these tools to be run by most contributors. However, you can ensure that we can track down such issues more easily easier:</p>
+
+                          <ul>               <li>               <p>Tests should cover all code paths, including error paths.</p>
+
+</li>
+               <li>               <p>Try to write short and simple tests. If you have a very complicated test   consider creating an additional simpler test as well.   This can be helpful, because often it is only easy to find which test   triggers an issue and not which line of the test.</p>
+
+</li>
+               <li>               <p>Never use         <code class='verbatim'>np.empty</code>
+ if data is read/used.         <code class='verbatim'>valgrind</code>
+ will notice this   and report an error. When you do not care about values, you can generate   random values instead.</p>
+
+</li>
+            </ul>
+
+               <p>This will help us catch any oversights before your change is released and means you do not have to worry about making reference counting errors, which can be intimidating.</p>
+
+
+<h3>Python debug build for finding memory leaks</h3>
+               <p>Debug builds of Python are easily available for example on         <code class='verbatim'>debian</code>
+ systems, and can be used on all platforms. Running a test or terminal is usually as easy as:      </p>
+
+               <pre>python3.8d runtests.py
+# or
+python3.8d runtests.py --ipython</pre>
+               <p>and were already mentioned in         <code class='verbatim'>Debugging &lt;debugging&gt;</code>
+.</p>
+
+               <p>A Python debug build will help:</p>
+
+                          <ul>               <li>               <p>Find bugs which may otherwise cause random behaviour.   One example is when an object is still used after it has been deleted.</p>
+
+</li>
+               <li>               <p>Python debug builds allows to check correct reference counting.   This works using the additional commands:      </p>
+
+               <pre>sys.gettotalrefcount()
+sys.getallocatedblocks()</pre>
+</li>
+            </ul>
+
+
+<h4>Use together with ``pytest``</h4>
+               <p>Running the test suite only with a debug python build will not find many errors on its own. An additional advantage of a debug build of Python is that it allows detecting memory leaks.</p>
+
+               <p>A tool to make this easier is <code class='not-implemented'>:None:None:`pytest-leaks`</code>, which can be installed using         <code class='verbatim'>pip</code>
+. Unfortunately,         <code class='verbatim'>pytest</code>
+ itself may leak memory, but good results can usually (currently) be achieved by removing:      </p>
+
+               <pre>@pytest.fixture(autouse=True)
+def add_np(doctest_namespace):
+    doctest_namespace[&#39;np&#39;] = numpy
+
+@pytest.fixture(autouse=True)
+def env_setup(monkeypatch):
+    monkeypatch.setenv(&#39;PYTHONHASHSEED&#39;, &#39;0&#39;)</pre>
+               <p>from         <code class='verbatim'>numpy/conftest.py</code>
+ (This may change with new         <code class='verbatim'>pytest-leaks</code>
+ versions or         <code class='verbatim'>pytest</code>
+ updates).</p>
+
+               <p>This allows to run the test suite, or part of it, conveniently:      </p>
+
+               <pre>python3.8d runtests.py -t numpy/core/tests/test_multiarray.py -- -R2:3 -s</pre>
+               <p>where         <code class='verbatim'>-R2:3</code>
+ is the         <code class='verbatim'>pytest-leaks</code>
+ command (see its documentation), the         <code class='verbatim'>-s</code>
+ causes output to print and may be necessary (in some versions captured output was detected as a leak).</p>
+
+               <p>Note that some tests are known (or even designed) to leak references, we try to mark them, but expect some false positives.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _pytest-leaks: https://github.com/abalkin/pytest-leaks&#39;&gt;
+           </pre>
+
+
+<h3>``valgrind``</h3>
+               <p>Valgrind is a powerful tool to find certain memory access problems and should be run on complicated C code. Basic use of         <code class='verbatim'>valgrind</code>
+ usually requires no more than:      </p>
+
+               <pre>PYTHONMALLOC=malloc valgrind python runtests.py</pre>
+               <p>where         <code class='verbatim'>PYTHONMALLOC=malloc</code>
+ is necessary to avoid false positives from python itself. Depending on the system and valgrind version, you may see more false positives.         <code class='verbatim'>valgrind</code>
+ supports &#34;suppressions&#34; to ignore some of these, and Python does have a suppression file (and even a compile time option) which may help if you find it necessary.</p>
+
+               <p>Valgrind helps:</p>
+
+                          <ul>               <li>               <p>Find use of uninitialized variables/memory.</p>
+
+</li>
+               <li>               <p>Detect memory access violations (reading or writing outside of allocated   memory).</p>
+
+</li>
+               <li>               <p>Find <em>many</em> memory leaks. Note that for <em>most</em> leaks the python   debug build approach (and         <code class='verbatim'>pytest-leaks</code>
+) is much more sensitive.   The reason is that         <code class='verbatim'>valgrind</code>
+ can only detect if memory is definitely   lost. If:        </p>
+
+               <pre>dtype = np.dtype(np.int64)
+arr.astype(dtype=dtype)</pre>
+               <p>Has incorrect reference counting for         <code class='verbatim'>dtype</code>
+, this is a bug, but valgrind   cannot see it because         <code class='verbatim'>np.dtype(np.int64)</code>
+ always returns the same object.   However, not all dtypes are singletons, so this might leak memory for   different input.   In rare cases NumPy uses         <code class='verbatim'>malloc</code>
+ and not the Python memory allocators   which are invisible to the Python debug build.           <code class='verbatim'>malloc</code>
+ should normally be avoided, but there are some exceptions   (e.g. the         <code class='verbatim'>PyArray_Dims</code>
+ structure is public API and cannot use the   Python allocators.)</p>
+
+</li>
+            </ul>
+
+               <p>Even though using valgrind for memory leak detection is slow and less sensitive it can be a convenient: you can run most programs with valgrind without modification.</p>
+
+               <p>Things to be aware of:</p>
+
+                          <ul>               <li>               <p>Valgrind does not support the numpy         <code class='verbatim'>longdouble</code>
+, this means that tests   will fail or be flagged errors that are completely fine.</p>
+
+</li>
+               <li>               <p>Expect some errors before and after running your NumPy code.</p>
+
+</li>
+               <li>               <p>Caches can mean that errors (specifically memory leaks) may not be detected   or are only detect at a later, unrelated time.</p>
+
+</li>
+            </ul>
+
+               <p>A big advantage of valgrind is that it has no requirements aside from valgrind itself (although you probably want to use debug builds for better tracebacks).</p>
+
+
+<h4>Use together with ``pytest``</h4>
+               <p>You can run the test suite with valgrind which may be sufficient when you are only interested in a few tests:      </p>
+
+               <pre>PYTHOMMALLOC=malloc valgrind python runtests.py \
+ -t numpy/core/tests/test_multiarray.py -- --continue-on-collection-errors</pre>
+               <p>Note the         <code class='verbatim'>--continue-on-collection-errors</code>
+, which is currently necessary due to missing         <code class='verbatim'>longdouble</code>
+ support causing failures (this will usually not be necessary if you do not run the full test suite).</p>
+
+               <p>If you wish to detect memory leaks you will also require         <code class='verbatim'>--show-leak-kinds=definite</code>
+ and possibly more valgrind options.  Just as for         <code class='verbatim'>pytest-leaks</code>
+ certain tests are known to leak cause errors in valgrind and may or may not be marked as such.</p>
+
+               <p>We have developed <code class='not-implemented'>:None:None:`pytest-valgrind`</code> which:</p>
+
+                          <ul>               <li>               <p>Reports errors for each test individually</p>
+
+</li>
+               <li>               <p>Narrows down memory leaks to individual tests (by default valgrind   only checks for memory leaks after a program stops, which is very   cumbersome).</p>
+
+</li>
+            </ul>
+
+               <p>Please refer to its         <code class='verbatim'>README</code>
+ for more information (it includes an example command for NumPy).</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _pytest-valgrind: https://github.com/seberg/pytest-valgrind&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

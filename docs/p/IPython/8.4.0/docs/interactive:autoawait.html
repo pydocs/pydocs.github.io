@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=IPython>IPython</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/IPython/8.4.0/api/IPython'>8.4.0</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/IPython/8.4.0/api/IPython">8.4.0</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/IPython/8.4.0/api/IPython'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/IPython/8.4.0/api/IPython">API</a>
+                        <a href="/p/IPython/8.4.0/gallery">Gallery</a>
+                        <a href="/p/IPython/8.4.0/examples">Examples</a>
+                        <a href="/p/IPython/8.4.0/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/IPython/8.4.0/img/ipython-logo.png"/>
+    <a href="#">IPython</a>
+    <a href="#">8.4.0</a>
+        <a class='external'  href="https://pypi.org/project/ipython">Pypi</a>
+        <a class='external' href="https://github.com/IPython/IPython">GitHub</a>
+        <a class='external' href="https://ipython.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://ipython.readthedocs.org/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _autoawait:&#39;&gt;
+           </pre>
+
+
+<h1>Asynchronous in REPL: Autoawait</h1>
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This feature is experimental and behavior can change between python and IPython version without prior deprecation.</p>
+
+</div>
+
+
+               <p>Starting with IPython 7.0, and when using Python 3.6 and above, IPython offer the ability to run asynchronous code from the REPL. Constructs which are         <code class='verbatim'>SyntaxError</code>
+ s in the Python REPL can be used seamlessly in IPython.</p>
+
+               <p>The examples given here are for terminal IPython, running async code in a notebook interface or any other frontend using the Jupyter protocol needs IPykernel version 5.0 or above. The details of how async code runs in IPykernel will differ between IPython, IPykernel and their versions.</p>
+
+               <p>When a supported library is used, IPython will automatically allow Futures and Coroutines in the REPL to be         <code class='verbatim'>await</code>
+ ed. This will happen if an         <code class='verbatim'>await
+&lt;await&gt;</code>
+ (or any other async constructs like async-with, async-for) is used at top level scope, or if any structure valid only in <code class='not-implemented'>:None:None:`async def
+&lt;https://docs.python.org/3/reference/compound_stmts.html#async-def&gt;`</code> function context are present. For example, the following being a syntax error in the Python REPL:      </p>
+
+               <pre>Python 3.6.0 
+[GCC 4.2.1]
+Type &#34;help&#34;, &#34;copyright&#34;, &#34;credits&#34; or &#34;license&#34; for more information.
+&gt;&gt;&gt; import aiohttp
+&gt;&gt;&gt; session = aiohttp.ClientSession()
+&gt;&gt;&gt; result = session.get(&#39;https://api.github.com&#39;)
+&gt;&gt;&gt; response = await result
+  File &#34;&lt;stdin&gt;&#34;, line 1
+    response = await result
+                          ^
+SyntaxError: invalid syntax</pre>
+               <p>Should behave as expected in the IPython REPL:      </p>
+
+               <pre>Python 3.6.0
+Type &#39;copyright&#39;, &#39;credits&#39; or &#39;license&#39; for more information
+IPython 7.0.0 -- An enhanced Interactive Python. Type &#39;?&#39; for help.
+
+In [1]: import aiohttp
+   ...: session = aiohttp.ClientSession()
+   ...: result = session.get(&#39;https://api.github.com&#39;)
+
+In [2]: response = await result
+&lt;pause for a few 100s ms&gt;
+
+In [3]: await response.json()
+Out[3]:
+{&#39;authorizations_url&#39;: &#39;https://api.github.com/authorizations&#39;,
+ &#39;code_search_url&#39;: &#39;https://api.github.com/search/code?q={query}...&#39;,
+...
+}</pre>
+               <p>You can use the         <code class='verbatim'>c.InteractiveShell.autoawait</code>
+ configuration option and set it to         <code class='verbatim'>False</code>
+ to deactivate automatic wrapping of asynchronous code. You can also use the <code class='not-implemented'>:None:magic:`%autoawait`</code> magic to toggle the behavior at runtime:      </p>
+
+               <pre>In [1]: %autoawait False
+
+In [2]: %autoawait
+IPython autoawait is `Off`, and set to use `asyncio`</pre>
+               <p>By default IPython will assume integration with Python&#39;s provided         <code class='verbatim'>asyncio</code>
+, but integration with other libraries is provided. In particular we provide experimental integration with the         <code class='verbatim'>curio</code>
+ and         <code class='verbatim'>trio</code>
+ library.</p>
+
+               <p>You can switch the current integration by using the         <code class='verbatim'>c.InteractiveShell.loop_runner</code>
+ option or the         <code class='verbatim'>autoawait &lt;name
+integration&gt;</code>
+ magic.</p>
+
+               <p>For example:      </p>
+
+               <pre>In [1]: %autoawait trio
+
+In [2]: import trio
+
+In [3]: async def child(i):
+   ...:     print(&#34;   child %s goes to sleep&#34;%i)
+   ...:     await trio.sleep(2)
+   ...:     print(&#34;   child %s wakes up&#34;%i)
+
+In [4]: print(&#39;parent start&#39;)
+   ...: async with trio.open_nursery() as n:
+   ...:     for i in range(5):
+   ...:         n.spawn(child, i)
+   ...: print(&#39;parent end&#39;)
+parent start
+   child 2 goes to sleep
+   child 0 goes to sleep
+   child 3 goes to sleep
+   child 1 goes to sleep
+   child 4 goes to sleep
+   &lt;about 2 seconds pause&gt;
+   child 2 wakes up
+   child 1 wakes up
+   child 0 wakes up
+   child 3 wakes up
+   child 4 wakes up
+parent end</pre>
+               <p>In the above example,         <code class='verbatim'>async with</code>
+ at top level scope is a syntax error in Python.</p>
+
+               <p>Using this mode can have unexpected consequences if used in interaction with other features of IPython and various registered extensions. In particular if you are a direct or indirect user of the AST transformers, these may not apply to your code.</p>
+
+               <p>When using command line IPython, the default loop (or runner) does not process in the background, so top level asynchronous code must finish for the REPL to allow you to enter more code. As with usual Python semantics, the awaitables are started only when awaited for the first time. That is to say, in first example, no network request is done between         <code class='verbatim'>In[1]</code>
+ and         <code class='verbatim'>In[2]</code>
+.</p>
+
+
+<h2>Effects on IPython.embed()</h2>
+               <p>IPython core being asynchronous, the use of         <code class='verbatim'>IPython.embed()</code>
+ will now require a loop to run. By default IPython will use a fake coroutine runner which should allow         <code class='verbatim'>IPython.embed()</code>
+ to be nested. Though this will prevent usage of the <code class='not-implemented'>:None:magic:`%autoawait`</code> feature when using IPython embed.</p>
+
+               <p>You can set a coroutine runner explicitly for         <code class='verbatim'>embed()</code>
+ if you want to run asynchronous code, though the exact behavior is undefined.</p>
+
+
+<h2>Effects on Magics</h2>
+               <p>A couple of magics (        <code class='verbatim'>%%timeit</code>
+,         <code class='verbatim'>%timeit</code>
+,         <code class='verbatim'>%%time</code>
+,         <code class='verbatim'>%%prun</code>
+) have not yet been updated to work with asynchronous code and will raise syntax errors when trying to use top-level         <code class='verbatim'>await</code>
+. We welcome any contribution to help fix those, and extra cases we haven&#39;t caught yet. We hope for better support in Core Python for top-level Async code.</p>
+
+
+<h2>Internals</h2>
+               <p>As running asynchronous code is not supported in interactive REPL (as of Python 3.7) we have to rely to a number of complex workarounds and heuristics to allow this to happen. It is interesting to understand how this works in order to comprehend potential bugs, or provide a custom runner.</p>
+
+               <p>Among the many approaches that are at our disposition, we find only one that suited out need. Under the hood we use the code object from a async-def function and run it in global namespace after modifying it to not create a new         <code class='verbatim'>locals()</code>
+ scope:      </p>
+
+               <pre>async def inner_async():
+    locals().update(**global_namespace)
+    #
+    # here is user code
+    #
+    return last_user_statement
+codeobj = modify(inner_async.__code__)
+coroutine = eval(codeobj, user_ns)
+display(loop_runner(coroutine))</pre>
+               <p>The first thing you&#39;ll notice is that unlike classical         <code class='verbatim'>exec</code>
+, there is only one namespace. Second, user code runs in a function scope, and not a module scope.</p>
+
+               <p>On top of the above there are significant modification to the AST of         <code class='verbatim'>function</code>
+, and         <code class='verbatim'>loop_runner</code>
+ can be arbitrary complex. So there is a significant overhead to this kind of code.</p>
+
+               <p>By default the generated coroutine function will be consumed by Asyncio&#39;s         <code class='verbatim'>loop_runner = asyncio.get_evenloop().run_until_complete()</code>
+ method if         <code class='verbatim'>async</code>
+ mode is deemed necessary, otherwise the coroutine will just be exhausted in a simple runner. It is possible, though, to change the default runner.</p>
+
+               <p>A loop runner is a <em>synchronous</em>  function responsible from running a coroutine object.</p>
+
+               <p>The runner is responsible for ensuring that         <code class='verbatim'>coroutine</code>
+ runs to completion, and it should return the result of executing the coroutine. Let&#39;s write a runner for         <code class='verbatim'>trio</code>
+ that print a message when used as an exercise,         <code class='verbatim'>trio</code>
+ is special as it usually prefers to run a function object and make a coroutine by itself, we can get around this limitation by wrapping it in an async-def without parameters and passing this value to         <code class='verbatim'>trio</code>
+:       </p>
+
+               <pre>In [1]: import trio
+   ...: from types import CoroutineType
+   ...:
+   ...: def trio_runner(coro:CoroutineType):
+   ...:     print(&#39;running asynchronous code&#39;)
+   ...:     async def corowrap(coro):
+   ...:         return await coro
+   ...:     return trio.run(corowrap, coro)</pre>
+               <p>We can set it up by passing it to         <code class='verbatim'>%autoawait</code>
+:      </p>
+
+               <pre>In [2]: %autoawait trio_runner
+
+In [3]: async def async_hello(name):
+   ...:     await trio.sleep(1)
+   ...:     print(f&#39;Hello {name} world !&#39;)
+   ...:     await trio.sleep(1)
+
+In [4]: await async_hello(&#39;async&#39;)
+running asynchronous code
+Hello async world !</pre>
+               <p>Asynchronous programming in python (and in particular in the REPL) is still a relatively young subject. We expect some code to not behave as you expect, so feel free to contribute improvements to this codebase and give us feedback.</p>
+
+               <p>We invite you to thoroughly test this feature and report any unexpected behavior as well as propose any improvement.</p>
+
+
+<h2>Using Autoawait in a notebook (IPykernel)</h2>
+               <p>Update ipykernel to version 5.0 or greater:     </p>
+
+               <pre>pip install ipykernel ipython --upgrade
+# or
+conda install ipykernel ipython --upgrade</pre>
+               <p>This should automatically enable <code class='not-implemented'>:None:magic:`autoawait`</code> integration. Unlike terminal IPython, all code runs on         <code class='verbatim'>asyncio</code>
+ eventloop, so creating a loop by hand will not work, including with magics like <code class='not-implemented'>:None:magic:`%run`</code> or other frameworks that create the eventloop themselves. In cases like these you can try to use projects like <code class='not-implemented'>:None:None:`nest_asyncio
+&lt;https://github.com/erdewit/nest_asyncio&gt;`</code> and follow <code class='not-implemented'>:None:None:`this discussion
+&lt;https://github.com/jupyter/notebook/issues/3397#issuecomment-419386811&gt;`</code></p>
+
+
+<h2>Difference between terminal IPython and IPykernel</h2>
+               <p>The exact asynchronous code running behavior varies between Terminal IPython and IPykernel. The root cause of this behavior is due to IPykernel having a <em>persistent</em> <code><a href="/p/asyncio/*/api/asyncio.html" class='exists'>asyncio</a></code>
+ loop running, while Terminal IPython starts and stops a loop for each code block. This can lead to surprising behavior in some cases if you are used to manipulating asyncio loop yourself, see for example <a link href="https://github.com/ipython/ipython/issue/11303" class='external'>#11303</a> for a longer discussion but here are some of the astonishing cases.</p>
+
+               <p>This behavior is an implementation detail, and should not be relied upon. It can change without warnings in future versions of IPython.</p>
+
+               <p>In terminal IPython a loop is started for each code blocks only if there is top level async code:     </p>
+
+               <pre>$ ipython
+In [1]: import asyncio
+   ...: asyncio.get_event_loop()
+Out[1]: &lt;_UnixSelectorEventLoop running=False closed=False debug=False&gt;
+
+In [2]:
+
+In [2]: import asyncio
+   ...: await asyncio.sleep(0)
+   ...: asyncio.get_event_loop()
+Out[2]: &lt;_UnixSelectorEventLoop running=True closed=False debug=False&gt;</pre>
+               <p>See that         <code class='verbatim'>running</code>
+ is         <code class='verbatim'>True</code>
+ only in the case were we         <code class='verbatim'>await sleep()</code>
+</p>
+
+               <p>In a Notebook, with ipykernel the asyncio eventloop is always running:     </p>
+
+               <pre>$ jupyter notebook
+In [1]: import asyncio
+   ...: loop1 = asyncio.get_event_loop()
+   ...: loop1
+Out[1]: &lt;_UnixSelectorEventLoop running=True closed=False debug=False&gt;
+
+In [2]: loop2 = asyncio.get_event_loop()
+   ...: loop2
+Out[2]: &lt;_UnixSelectorEventLoop running=True closed=False debug=False&gt;
+
+In [3]: loop1 is loop2
+Out[3]: True</pre>
+               <p>In Terminal IPython background tasks are only processed while the foreground task is running, if and only if the foreground task is async:     </p>
+
+               <pre>$ ipython
+In [1]: import asyncio
+   ...:
+   ...: async def repeat(msg, n):
+   ...:     for i in range(n):
+   ...:         print(f&#34;{msg} {i}&#34;)
+   ...:         await asyncio.sleep(1)
+   ...:     return f&#34;{msg} done&#34;
+   ...:
+   ...: asyncio.ensure_future(repeat(&#34;background&#34;, 10))
+Out[1]: &lt;Task pending coro=&lt;repeat() running at &lt;ipython-input-1-02d0ef250fe7&gt;:3&gt;&gt;
+
+In [2]: await asyncio.sleep(3)
+background 0
+background 1
+background 2
+background 3
+
+In [3]: import time
+...: time.sleep(5)
+
+In [4]: await asyncio.sleep(3)
+background 4
+background 5
+background 6g</pre>
+               <p>In a Notebook, QtConsole, or any other frontend using IPykernel, background tasks should behave as expected.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/IPython/IPython/blob/8.2.0/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=numpy>numpy</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/numpy/1.22.4/api/numpy'>1.22.4</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/numpy/1.22.4/api/numpy">1.22.4</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/numpy/1.22.4/api/numpy'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/numpy/1.22.4/api/numpy">API</a>
+                        <a href="/p/numpy/1.22.4/gallery">Gallery</a>
+                        <a href="/p/numpy/1.22.4/examples">Examples</a>
+                        <a href="/p/numpy/1.22.4/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <img src="/p/numpy/1.22.4/img/numpy_logo.png"/>
+    <a href="#">numpy</a>
+    <a href="#">1.22.4</a>
+        <a class='external'  href="https://pypi.org/project/numpy">Pypi</a>
+        <a class='external' href="https://github.com/numpy/numpy">GitHub</a>
+        <a class='external' href="https://numpy.org/">Homepage</a>
+    <hr/>
+        <a class='external' href="https://numpy.org/doc/1.22/">Other Docs</a>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>NumPy 1.8.0 Release Notes</h1>
+               <p>This release supports  Python 2.6 -2.7 and 3.2 - 3.3.</p>
+
+
+<h2>Highlights</h2>
+                          <ul>               <li>               <p>New, no 2to3, Python 2 and Python 3 are supported by a common code base.</p>
+
+</li>
+               <li>               <p>New, gufuncs for linear algebra, enabling operations on stacked arrays.</p>
+
+</li>
+               <li>               <p>New, inplace fancy indexing for ufuncs with the         <code class='verbatim'>.at</code>
+ method.</p>
+
+</li>
+               <li>               <p>New,         <code class='verbatim'>partition</code>
+ function, partial sorting via selection for fast median.</p>
+
+</li>
+               <li>               <p>New,         <code class='verbatim'>nanmean</code>
+,         <code class='verbatim'>nanvar</code>
+, and         <code class='verbatim'>nanstd</code>
+ functions skipping NaNs.</p>
+
+</li>
+               <li>               <p>New,         <code class='verbatim'>full</code>
+ and         <code class='verbatim'>full_like</code>
+ functions to create value initialized arrays.</p>
+
+</li>
+               <li>               <p>New,         <code class='verbatim'>PyUFunc_RegisterLoopForDescr</code>
+, better ufunc support for user dtypes.</p>
+
+</li>
+               <li>               <p>Numerous performance improvements in many areas.</p>
+
+</li>
+            </ul>
+
+
+<h2>Dropped Support</h2>
+               <p>Support for Python versions 2.4 and 2.5 has been dropped,</p>
+
+               <p>Support for SCons has been removed.</p>
+
+
+<h2>Future Changes</h2>
+               <p>The Datetime64 type remains experimental in this release. In 1.9 there will probably be some changes to make it more usable.</p>
+
+               <p>The diagonal method currently returns a new array and raises a FutureWarning. In 1.9 it will return a readonly view.</p>
+
+               <p>Multiple field selection from an array of structured type currently returns a new array and raises a FutureWarning. In 1.9 it will return a readonly view.</p>
+
+               <p>The numpy/oldnumeric and numpy/numarray compatibility modules will be removed in 1.9.</p>
+
+
+<h2>Compatibility notes</h2>
+               <p>The doc/sphinxext content has been moved into its own github repository, and is included in numpy as a submodule. See the instructions in doc/HOWTO_BUILD_DOCS.rst for how to access the content.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _numpydoc: https://github.com/numpy/numpydoc&#39;&gt;
+           </pre>
+
+               <p>The hash function of numpy.void scalars has been changed.  Previously the pointer to the data was hashed as an integer.  Now, the hash function uses the tuple-hash algorithm to combine the hash functions of the elements of the scalar, but only if the scalar is read-only.</p>
+
+               <p>Numpy has switched its build system to using &#39;separate compilation&#39; by default.  In previous releases this was supported, but not default. This should produce the same results as the old system, but if you&#39;re trying to do something complicated like link numpy statically or using an unusual compiler, then it&#39;s possible you will encounter problems. If so, please file a bug and as a temporary workaround you can re-enable the old build system by exporting the shell variable NPY_SEPARATE_COMPILATION=0.</p>
+
+               <p>For the AdvancedNew iterator the         <code class='verbatim'>oa_ndim</code>
+ flag should now be -1 to indicate that no         <code class='verbatim'>op_axes</code>
+ and         <code class='verbatim'>itershape</code>
+ are passed in. The         <code class='verbatim'>oa_ndim == 0</code>
+ case, now indicates a 0-D iteration and         <code class='verbatim'>op_axes</code>
+ being NULL and the old usage is deprecated. This does not effect the         <code class='verbatim'>NpyIter_New</code>
+ or         <code class='verbatim'>NpyIter_MultiNew</code>
+ functions.</p>
+
+               <p>The functions nanargmin and nanargmax now return np.iinfo[&#39;intp&#39;].min for the index in all-NaN slices. Previously the functions would raise a ValueError for array returns and NaN for scalar returns.</p>
+
+
+<h3>NPY_RELAXED_STRIDES_CHECKING</h3>
+               <p>There is a new compile time environment variable         <code class='verbatim'>NPY_RELAXED_STRIDES_CHECKING</code>
+. If this variable is set to 1, then numpy will consider more arrays to be C- or F-contiguous -- for example, it becomes possible to have a column vector which is considered both C- and F-contiguous simultaneously. The new definition is more accurate, allows for faster code that makes fewer unnecessary copies, and simplifies numpy&#39;s code internally. However, it may also break third-party libraries that make too-strong assumptions about the stride values of C- and F-contiguous arrays. (It is also currently known that this breaks Cython code using memoryviews, which will be fixed in Cython.) THIS WILL BECOME THE DEFAULT IN A FUTURE RELEASE, SO PLEASE TEST YOUR CODE NOW AGAINST NUMPY BUILT WITH:    </p>
+
+               <pre>NPY_RELAXED_STRIDES_CHECKING=1 python setup.py install</pre>
+               <p>You can check whether NPY_RELAXED_STRIDES_CHECKING is in effect by running:    </p>
+
+               <pre>np.ones((10, 1), order=&#34;C&#34;).flags.f_contiguous</pre>
+               <p>This will be         <code class='verbatim'>True</code>
+ if relaxed strides checking is enabled, and         <code class='verbatim'>False</code>
+ otherwise. The typical problem we&#39;ve seen so far is C code that works with C-contiguous arrays, and assumes that the itemsize can be accessed by looking at the last element in the         <code class='verbatim'>PyArray_STRIDES(arr)</code>
+ array. When relaxed strides are in effect, this is not true (and in fact, it never was true in some corner cases). Instead, use         <code class='verbatim'>PyArray_ITEMSIZE(arr)</code>
+.</p>
+
+               <p>For more information check the &#34;Internal memory layout of an ndarray&#34; section in the documentation.</p>
+
+
+<h3>Binary operations with non-arrays as second argument</h3>
+               <p>Binary operations of the form         <code class='verbatim'>&lt;array-or-subclass&gt; * &lt;non-array-subclass&gt;</code>
+ where         <code class='verbatim'>&lt;non-array-subclass&gt;</code>
+ declares an         <code class='verbatim'>__array_priority__</code>
+ higher than that of         <code class='verbatim'>&lt;array-or-subclass&gt;</code>
+ will now unconditionally return <em>NotImplemented</em>, giving         <code class='verbatim'>&lt;non-array-subclass&gt;</code>
+ a chance to handle the operation.  Previously, <code class='not-implemented'>:None:None:`NotImplemented`</code> would only be returned if         <code class='verbatim'>&lt;non-array-subclass&gt;</code>
+ actually implemented the reversed operation, and after a (potentially expensive) array conversion of         <code class='verbatim'>&lt;non-array-subclass&gt;</code>
+ had been attempted. (<a link href="https://github.com/numpy/numpy/issues/3375" class='external'>bug</a>, <code class='not-implemented'>:None:None:`pull request
+&lt;https://github.com/numpy/numpy/pull/3501&gt;`</code>)</p>
+
+
+<h3>Function `median` used with `overwrite_input` only partially sorts array</h3>
+               <p>If <code class='not-implemented'>:None:None:`median`</code> is used with <code class='not-implemented'>:None:None:`overwrite_input`</code> option the input array will now only be partially sorted instead of fully sorted.</p>
+
+
+<h3>Fix to financial.npv</h3>
+               <p>The npv function had a bug. Contrary to what the documentation stated, it summed from indexes         <code class='verbatim'>1</code>
+ to         <code class='verbatim'>M</code>
+ instead of from         <code class='verbatim'>0</code>
+ to         <code class='verbatim'>M - 1</code>
+. The fix changes the returned value. The mirr function called the npv function, but worked around the problem, so that was also fixed and the return value of the mirr function remains unchanged.</p>
+
+
+<h3>Runtime warnings when comparing NaN numbers</h3>
+               <p>Comparing         <code class='verbatim'>NaN</code>
+ floating point numbers now raises the         <code class='verbatim'>invalid</code>
+ runtime warning. If a         <code class='verbatim'>NaN</code>
+ is expected the warning can be ignored using np.errstate. E.g.:    </p>
+
+               <pre>with np.errstate(invalid=&#39;ignore&#39;):
+    operation()</pre>
+
+<h2>New Features</h2>
+
+<h3>Support for linear algebra on stacked arrays</h3>
+               <p>The gufunc machinery is now used for np.linalg, allowing operations on stacked arrays and vectors. For example:      </p>
+
+               <pre>&gt;&gt;&gt; a
+array([[[ 1.,  1.],
+        [ 0.,  1.]],
+
+       [[ 1.,  1.],
+        [ 0.,  1.]]])
+
+&gt;&gt;&gt; np.linalg.inv(a)
+array([[[ 1., -1.],
+        [ 0.,  1.]],
+
+       [[ 1., -1.],
+        [ 0.,  1.]]])</pre>
+
+<h3>In place fancy indexing for ufuncs</h3>
+               <p>The function         <code class='verbatim'>at</code>
+ has been added to ufunc objects to allow in place ufuncs with no buffering when fancy indexing is used. For example, the following will increment the first and second items in the array, and will increment the third item twice:         <code class='verbatim'>numpy.add.at(arr, [0, 1, 2, 2], 1)</code>
+</p>
+
+               <p>This is what many have mistakenly thought         <code class='verbatim'>arr[[0, 1, 2, 2]] += 1</code>
+ would do, but that does not work as the incremented value of         <code class='verbatim'>arr[2]</code>
+ is simply copied into the third slot in         <code class='verbatim'>arr</code>
+ twice, not incremented twice.</p>
+
+
+<h3>New functions `partition` and `argpartition`</h3>
+               <p>New functions to partially sort arrays via a selection algorithm.</p>
+
+               <p>A         <code class='verbatim'>partition</code>
+ by index         <code class='verbatim'>k</code>
+ moves the         <code class='verbatim'>k</code>
+ smallest element to the front of an array.  All elements before         <code class='verbatim'>k</code>
+ are then smaller or equal than the value in position         <code class='verbatim'>k</code>
+ and all elements following         <code class='verbatim'>k</code>
+ are then greater or equal than the value in position         <code class='verbatim'>k</code>
+. The ordering of the values within these bounds is undefined. A sequence of indices can be provided to sort all of them into their sorted position at once iterative partitioning. This can be used to efficiently obtain order statistics like median or percentiles of samples.         <code class='verbatim'>partition</code>
+ has a linear time complexity of         <code class='verbatim'>O(n)</code>
+ while a full sort has         <code class='verbatim'>O(n log(n))</code>
+.</p>
+
+
+<h3>New functions `nanmean`, `nanvar` and `nanstd`</h3>
+               <p>New nan aware statistical functions are added. In these functions the results are what would be obtained if nan values were omitted from all computations.</p>
+
+
+<h3>New functions `full` and `full_like`</h3>
+               <p>New convenience functions to create arrays filled with a specific value; complementary to the existing <code class='not-implemented'>:None:None:`zeros`</code> and <code class='not-implemented'>:None:None:`zeros_like`</code> functions.</p>
+
+
+<h3>IO compatibility with large files</h3>
+               <p>Large NPZ files &gt;2GB can be loaded on 64-bit systems.</p>
+
+
+<h3>Building against OpenBLAS</h3>
+               <p>It is now possible to build numpy against OpenBLAS by editing site.cfg.</p>
+
+
+<h3>New constant</h3>
+               <p>Euler&#39;s constant is now exposed in numpy as euler_gamma.</p>
+
+
+<h3>New modes for qr</h3>
+               <p>New modes &#39;complete&#39;, &#39;reduced&#39;, and &#39;raw&#39; have been added to the qr factorization and the old &#39;full&#39; and &#39;economic&#39; modes are deprecated. The &#39;reduced&#39; mode replaces the old &#39;full&#39; mode and is the default as was the &#39;full&#39; mode, so backward compatibility can be maintained by not specifying the mode.</p>
+
+               <p>The &#39;complete&#39; mode returns a full dimensional factorization, which can be useful for obtaining a basis for the orthogonal complement of the range space. The &#39;raw&#39; mode returns arrays that contain the Householder reflectors and scaling factors that can be used in the future to apply q without needing to convert to a matrix. The &#39;economic&#39; mode is simply deprecated, there isn&#39;t much use for it and it isn&#39;t any more efficient than the &#39;raw&#39; mode.</p>
+
+
+<h3>New `invert` argument to `in1d`</h3>
+               <p>The function <code class='not-implemented'>:None:None:`in1d`</code> now accepts a <code class='not-implemented'>:None:None:`invert`</code> argument which, when <code class='not-implemented'>:None:None:`True`</code>, causes the returned array to be inverted.</p>
+
+
+<h3>Advanced indexing using `np.newaxis`</h3>
+               <p>It is now possible to use <code class='not-implemented'>:None:None:`np.newaxis`</code>/<code class='not-implemented'>:None:None:`None`</code> together with index arrays instead of only in simple indices. This means that         <code class='verbatim'>array[np.newaxis, [0, 1]]</code>
+ will now work as expected and select the first two rows while prepending a new axis to the array.</p>
+
+
+<h3>C-API</h3>
+               <p>New ufuncs can now be registered with builtin input types and a custom output type. Before this change, NumPy wouldn&#39;t be able to find the right ufunc loop function when the ufunc was called from Python, because the ufunc loop signature matching logic wasn&#39;t looking at the output operand type. Now the correct ufunc loop is found, as long as the user provides an output argument with the correct output type.</p>
+
+
+<h3>runtests.py</h3>
+               <p>A simple test runner script         <code class='verbatim'>runtests.py</code>
+ was added. It also builds Numpy via         <code class='verbatim'>setup.py build</code>
+ and can be used to run tests easily during development.</p>
+
+
+<h2>Improvements</h2>
+
+<h3>IO performance improvements</h3>
+               <p>Performance in reading large files was improved by chunking (see also IO compatibility).</p>
+
+
+<h3>Performance improvements to `pad`</h3>
+               <p>The <code class='not-implemented'>:None:None:`pad`</code> function has a new implementation, greatly improving performance for all inputs except <code class='not-implemented'>:None:None:`mode=&lt;function&gt;`</code> (retained for backwards compatibility). Scaling with dimensionality is dramatically improved for rank &gt;= 4.</p>
+
+
+<h3>Performance improvements to `isnan`, `isinf`, `isfinite` and `byteswap`</h3>
+               <p><code class='not-implemented'>:None:None:`isnan`</code>, <code class='not-implemented'>:None:None:`isinf`</code>, <code class='not-implemented'>:None:None:`isfinite`</code> and <code class='not-implemented'>:None:None:`byteswap`</code> have been improved to take advantage of compiler builtins to avoid expensive calls to libc. This improves performance of these operations by about a factor of two on gnu libc systems.</p>
+
+
+<h3>Performance improvements via SSE2 vectorization</h3>
+               <p>Several functions have been optimized to make use of SSE2 CPU SIMD instructions.</p>
+
+                          <ul>               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>Float32 and float64:</p>
+</dt>
+               <dd>           <ul>               <li>               <p>base math (<code class='not-implemented'>:None:None:`add`</code>, <code class='not-implemented'>:None:None:`subtract`</code>, <code class='not-implemented'>:None:None:`divide`</code>, <code class='not-implemented'>:None:None:`multiply`</code>)</p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`sqrt`</code></p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`minimum/maximum`</code></p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`absolute`</code></p>
+
+</li>
+            </ul>
+</dd>
+           </dl>
+
+</li>
+               <li>               <!-- deflist -->
+           <dl>
+               <dt><p>Bool:</p>
+</dt>
+               <dd>           <ul>               <li>               <p><code class='not-implemented'>:None:None:`logical_or`</code></p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`logical_and`</code></p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`logical_not`</code></p>
+
+</li>
+            </ul>
+</dd>
+           </dl>
+
+</li>
+            </ul>
+
+               <p>This improves performance of these operations up to 4x/2x for float32/float64 and up to 10x for bool depending on the location of the data in the CPU caches. The performance gain is greatest for in-place operations.</p>
+
+               <p>In order to use the improved functions the SSE2 instruction set must be enabled at compile time. It is enabled by default on x86_64 systems. On x86_32 with a capable CPU it must be enabled by passing the appropriate flag to the CFLAGS build variable (-msse2 with gcc).</p>
+
+
+<h3>Performance improvements to `median`</h3>
+               <p><code class='not-implemented'>:None:None:`median`</code> is now implemented in terms of <code class='not-implemented'>:None:None:`partition`</code> instead of <code class='not-implemented'>:None:None:`sort`</code> which reduces its time complexity from O(n log(n)) to O(n). If used with the <code class='not-implemented'>:None:None:`overwrite_input`</code> option the array will now only be partially sorted instead of fully sorted.</p>
+
+
+<h3>Overridable operand flags in ufunc C-API</h3>
+               <p>When creating a ufunc, the default ufunc operand flags can be overridden via the new op_flags attribute of the ufunc object. For example, to set the operand flag for the first input to read/write:</p>
+
+               <p>PyObject \*ufunc = PyUFunc_FromFuncAndData(...); ufunc-&gt;op_flags[0] = NPY_ITER_READWRITE;</p>
+
+               <p>This allows a ufunc to perform an operation in place. Also, global nditer flags can be overridden via the new iter_flags attribute of the ufunc object. For example, to set the reduce flag for a ufunc:</p>
+
+               <p>ufunc-&gt;iter_flags = NPY_ITER_REDUCE_OK;</p>
+
+
+<h2>Changes</h2>
+
+<h3>General</h3>
+               <p>The function np.take now allows 0-d arrays as indices.</p>
+
+               <p>The separate compilation mode is now enabled by default.</p>
+
+               <p>Several changes to np.insert and np.delete:</p>
+
+                          <ul>               <li>               <p>Previously, negative indices and indices that pointed past the end of   the array were simply ignored. Now, this will raise a Future or Deprecation   Warning. In the future they will be treated like normal indexing treats   them -- negative indices will wrap around, and out-of-bound indices will   generate an error.</p>
+
+</li>
+               <li>               <p>Previously, boolean indices were treated as if they were integers (always   referring to either the 0th or 1st item in the array). In the future, they   will be treated as masks. In this release, they raise a FutureWarning   warning of this coming change.</p>
+
+</li>
+               <li>               <p>In Numpy 1.7. np.insert already allowed the syntax   <code class='not-implemented'>:None:None:`np.insert(arr, 3, [1,2,3])`</code> to insert multiple items at a single position.   In Numpy 1.8. this is also possible for <code class='not-implemented'>:None:None:`np.insert(arr, [3], [1, 2, 3])`</code>.</p>
+
+</li>
+            </ul>
+
+               <p>Padded regions from np.pad are now correctly rounded, not truncated.</p>
+
+
+<h3>C-API Array Additions</h3>
+               <p>Four new functions have been added to the array C-API.</p>
+
+                          <ul>               <li>               <p>PyArray_Partition</p>
+
+</li>
+               <li>               <p>PyArray_ArgPartition</p>
+
+</li>
+               <li>               <p>PyArray_SelectkindConverter</p>
+
+</li>
+               <li>               <p>PyDataMem_NEW_ZEROED</p>
+
+</li>
+            </ul>
+
+
+<h3>C-API Ufunc Additions</h3>
+               <p>One new function has been added to the ufunc C-API that allows to register an inner loop for user types using the descr.</p>
+
+                          <ul>               <li>               <p>PyUFunc_RegisterLoopForDescr</p>
+
+</li>
+            </ul>
+
+
+<h3>C-API Developer Improvements</h3>
+               <p>The         <code class='verbatim'>PyArray_Type</code>
+ instance creation function         <code class='verbatim'>tp_new</code>
+ now uses         <code class='verbatim'>tp_basicsize</code>
+ to determine how much memory to allocate. In previous releases only         <code class='verbatim'>sizeof(PyArrayObject)</code>
+ bytes of memory were allocated, often requiring C-API subtypes to reimplement         <code class='verbatim'>tp_new</code>
+.</p>
+
+
+<h2>Deprecations</h2>
+               <p>The &#39;full&#39; and &#39;economic&#39; modes of qr factorization are deprecated.</p>
+
+
+<h3>General</h3>
+               <p>The use of non-integer for indices and most integer arguments has been deprecated. Previously float indices and function arguments such as axes or shapes were truncated to integers without warning. For example <code class='not-implemented'>:None:None:`arr.reshape(3., -1)`</code> or <code class='not-implemented'>:None:None:`arr[0.]`</code> will trigger a deprecation warning in NumPy 1.8., and in some future version of NumPy they will raise an error.</p>
+
+
+<h2>Authors</h2>
+               <p>This release contains work by the following people who contributed at least one patch to this release. The names are in alphabetical order by first name:</p>
+
+                          <ul>               <li>               <p>87</p>
+
+</li>
+               <li>               <p>Adam Ginsburg +</p>
+
+</li>
+               <li>               <p>Adam Griffiths +</p>
+
+</li>
+               <li>               <p>Alexander Belopolsky +</p>
+
+</li>
+               <li>               <p>Alex Barth +</p>
+
+</li>
+               <li>               <p>Alex Ford +</p>
+
+</li>
+               <li>               <p>Andreas Hilboll +</p>
+
+</li>
+               <li>               <p>Andreas Kloeckner +</p>
+
+</li>
+               <li>               <p>Andreas Schwab +</p>
+
+</li>
+               <li>               <p>Andrew Horton +</p>
+
+</li>
+               <li>               <p>argriffing +</p>
+
+</li>
+               <li>               <p>Arink Verma +</p>
+
+</li>
+               <li>               <p>Bago Amirbekian +</p>
+
+</li>
+               <li>               <p>Bartosz Telenczuk +</p>
+
+</li>
+               <li>               <p>bebert218 +</p>
+
+</li>
+               <li>               <p>Benjamin Root +</p>
+
+</li>
+               <li>               <p>Bill Spotz +</p>
+
+</li>
+               <li>               <p>Bradley M. Froehle</p>
+
+</li>
+               <li>               <p>Carwyn Pelley +</p>
+
+</li>
+               <li>               <p>Charles Harris</p>
+
+</li>
+               <li>               <p>Chris</p>
+
+</li>
+               <li>               <p>Christian Brueffer +</p>
+
+</li>
+               <li>               <p>Christoph Dann +</p>
+
+</li>
+               <li>               <p>Christoph Gohlke</p>
+
+</li>
+               <li>               <p>Dan Hipschman +</p>
+
+</li>
+               <li>               <p>Daniel +</p>
+
+</li>
+               <li>               <p>Dan Miller +</p>
+
+</li>
+               <li>               <p>daveydave400 +</p>
+
+</li>
+               <li>               <p>David Cournapeau</p>
+
+</li>
+               <li>               <p>David Warde-Farley</p>
+
+</li>
+               <li>               <p>Denis Laxalde</p>
+
+</li>
+               <li>               <p>dmuellner +</p>
+
+</li>
+               <li>               <p>Edward Catmur +</p>
+
+</li>
+               <li>               <p>Egor Zindy +</p>
+
+</li>
+               <li>               <p>endolith</p>
+
+</li>
+               <li>               <p>Eric Firing</p>
+
+</li>
+               <li>               <p>Eric Fode</p>
+
+</li>
+               <li>               <p>Eric Moore +</p>
+
+</li>
+               <li>               <p>Eric Price +</p>
+
+</li>
+               <li>               <p>Fazlul Shahriar +</p>
+
+</li>
+               <li>               <p>Félix Hartmann +</p>
+
+</li>
+               <li>               <p>Fernando Perez</p>
+
+</li>
+               <li>               <p>Frank B +</p>
+
+</li>
+               <li>               <p>Frank Breitling +</p>
+
+</li>
+               <li>               <p>Frederic</p>
+
+</li>
+               <li>               <p>Gabriel</p>
+
+</li>
+               <li>               <p>GaelVaroquaux</p>
+
+</li>
+               <li>               <p>Guillaume Gay +</p>
+
+</li>
+               <li>               <p>Han Genuit</p>
+
+</li>
+               <li>               <p>HaroldMills +</p>
+
+</li>
+               <li>               <p>hklemm +</p>
+
+</li>
+               <li>               <p>jamestwebber +</p>
+
+</li>
+               <li>               <p>Jason Madden +</p>
+
+</li>
+               <li>               <p>Jay Bourque</p>
+
+</li>
+               <li>               <p>jeromekelleher +</p>
+
+</li>
+               <li>               <p>Jesús Gómez +</p>
+
+</li>
+               <li>               <p>jmozmoz +</p>
+
+</li>
+               <li>               <p>jnothman +</p>
+
+</li>
+               <li>               <p>Johannes Schönberger +</p>
+
+</li>
+               <li>               <p>John Benediktsson +</p>
+
+</li>
+               <li>               <p>John Salvatier +</p>
+
+</li>
+               <li>               <p>John Stechschulte +</p>
+
+</li>
+               <li>               <p>Jonathan Waltman +</p>
+
+</li>
+               <li>               <p>Joon Ro +</p>
+
+</li>
+               <li>               <p>Jos de Kloe +</p>
+
+</li>
+               <li>               <p>Joseph Martinot-Lagarde +</p>
+
+</li>
+               <li>               <p>Josh Warner (Mac) +</p>
+
+</li>
+               <li>               <p>Jostein Bø Fløystad +</p>
+
+</li>
+               <li>               <p>Juan Luis Cano Rodríguez +</p>
+
+</li>
+               <li>               <p>Julian Taylor +</p>
+
+</li>
+               <li>               <p>Julien Phalip +</p>
+
+</li>
+               <li>               <p>K.-Michael Aye +</p>
+
+</li>
+               <li>               <p>Kumar Appaiah +</p>
+
+</li>
+               <li>               <p>Lars Buitinck</p>
+
+</li>
+               <li>               <p>Leon Weber +</p>
+
+</li>
+               <li>               <p>Luis Pedro Coelho</p>
+
+</li>
+               <li>               <p>Marcin Juszkiewicz</p>
+
+</li>
+               <li>               <p>Mark Wiebe</p>
+
+</li>
+               <li>               <p>Marten van Kerkwijk +</p>
+
+</li>
+               <li>               <p>Martin Baeuml +</p>
+
+</li>
+               <li>               <p>Martin Spacek</p>
+
+</li>
+               <li>               <p>Martin Teichmann +</p>
+
+</li>
+               <li>               <p>Matt Davis +</p>
+
+</li>
+               <li>               <p>Matthew Brett</p>
+
+</li>
+               <li>               <p>Maximilian Albert +</p>
+
+</li>
+               <li>               <p>m-d-w +</p>
+
+</li>
+               <li>               <p>Michael Droettboom</p>
+
+</li>
+               <li>               <p>mwtoews +</p>
+
+</li>
+               <li>               <p>Nathaniel J. Smith</p>
+
+</li>
+               <li>               <p>Nicolas Scheffer +</p>
+
+</li>
+               <li>               <p>Nils Werner +</p>
+
+</li>
+               <li>               <p>ochoadavid +</p>
+
+</li>
+               <li>               <p>Ondřej Čertík</p>
+
+</li>
+               <li>               <p>ovillellas +</p>
+
+</li>
+               <li>               <p>Paul Ivanov</p>
+
+</li>
+               <li>               <p>Pauli Virtanen</p>
+
+</li>
+               <li>               <p>peterjc</p>
+
+</li>
+               <li>               <p>Ralf Gommers</p>
+
+</li>
+               <li>               <p>Raul Cota +</p>
+
+</li>
+               <li>               <p>Richard Hattersley +</p>
+
+</li>
+               <li>               <p>Robert Costa +</p>
+
+</li>
+               <li>               <p>Robert Kern</p>
+
+</li>
+               <li>               <p>Rob Ruana +</p>
+
+</li>
+               <li>               <p>Ronan Lamy</p>
+
+</li>
+               <li>               <p>Sandro Tosi</p>
+
+</li>
+               <li>               <p>Sascha Peilicke +</p>
+
+</li>
+               <li>               <p>Sebastian Berg</p>
+
+</li>
+               <li>               <p>Skipper Seabold</p>
+
+</li>
+               <li>               <p>Stefan van der Walt</p>
+
+</li>
+               <li>               <p>Steve +</p>
+
+</li>
+               <li>               <p>Takafumi Arakaki +</p>
+
+</li>
+               <li>               <p>Thomas Robitaille +</p>
+
+</li>
+               <li>               <p>Tomas Tomecek +</p>
+
+</li>
+               <li>               <p>Travis E. Oliphant</p>
+
+</li>
+               <li>               <p>Valentin Haenel</p>
+
+</li>
+               <li>               <p>Vladimir Rutsky +</p>
+
+</li>
+               <li>               <p>Warren Weckesser</p>
+
+</li>
+               <li>               <p>Yaroslav Halchenko</p>
+
+</li>
+               <li>               <p>Yury V. Zaytsev +</p>
+
+</li>
+            </ul>
+
+               <p>A total of 119 people contributed to this release. People with a &#34;+&#34; by their names contributed a patch for the first time.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/numpy/numpy/blob/v1.22.3/None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>
