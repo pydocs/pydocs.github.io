@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Server Side Search Integration</h1>
+               <p>Read the Docs provides         <code class='verbatim'>server side search (SSS) &lt;rtd:server-side-search&gt;</code>
+ in replace of the default search engine of your site. To accomplish this, Read the Docs parses the content directly from your HTML pages .</p>
+
+               <p>If you are the author of a theme or a static site generator you can read this document, and follow some conventions in order to improve the integration of SSS with your theme/site.</p>
+
+
+<h2>Indexing</h2>
+               <p>The content of the page is parsed into sections, in general, the indexing process happens in three steps:</p>
+
+                          <ol>               <li>               <p>Identify the main content node.</p>
+
+</li>
+               <li>               <p>Remove any irrelevant content from the main node.</p>
+
+</li>
+               <li>               <p>Parse all sections inside the main node.</p>
+
+</li>
+            </ol>
+
+               <p>Read the Docs makes use of <code class='not-implemented'>:None:None:`ARIA_`</code> roles and other heuristics in order to process the content.</p>
+
+               <pre class='not-implemented'>
+.. tip:: 
+    Following the ARIA_ conventions will also improve the accessibility of your site.
+    See also https://webaim.org/techniques/semanticstructure/.</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _ARIA: https://www.w3.org/TR/wai-aria/&#39;&gt;
+           </pre>
+
+
+<h3>Main content node</h3>
+               <p>The main content node should have a main role (or a         <code class='verbatim'>main</code>
+ tag), and there should only be one per page. This node is the one that contains all the page content. Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;10-12&#39;)
+    &lt;html&gt;
+       &lt;head&gt;
+          ...
+       &lt;/head&gt;
+       &lt;body&gt;
+          &lt;div&gt;
+             This content isn&#39;t processed
+          &lt;/div&gt;
+
+          &lt;div role=&#34;main&#34;&gt;
+             All content inside the main node is processed
+          &lt;/div&gt;
+
+          &lt;footer&gt;
+             This content isn&#39;t processed
+          &lt;/footer&gt;
+       &lt;/body&gt;
+    &lt;/html&gt;</pre>
+
+
+
+<h3>Irrelevant content</h3>
+               <p>If you have content inside the main node that isn&#39;t relevant to the page (like navigation items, menus, or search box), make sure to use the correct role or tag for it.</p>
+
+               <p>Roles to be ignored:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>navigation</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>search</code>
+</p>
+
+</li>
+            </ul>
+
+               <p>Tags to be ignored:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>nav</code>
+</p>
+
+</li>
+            </ul>
+
+               <p>Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;3-5&#39;)
+    &lt;div role=&#34;main&#34;&gt;
+       ...
+       &lt;nav role=&#34;navigation&#34;&gt;
+          ...
+       &lt;/nav&gt;
+       ...
+    &lt;/div&gt;</pre>
+
+
+
+<h3>Sections</h3>
+               <p>Sections are         <code class='verbatim'>h</code>
+ tags, and sections of the same level should be neighbors. Additionally, sections should have an unique         <code class='verbatim'>id</code>
+ attribute per page (this is used to link to the section). All content below the section, till the new section will be indexed as part of the section. Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;2-10&#39;)
+    &lt;div role=&#34;main&#34;&gt;
+       &lt;h1 id=&#34;section-title&#34;&gt;
+          Section title
+       &lt;/h1&gt;
+       &lt;p&gt;
+          Content to be indexed
+       &lt;/p&gt;
+       &lt;ul&gt;
+          &lt;li&gt;This is also part of the section and will be indexed as well&lt;/li&gt;
+       &lt;/ul&gt;
+
+       &lt;h2 id=&#34;2&#34;&gt;
+          This is the start of a new section
+       &lt;/h2&gt;
+       &lt;p&gt;
+          ...
+       &lt;/p&gt;
+
+       ...
+
+       &lt;h1 id=&#34;neigbor-section&#34;&gt;
+          This section is neighbor of &#34;section-title&#34;
+       &lt;/h1&gt;
+       &lt;p&gt;
+          ...
+       &lt;/p&gt;
+    &lt;/div&gt;</pre>
+
+
+               <p>Sections can be inside till two nested tags (and have nested sections), and its immediate parent can contain the         <code class='verbatim'>id</code>
+ attribute. Note that the section content still needs to be below the         <code class='verbatim'>h</code>
+ tag. Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;3-11,14-21&#39;)
+    &lt;div role=&#34;main&#34;&gt;
+       &lt;div class=&#34;section&#34;&gt;
+          &lt;h1 id=&#34;section-title&#34;&gt;
+             Section title
+          &lt;/h1&gt;
+          &lt;p&gt;
+             Content to be indexed
+          &lt;/p&gt;
+          &lt;ul&gt;
+             &lt;li&gt;This is also part of the section&lt;/li&gt;
+          &lt;/ul&gt;
+
+          &lt;div class=&#34;section&#34;&gt;
+             &lt;div id=&#34;nested-section&#34;&gt;
+                &lt;h2&gt;
+                   This is the start of a sub-section
+                &lt;/h2&gt;
+                &lt;p&gt;
+                   With the h tag within two levels
+                &lt;/p&gt;
+             &lt;/div&gt;
+          &lt;/div&gt;
+       &lt;/div&gt;
+    &lt;/div&gt;</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>The title of the first section will be the title of the page, falling back to the         <code class='verbatim'>title</code>
+ tag.</p>
+
+</div>
+
+
+
+<h3>Other special nodes</h3>
+                          <ul>               <li>               <p><strong>Anchors</strong>: If the title of your section contains an anchor, wrap it in a         <code class='verbatim'>headerlink</code>
+ class,   so it won&#39;t be indexed as part of the title.</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;3&#39;)
+    &lt;h2&gt;
+       Section title
+       &lt;a class=&#34;headerlink&#34; title=&#34;Permalink to this headline&#34;&gt;¶&lt;/a&gt;
+    &lt;/h2&gt;</pre>
+
+
+                          <ul>               <li>               <p><strong>Code blocks</strong>: If a code block contains line numbers,   wrap them in a         <code class='verbatim'>linenos</code>
+ or         <code class='verbatim'>lineno</code>
+ class,   so they won&#39;t be indexed as part of the code.</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. code-block:: html
+    (&#39;emphasize-lines&#39;, &#39;3-7&#39;)
+    &lt;table class=&#34;highlighttable&#34;&gt;
+       &lt;tr&gt;
+          &lt;td class=&#34;linenos&#34;&gt;
+             &lt;div class=&#34;linenodiv&#34;&gt;
+                &lt;pre&gt;1 2 3&lt;/pre&gt;
+             &lt;/div&gt;
+          &lt;/td&gt;
+
+          &lt;td class=&#34;code&#34;&gt;
+             &lt;div class=&#34;highlight&#34;&gt;
+                &lt;pre&gt;First line
+    Second line
+    Third line&lt;/pre&gt;
+             &lt;/div&gt;
+          &lt;/td&gt;
+       &lt;/tr&gt;
+    &lt;/table&gt;</pre>
+
+
+
+<h2>Overriding the default search</h2>
+               <p>Static sites usually have their own static index, and search results are retrieved via JavaScript. In order for Read the Docs to override the default search as expected, themes from the supported generators must follow these conventions.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Read the Docs will fallback to the original search in case of an error or no results.</p>
+
+</div>
+
+
+
+<h3>Sphinx</h3>
+               <p>Sphinx&#39;s basic theme provides the <code class='not-implemented'>:None:None:`static/searchtools.js`</code> file, which initializes search with the         <code class='verbatim'>Search.init()</code>
+ method. Read the Docs overrides the         <code class='verbatim'>Search.query</code>
+ method and makes use of         <code class='verbatim'>Search.output.append</code>
+ to add the results. A simplified example looks like this:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: js
+    var original_search = Search.query;
+
+    function search_override(query) {
+       var results = fetch_resuls(query);
+       if (results) {
+          for (var i = 0; i &lt; results.length; i += 1) {
+             var result = process_result(results[i]);
+             Search.output.append(result);
+          }
+       } else {
+          original_search(query);
+       }
+    }
+
+    Search.query = search_override;
+
+    $(document).ready(function() {
+       Search.init();
+    });</pre>
+
+
+               <p>Highlights from results will be in a         <code class='verbatim'>span</code>
+ tag with the         <code class='verbatim'>highlighted</code>
+ class (        <code class='verbatim'>This is a &lt;span class=&#34;highlighted&#34;&gt;result&lt;/span&gt;</code>
+). If your theme works with the search from the basic theme, it will work with Read the Docs&#39; SSS.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`static/searchtools.js`: https://github.com/sphinx-doc/sphinx/blob/275d9/sphinx/themes/basic/static/searchtools.js&#39;&gt;
+           </pre>
+
+
+<h3>MkDocs</h3>
+               <p>Search on MkDocs is provided by the <code class='not-implemented'>:None:None:`search plugin`</code>, which is included (and activated) by default in MkDocs. The js part of this plugin is included in the <code class='not-implemented'>:None:None:`templates/search/main.js`</code> file, which subscribes to the         <code class='verbatim'>keyup</code>
+ event of the         <code class='verbatim'>#mkdocs-search-query</code>
+ element to call the         <code class='verbatim'>doSearch</code>
+ function (available on MkDocs &gt;= 1.x) on every key press.</p>
+
+               <p>Read the Docs overrides the         <code class='verbatim'>initSearch</code>
+ and         <code class='verbatim'>doSearch</code>
+ functions to subscribe to the         <code class='verbatim'>keyup</code>
+ event of the         <code class='verbatim'>#mkdocs-search-query</code>
+ element, and puts the results into the         <code class='verbatim'>#mkdocs-search-results</code>
+ element. A simplified example looks like this:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: js
+    var original_search = doSearch;
+
+    function search_override() {
+       var query = document.getElementById(&#39;mkdocs-search-query&#39;).value;
+       var search_results = document.getElementById(&#39;mkdocs-search-results&#39;);
+
+       var results = fetch_resuls(query);
+       if (results) {
+          empty_results(search_results)
+          for (var i = 0; i &lt; results.length; i += 1) {
+             var result = process_result(results[i]);
+             append_result(result, search_results);
+          }
+       } else {
+          original_search();
+       }
+    }
+
+    var init_override = function () {
+       var search_input = document.getElementById(&#39;mkdocs-search-query&#39;);
+       search_input.addEventListener(&#39;keyup&#39;, doSearch);
+    };
+
+    window.doSearch = search_override;
+    window.initSearch = init_override;
+
+    initSearch();</pre>
+
+
+               <p>Highlights from results will be in a         <code class='verbatim'>mark</code>
+ tag (        <code class='verbatim'>This is a &lt;mark&gt;result&lt;/mark&gt;</code>
+). If your theme works with the search plugin of MkDocs, and defines the         <code class='verbatim'>#mkdocs-search-query</code>
+ and         <code class='verbatim'>#mkdocs-search-results</code>
+ elements, it will work with Read the Docs&#39; SSS.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Since the         <code class='verbatim'>templates/search/main.js</code>
+ file is included after our custom search, it will subscribe to the         <code class='verbatim'>keyup</code>
+ event too, triggering both functions when a key is pressed (but ours should have more precedence). This can be fixed by not including the         <code class='verbatim'>search</code>
+ plugin (you won&#39;t be able to fallback to the original search), or by creating a custom plugin to include our search at the end (this should be done by Read the Docs).</p>
+
+</div>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`search plugin`: https://www.mkdocs.org/user-guide/configuration/#search&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _`templates/search/main.js`: https://github.com/mkdocs/mkdocs/blob/ff0b72/mkdocs/contrib/search/templates/search/main.js&#39;&gt;
+           </pre>
+
+
+<h2>Supporting more themes and static site generators</h2>
+               <p>Currently, Read the Docs supports building documentation from         <code class='verbatim'>Sphinx &lt;rtd:intro/getting-started-with-sphinx&gt;</code>
+ and         <code class='verbatim'>MkDocs &lt;rtd:intro/getting-started-with-mkdocs&gt;</code>
+. All themes that follow these conventions should work as expected. If you think other generators or other conventions should be supported, or content that should be ignored or have an especial treatment, or if you found an error with our indexing, let us know in <code class='not-implemented'>:None:None:`our issue tracker`</code>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _our issue tracker: https://github.com/readthedocs/readthedocs.org/issues/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;footnote&#39; &#39;.. [*] For Sphinx projects, the content of the main node is provided by an intermediate step in the build process,\n       but the HTML components from the node are preserved.&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

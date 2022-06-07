@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Build Images</h1>
+               <p>This document describes how Read the Docs uses the <code class='not-implemented'>:None:None:`Docker Images`</code> and how they are named. Besides, it proposes a path forward about a new way to create, name and use our Docker build images to reduce its complexity and support installation of other languages (e.g. nodejs, rust, go) as extra requirements.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Docker Images: https://github.com/readthedocs/readthedocs-docker-images&#39;&gt;
+           </pre>
+
+
+<h2>Introduction</h2>
+               <p>We use Docker images to build user&#39;s documentation. Each time a build is triggered, one of our VMs picks the task and go through different steps:</p>
+
+                          <ol>               <li>               <p>run some application code to spin up a Docker image into a container</p>
+
+</li>
+               <li>               <p>execute         <code class='verbatim'>git</code>
+ inside the container to clone the repository</p>
+
+</li>
+               <li>               <p>analyze and parse files (        <code class='verbatim'>.readthedocs.yaml</code>
+) from the repository <em>outside</em> the container</p>
+
+</li>
+               <li>               <p>spin up a new Docker container based on the config file</p>
+
+</li>
+               <li>               <p>create the environment and install docs&#39; dependencies inside the container</p>
+
+</li>
+               <li>               <p>execute build commands inside the container</p>
+
+</li>
+               <li>               <p>push the output generated by build commands to the storage</p>
+
+</li>
+            </ol>
+
+               <p><em>All</em> those steps depends on specific commands versions:         <code class='verbatim'>git</code>
+,         <code class='verbatim'>python</code>
+,         <code class='verbatim'>virtualenv</code>
+,         <code class='verbatim'>conda</code>
+, etc. Currently, we are pinning only a few of them in our Docker images and that have caused issues when re-deploying these images with bugfixes: <strong>the images are not reproducible over time</strong>.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We have been improving the reproducibility of our images by adding some tests cases. These are run inside the Docker image after it&#39;s built and check that it contains the versions we expect.</p>
+
+</div>
+
+
+               <p>To allow users to pin the image we ended up exposing three images:         <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+ and         <code class='verbatim'>testing</code>
+. With that naming, we were able to bugfix issues and add more features on each image without asking the users to change the image selected in their config file.</p>
+
+               <p>Then, when a completely different image appeared and after testing         <code class='verbatim'>testing</code>
+ image enough, we discarded         <code class='verbatim'>stable</code>
+, old         <code class='verbatim'>latest</code>
+ became the new         <code class='verbatim'>stable</code>
+ and old         <code class='verbatim'>testing</code>
+ became the new         <code class='verbatim'>latest</code>
+. This produced issues to people pinning their images to any of these names because after this change, <em>we changed all the images for all the users</em> and many build issues arrised!</p>
+
+
+<h2>Goals</h2>
+                          <ul>               <li>               <p>release completely new Docker images without forcing users to change their pinned image (        <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+,         <code class='verbatim'>testing</code>
+)</p>
+
+</li>
+               <li>               <p>allow users to select language requirements instead of an image name</p>
+
+</li>
+               <li>               <p>use a         <code class='verbatim'>base</code>
+ image with the dependencies that don&#39;t change frequently (OS and base requirements)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>base</code>
+ image naming is tied to the OS version (e.g. Ubuntu LTS)</p>
+
+</li>
+               <li>               <p>allow us to add/update a Python version without affecting the         <code class='verbatim'>base</code>
+ image</p>
+
+</li>
+               <li>               <p>reduce size on builder VM disks by sharing Docker image layers</p>
+
+</li>
+               <li>               <p>allow users to specify extra languages (e.g. nodejs, rust, go)</p>
+
+</li>
+               <li>               <p>de-motivate the usage of         <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+ and         <code class='verbatim'>testing</code>
+; and promote declaring language requirements instead</p>
+
+</li>
+               <li>               <p>new images won&#39;t contain old/deprecated OS (eg. Ubuntu 18) and Python versions (eg. 3.5, miniconda2)</p>
+
+</li>
+               <li>               <p>install language requirements <em>at built time</em> using         <code class='verbatim'>asdf</code>
+ and its plugins</p>
+
+</li>
+               <li>               <p>create local mirrors for all languages supported</p>
+
+</li>
+               <li>               <p>deleting a pre-built image won&#39;t make builds to fail; only make them slower</p>
+
+</li>
+               <li>               <p>support only the latest Ubuntu LTS version and keep the previous one as long as it&#39;s officially supported</p>
+
+</li>
+            </ul>
+
+
+<h2>Non goals</h2>
+                          <ul>               <li>               <p>allow creation/usage of custom Docker images</p>
+
+</li>
+               <li>               <p>allow to execute arbitrary commands via hooks (eg.         <code class='verbatim'>pre_build</code>
+)</p>
+
+</li>
+               <li>               <p>automatically build &amp; push <em>all</em> images on commit</p>
+
+</li>
+               <li>               <p>pre-built multiple images for all the languages combinations</p>
+
+</li>
+            </ul>
+
+
+<h2>Pre-built build image structure</h2>
+                          <pre class='not-implemented'>
+            &lt;Comment: 
+   |value: &#39;.. Taken from https://github.com/readthedocs/readthedocs-docker-images/blob/main/Dockerfile&#39;
+   |&gt;
+           </pre>
+
+               <p>The new pre-built images will depend only on the Ubuntu OS. They will contain all the requirements to add extra languages support at built time via         <code class='verbatim'>asdf</code>
+ command.</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>ubuntu20-base</code>
+</p>
+
+                          <ul>               <li>               <p>labels</p>
+
+</li>
+               <li>               <p>environment variables</p>
+
+</li>
+               <li>               <p>system dependencies</p>
+
+</li>
+               <li>               <p>install requirements</p>
+
+</li>
+               <li>               <p>LaTeX dependencies (for PDF generation)</p>
+
+</li>
+               <li>               <p>languages version manager (        <code class='verbatim'>asdf</code>
+) and its plugins for each language</p>
+
+</li>
+               <li>               <p>UID and GID</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+               <p>Instead of building all the Docker image per language versions combination, it will be easier to install all of them at build time using the same steps. Installing a language only adds a few seconds when binaries are provided. However, to reduce the time to install these languages as much as possible, a local mirror hosted on S3 for each language will be created.</p>
+
+               <p>It&#39;s important to note that Python does not provide binaries and compiling a version takes around ~2 minutes. However, the Python versions could be pre-compiled and expose their binaries via S3 to builders. Then, at build time, the builder will only download the binary and copy it in the correct path.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Depending on the demand, Read the Docs may pre-build the most common combinations of languages used by users. For example,         <code class='verbatim'>ubuntu20+python39+node14</code>
+ or         <code class='verbatim'>ubuntu20+python39+node14+rust1</code>
+. However, this is seen as an optimization for the future and it&#39;s not required for this document.</p>
+
+</div>
+
+
+
+<h2>Build steps</h2>
+               <p>With this new approach, the steps followed by a builder will be:</p>
+
+                          <ol>               <li>               <p>run some application code to spin up the         <code class='verbatim'>-base</code>
+ Docker image into a container</p>
+
+</li>
+               <li>               <p>execute         <code class='verbatim'>git</code>
+ inside the container to clone the repository</p>
+
+</li>
+               <li>               <p>analyze and parse files (        <code class='verbatim'>.readthedocs.yaml</code>
+) from the repository <em>outside</em> the container</p>
+
+</li>
+               <li>               <p>spin up a new Docker container <strong>based on the Ubuntu OS specified</strong> in the config file</p>
+
+</li>
+               <li>               <p><strong>install all language dependencies from the cache</strong></p>
+
+</li>
+               <li>               <p>create the environment and install docs&#39; dependencies inside the container</p>
+
+</li>
+               <li>               <p>execute build commands inside the container</p>
+
+</li>
+               <li>               <p>push the output generated by build commands to the storage</p>
+
+</li>
+            </ol>
+
+               <p>The main difference with the current approach are:</p>
+
+                          <ul>               <li>               <p>the image to spin up is selected depending on the OS version</p>
+
+</li>
+               <li>               <p>all language dependencies are installed at build time</p>
+
+</li>
+               <li>               <p>languages not offering binaries are pre-compiled by Read the Docs and stored in the cache</p>
+
+</li>
+               <li>               <p>miniconda/mambaforge are now managed with the same management tool (e.g.         <code class='verbatim'>asdf install python miniconda3-4.7.12</code>
+)</p>
+
+</li>
+            </ul>
+
+
+<h2>Specifying extra languages requirements</h2>
+               <p>Different users may have different requirements. People with specific language dependencies will be able to install them by using         <code class='verbatim'>.readthedocs.yaml</code>
+ config file. Example:</p>
+
+               <pre>build:
+  os: ubuntu20
+  languages:
+    python: &#34;3.9&#34;  # supports &#34;pypy3&#34;, &#34;miniconda3&#34; and &#34;mambaforge&#34;
+    nodejs: &#34;14&#34;
+    rust: &#34;1.54&#34;
+    golang: &#34;1.17&#34;</pre>
+               <p>Important highlights:</p>
+
+                          <ul>               <li>               <p>do not treat Python language different from the others (will help us to support other non-Python doctools in the future)</p>
+
+</li>
+               <li>               <p>specifying         <code class='verbatim'>build.languages.python: &#34;3&#34;</code>
+ will use Python version         <code class='verbatim'>3.x.y</code>
+, and may differ between builds</p>
+
+</li>
+               <li>               <p>specifying         <code class='verbatim'>build.languages.python: &#34;3.9&#34;</code>
+ will use Python version         <code class='verbatim'>3.9.y</code>
+, and may differ between builds</p>
+
+</li>
+               <li>               <p>specifying         <code class='verbatim'>build.languages.nodejs: &#34;14&#34;</code>
+ will use nodejs version         <code class='verbatim'>14.x.y</code>
+, and may differ between builds</p>
+
+</li>
+               <li>               <p>if no full version is declared, it will try first latest available on our cache, and then the latest on         <code class='verbatim'>asdf</code>
+   (it has to match the first part of the version declared)</p>
+
+</li>
+               <li>               <p>specifying minor language versions is not allowed (e.g.         <code class='verbatim'>3.7.11</code>
+)</p>
+
+</li>
+               <li>               <p>not specifying         <code class='verbatim'>build.os</code>
+ will make the config file parser to fail</p>
+
+</li>
+               <li>               <p>not specifying         <code class='verbatim'>build.languages</code>
+ will make the config file parsing to fail (at least one is required)</p>
+
+</li>
+               <li>               <p>specifying only         <code class='verbatim'>build.languages.nodejs</code>
+ and using Sphinx to build the docs, will make the build to fail (e.g. &#34;Command not found&#34;)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>build.image</code>
+ is incompatible with         <code class='verbatim'>build.os</code>
+ or         <code class='verbatim'>build.languages</code>
+ and will produce an error</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>python.version</code>
+ is incompatible with         <code class='verbatim'>build.os</code>
+ or         <code class='verbatim'>build.languages</code>
+ and will produce an error</p>
+
+</li>
+               <li>               <p>Ubuntu 18 will still be available via         <code class='verbatim'>stable</code>
+ and         <code class='verbatim'>latest</code>
+ images, but not in new ones</p>
+
+</li>
+               <li>               <p>only a subset (not defined yet) of         <code class='verbatim'>python</code>
+,         <code class='verbatim'>nodejs</code>
+,         <code class='verbatim'>rust</code>
+ and         <code class='verbatim'>go</code>
+ versions on         <code class='verbatim'>asdf</code>
+ are available to select</p>
+
+</li>
+            </ul>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We are moving away from users specifying a particular Docker image. With the new approach, users will specify the languages requirements they need, and Read the Docs will decide if it will use a pre-built image or will spin up the base one and install these languages on the fly.</p>
+
+        <p>However,         <code class='verbatim'>build.image</code>
+ will be still available for backward compatibility with         <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+ and         <code class='verbatim'>testing</code>
+ but won&#39;t support the new         <code class='verbatim'>build.languages</code>
+ config.</p>
+
+</div>
+
+
+               <p>Note that knowing exactly what packages users are installing, could allow us to pre-build the most common combinations used images:         <code class='verbatim'>ubuntu20+py39+node14</code>
+.</p>
+
+
+<h2>Time required to install languages at build time</h2>
+               <p>Testings using         <code class='verbatim'>time</code>
+ command in ASG instances to install extra languages took these &#34;real&#34; times:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>build-default</code>
+</p>
+
+                          <ul>               <li>               <p>python 3.9.6: 2m21.331s</p>
+
+</li>
+               <li>               <p>mambaforge 4.10.1: 0m26.291s</p>
+
+</li>
+               <li>               <p>miniconda3 4.7.12: 0m9.955s</p>
+
+</li>
+               <li>               <p>nodejs 14.17.5: 0m5.603s</p>
+
+</li>
+               <li>               <p>rust 1.54.0: 0m13.587s</p>
+
+</li>
+               <li>               <p>golang 1.17: 1m30.428s</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>        <code class='verbatim'>build-large</code>
+</p>
+
+                          <ul>               <li>               <p>python 3.9.6: 2m33.688s</p>
+
+</li>
+               <li>               <p>mambaforge 4.10.1: 0m28.781s</p>
+
+</li>
+               <li>               <p>miniconda3 4.7.12: 0m10.551s</p>
+
+</li>
+               <li>               <p>nodejs 14.17.5: 0m6.136s</p>
+
+</li>
+               <li>               <p>rust 1.54.0: 0m14.716s</p>
+
+</li>
+               <li>               <p>golang 1.17: 1m36.470s</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+               <p>Note that the only one that required compilation was Python. All the others, spent 100% of its time downloading the binary. These download times are <em>way better from EU</em> with a home internet connection.</p>
+
+               <p>In the worst scenario: &#34;none of the specified language version has a pre-built image&#34;, the build will require ~5 minutes to install all the language requirements. By providing <em>only</em> pre-built images with the Python version (that&#39;s the most time consuming), build times will only require ~2 minutes to install the others. However, requiring one version of each language is not a common case.</p>
+
+
+<h2>Cache language binaries on S3</h2>
+               <p>        <code class='verbatim'>asdf</code>
+ scripts can be altered to download the         <code class='verbatim'>.tar.gz</code>
+ dist files from a different mirror than the official one. Read the Docs can make usage of this to create a mirror hosted locally on S3 to get faster download speeds. This will make a good improvement for languages that offer binaries:         <code class='verbatim'>nodejs</code>
+,         <code class='verbatim'>rust</code>
+ and         <code class='verbatim'>go</code>
+:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>nodejs</code>
+ uses         <code class='verbatim'>NODEJS_ORG_MIRROR</code>
+: https://github.com/asdf-vm/asdf-nodejs/blob/f9957f3f256ebbb3fdeebcaed5082ad305222be6/lib/utils.sh#L5</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>rust</code>
+ uses         <code class='verbatim'>RUSTUP_UPDATE_ROOT</code>
+: https://github.com/rust-lang/rustup/blob/499e582bc8ba34fa7e84d5120001aae31151d3c8/rustup-init.sh#L23</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>go</code>
+ has the URL hardcoded: https://github.com/kennyp/asdf-golang/blob/cc8bc47d4877beed61e10815d46669e1eaaa0bbe/bin/download#L54</p>
+
+</li>
+            </ul>
+
+               <p>However, currently Python does not offer binaries and a different solution is needed. Python versions can be pre-compiled once and expose the output on the S3 for the builders to download and extract in the correct PATH.</p>
+
+               <pre class='not-implemented'>
+.. tip:: 
+    Since we are building a special cache for pre-compiled Python versions,
+    we could use the same method for all the other languages instead of creating a full mirror (many Gigabyes)
+    This simple `bash script`_ download the language sources, compiles it and upload it to S3 without requiring a mirror.
+    Note that it works in the same way for all the languages, not just for Python.</pre>
+
+
+
+<h2>Questions</h2>
+
+<h3>What Python versions will be pre-compiled and cached?</h3>
+               <p>At start only a small subset of Python version will be pre-compiled:</p>
+
+                          <ul>               <li>               <p>2.7.x</p>
+
+</li>
+               <li>               <p>3.7.x</p>
+
+</li>
+               <li>               <p>3.8.x</p>
+
+</li>
+               <li>               <p>3.9.x</p>
+
+</li>
+               <li>               <p>3.10.x</p>
+
+</li>
+               <li>               <p>pypy3.x</p>
+
+</li>
+            </ul>
+
+
+<h3>How do we upgrade a Python version?</h3>
+               <p>Python patch versions can be upgraded by re-compiling the new patch version and making it available in our cache. For example, if version 3.9.6 is the one available and 3.9.7 is released, <em>after updating our cache</em>:</p>
+
+                          <ul>               <li>               <p>users specifying         <code class='verbatim'>build.languages.python: &#34;3.9&#34;</code>
+ will get the 3.9.7 version</p>
+
+</li>
+               <li>               <p>users specifying         <code class='verbatim'>build.languages.python: &#34;3&#34;</code>
+ will get the 3.9.7 version</p>
+
+</li>
+            </ul>
+
+               <p>As we will have control over these version, we can decide <em>when</em> to upgrade (if ever required) and we can roll back if the new pre-compiled version was built with a problem.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Python versions may need to be re-compiled each time that the         <code class='verbatim'>-base</code>
+ image is re-built. This is due that some underlying libraries that Python depend on may have changed.</p>
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Installing always the latest version is harder to maintain. It will require building the newest version each time a new patch version is released. Beacause of that, Read the Docs will always be behind official releases. Besides, it will give projects different versions more often.</p>
+
+        <p>Exposing to the user the patch version would require to cache many different versions ourselves, and if the user selects one patched version that we don&#39;t have cached by mistake, those builds will add extra build time.</p>
+
+</div>
+
+
+
+<h3>How do we add a Python version?</h3>
+               <p>Adding a new Python version requires:</p>
+
+                          <ul>               <li>               <p>pre-compile the desired version for each Ubuntu OS version supported</p>
+
+</li>
+               <li>               <p>upload the compressed output to S3</p>
+
+</li>
+               <li>               <p>add the supported version to the config file validator</p>
+
+</li>
+            </ul>
+
+
+<h3>How do we remove an old Python version?</h3>
+               <p>At some point, an old version of Python will be deprecated (eg. 3.4) and will be removed. To achieve this, we can just remove the pre-compiled Python version from the cache.</p>
+
+               <p>However, unless it&#39;s strictly neeed for some specific reason, we shouldn&#39;t require to remove support for a Python version as long as we support the Ubuntu OS version where this version was compiled for.</p>
+
+               <p>In any case, we will know which projects are using these versions because they are pinning these specific versions in the config file. We could show a message in the build output page and also send them an email with the EOL date for this image.</p>
+
+               <p>However, removing pre-compiled Python version that it&#39;s being currently used by some users won&#39;t make their builds to fail. Instead, that Python version will be compiled and installed at build time; adding a &#34;penalization&#34; time to those projects and motivating them to move forward to a newer version.</p>
+
+
+<h3>How do we upgrade system versions?</h3>
+               <p>We usually don&#39;t upgrade these dependencies unless we upgrade the Ubuntu version. So, they will be only upgraded when we go from Ubuntu 18.04 LTS to Ubuntu 20.04 LTS for example.</p>
+
+               <p>Examples of these versions are:</p>
+
+                          <ul>               <li>               <p>doxygen</p>
+
+</li>
+               <li>               <p>git</p>
+
+</li>
+               <li>               <p>subversion</p>
+
+</li>
+               <li>               <p>pandoc</p>
+
+</li>
+               <li>               <p>swig</p>
+
+</li>
+               <li>               <p>latex</p>
+
+</li>
+            </ul>
+
+               <p>This case will introduce a new         <code class='verbatim'>base</code>
+ image. Example,         <code class='verbatim'>ubuntu22-base</code>
+ in 2022. Note that these images will be completely isolated from the rest and don&#39;t require them to rebuild. This also allow us to start testing a newer Ubuntu version (e.g. 22.04 LTS) without breaking people&#39;s builds, even before it&#39;s officially released.</p>
+
+
+<h3>How do we add an extra requirement?</h3>
+               <p>In case we need to add an extra requirement to the         <code class='verbatim'>base</code>
+ image, we will need to rebuild all of them. The new image <em>may have different package versions</em> since there may be updates on the Ubuntu repositories. This conveys some risk here, but in general we shouldn&#39;t require to add packages to the base images.</p>
+
+               <p>In case we need an extra requirement for <em>all our images</em>, I&#39;d recommend to add it when creating a new base image.</p>
+
+               <p>If it&#39;s strongly needed and we can&#39;t wait for a new base image, we could install it at build time in a similar way as we do with         <code class='verbatim'>build.apt_packages</code>
+ as a temporal workaround.</p>
+
+
+<h3>How do we create a mirror for each language?</h3>
+               <p>A mirror can be created with         <code class='verbatim'>wget</code>
+ together with         <code class='verbatim'>rclone</code>
+:</p>
+
+                          <ol>               <li>               <p>Download all the files from the official mirror:</p>
+
+               <pre># https://stackoverflow.com/questions/29802579/create-private-mirror-of-http-nodejs-org-dist
+   wget --mirror --convert-links --adjust-extension --page-requisites --no-parent -e robots=off http://nodejs.org/dist</pre>
+</li>
+               <li>               <p>Upload all the files to S3:</p>
+
+               <pre># https://rclone.org/s3/
+   rclone sync -i nodejs.org s3:languages</pre>
+</li>
+            </ol>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Downloading a copy of the official mirror took 15m and 52Gb.</p>
+
+</div>
+
+
+
+<h3>How local development will work with the new approach?</h3>
+               <p>Local development will require scripts to clone the official mirrors for each language and upload them to MinIO (S3). Besides, a script to define a set of Python version, pre-compile them and also upload them to S3.</p>
+
+               <p>This is already covered by this simple <code class='not-implemented'>:None:None:`bash script`</code> and tested in this PR with a POC: https://github.com/readthedocs/readthedocs.org/pull/8453</p>
+
+
+<h2>Deprecation plan</h2>
+               <p>After this design document gets implemented and tested, all our current images (        <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+,         <code class='verbatim'>testing</code>
+) will be deprecated and their usage will be de-motivated. However, we could keep them on our builders to give users a good time to migrate their projects to the new ones.</p>
+
+               <p>We may want to keep only the latest Ubuntu LTS release available in production, with a special consideration for our current Ubuntu 18.04 LTS on         <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+ and         <code class='verbatim'>testing</code>
+ because 100% of the projects depend on them currently. Once Ubuntu 22.04 LTS is released, we should communicate that Ubuntu 20.04 LTS is deprecated, and keep it available in our servers during the time that&#39;s officially supported by Ubuntu during the &#34;Maintenance updates&#34; (see &#34;Login term support and interim releases&#34; in https://ubuntu.com/about/release-cycle). As an example, Ubuntu 22.04 LTS will be officially released on April 2022 and we will offer support for it until 2027.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>Deleting         <code class='verbatim'>-base</code>
+ images from the build servers <strong>will make project&#39;s builds to fail</strong>. We want to keep supporting them as much as we can, but having a well-defined deprecation policy is a win.</p>
+
+</div>
+
+
+
+<h2>Work required and rollout plan</h2>
+               <p>The following steps are required to support the full proposal of this document.</p>
+
+                          <ol>               <li>               <p>allow users to install extras languages requirements via config file</p>
+
+                          <ul>               <li>               <p>update config file to support         <code class='verbatim'>build.os</code>
+ and         <code class='verbatim'>build.languages</code>
+ config</p>
+
+</li>
+               <li>               <p>modify builder code to run         <code class='verbatim'>asdf install</code>
+ for all supported languages</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>build a new base Docker image with new structure (        <code class='verbatim'>ubuntu20-base</code>
+)</p>
+
+                          <ul>               <li>               <p>build new image with Ubuntu 20.04 LTS and pre-installed         <code class='verbatim'>asdf</code>
+ with all its plugins</p>
+
+</li>
+               <li>               <p>do not install any language version on base image</p>
+
+</li>
+               <li>               <p>deploy builders with new base image</p>
+
+</li>
+            </ul>
+
+</li>
+            </ol>
+
+               <p>At this point, we will have a full working setup. It will be opt-in by using the new configs         <code class='verbatim'>build.os</code>
+ and         <code class='verbatim'>build.languages</code>
+. However, <em>all languages</em> will be installed at build time; which will &#34;penalize&#34; all projects because all of them will have to install Python.</p>
+
+               <p>After testing this for some time, we can continue with the following steps that provides a cache to optimize installation times:</p>
+
+                          <ol>               <li>               <p>create mirrors on S3 for all supported languages</p>
+
+</li>
+               <li>               <p>create mirror for pre-compiled latest 3 Python versions, Python 2.7 and PyPy3</p>
+
+</li>
+            </ol>
+
+
+<h2>Conclusion</h2>
+               <p>There is no need to differentiate the images by its state (stable, latest, testing) but by its main base differences: OS. The version of the OS will change many library versions, LaTeX dependencies, basic required commands like git and more, that doesn&#39;t seem to be useful to have the same OS version with different states.</p>
+
+               <p>Allowing users to install extra languages by using the Config File will cover most of the support requests we have had in the past. It also will allow us to know more about how our users are using the platform to make future decisions based on this data. Exposing users how we want them to use our platform will allow us to be able to maintain it longer, than giving the option to select a specific Docker image by name that we can&#39;t guarrantee it will be frozen.</p>
+
+               <p>Finally, having the ability to deprecate and <em>remove</em> pre-built images from our builders over time, will reduce the maintainance work required from the the core team. We can always support all the languages versions by installing them at build time. The only required pre-built image for this are the OS         <code class='verbatim'>-base</code>
+ images. In fact, even after decided to deprecate and removed a pre-built image from the builders, we can re-build it if we find that it&#39;s affecting many projects and slowing down their builds too much, causing us problems.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _bash script: https://gist.github.com/humitos/191ee6990cbd951cf70318edbd13b922&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

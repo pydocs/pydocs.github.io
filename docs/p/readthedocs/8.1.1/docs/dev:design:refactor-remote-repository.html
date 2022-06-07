@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Refactor ``RemoteRepository`` object</h1>
+               <p>This document describes the current usage of         <code class='verbatim'>RemoteRepository</code>
+ objects and proposes a new normalized modeling.</p>
+
+
+<h2>Goals</h2>
+                          <ul>               <li>               <p>De-duplicate data stored in our database.</p>
+
+</li>
+               <li>               <p>Save only one         <code class='verbatim'>RemoteRepository</code>
+ per GitHub repository.</p>
+
+</li>
+               <li>               <p>Use an intermediate table between         <code class='verbatim'>RemoteRepository</code>
+ and         <code class='verbatim'>User</code>
+ to store associated remote data for the specific user.</p>
+
+</li>
+               <li>               <p>Make this model usable from our SSO implementation (adding         <code class='verbatim'>remote_id</code>
+ field in         <code class='verbatim'>Remote</code>
+ objects).</p>
+
+</li>
+               <li>               <p>Use Post         <code class='verbatim'>JSONField</code>
+ to store associated         <code class='verbatim'>json</code>
+ remote data.</p>
+
+</li>
+               <li>               <p>Make         <code class='verbatim'>Project</code>
+ connect directly to         <code class='verbatim'>RemoteRepository</code>
+ without being linked to a specific         <code class='verbatim'>User</code>
+.</p>
+
+</li>
+               <li>               <p>Do not disconnect         <code class='verbatim'>Project</code>
+ and         <code class='verbatim'>RemoteRepository</code>
+ when a user delete/disconnects their account.</p>
+
+</li>
+            </ul>
+
+
+<h2>Non-Goals</h2>
+                          <ul>               <li>               <p>Keep         <code class='verbatim'>RemoteRepository</code>
+ in sync with GitHub repositories.</p>
+
+</li>
+               <li>               <p>Delete         <code class='verbatim'>RemoteRepository</code>
+ objects deleted from GitHub.</p>
+
+</li>
+               <li>               <p>Listen to GitHub events to detect         <code class='verbatim'>full_name</code>
+ changes and update our objects.</p>
+
+</li>
+            </ul>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We may need/want some of these non-goals in the future. They are just outside the scope of this document.</p>
+
+</div>
+
+
+
+<h2>Current Implementation</h2>
+               <p>When a user connect their account to a social account, we create a</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>allauth.socialaccount.models.SocialAccount</code>
+   * basic information (provider, last login, etc)   * provider&#39;s specific data saved in a JSON under         <code class='verbatim'>extra_data</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>allauthsocialaccount.models.SocialToken</code>
+   * token to hit the API on behalf the user</p>
+
+</li>
+            </ul>
+
+               <p>We <em>don&#39;t create</em> any         <code class='verbatim'>RemoteRepository</code>
+ at this point. They are created when the user jumps into &#34;Import Project&#34; page and hit the circled arrows. It triggers         <code class='verbatim'>sync_remote_repostories</code>
+ task in background that updates or creates         <code class='verbatim'>RemoteRepositories</code>
+, but <strong>it does not delete</strong> them (after <code class='not-implemented'>:None:None:`#7183`</code> and <code class='not-implemented'>:None:None:`#7310`</code> got merged, they will be deleted). One         <code class='verbatim'>RemoteRepository</code>
+ is created per repository the         <code class='verbatim'>User</code>
+ has access to.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>In corporate, we are automatically syncing         <code class='verbatim'>RemoteRepository</code>
+ and         <code class='verbatim'>RemoteOganization</code>
+ at signup (foreground) and login (background) via a signal. We should eventually move these to community.</p>
+
+</div>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _sync_remote_repositoies: https://github.com/readthedocs/readthedocs.org/blob/56253cb786945c9fe53a034a4433f10672ae8a4f/readthedocs/oauth/tasks.py#L25-L43&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _#7183: https://github.com/readthedocs/readthedocs.org/pull/7183&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _#7310: https://github.com/readthedocs/readthedocs.org/pull/7310&#39;&gt;
+           </pre>
+
+
+<h2>Where ``RemoteRepository`` is used?</h2>
+                          <ul>               <li>               <p>List of available repositories to import under &#34;Import Project&#34;</p>
+
+</li>
+               <li>               <p>Show a &#34;+&#34;, &#34;External Arrow&#34; or a &#34;Lock&#34; sign next to the element in the list   * +: it&#39;s available to be imported   * External Arrow: the repository is already imported (see <code class='not-implemented'>:None:None:`RemoteRepository.matches`</code> method)   * Lock: user doesn&#39;t have (admin) permissions to import this repository (uses         <code class='verbatim'>RemoteRepository.private</code>
+ and         <code class='verbatim'>RemoteRepository.admin</code>
+)</p>
+
+</li>
+               <li>               <p>Avatar URL in the list of project available to import</p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`Update webhook`</code> when user clicks &#34;Resync webhook&#34; from the <code class='not-implemented'>:None:guilabel:`Admin`</code> &gt; <code class='not-implemented'>:None:guilabel:`Integrations`</code> tab</p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`Send build status`</code> when building Pull Requests</p>
+
+</li>
+            </ul>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _RemoteRepository.matches: https://github.com/readthedocs/readthedocs.org/blob/56253cb786945c9fe53a034a4433f10672ae8a4f/readthedocs/oauth/models.py#L182-L204&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Update webhook: https://github.com/readthedocs/readthedocs.org/blob/56253cb786945c9fe53a034a4433f10672ae8a4f/readthedocs/oauth/utils.py#L26-L62&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Send build status: https://github.com/readthedocs/readthedocs.org/blob/56253cb786945c9fe53a034a4433f10672ae8a4f/readthedocs/projects/tasks.py#L1852-L1956&#39;&gt;
+           </pre>
+
+
+<h2>New Normalized Implementation</h2>
+               <p>The         <code class='verbatim'>ManyToMany</code>
+ relation         <code class='verbatim'>RemoteRepository.users</code>
+ will be changed to be         <code class='verbatim'>ManyToMany(through=&#39;RemoteRelation&#39;)</code>
+ <code class='not-implemented'>:None:None:`to add extra fields in the relation`</code> that are specific only for the User. Allows us to have <em>only one</em>         <code class='verbatim'>RemoteRepository</code>
+ per GitHub repository with multiple relationships to         <code class='verbatim'>User</code>
+.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _to add extra fields in the relation: https://docs.djangoproject.com/en/2.2/topics/db/models/#extra-fields-on-many-to-many-relationships&#39;&gt;
+           </pre>
+
+               <p>With this modeling, we can avoid the disconnection         <code class='verbatim'>Project</code>
+ and         <code class='verbatim'>RemoteRepository</code>
+ only by removing the         <code class='verbatim'>RemoteRelation</code>
+.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>All the points mentioned in the previous section may need to be adapted to use the new normalized modeling. However, it may be only field renaming or small query changes over new fields.</p>
+
+</div>
+
+
+
+<h3>Use this modeling for SSO</h3>
+               <p>We can get the list of         <code class='verbatim'>Project</code>
+ where a user as access:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: python
+    admin_remote_repositories = RemoteRepository.objects.filter(
+        users__contains=request.user,
+        users__remoterelation__admin=True,  # False for read-only access
+    )
+    Project.objects.filter(remote_repository__in=admin_remote_repositories)</pre>
+
+
+
+<h2>Rollout Plan</h2>
+               <p>Due the constraints we have in the         <code class='verbatim'>RemoteRepository</code>
+ table and its size, we can&#39;t just do the data migration at the same time of the deploy. Because of this we need to be more creative here and find a way to re-sync the data from VCS providers, while the site continue working.</p>
+
+               <p>To achieve this, we thought on following this steps:</p>
+
+                          <ol>               <li>               <p>modify all the Python code to use the new modeling in .org and .com (will help us to find out bugs locally in an easier way)</p>
+
+</li>
+               <li>               <p>QA this locally with test data</p>
+
+</li>
+               <li>               <p>enable Django signal to re-sync RemoteRepository on login async (we already have this in .com). New active users will have updated data immediately</p>
+
+</li>
+               <li>               <p>spin up a new instance with the new refactored code</p>
+
+</li>
+               <li>               <p>run migrations to create a new table for <code class='not-implemented'>:None:None:`RemoteRepository`</code></p>
+
+</li>
+               <li>               <p>re-sync everything from VCS providers into the new table for 1-week or so</p>
+
+</li>
+               <li>               <p>dump-n-load <code class='not-implemented'>:None:None:`Project - RemoteRepository`</code> relations</p>
+
+</li>
+               <li>               <p>create a migration to use the new table with synced data</p>
+
+</li>
+               <li>               <p>deploy new code once the sync is finished</p>
+
+</li>
+            </ol>
+
+               <p>See these issues for more context: * https://github.com/readthedocs/readthedocs.org/pull/7536#issuecomment-724102640 * https://github.com/readthedocs/readthedocs.org/pull/7675#issuecomment-732756118</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

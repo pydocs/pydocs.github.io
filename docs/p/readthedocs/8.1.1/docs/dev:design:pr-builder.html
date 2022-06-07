@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Design of Pull Request Builder</h1>
+
+<h2>Background</h2>
+               <p>This will focus on automatically building documentation for Pull Requests on Read the Docs projects. This is one of the most requested feature of Read the Docs. This document will serve as a design document for discussing how to implement this features.</p>
+
+
+<h2>Scope</h2>
+                          <ul>               <li>               <p>Making Pull Requests work like temporary         <code class='verbatim'>Version</code>
+</p>
+
+</li>
+               <li>               <p>Excluding PR Versions from Elasticsearch Indexing</p>
+
+</li>
+               <li>               <p>Adding a         <code class='verbatim'>PR Builds</code>
+ Tab in the Project Dashboard</p>
+
+</li>
+               <li>               <p>Updating the Footer API</p>
+
+</li>
+               <li>               <p>Adding Warning Banner to Docs</p>
+
+</li>
+               <li>               <p>Serving PR Docs</p>
+
+</li>
+               <li>               <p>Excluding PR Versions from Search Engines</p>
+
+</li>
+               <li>               <p>Receiving         <code class='verbatim'>pull_request</code>
+ webhook event from Github</p>
+
+</li>
+               <li>               <p>Fetching data from pull requests</p>
+
+</li>
+               <li>               <p>Storing PR Version build Data</p>
+
+</li>
+               <li>               <p>Creating PR Versions when a pull request is opened and Triggering a build</p>
+
+</li>
+               <li>               <p>Triggering Builds on new commits on a PR</p>
+
+</li>
+               <li>               <p>Status reporting to Github</p>
+
+</li>
+            </ul>
+
+
+<h2>Fetching Data from Pull Requests</h2>
+               <p>We already get Pull request events from Github webhooks. We can utilize that to fetch data from pull requests. when a         <code class='verbatim'>pull_request</code>
+ event is triggered we can fetch the data of that pull request. We can fetch the pull request by doing something similar to travis-ci. ie:         <code class='verbatim'>git fetch origin +refs/pull/&lt;pr_number&gt;/merge:</code>
+</p>
+
+
+<h2>Modeling Pull Requests as a Type of Version</h2>
+               <p>Pull requests can be Treated as a Type of Temporary         <code class='verbatim'>Version</code>
+. We might consider adding a         <code class='verbatim'>VERSION_TYPES</code>
+ to the         <code class='verbatim'>Version</code>
+ model.</p>
+
+                          <ul>               <li>               <p>If we go with         <code class='verbatim'>VERSION_TYPES</code>
+ we can add something like         <code class='verbatim'>pull_request</code>
+ alongside Tag and Branch.</p>
+
+</li>
+            </ul>
+
+               <p>We should add         <code class='verbatim'>Version</code>
+ and         <code class='verbatim'>Build</code>
+ Model Managers for PR and Regular Versions and Builds. The proposed names for PR and Regular Version and Build Mangers are         <code class='verbatim'>external</code>
+ and         <code class='verbatim'>internal</code>
+.</p>
+
+               <p>We can then use         <code class='verbatim'>Version.internal.all()</code>
+ to get all regular versions,         <code class='verbatim'>Version.external.all()</code>
+ to get all PR versions.</p>
+
+               <p>We can then use         <code class='verbatim'>Build.internal.all()</code>
+ to get all regular version builds,         <code class='verbatim'>Build.external.all()</code>
+ to get all PR version builds.</p>
+
+
+<h2>Excluding PR Versions from Elasticsearch Indexing</h2>
+               <p>We should exclude to PR Versions from being Indexed to Elasticsearch. We need to update the queryset to exclude PR Versions.</p>
+
+
+<h2>Adding a PR Builds Tab in the Project Dashboard</h2>
+               <p>We can add a Tab in the project dashboard that will listout the PR Builds of that project. We can name it         <code class='verbatim'>PR Builds</code>
+.</p>
+
+
+<h2>Creating Versions for Pull Requests</h2>
+               <p>If the Github webhook event is         <code class='verbatim'>pull_request</code>
+ and action is         <code class='verbatim'>opened</code>
+, this means a pull request was opened in the projects repository. We can create a         <code class='verbatim'>Version</code>
+ from the Payload data and trigger a initial build for the version. A version will be created whenever RTD receives an event like this.</p>
+
+
+<h2>Triggering Build for New Commits in a Pull Request</h2>
+               <p>We might want to trigger a new build for the PR version if there is a new commit on the PR. If the Github webhook event is         <code class='verbatim'>pull_request</code>
+ and action is         <code class='verbatim'>synchronize</code>
+, this means a new commit was added to the pull request.</p>
+
+
+<h2>Status Reporting to Github</h2>
+               <p>We could send build status reports to Github. We could send if the build was Successful or Failed. We can also send the build URL. By this we could show if the build passed or failed on Github something like travis-ci does.</p>
+
+               <p>As we already have the         <code class='verbatim'>repo:status</code>
+ scope on our OAuth App, we can send the status report to Github using the Github Status API.</p>
+
+               <p>Sending the status report would be something like this:</p>
+
+               <pre class='not-implemented'>
+.. http:post:: /repos/:owner/:repo/statuses/:sha
+    </pre>
+
+
+               <pre>{
+    &#34;state&#34;: &#34;success&#34;,
+    &#34;target_url&#34;: &#34;&lt;pr_build_url&gt;&#34;,
+    &#34;description&#34;: &#34;The build succeeded!&#34;,
+    &#34;context&#34;: &#34;continuous-documentation/read-the-docs&#34;
+}</pre>
+
+<h2>Storing Pull Request Docs</h2>
+               <p>We need to think about how and where to store data after a PR Version build is finished. We can store the data in a blob storage.</p>
+
+
+<h2>Excluding PR Versions from Search Engines</h2>
+               <p>We should Exclude the PR Versions from Search Engines, because it might cause problems for RTD users. As users might land to a pull request doc but not the original Project Docs. This will cause confusion for the users.</p>
+
+
+<h2>Serving PR Docs</h2>
+               <p>We need to think about how we want to serve the PR Docs.</p>
+
+                          <ul>               <li>               <p>We could serve the PR Docs from another Domain.</p>
+
+</li>
+               <li>               <p>We could serve the PR Docs using         <code class='verbatim'>&lt;pr_number&gt;</code>
+ namespace on the same Domain.</p>
+
+                          <ul>               <li>               <p>Using         <code class='verbatim'>pr-&lt;pr_number&gt;</code>
+ as the version slug         <code class='verbatim'>https://&lt;project_slug&gt;.readthedocs.io/&lt;language_code&gt;/pr-&lt;pr_number&gt;/</code>
+</p>
+
+</li>
+               <li>               <p>Using         <code class='verbatim'>pr</code>
+ subdomain         <code class='verbatim'>https://pr.&lt;project_slug&gt;.readthedocs.io/&lt;pr_number&gt;/</code>
+</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h2>Updating the Footer API</h2>
+               <p>We need to update the Footer API to reflect the changes. We might want to have a way to show that if this is a PR Build on the Footer.</p>
+
+                          <ul>               <li>               <p>For regular project docs we should remove the PR Versions from the version list of the Footer.</p>
+
+</li>
+               <li>               <p>We might want to send         <code class='verbatim'>is_pr</code>
+ data with the Footer API response.</p>
+
+</li>
+            </ul>
+
+
+<h2>Adding Warning Banner to Docs</h2>
+               <p>We need to add a warning banner to the PR Version Docs to let the users know that this is a Draft/PR version. We can use a sphinx extension that we will force to install on the PR Versions to add the warning banner.</p>
+
+
+<h2>Related Issues</h2>
+                          <ul>               <li>               <p><code class='not-implemented'>:None:None:`Autobuild Docs for Pull Requests`</code></p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`Add travis-ci style pull request builder`</code></p>
+
+</li>
+            </ul>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Autobuild Docs for Pull Requests: https://github.com/readthedocs/readthedocs.org/issues/5684&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Add travis-ci style pull request builder: https://github.com/readthedocs/readthedocs.org/issues/1340&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

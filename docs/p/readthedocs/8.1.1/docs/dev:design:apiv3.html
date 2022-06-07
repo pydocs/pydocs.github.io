@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>API v3 Design Document</h1>
+               <p>This document describes the design, some decisions already made and built (current Version 1 of APIv3) and an implementation plan for next Versions of APIv3.</p>
+
+               <p>APIv3 will be designed to be easy to use and useful to perform read and write operations as the main two goals.</p>
+
+               <p>It will be based on Resources as APIv2 but considering the         <code class='verbatim'>Project</code>
+ resource as the main one, from where most of the endpoint will be based on it.</p>
+
+               <pre class='not-implemented'>
+.. contents:: 
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;backlinks&#39;, &#39;none&#39;)
+    (&#39;depth&#39;, &#39;1&#39;)
+    </pre>
+
+
+
+<h2>Goals</h2>
+                          <ul>               <li>               <p>Easy to use for our users (access most of resources by         <code class='verbatim'>slug</code>
+)</p>
+
+</li>
+               <li>               <p>Useful to perform read and write operations</p>
+
+</li>
+               <li>               <p>Authentication/Authorization</p>
+
+                          <ul>               <li>               <p>Authentication based on scoped-tokens</p>
+
+</li>
+               <li>               <p>Handle Authorization nicely using an abstraction layer</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Cover most useful cases:</p>
+
+                          <ul>               <li>               <p>Integration on CI (check build status, trigger new build, etc)</p>
+
+</li>
+               <li>               <p>Usage from public Sphinx/MkDocs extensions</p>
+
+</li>
+               <li>               <p>Allow creation of flyout menu client-side</p>
+
+</li>
+               <li>               <p>Simplify migration from other services (import projects, create multiple redirects, etc)</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h2>Non-Goals</h2>
+                          <ul>               <li>               <p>Filter by arbitrary and useless fields</p>
+
+                          <ul>               <li>               <p>&#34;Builds with         <code class='verbatim'>exit_code=1</code>
+&#34;</p>
+
+</li>
+               <li>               <p>&#34;Builds containing         <code class='verbatim'>ERROR</code>
+ on their output&#34;</p>
+
+</li>
+               <li>               <p>&#34;Projects created after X datetime&#34;</p>
+
+</li>
+               <li>               <p>&#34;Versions with tag         <code class='verbatim'>python</code>
+&#34;</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Cover <em>all the actions</em> available from the WebUI</p>
+
+</li>
+            </ul>
+
+
+<h2>Problems with APIv2</h2>
+               <p>There are several problem with our current APIv2 that we can list:</p>
+
+                          <ul>               <li>               <p>No authentication</p>
+
+</li>
+               <li>               <p>It&#39;s read-only</p>
+
+</li>
+               <li>               <p>Not designed for slugs</p>
+
+</li>
+               <li>               <p>Useful APIs not exposed (only for internal usage currently)</p>
+
+</li>
+               <li>               <p>Error reporting is a mess</p>
+
+</li>
+               <li>               <p>Relationships between API resources is not obvious</p>
+
+</li>
+               <li>               <p>Footer API endpoint returns HTML</p>
+
+</li>
+            </ul>
+
+
+<h2>Implementation stages</h2>
+
+<h3>Version 1</h3>
+               <p>The first implementation of APIv3 will cover the following aspects:</p>
+
+                          <ul>               <li>               <p>Authentication</p>
+
+                          <ul>               <li>               <p>all endpoints require authentication via         <code class='verbatim'>Authorization:</code>
+ request header</p>
+
+</li>
+               <li>               <p>detail endpoints are available for all authenticated users</p>
+
+</li>
+               <li>               <p>only Project&#39;s maintainers can access listing endpoints</p>
+
+</li>
+               <li>               <p>personalized listing</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Read and Write</p>
+
+                          <ul>               <li>               <p>edit attributes from Version (only         <code class='verbatim'>active</code>
+ and         <code class='verbatim'>privacy_level</code>
+)</p>
+
+</li>
+               <li>               <p>trigger Build for a specific Version</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Accessible by slug</p>
+
+                          <ul>               <li>               <p>Projects are accessed by         <code class='verbatim'>slug</code>
+</p>
+
+</li>
+               <li>               <p>Versions are accessed by         <code class='verbatim'>slug</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>/projects/</code>
+ endpoint is the main one and all of the other are nested under it</p>
+
+</li>
+               <li>               <p>Builds are accessed by          <code class='verbatim'>id</code>
+, as exception to this rule</p>
+
+</li>
+               <li>               <p>access all (active/non-active) Versions of a Project by         <code class='verbatim'>slug</code>
+</p>
+
+</li>
+               <li>               <p>get latest Build for a Project (and Version) by         <code class='verbatim'>slug</code>
+</p>
+
+</li>
+               <li>               <p>filter by relevant fields</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Proper status codes to report errors</p>
+
+</li>
+               <li>               <p>Browse-able endpoints</p>
+
+                          <ul>               <li>               <p>browse is allowed hitting         <code class='verbatim'>/api/v3/projects/</code>
+ as starting point</p>
+
+</li>
+               <li>               <p>ability to navigate clicking on other resources under         <code class='verbatim'>_links</code>
+ attribute</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Rate limited</p>
+
+</li>
+            </ul>
+
+
+<h3>Version 2</h3>
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This is currently implemented and live.</p>
+
+</div>
+
+
+               <p>Second iteration will polish issues found from the first step, and add new endpoints to allow <em>import a project and configure it</em> without the needed of using the WebUI as a main goal.</p>
+
+               <p>After Version 2 is deployed, we will invite users that reach us as beta testers to receive more feedback and continue improving it by supporting more use cases.</p>
+
+               <p>This iteration will include:</p>
+
+                          <ul>               <li>               <p>Minor changes to fields returned in the objects</p>
+
+</li>
+               <li>               <p>Import Project endpoint</p>
+
+</li>
+               <li>               <p>Edit Project attributes (&#34;Settings&#34; and &#34;Advanced settings-Global settings&#34; in the WebUI)</p>
+
+</li>
+               <li>               <p>Trigger Build for default version</p>
+
+</li>
+               <li>               <p>Allow CRUD for Redirect, Environment Variables and Notifications (        <code class='verbatim'>WebHook</code>
+ and         <code class='verbatim'>EmailHook</code>
+)</p>
+
+</li>
+               <li>               <p>Create/Delete a Project as subproject of another Project</p>
+
+</li>
+               <li>               <p>Documentation</p>
+
+</li>
+            </ul>
+
+
+<h3>Version 3</h3>
+               <p>Third iteration will implement granular permissions. Keeping in mind how Sphinx extension will use it:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>sphinx-version-warning</code>
+ needs to get <em>all active Versions of a Project</em></p>
+
+</li>
+               <li>               <p>An extension that creates a landing page, will need <em>all the subprojects of a Project</em></p>
+
+</li>
+            </ul>
+
+               <p>To fulfill these requirements, this iteration will include:</p>
+
+                          <ul>               <li>               <p>Scope-based authorization token</p>
+
+</li>
+            </ul>
+
+
+<h3>Version 4</h3>
+                          <ul>               <li>               <p>Specific endpoint for our flyout menu (returning JSON instead of HTML)</p>
+
+</li>
+            </ul>
+
+
+<h2>Out of roadmap</h2>
+               <p>These are some features that we may want to build at some point. Although, they are currently out of our near roadmap because they don&#39;t affect too many users, or are for internal usage only.</p>
+
+                          <ul>               <li>               <p>CRUD for Domain</p>
+
+</li>
+               <li>               <p>Add User as maintainer</p>
+
+</li>
+               <li>               <p>Give access to a documentation page (        <code class='verbatim'>objects.inv</code>
+,         <code class='verbatim'>/design/core.html</code>
+)</p>
+
+</li>
+               <li>               <p>Internal Build process</p>
+
+</li>
+            </ul>
+
+
+<h2>Nice to have</h2>
+                          <ul>               <li>               <p>        <code class='verbatim'>Request-ID</code>
+ header</p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`JSON minified by default`</code> (maybe with         <code class='verbatim'>?pretty=true</code>
+)</p>
+
+</li>
+               <li>               <p><code class='not-implemented'>:None:None:`JSON schema and validation`</code> with <code class='not-implemented'>:None:None:`docs_`</code></p>
+
+</li>
+            </ul>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _JSON minified by default: https://geemus.gitbooks.io/http-api-design/content/en/responses/keep-json-minified-in-all-responses.html&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _JSON schema and validation: https://geemus.gitbooks.io/http-api-design/content/en/responses/keep-json-minified-in-all-responses.html&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _docs: https://geemus.gitbooks.io/http-api-design/content/en/artifacts/provide-human-readable-docs.html&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

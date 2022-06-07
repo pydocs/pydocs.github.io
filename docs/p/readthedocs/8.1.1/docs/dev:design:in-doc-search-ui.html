@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>In Doc Search UI</h1>
+               <p>Giving readers the ability to easily search the information that they are looking for is important for us. We have already upgraded to the latest version of <code class='not-implemented'>:None:None:`Elasticsearch`</code> and we plan to implement <code class='not-implemented'>:None:None:`search as you type`</code> feature for all the documentations hosted by us. It will be designed to provide instant results as soon as the user starts typing in the search bar with a clean and minimal frontend. This design document aims to provides the details of it. This is a GSoC&#39;19 project.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>This design document details future features that are <strong>not yet implemented</strong>. To discuss this document, please get in touch in the <code class='not-implemented'>:None:None:`issue tracker`</code>.</p>
+
+</div>
+
+
+               <p>The final result may look something like this:</p>
+
+               <pre class='not-implemented'>
+.. figure:: /_static/images/design-docs/in-doc-search-ui/in-doc-search-ui-demo.gif
+    (&#39;align&#39;, &#39;center&#39;)
+    Short demo</pre>
+
+
+
+<h2>Goals And Non-Goals</h2>
+
+<h3>Project Goals</h3>
+                          <ul>               <li>               <p>Support a search-as-you-type/autocomplete interface.</p>
+
+</li>
+               <li>               <p>Support across all (or virtually all) Sphinx themes.</p>
+
+</li>
+               <li>               <p>Support for the JavaScript user experience down to IE11 or graceful degradation where we can&#39;t support it.</p>
+
+</li>
+               <li>               <p>Project maintainers should have a way to opt-in/opt-out of this feature.</p>
+
+</li>
+               <li>               <p>(Optional) Project maintainers should have the flexibility to change some of the styles using custom CSS and JS files.</p>
+
+</li>
+            </ul>
+
+
+<h3>Non-Goals</h3>
+                          <ul>               <li>               <p>For the initial release, we are targeting only Sphinx documentations   as we don&#39;t index MkDocs documentations to our Elasticsearch index.</p>
+
+</li>
+            </ul>
+
+
+<h2>Existing Search Implementation</h2>
+               <p>We have a detailed documentation explaining the underlying architecture of our search backend and how we index documents to our Elasticsearch index. You can read about it         <code class='verbatim'>here &lt;/server-side-search&gt;</code>
+.</p>
+
+
+<h2>Proposed Architecture for In-Doc Search UI</h2>
+
+<h3>Frontend</h3>
+
+<h4>Technologies</h4>
+               <p>Frontend is to designed in a theme agnostics way. For that, we explored various libraries which may be of use but none of them fits our needs. So, we might be using vanilla JavaScript for this purpose. This will provide us some advantages over using any third party library:</p>
+
+                          <ul>               <li>               <p>Better control over the DOM.</p>
+
+</li>
+               <li>               <p>Performance benefits.</p>
+
+</li>
+            </ul>
+
+
+<h4>Proposed Architecture</h4>
+               <p>We plan to select the search bar, which is present in every theme, and use the <code class='not-implemented'>:None:None:`querySelector()`</code> method of JavaScript. Then add an event listener to it to listen for the changes and fire a search query to our backend as soon as there is any change. Our backend will then return the suggestions, which will be shown to the user in a clean and minimal UI. We will be using <code class='not-implemented'>:None:None:`document.createElement()`</code> and <code class='not-implemented'>:None:None:`node.removeChild()`</code> method provided by JavaScript as we don&#39;t want empty <code class='not-implemented'>:None:None:`&lt;div&gt;`</code> hanging out in the DOM.</p>
+
+               <p>We have a few ways to include the required JavaScript and CSS files in all the projects:</p>
+
+                          <ul>               <li>               <p>Add CSS into <code class='not-implemented'>:None:None:`readthedocs-doc-embed.css`</code> and JS into <code class='not-implemented'>:None:None:`readthedocs-doc-embed.js`</code>   and it will get included.</p>
+
+</li>
+               <li>               <p>Package the in-doc search into it&#39;s own self-contained CSS and JS files   and include them in a similar manner to <code class='not-implemented'>:None:None:`readthedocs-doc-embed.*`</code>.</p>
+
+</li>
+               <li>               <p>It might be possible to package up the in-doc CSS/JS as a sphinx extension.   This might be nice because then it&#39;s easy to enable it on a per-project basis.   When we are ready to roll it out to a wider audience,   we can make a decision to just turn it on for everybody (put it in <code class='not-implemented'>:None:None:`here`</code>)   or we could enable it as an opt-in feature like the <code class='not-implemented'>:None:None:`404 extension`</code>.</p>
+
+</li>
+            </ul>
+
+
+<h4>UI/UX</h4>
+               <p>We have two ways which can be used to show suggestions to the user.</p>
+
+                          <ul>               <li>               <p>Show suggestions below the search bar.</p>
+
+</li>
+               <li>               <p>Open a full page search interface when the user click on search field.</p>
+
+</li>
+            </ul>
+
+
+<h3>Backend</h3>
+               <p>We have a few options to support <code class='not-implemented'>:None:None:`search as you type`</code> feature, but we need to decide that which option would be best for our use-case.</p>
+
+
+<h4>Edge NGram Tokenizer</h4>
+                          <ul>               <li>               <p>Pros</p>
+
+                          <ul>               <li>               <p>More effective than Completion Suggester when it comes to autocompleting     words that can appear in any order.</p>
+
+</li>
+               <li>               <p>It is considerable fast because most of the work is being done at index time,     hence the time taken for autocompletion is reduced.</p>
+
+</li>
+               <li>               <p>Supports highlighting of the matching terms.</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Cons</p>
+
+                          <ul>               <li>               <p>Requires greater disk space.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h4>Completion Suggester</h4>
+                          <ul>               <li>               <p>Pros</p>
+
+                          <ul>               <li>               <p>Really fast as it is optimized for speed.</p>
+
+</li>
+               <li>               <p>Does not require large disk space.</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Cons</p>
+
+                          <ul>               <li>               <p>Matching always starts at the beginning of the text. So, for example,     &#34;Hel&#34; will match &#34;Hello, World&#34; but not &#34;World Hello&#34;.</p>
+
+</li>
+               <li>               <p>Highlighting of the matching words is not supported.</p>
+
+</li>
+               <li>               <p>According to the official docs for Completion Suggester,     fast lookups are costly to build and are stored in-memory.</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+
+
+<h2>Milestones</h2>
+               <p>+-----------------------------------------------------------------------------------+------------------+ | Milestone                                                                         | Due Date         | +===================================================================================+==================+ | A local implementation of the project.                                            | 12th June, 2019  | +-----------------------------------------------------------------------------------+------------------+ | In-doc search on a test project hosted on Read the Docs using the RTD Search API. | 20th June, 2019  | +-----------------------------------------------------------------------------------+------------------+ | In-doc search on docs.readthedocs.io.                                             | 20th June, 2019  | +-----------------------------------------------------------------------------------+------------------+ | Friendly user trial where users can add this on their own docs.                   | 5th July, 2019   | +-----------------------------------------------------------------------------------+------------------+ | Additional UX testing on the top-10 Sphinx themes.                                | 15th July, 2019  | +-----------------------------------------------------------------------------------+------------------+ | Finalize the UI.                                                                  | 25th July, 2019  | +-----------------------------------------------------------------------------------+------------------+ | Improve the search backend for efficient and fast search results.                 | 10th August, 2019| +-----------------------------------------------------------------------------------+------------------+</p>
+
+
+<h3>Open Questions</h3>
+                          <ul>               <li>               <p>Should we rely on jQuery, any third party library or pure vanilla JavaScript?</p>
+
+</li>
+               <li>               <p>Are the subprojects to be searched?</p>
+
+</li>
+               <li>               <p>Is our existing Search API is sufficient?</p>
+
+</li>
+               <li>               <p>Should we go for edge ngrams or completion suggester?</p>
+
+</li>
+            </ul>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _issue tracker: https://github.com/readthedocs/readthedocs.org/issues&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Elasticsearch: https://www.elastic.co/products/elasticsearch&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _querySelector(): https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _document.createElement(): https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _node.removeChild(): https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _here: https://github.com/readthedocs/readthedocs.org/blob/9ca5858e859dea0759d913e8db70a623d62d6a16/readthedocs/doc_builder/templates/doc_builder/conf.py.tmpl#L135-L142&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _404 extension : https://github.com/readthedocs/sphinx-notfound-page&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

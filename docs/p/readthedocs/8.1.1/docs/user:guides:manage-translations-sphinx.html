@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Manage Translations for Sphinx projects</h1>
+               <p>This guide walks through the process needed to manage translations of your documentation. Once this work is done, you can setup your project under Read the Docs to build each language of your documentation by reading         <code class='verbatim'>/localization</code>
+.</p>
+
+
+<h2>Overview</h2>
+               <p>There are many different ways to manage documentation in multiple languages by using different tools or services. All of them have their pros and cons depending on the context of your project or organization.</p>
+
+               <p>In this guide we will focus our efforts around two different methods: manual and using <code class='not-implemented'>:None:None:`Transifex_`</code>.</p>
+
+               <p>In both methods, we need to follow these steps to translate our documentation:</p>
+
+                          <ol>               <li>               <p>Create translatable files (        <code class='verbatim'>.pot</code>
+ and         <code class='verbatim'>.po</code>
+ extensions) from source language</p>
+
+</li>
+               <li>               <p>Translate the text on those files from source language to target language</p>
+
+</li>
+               <li>               <p>Build the documentation in <em>target language</em> using the translated texts</p>
+
+</li>
+            </ol>
+
+               <p>Besides these steps, once we have published our first translated version of our documentation, we will want to keep it updated from the source language. At that time, the workflow would be:</p>
+
+                          <ol>               <li>               <p>Update our translatable files from source language</p>
+
+</li>
+               <li>               <p>Translate only <em>new</em> and <em>modified</em> texts in source language into target language</p>
+
+</li>
+               <li>               <p>Build the documentation using the most up to date translations</p>
+
+</li>
+            </ol>
+
+
+<h2>Create translatable files</h2>
+               <p>To generate these         <code class='verbatim'>.pot</code>
+ files it&#39;s needed to run this command from your         <code class='verbatim'>docs/</code>
+ directory:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    sphinx-build -b gettext . _build/gettext</pre>
+
+
+               <pre class='not-implemented'>
+.. tip:: 
+    We recommend configuring Sphinx to use gettext_uuid_ as ``True``
+    and also gettext_compact_ as ``False`` to generate ``.pot`` files.
+
+    .. Unfortunately these are custom types and can&#39;t yet be used with intersphinx
+    .. https://github.com/sphinx-doc/sphinx/issues/5562
+    .. _gettext_uuid: https://www.sphinx-doc.org/page/usage/configuration.html#confval-gettext_uuid
+    .. _gettext_compact: https://www.sphinx-doc.org/page/usage/configuration.html#confval-gettext_compact</pre>
+
+
+               <p>This command will leave the generated files under         <code class='verbatim'>_build/gettext</code>
+.</p>
+
+
+<h2>Translate text from source language</h2>
+
+<h3>Manually</h3>
+               <p>We recommend using <code class='not-implemented'>:None:None:`sphinx-intl`</code> tool for this workflow.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _sphinx-intl: https://pypi.org/project/sphinx-intl/&#39;&gt;
+           </pre>
+
+               <p>First, you need to install it:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    pip install sphinx-intl</pre>
+
+
+               <p>As a second step, we want to create a directory with each translated file per target language (in this example we are using Spanish/Argentina and Portuguese/Brazil). This can be achieved with the following command:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    sphinx-intl update -p _build/gettext -l es_AR -l pt_BR</pre>
+
+
+               <p>This command will create a directory structure similar to the following (with one         <code class='verbatim'>.po</code>
+ file per         <code class='verbatim'>.rst</code>
+ file in your documentation):    </p>
+
+               <pre>locale
+├── es_AR
+│   └── LC_MESSAGES
+│       └── index.po
+└── pt_BR
+    └── LC_MESSAGES
+        └── index.po</pre>
+               <p>Now, you can just open those         <code class='verbatim'>.po</code>
+ files with a text editor and translate them taking care of no breaking the reST notation. Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: po
+    # b8f891b8443f4a45994c9c0a6bec14c3
+    #: ../../index.rst:4
+    msgid &#34;&#34;
+    &#34;Read the Docs hosts documentation for the open source community.&#34;
+    &#34;It supports :ref:`Sphinx &lt;sphinx&gt;` docs written with reStructuredText.&#34;
+    msgstr &#34;&#34;
+    &#34;FILL HERE BY TARGET LANGUAGE FILL HERE BY TARGET LANGUAGE FILL HERE &#34;
+    &#34;BY TARGET LANGUAGE :ref:`Sphinx &lt;sphinx&gt;` FILL HERE.&#34;</pre>
+
+
+
+<h3>Using Transifex</h3>
+               <p><code class='not-implemented'>:None:None:`Transifex_`</code> is a platform that simplifies the manipulation of         <code class='verbatim'>.po</code>
+ files and offers many useful features to make the translation process as smooth as possible. These features includes a great web based UI, <code class='not-implemented'>:None:None:`Translation Memory`</code>, collaborative translation, etc.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Transifex: https://www.transifex.com/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Translation Memory: https://docs.transifex.com/setup/translation-memory&#39;&gt;
+           </pre>
+
+               <p>You need to create an account in their service and a new project before start.</p>
+
+               <p>After that, you need to install the <code class='not-implemented'>:None:None:`transifex-client`</code> tool which will help you in the process to upload source files, update them and also download translated files. To do this, run this command:</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _transifex-client: https://docs.transifex.com/client/introduction&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    pip install transifex-client</pre>
+
+
+               <p>After installing it, you need to configure your account. For this, you need to create an API Token for your user to access this service through the command line. This can be done under your <code class='not-implemented'>:None:None:`User&#39;s Settings`</code>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#34;.. _User&#39;s Settings: https://www.transifex.com/user/settings/api/&#34;&gt;
+           </pre>
+
+               <p>Now, you need to setup it to use this token:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx init --token $TOKEN --no-interactive</pre>
+
+
+               <p>The next step is to map every         <code class='verbatim'>.pot</code>
+ file you have created in the previous step to a resource under Transifex. To achieve this, you need to run this command:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx config mapping-bulk \
+        --project $TRANSIFEX_PROJECT \
+        --file-extension &#39;.pot&#39; \
+        --source-file-dir docs/_build/gettext \
+        --source-lang en \
+        --type PO \
+        --expression &#39;locale/&lt;lang&gt;/LC_MESSAGES/{filepath}/{filename}.po&#39; \
+        --execute</pre>
+
+
+               <p>This command will generate a file at         <code class='verbatim'>.tx/config</code>
+ with all the information needed by the         <code class='verbatim'>transifext-client</code>
+ tool to keep your translation synchronized.</p>
+
+               <p>Finally, you need to upload these files to Transifex platform so translators can start their work. To do this, you can run this command:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx push --source</pre>
+
+
+               <p>Now, you can go to your Transifex&#39;s project and check that there is one resource per         <code class='verbatim'>.rst</code>
+ file of your documentation. After the source files are translated using Transifex, you can download all the translations for all the languages by running:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx pull --all</pre>
+
+
+               <p>This command will leave the         <code class='verbatim'>.po</code>
+ files needed for building the documentation in the target language under         <code class='verbatim'>locale/&lt;lang&gt;/LC_MESSAGES</code>
+.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>It&#39;s important to use always the same method to translate the documentation and do not mix them. Otherwise, it&#39;s very easy to end up with inconsistent translations or losing already translated text.</p>
+
+</div>
+
+
+
+<h2>Build the documentation in target language</h2>
+               <p>Finally, to build our documentation in Spanish(Argentina) we need to tell Sphinx builder the target language with the following command:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    sphinx-build -b html -D language=es_AR . _build/html/es_AR</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>There is no need to create a new         <code class='verbatim'>conf.py</code>
+ to redefine the         <code class='verbatim'>language</code>
+ for the Spanish version of this documentation,  but you need to set <code class='not-implemented'>:None:None:`locale_dirs_`</code> to         <code class='verbatim'>[&#34;locale&#34;]</code>
+ for Sphinx to find the translated content.</p>
+
+                   <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _locale_dirs: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-locale_dirs&#39;&gt;
+           </pre>
+
+</div>
+
+
+               <p>After running this command, the Spanish(Argentina) version of your documentation will be under         <code class='verbatim'>_build/html/es_AR</code>
+.</p>
+
+
+<h2>Summary</h2>
+
+<h3>Update sources to be translated</h3>
+               <p>Once you have done changes in your documentation, you may want to make these additions/modifications available for translators so they can update it:</p>
+
+                          <ol>               <li>               <p>Create the         <code class='verbatim'>.pot</code>
+ files:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    sphinx-build -b gettext . _build/gettext</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Comment: 
+   |value: &#39;.. For the manual workflow, we need to run this command\n\n     $ sphinx-intl update -p _build/gettext -l es_AR -l pt_BR&#39;
+   |&gt;
+           </pre>
+
+</li>
+               <li>               <p>Push new files to Transifex</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx push --sources</pre>
+
+
+</li>
+            </ol>
+
+
+<h3>Build documentation from up to date translation</h3>
+               <p>When translators have finished their job, you may want to update the documentation by pulling the changes from Transifex:</p>
+
+                          <ol>               <li>               <p>Pull up to date translations from Transifex:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    tx pull --all</pre>
+
+
+</li>
+               <li>               <p>Commit and push these changes to our repo</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    git add locale/
+       git commit -m &#34;Update translations&#34;
+       git push</pre>
+
+
+</li>
+            </ol>
+
+               <p>The last         <code class='verbatim'>git push</code>
+ will trigger a build per translation defined as part of your project under Read the Docs and make it immediately available.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

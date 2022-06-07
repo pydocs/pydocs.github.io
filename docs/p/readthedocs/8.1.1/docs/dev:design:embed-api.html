@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Embed APIv3</h1>
+               <p>The Embed API allows users to embed content from documentation pages in other sites. It has been treated as an <em>experimental</em> feature without public documentation or real applications, but recently it started to be used widely (mainly because we created the         <code class='verbatim'>hoverxref</code>
+ Sphinx extension).</p>
+
+               <p>The main goal of this document is to design a new version of the Embed API to be more user friendly, make it more stable over time, support embedding content from pages not hosted at Read the Docs, and remove some quirkiness that makes it hard to maintain and difficult to use.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This work is part of the <code class='not-implemented'>:None:None:`CZI grant`</code> that Read the Docs received.</p>
+
+</div>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _CZI grant: https://blog.readthedocs.com/czi-grant-announcement/&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. contents:: 
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;depth&#39;, &#39;2&#39;)
+    </pre>
+
+
+
+<h2>Current implementation</h2>
+               <p>The current implementation of the API is partially documented in         <code class='verbatim'>rtd:guides/embedding-content</code>
+. It has some known problems:</p>
+
+                          <ul>               <li>               <p>There are different ways of querying the API:         <code class='verbatim'>?url=</code>
+ (generic) and         <code class='verbatim'>?doc=</code>
+ (relies on Sphinx&#39;s specific concept)</p>
+
+</li>
+               <li>               <p>Doesn&#39;t support MkDocs</p>
+
+</li>
+               <li>               <p>Lookups are slow (~500 ms)</p>
+
+</li>
+               <li>               <p>IDs returned aren&#39;t well formed (like empty IDs         <code class='verbatim'>&#34;headers&#34;: [{&#34;title&#34;: &#34;#&#34;}]</code>
+)</p>
+
+</li>
+               <li>               <p>The content is always an array of one element</p>
+
+</li>
+               <li>               <p>It tries different variations of the original ID</p>
+
+</li>
+               <li>               <p>It doesn&#39;t return valid HTML for definition lists (        <code class='verbatim'>dd</code>
+ tags without a         <code class='verbatim'>dt</code>
+ tag)</p>
+
+</li>
+            </ul>
+
+
+<h2>Goals</h2>
+               <p>We plan to add new features and define a contract that works the same for all HTML. This project has the following goals:</p>
+
+                          <ul>               <li>               <p>Support embedding content from pages hosted outside Read the Docs</p>
+
+</li>
+               <li>               <p>Do not depend on Sphinx         <code class='verbatim'>.fjson</code>
+ files</p>
+
+</li>
+               <li>               <p>Query and parse the         <code class='verbatim'>.html</code>
+ file directly (from our storage or from an external request)</p>
+
+</li>
+               <li>               <p>Rewrite all links returned in the content to make them absolute</p>
+
+</li>
+               <li>               <p>Require a valid HTML         <code class='verbatim'>id</code>
+ selector</p>
+
+</li>
+               <li>               <p>Accept only         <code class='verbatim'>?url=</code>
+ request GET argument to query the endpoint</p>
+
+</li>
+               <li>               <p>Support         <code class='verbatim'>?nwords=</code>
+ and         <code class='verbatim'>?nparagraphs=</code>
+ to return chunked content</p>
+
+</li>
+               <li>               <p>Handle special cases for particular doctools (e.g. Sphinx requires to return the         <code class='verbatim'>.parent()</code>
+ element for         <code class='verbatim'>dl</code>
+)</p>
+
+</li>
+               <li>               <p>Make explicit the client is asking to handle the special cases (e.g. send         <code class='verbatim'>?doctool=sphinx&amp;version=4.0.1&amp;writer=html4</code>
+)</p>
+
+</li>
+               <li>               <p>Delete HTML tags from the original document (for well-defined special cases)</p>
+
+</li>
+               <li>               <p>Add HTTP cache headers to cache responses</p>
+
+</li>
+               <li>               <p>Allow <code class='not-implemented'>:None:abbr:`CORS`</code> from everywhere <em>only</em> for public projects</p>
+
+</li>
+            </ul>
+
+
+<h2>The contract</h2>
+               <p>Return the HTML tag (and its children) with the         <code class='verbatim'>id</code>
+ selector requested and replace all the relative links from its content making them absolute.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Any other case outside this contract will be considered <em>special</em> and will be implemented only under         <code class='verbatim'>?doctool=</code>
+,         <code class='verbatim'>?version=</code>
+ and         <code class='verbatim'>?writer=</code>
+ arguments.</p>
+
+</div>
+
+
+               <p>If no         <code class='verbatim'>id</code>
+ selector is sent to the request, the content of the first meaningful HTML tag (        <code class='verbatim'>&lt;main&gt;</code>
+,         <code class='verbatim'>&lt;div role=&#34;main&#34;&gt;</code>
+ or other well-defined standard tags) identifier found is returned.</p>
+
+
+<h2>Embed endpoints</h2>
+               <p>This is the list of endpoints to be implemented in APIv3:</p>
+
+               <pre class='not-implemented'>
+.. http:get:: /api/v3/embed/
+    Returns the exact HTML content for a specific identifier (``id``).
+    If no anchor identifier is specified the content of the first one returned.
+
+    **Example request**:
+
+    .. code:: bash
+
+       $ curl https://readthedocs.org/api/v3/embed/?url=https://docs.readthedocs.io/en/latest/development/install.html#set-up-your-environment
+
+    **Example response**:
+
+    .. sourcecode:: json
+
+       {
+          &#34;project&#34;: &#34;docs&#34;,
+          &#34;version&#34;: &#34;latest&#34;,
+          &#34;language&#34;: &#34;en&#34;,
+          &#34;path&#34;: &#34;development/install.html&#34;,
+          &#34;title&#34;: &#34;Development Installation&#34;,
+          &#34;url&#34;: &#34;https://docs.readthedocs.io/en/latest/install.html#set-up-your-environment&#34;,
+          &#34;id&#34;: &#34;set-up-your-environment&#34;,
+          &#34;content&#34;: &#34;&lt;div class=\&#34;section\&#34; id=\&#34;development-installation\&#34;&gt;\n&lt;h1&gt;Development Installation&lt;a class=\&#34;headerlink\&#34; href=\&#34;https://docs.readthedocs.io/en/stable/development/install.html#development-installation\&#34; title=\&#34;Permalink to this headline\&#34;&gt;¶&lt;/a&gt;&lt;/h1&gt;\n ...&#34;
+       }
+
+    :query url (required): Full URL for the documentation page with optional anchor identifier.</pre>
+
+
+               <pre class='not-implemented'>
+.. http:get:: /api/v3/embed/metadata/
+    Returns all the available metadata for an specific page.
+
+    .. note::
+
+       As it&#39;s not trivial to get the ``title`` associated with a particular ``id`` and it&#39;s not easy to get a nested list of identifiers,
+       we may not implement this endpoint in initial version.
+
+       The endpoint as-is, is mainly useful to explore/discover what are the identifiers available for a particular page
+       --which is handy in the development process of a new tool that consumes the API.
+       Because of this, we don&#39;t have too much traction to add it in the initial version.
+
+    **Example request**:
+
+    .. code:: bash
+
+       $ curl https://readthedocs.org/api/v3/embed/metadata/?url=https://docs.readthedocs.io/en/latest/development/install.html
+
+    **Example response**:
+
+    .. sourcecode:: json
+
+       {
+         &#34;identifiers&#34;: {
+             &#34;id&#34;: &#34;set-up-your-environment&#34;,
+             &#34;url&#34;: &#34;https://docs.readthedocs.io/en/latest/development/install.html#set-up-your-environment&#34;
+             &#34;_links&#34;: {
+                 &#34;embed&#34;: &#34;https://docs.readthedocs.io/_/api/v3/embed/?url=https://docs.readthedocs.io/en/latest/development/install.html#set-up-your-environment&#34;
+             }
+         },
+         {
+             &#34;id&#34;: &#34;check-that-everything-works&#34;,
+             &#34;url&#34;: &#34;https://docs.readthedocs.io/en/latest/development/install.html#check-that-everything-works&#34;
+             &#34;_links&#34;: {
+                 &#34;embed&#34;: &#34;https://docs.readthedocs.io/_/api/v3/embed/?url=https://docs.readthedocs.io/en/latest/development/install.html#check-that-everything-works&#34;
+             }
+          },
+       }
+
+    :query url (required): Full URL for the documentation page</pre>
+
+
+
+<h2>Handle specific Sphinx cases</h2>
+                          <pre class='not-implemented'>
+            &lt;Comment: 
+   |value: &#39;.. https://github.com/readthedocs/readthedocs.org/pull/8039#discussion_r640670085&#39;
+   |&gt;
+           </pre>
+
+               <p>We are currently handling some special cases for Sphinx due how it writes the HTML output structure. In some cases, we look for the HTML tag with the identifier requested but we return the         <code class='verbatim'>.next()</code>
+ HTML tag or the         <code class='verbatim'>.parent()</code>
+ tag instead of the <em>requested one</em>.</p>
+
+               <p>Currently, we have identified that this happens for definition tags (        <code class='verbatim'>dl</code>
+,         <code class='verbatim'>dt</code>
+,         <code class='verbatim'>dd</code>
+) --but may be other cases we don&#39;t know yet. Sphinx adds the         <code class='verbatim'>id=</code>
+ attribute to the         <code class='verbatim'>dt</code>
+ tag, which contains only the title of the definition, but as a user, we are expecting the description of it.</p>
+
+               <p>In the following example we will return the whole         <code class='verbatim'>dl</code>
+ HTML tag instead of the HTML tag with the identifier         <code class='verbatim'>id=&#34;term-name&#34;</code>
+ as requested by the client, because otherwise the &#34;Term definition for Term Name&#34; content won&#39;t be included and the response would be useless.</p>
+
+               <pre>&lt;dl class=&#34;glossary docutils&#34;&gt;
+  &lt;dt id=&#34;term-name&#34;&gt;Term Name&lt;/dt&gt;
+  &lt;dd&gt;Term definition for Term Name&lt;/dd&gt;
+&lt;/dl&gt;</pre>
+               <p>If the definition list (        <code class='verbatim'>dl</code>
+) has more than <em>one definition</em> it will return <strong>only the term requested</strong>. Considering the following example, with the request         <code class='verbatim'>?url=glossary.html#term-name</code>
+</p>
+
+               <pre>&lt;dl class=&#34;glossary docutils&#34;&gt;
+  ...
+
+  &lt;dt id=&#34;term-name&#34;&gt;Term Name&lt;/dt&gt;
+  &lt;dd&gt;Term definition for Term Name&lt;/dd&gt;
+
+  &lt;dt id=&#34;term-unknown&#34;&gt;Term Unknown&lt;/dt&gt;
+  &lt;dd&gt;Term definition for Term Unknown &lt;/dd&gt;
+
+  ...
+&lt;/dl&gt;</pre>
+               <p>It will return the whole         <code class='verbatim'>dl</code>
+ with only the         <code class='verbatim'>dt</code>
+ and         <code class='verbatim'>dd</code>
+ for         <code class='verbatim'>id</code>
+ requested:</p>
+
+               <pre>&lt;dl class=&#34;glossary docutils&#34;&gt;
+  &lt;dt id=&#34;term-name&#34;&gt;Term Name&lt;/dt&gt;
+  &lt;dd&gt;Term definition for Term Name&lt;/dd&gt;
+&lt;/dl&gt;</pre>
+               <p>However, this assumptions may not apply to documentation pages built with a different doctool than Sphinx. For this reason, we need to communicate to the API that we want to handle this special cases in the backend. This will be done by appending a request GET argument to the Embed API endpoint:         <code class='verbatim'>?doctool=sphinx&amp;version=4.0.1&amp;writer=html4</code>
+. In this case, the backend will known that has to deal with these special cases.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This leaves the door open to be able to support more special cases (e.g. for other doctools) without breaking the actual behavior.</p>
+
+</div>
+
+
+
+<h2>Support for external documents</h2>
+               <p>When the         <code class='verbatim'>?url=</code>
+ argument passed belongs to a documentation page not hosted on Read the Docs, the endpoint will do an external request to download the HTML file, parse it and return the content for the identifier requested.</p>
+
+               <p>The whole logic should be the same, the only difference would be where the source HTML comes from.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>We should be careful with the URL received from the user because those may be internal URLs and we could be leaking some data. Example:         <code class='verbatim'>?url=http://localhost/some-weird-endpoint</code>
+ or         <code class='verbatim'>?url=http://169.254.169.254/latest/meta-data/</code>
+ (see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html).</p>
+
+        <p>This is related to SSRF (https://en.wikipedia.org/wiki/Server-side_request_forgery). It doesn&#39;t seem to be a huge problem, but something to consider.</p>
+
+        <p>Also, the endpoint may need to limit the requests per-external domain to avoid using our servers to take down another site.</p>
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Due to the potential security issues mentioned, we will start with an allowed list of domains for common Sphinx docs projects. Projects like Django and Python, where         <code class='verbatim'>sphinx-hoverxref</code>
+ users might commonly want to embed from. We aren&#39;t planning to allow arbitrary HTML from any website.</p>
+
+</div>
+
+
+
+<h2>Handle project&#39;s domain changes</h2>
+               <p>The proposed Embed APIv3 implementation only allows         <code class='verbatim'>?url=</code>
+ argument to embed content from that page. That URL can be:</p>
+
+                          <ul>               <li>               <p>a URL for a project hosted under         <code class='verbatim'>&lt;project-slug&gt;.readthedocs.io</code>
+</p>
+
+</li>
+               <li>               <p>a URL for a project with a custom domain</p>
+
+</li>
+            </ul>
+
+               <p>In the first case, we can easily get the project&#39;s slug directly from the URL. However, in the second case we get the project&#39;s slug by querying our database for a         <code class='verbatim'>Domain</code>
+ object with the full domain from the URL.</p>
+
+               <p>Now, consider that all the links in the documentation page that uses Embed APIv3 are pointing to         <code class='verbatim'>docs.example.com</code>
+ and the author decides to change the domain to be         <code class='verbatim'>docs.newdomain.com</code>
+. At this point there are different possible scenarios:</p>
+
+                          <ul>               <li>               <p>The user creates a new         <code class='verbatim'>Domain</code>
+ object with         <code class='verbatim'>docs.newdomain.com</code>
+ as domain&#39;s name.   In this case, old links will keep working because we still have the old         <code class='verbatim'>Domain</code>
+ object in our database   and we can use it to get the project&#39;s slug.</p>
+
+</li>
+               <li>               <p>The user <em>deletes</em> the old         <code class='verbatim'>Domain</code>
+ besides creating the new one.   In this scenario, our query for a         <code class='verbatim'>Domain</code>
+ with name         <code class='verbatim'>docs.example.com</code>
+ to our database will fail.   We will need to do a request to         <code class='verbatim'>docs.example.com</code>
+ and check for a 3xx response status code and in that case,   we can read the         <code class='verbatim'>Location:</code>
+ HTTP header to find the new domain&#39;s name for the documentation.   Once we have the new domain from the redirect response, we can query our database again to find out the project&#39;s slug.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We will follow up to 5 redirects to find out the project&#39;s domain.</p>
+
+</div>
+
+
+</li>
+            </ul>
+
+
+<h2>Embed APIv2 deprecation</h2>
+               <p>The v2 is currently widely used by projects using the         <code class='verbatim'>sphinx-hoverxref</code>
+ extension. Because of that, we need to keep supporting it as-is for a long time.</p>
+
+               <p>Next steps on this direction should be:</p>
+
+                          <ul>               <li>               <p>Add a note in the documentation mentioning this endpoint is deprecated</p>
+
+</li>
+               <li>               <p>Promote the usage of the new Embed APIv3</p>
+
+</li>
+               <li>               <p>Migrate the         <code class='verbatim'>sphinx-hoverxref</code>
+ extension to use the new endpoint</p>
+
+</li>
+            </ul>
+
+               <p>Once we have done them, we could check our NGINX logs to find out if there are people still using APIv2, contact them and let them know that they have some months to migrate since the endpoint is deprecated and will be removed.</p>
+
+
+<h2>Unanswered questions</h2>
+                          <ul>               <li>               <p>How do we distinguish between our APIv3 for resources (models in the database) from these &#34;feature API endpoints&#34;?</p>
+
+</li>
+            </ul>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Conda Support</h1>
+               <p>Read the Docs supports Conda as an environment management tool, along with Virtualenv. Conda support is useful for people who depend on C libraries, and need them installed when building their documentation.</p>
+
+               <p>This work was funded by <code class='not-implemented'>:None:None:`Clinical Graphics`</code> -- many thanks for their support of open source.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Clinical Graphics: https://www.clinicalgraphics.com/&#39;&gt;
+           </pre>
+
+
+<h2>Activating Conda</h2>
+               <p>Conda support is available using a         <code class='verbatim'>../config-file/index</code>
+, see         <code class='verbatim'>config-file/v2:conda</code>
+.</p>
+
+               <p>Our Docker images use Miniconda, a minimal conda installer. After specifying your project requirements using a conda         <code class='verbatim'>environment.yml</code>
+ file, Read the Docs will create the environment (using         <code class='verbatim'>conda env create</code>
+) and add the core dependencies needed to build the documentation.</p>
+
+
+<h2>Creating the ``environment.yml``</h2>
+               <p>There are several ways of <code class='not-implemented'>:None:None:`exporting a conda environment`</code>:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>conda env export</code>
+ will produce a complete list of all the packages installed in the environment   with their exact versions. This is the best option to ensure reproducibility,   but can create problems if done from a different operative system than the target machine,   in our case Ubuntu Linux.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>conda env export --from-history</code>
+ will only include packages that were explicitly requested   in the environment, excluding the transitive dependencies. This is the best option to maximize   cross-platform compatibility, however it may include packages that are not needed to build your docs.</p>
+
+</li>
+               <li>               <p>And finally, you can also write it by hand. This allows you to pick exactly the packages needed to   build your docs (which also results in faster builds) and overcomes some limitations in the conda   exporting capabilities.</p>
+
+</li>
+            </ul>
+
+               <p>For example, using the second method for an existing environment:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: 
+    $ conda activate rtd38
+    (rtd38) $ conda env export --from-history | tee environment.yml
+    name: rtd38
+    channels:
+      - defaults
+      - conda-forge
+    dependencies:
+      - rasterio==1.2
+      - python=3.8
+      - pytorch-cpu=1.7
+    prefix: /home/docs/.conda/envs/rtd38</pre>
+
+
+               <p>Read the Docs will override the         <code class='verbatim'>name</code>
+ and         <code class='verbatim'>prefix</code>
+ of the environment when creating it, so they can have any value, or not be present at all.</p>
+
+               <pre class='not-implemented'>
+.. tip:: Bear in mind that ``rasterio==1.2`` (double ``==``) will install version ``1.2.0``,
+    whereas ``python=3.8`` (single ``=``) will fetch the latest ``3.8.*`` version,
+    which is ``3.8.8`` at the time of writing.</pre>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>is not yet supported by default when using conda (see <code class='not-implemented'>:None:None:`this GitHub issue for discussion`</code>). If your project needs it, request that we enable the         <code class='verbatim'>CONDA_APPEND_CORE_REQUIREMENTS</code>
+ <code class='not-implemented'>:None:ref:`feature flag &lt;feature-flags:Feature Flags&gt;`</code>.</p>
+
+</div>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _this GitHub issue for discussion: https://github.com/readthedocs/readthedocs.org/issues/3829&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _exporting a conda environment: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment&#39;&gt;
+           </pre>
+
+
+<h2>Effective use of channels</h2>
+               <p>Conda packages are usually hosted on https://anaconda.org/, a registration-free artifact archive maintained by Anaconda Inc. Contrary to what happens with the Python Package Index, different users can potentially host the same package in the same repository, each of them using their own <em>channel</em>. Therefore, when installing a conda package, conda also needs to know which channels to use, and which ones take precedence.</p>
+
+               <p>If not specified, conda will use         <code class='verbatim'>defaults</code>
+, the channel maintained by Anaconda Inc. and subject to <code class='not-implemented'>:None:None:`Anaconda Terms of Service`</code>. It contains well-tested versions of the most widely used packages. However, some packages are not available on the         <code class='verbatim'>defaults</code>
+ channel, and even if they are, they might not be on their latest versions.</p>
+
+               <p>As an alternative, there are channels maintained by the community that have a broader selection of packages and more up-to-date versions of them, the most popular one being         <code class='verbatim'>conda-forge</code>
+.</p>
+
+               <p>To use the         <code class='verbatim'>conda-forge</code>
+ channel when specifying your project dependencies, include it in the list of         <code class='verbatim'>channels</code>
+ in         <code class='verbatim'>environment.yml</code>
+, and conda will rank them in order of appearance. To maximize compatibility, we recommend putting         <code class='verbatim'>conda-forge</code>
+ above         <code class='verbatim'>defaults</code>
+:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    name: rtd38
+    channels:
+      - conda-forge
+      - defaults
+    dependencies:
+      - python=3.8
+      # Rest of the dependencies</pre>
+
+
+               <pre class='not-implemented'>
+.. tip:: If you want to opt out the ``defaults`` channel completely, replace it by ``nodefaults``
+    in the list of channels. See `the relevant conda docs`_ for more information.</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Anaconda Terms of Service: https://www.anaconda.com/terms-of-service&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _the relevant conda docs: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html?highlight=nodefaults#creating-an-environment-file-manually&#39;&gt;
+           </pre>
+
+
+<h2>Making builds faster with mamba</h2>
+               <p>One important thing to note is that, when enabling the         <code class='verbatim'>conda-forge</code>
+ channel, the conda dependency solver requires a large amount of RAM and long solve times. This is <code class='not-implemented'>:None:None:`a known issue`</code> due to the sheer amount of packages available in conda-forge.</p>
+
+               <p>As an alternative, you can instruct Read the Docs to use <code class='not-implemented'>:None:None:`mamba_`</code>, a drop-in replacement for conda that is much faster and reduces the memory consumption of the dependency solving process.</p>
+
+               <p>To do that, add a         <code class='verbatim'>.readthedocs.yaml</code>
+         <code class='verbatim'>configuration file &lt;/config-file/v2&gt;</code>
+ with these contents:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    (&#39;caption&#39;, &#39;.readthedocs.yaml&#39;)
+    version: 2
+
+    build:
+      os: &#34;ubuntu-20.04&#34;
+      tools:
+        python: &#34;mambaforge-4.10&#34;
+
+    conda:
+      environment: environment.yml</pre>
+
+
+               <p>You can read more about the         <code class='verbatim'>config-file/v2:build.tools.python</code>
+ configuration in our documentation.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _mamba: https://github.com/mamba-org/mamba&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _a known issue: https://www.anaconda.com/understanding-and-improving-condas-performance/&#39;&gt;
+           </pre>
+
+
+<h2>Mixing conda and pip packages</h2>
+               <p>There are valid reasons to use pip inside a conda environment: some dependency might not be available yet as a conda package in any channel, or you might want to avoid precompiled binaries entirely. In either case, it is possible to specify the subset of packages that will be installed with pip in the         <code class='verbatim'>environment.yml</code>
+ file. For example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    name: rtd38
+    channels:
+      - conda-forge
+      - defaults
+    dependencies:
+      - rasterio==1.2
+      - python=3.8
+      - pytorch-cpu=1.7
+      - pip&gt;=20.1  # pip is needed as dependency
+      - pip:
+        - black==20.8b1</pre>
+
+
+               <p>The <code class='not-implemented'>:None:None:`conda developers recommend in their best practices`</code> to install as many requirements as possible with conda, then use pip to minimize possible conflicts and interoperability issues.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>see <code class='not-implemented'>:None:None:`this conda issue`</code> for discussion.</p>
+
+</div>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _conda developers recommend in their best practices: https://www.anaconda.com/blog/using-pip-in-a-conda-environment&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _this conda issue: https://github.com/conda/conda/issues/9628&#39;&gt;
+           </pre>
+
+
+<h2>Compiling your project sources</h2>
+               <p>If your project contains extension modules written in a compiled language (C, C++, FORTRAN) or server-side JavaScript, you might need special tools to build it from source that are not readily available on our Docker images, such as a suitable compiler, CMake, Node.js, and others.</p>
+
+               <p>Luckily, conda is a language-agnostic package manager, and many of these development tools are already packaged on         <code class='verbatim'>conda-forge</code>
+ or more specialized channels.</p>
+
+               <p>For example, this conda environment contains the required dependencies to compile <code class='not-implemented'>:None:None:`Slycot`</code> on Read the Docs:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    name: slycot38
+    channels:
+      - conda-forge
+      - defaults
+    dependencies:
+      - python=3.8
+      - cmake
+      - numpy
+      - compilers</pre>
+
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Slycot: https://github.com/python-control/Slycot&#39;&gt;
+           </pre>
+
+
+<h2>Troubleshooting</h2>
+               <p>If you have problems on the environment creation phase, either because the build runs out of memory or time or because some conflicts are found, you can try some of these mitigations:</p>
+
+                          <ul>               <li>               <p>Reduce the number of channels in         <code class='verbatim'>environment.yml</code>
+, even leaving         <code class='verbatim'>conda-forge</code>
+ only   and opting out of the defaults adding         <code class='verbatim'>nodefaults</code>
+.</p>
+
+</li>
+               <li>               <p>Constrain the package versions as much as possible to reduce the solution space.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Use mamba &lt;guides/conda:Making builds faster with mamba&gt;</code>
+,   an alternative package manager fully compatible with conda packages.</p>
+
+</li>
+               <li>               <p>And, if all else fails,           <code class='verbatim'>request more resources &lt;guides/build-using-too-many-resources:Requests more resources&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+
+<h2>Custom Installs</h2>
+               <p>If you are running a custom installation of Read the Docs, you will need the         <code class='verbatim'>conda</code>
+ executable installed somewhere on your         <code class='verbatim'>PATH</code>
+. Because of the way         <code class='verbatim'>conda</code>
+ works, we can&#39;t safely install it as a normal dependency into the normal Python virtualenv.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>making it so you can&#39;t properly activate that virtualenv anymore.</p>
+
+</div>
+
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Cross-referencing with Sphinx</h1>
+               <p>When writing documentation you often need to link to other pages of your documentation, other sections of the current page, or sections from other pages.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _target to paragraph:&#39;&gt;
+           </pre>
+
+               <p>An easy way is just to use the raw URL that Sphinx generates for each page/section. This works, but it has some disadvantages:</p>
+
+                          <ul>               <li>               <p>Links can change, so they are hard to maintain.</p>
+
+</li>
+               <li>               <p>Links can be verbose and hard to read, so it is unclear what page/section they are linking to.</p>
+
+</li>
+               <li>               <p>There is no easy way to link to specific sections like paragraphs, figures, or code blocks.</p>
+
+</li>
+               <li>               <p>URL links only work for the html version of your documentation.</p>
+
+</li>
+            </ul>
+
+               <p>Instead, Sphinx offers a powerful way to linking to the different elements of the document, called <em>cross-references</em>. Some advantages of using them:</p>
+
+                          <ul>               <li>               <p>Use a human-readable name of your choice, instead of a URL.</p>
+
+</li>
+               <li>               <p>Portable between formats: html, PDF, ePub.</p>
+
+</li>
+               <li>               <p>Sphinx will warn you of invalid references.</p>
+
+</li>
+               <li>               <p>You can cross reference more than just pages and section headers.</p>
+
+</li>
+            </ul>
+
+               <p>This page describes some best-practices for cross-referencing with Sphinx with two markup options: reStructuredText and MyST (Markdown).</p>
+
+                          <ul>               <li>               <p>If you are not familiar with reStructuredText,   check         <code class='verbatim'>sphinx:usage/restructuredtext/basics</code>
+ for a quick introduction.</p>
+
+</li>
+               <li>               <p>If you want to learn more about the MyST Markdown dialect,   check out         <code class='verbatim'>myst-parser:syntax/syntax</code>
+.</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. contents:: Table of contents
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;backlinks&#39;, &#39;none&#39;)
+    (&#39;depth&#39;, &#39;3&#39;)
+    </pre>
+
+
+
+<h2>Getting started</h2>
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _My target:&#39;&gt;
+           </pre>
+
+
+<h3>Explicit targets</h3>
+               <p>Cross referencing in Sphinx uses two components, <strong>references</strong> and <strong>targets</strong>.</p>
+
+                          <ul>               <li>               <p><strong>references</strong> are pointers in your documentation to other parts of your documentation.</p>
+
+</li>
+               <li>               <p><strong>targets</strong> are where the references can point to.</p>
+
+</li>
+            </ul>
+
+               <p>You can manually create a <em>target</em> in any location of your documentation, allowing you to <em>reference</em> it from other pages. These are called <strong>explicit targets</strong>.</p>
+
+               <p>For example, one way of creating an explicit target for a section is:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          .. _My target:
+
+          Explicit targets
+          ~~~~~~~~~~~~~~~~
+
+          Reference `My target`_.
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          (My_target)=
+          ## Explicit targets
+
+          Reference [](My_target).</pre>
+
+
+               <p>Then the reference will be rendered as <code class='not-implemented'>:None:None:`My target`</code>.</p>
+
+               <p>You can also add explicit targets before paragraphs (or any other part of a page).</p>
+
+               <p>Another example, add a target to a paragraph:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          .. _target to paragraph:
+
+          An easy way is just to use the final link of the page/section.
+          This works, but it has :ref:`some disadvantages &lt;target to paragraph&gt;`:
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          (target_to_paragraph)=
+
+          An easy way is just to use the final link of the page/section.
+          This works, but it has [some disadvantages](target_to_paragraph):</pre>
+
+
+               <p>Then the reference will be rendered as: <code class='not-implemented'>:None:None:`some disadvantages &lt;target to paragraph&gt;`</code>.</p>
+
+               <p>You can also create         <pre class='not-implemented'>&lt;Unimplemented &#39;inline_target&#39; &#39;_`in-line targets`&#39;&gt;</pre>
+ within an element on your page, allowing you to, for example, reference text <em>within</em> a paragraph.</p>
+
+               <p>For example, an in-line target inside a paragraph:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          You can also create _`in-line targets` within an element on your page,
+          allowing you to, for example, reference text *within* a paragraph.</pre>
+
+
+               <p>Then you can reference it using         <code class='verbatim'>`in-line targets`_</code>
+, that will be rendered as: <code class='not-implemented'>:None:None:`in-line targets`</code>.</p>
+
+
+<h3>Implicit targets</h3>
+               <p>You may also reference some objects by name without explicitly giving them one by using <em>implicit targets</em>.</p>
+
+               <p>When you create a section, a footnote, or a citation, Sphinx will create a target with the title as the name:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          For example, to reference the previous section
+          you can use `Explicit targets`_.
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          For example, to reference the previous section
+          you can use [](#explicit-targets).
+
+       .. note::
+
+          This requires setting ``myst_heading_anchors = 2`` in your ``conf.py``,
+          see :ref:`myst-parser:syntax/header-anchors`.</pre>
+
+
+               <p>The reference will be rendered as: <code class='not-implemented'>:None:None:`Explicit targets`</code>.</p>
+
+
+<h2>Cross-referencing using roles</h2>
+               <p>All targets seen so far can be referenced only from the same page. Sphinx provides some roles that allow you to reference any explicit target from any page.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Since Sphinx will make all explicit targets available globally, all targets must be unique.</p>
+
+</div>
+
+
+               <p>You can see the complete list of cross-referencing roles at         <code class='verbatim'>sphinx:xref-syntax</code>
+. Next, you will explore the most common ones.</p>
+
+
+<h3>The ref role</h3>
+               <p>The         <code class='verbatim'>ref</code>
+ role can be used to reference any explicit targets. For example:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          - :ref:`my target`.
+          - :ref:`Target to paragraph &lt;target to paragraph&gt;`.
+          - :ref:`Target inside a paragraph &lt;in-line targets&gt;`.
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          - {ref}`my target`.
+          - {ref}`Target to paragraph &lt;target_to_paragraph&gt;`.</pre>
+
+
+               <p>That will be rendered as:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>my target</code>
+.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Target to paragraph &lt;target to paragraph&gt;</code>
+.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Target inside a paragraph &lt;in-line targets&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+               <p>The         <code class='verbatim'>ref</code>
+ role also allow us to reference code blocks:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: rst
+    .. _target to code:
+
+    .. code-block:: python
+
+       # Add the extension
+       extensions = [
+          &#39;sphinx.ext.autosectionlabel&#39;,
+       ]
+
+       # Make sure the target is unique
+       autosectionlabel_prefix_document = True</pre>
+
+
+               <p>We can reference it using         <code class='verbatim'>:ref:`code &lt;target to code&gt;`</code>
+, that will be rendered as:         <code class='verbatim'>code &lt;target to code&gt;</code>
+.</p>
+
+
+<h3>The doc role</h3>
+               <p>The         <code class='verbatim'>doc</code>
+ role allows us to link to a page instead of just a section. The target name can be relative to the page where the role exists, or relative to your documentation&#39;s root folder (in both cases, you should omit the extension).</p>
+
+               <p>For example, to link to a page in the same directory as this one you can use:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          - :doc:`intersphinx`
+          - :doc:`/guides/intersphinx`
+          - :doc:`Custom title &lt;/guides/intersphinx&gt;`
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          - {doc}`intersphinx`
+          - {doc}`/guides/intersphinx`
+          - {doc}`Custom title &lt;/guides/intersphinx&gt;`</pre>
+
+
+               <p>That will be rendered as:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>intersphinx</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>/guides/intersphinx</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Custom title &lt;/guides/intersphinx&gt;</code>
+</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. tip:: 
+    Using paths relative to your documentation root is recommended,
+    so you avoid changing the target name if the page is moved.</pre>
+
+
+
+<h3>The numref role</h3>
+               <p>The         <code class='verbatim'>numref</code>
+ role is used to reference <strong>numbered</strong> elements of your documentation. For example, tables and images.</p>
+
+               <p>To activate numbered references, add this to your         <code class='verbatim'>conf.py</code>
+ file:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: python
+    # Enable numref
+    numfig = True</pre>
+
+
+               <p>Next, ensure that an object you would like to reference has an explicit target.</p>
+
+               <p>For example, you can create a target for the next image:</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _target to image:&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. figure:: /img/logo.png
+    (&#39;alt&#39;, &#39;Logo&#39;)
+    (&#39;align&#39;, &#39;center&#39;)
+    (&#39;width&#39;, &#39;240px&#39;)
+    Link me!</pre>
+
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          .. _target to image:
+
+          .. figure:: /img/logo.png
+             :alt: Logo
+             :align: center
+             :width: 240px
+
+             Link me!
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          (target_to_image)=
+
+          ```{figure} /img/logo.png
+          :alt: Logo
+          :align: center
+          :width: 240px
+          ```</pre>
+
+
+               <p>Finally, reference it using         <code class='verbatim'>:numref:`target to image`</code>
+, that will be rendered as         <code class='verbatim'>Fig. N</code>
+. Sphinx will enumerate the image automatically.</p>
+
+
+<h2>Automatically label sections</h2>
+               <p>Manually adding an explicit target to each section and making sure is unique is a big task! Fortunately, Sphinx includes an extension to help us with that problem,         <code class='verbatim'>autosectionlabel &lt;sphinx:usage/extensions/autosectionlabel&gt;</code>
+.</p>
+
+               <p>To activate the         <code class='verbatim'>autosectionlabel</code>
+ extension, add this to your         <code class='verbatim'>conf.py</code>
+ file:</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _target to code:&#39;&gt;
+           </pre>
+
+               <pre class='not-implemented'>
+.. code-block:: python
+    # Add the extension
+    extensions = [
+       &#39;sphinx.ext.autosectionlabel&#39;,
+    ]
+
+    # Make sure the target is unique
+    autosectionlabel_prefix_document = True</pre>
+
+
+               <p>Sphinx will create explicit targets for all your sections, the name of target has the form         <code class='verbatim'>{path/to/page}:{title-of-section}</code>
+.</p>
+
+               <p>For example, you can reference the previous section using:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: reStructuredText
+
+       .. code-block:: rst
+
+          - :ref:`guides/cross-referencing-with-sphinx:explicit targets`.
+          - :ref:`Custom title &lt;guides/cross-referencing-with-sphinx:explicit targets&gt;`.
+
+    .. tab:: MyST (Markdown)
+
+       .. code-block:: md
+
+          - {ref}`guides/cross-referencing-with-sphinx:explicit targets`.
+          - {ref}`Custom title &lt;guides/cross-referencing-with-sphinx:explicit targets&gt;`.</pre>
+
+
+               <p>That will be rendered as:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>guides/cross-referencing-with-sphinx:explicit targets</code>
+.</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Custom title &lt;guides/cross-referencing-with-sphinx:explicit targets&gt;</code>
+.</p>
+
+</li>
+            </ul>
+
+
+<h2>Invalid targets</h2>
+               <p>If you reference an invalid or undefined target Sphinx will warn us. You can use the <code class='not-implemented'>:None:option:`-W &lt;sphinx:sphinx-build.-W&gt;`</code> option when building your docs to fail the build if there are any invalid references. On Read the Docs you can use the         <code class='verbatim'>config-file/v2:sphinx.fail_on_warning</code>
+ option.</p>
+
+
+<h2>Finding the reference name</h2>
+               <p>When you build your documentation, Sphinx will generate an inventory of all explicit and implicit links called         <code class='verbatim'>objects.inv</code>
+. You can list all of these targets to explore what is available for you to reference.</p>
+
+               <p>List all targets for built documentation with:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    python -m sphinx.ext.intersphinx &lt;link&gt;</pre>
+
+
+               <p>Where         <code class='verbatim'>&lt;link&gt;</code>
+ is either a URL or a local path that points to your inventory file (usually in         <code class='verbatim'>_build/html/objects.inv</code>
+). For example, to see all targets from the Read the Docs documentation:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    python -m sphinx.ext.intersphinx https://docs.readthedocs.io/en/stable/objects.inv</pre>
+
+
+
+<h2>Cross-referencing targets in other documentation sites</h2>
+               <p>You can reference to docs outside your project too! See         <code class='verbatim'>/guides/intersphinx</code>
+.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

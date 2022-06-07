@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Future Builder</h1>
+               <pre class='not-implemented'>
+.. contents:: 
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;depth&#39;, &#39;2&#39;)
+    </pre>
+
+
+               <p>This document is a continuation of Santos&#39; work about &#34;<code class='not-implemented'>:None:None:`Explicit Builders`</code>&#34;. It builds on top of that document some extra features and makes some decisions about the final goal, proposing a clear direction to move forward with intermediate steps keeping backward and forward compatibility.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Explicit Builders: https://github.com/readthedocs/readthedocs.org/pull/8103/&#39;&gt;
+           </pre>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>A lot of things have changed since this document was written. We have had multiple discussions where we already took some decisions and discarded some of the ideas/details proposed here. The document was merged as-is without a cleaned up and there could be some inconsistencies. Note that         <code class='verbatim'>build.jobs</code>
+ and         <code class='verbatim'>build.commands</code>
+ are already implemented <em>without definig a contract</em> yet, and with small differences from the idea described here.</p>
+
+        <p>Please, refer to the following links to read more about all the discussions we already had:</p>
+
+                    <blockquote>           <ul>               <li>               <p>Public discussions:</p>
+
+                          <ul>               <li>               <p>https://github.com/readthedocs/readthedocs.org/issues/9062</p>
+
+</li>
+               <li>               <p>https://github.com/readthedocs/readthedocs.org/issues/1083</p>
+
+</li>
+               <li>               <p>https://github.com/readthedocs/readthedocs.org/issues/9063</p>
+
+</li>
+               <li>               <p>https://github.com/readthedocs/readthedocs.org/issues/9088</p>
+
+</li>
+            </ul>
+
+</li>
+               <li>               <p>Private discussions:</p>
+
+                          <ul>               <li>               <p>https://github.com/readthedocs/meta/discussions/9</p>
+
+</li>
+               <li>               <p>https://github.com/readthedocs/meta/discussions/14</p>
+
+</li>
+               <li>               <p>https://github.com/readthedocs/meta/discussions/17</p>
+
+</li>
+            </ul>
+
+</li>
+            </ul>
+</blockquote>
+
+</div>
+
+
+
+<h2>Goals</h2>
+                          <ul>               <li>               <p>Keep the current builder working as-is</p>
+
+</li>
+               <li>               <p>Keep backward and forward (with intermediate steps) compatibility</p>
+
+</li>
+               <li>               <p>Define a clear support for newbie, intermediate and advanced users</p>
+
+</li>
+               <li>               <p>Allow users to override a command, run pre/post hook commands or define all commands by themselves</p>
+
+</li>
+               <li>               <p>Remove the Read the Docs requirement of having access to the build process</p>
+
+</li>
+               <li>               <p>Translate our current magic at build time to a defined contract with the user</p>
+
+</li>
+               <li>               <p>Provide a way to add a command argument without implementing it as a config file (e.g.         <code class='verbatim'>fail_on_warning</code>
+)</p>
+
+</li>
+               <li>               <p>Define a path forward towards supporting other tools</p>
+
+</li>
+               <li>               <p>Re-write all         <code class='verbatim'>readthedocs-sphinx-ext</code>
+ features to post-processsing HTML features</p>
+
+</li>
+               <li>               <p>Reduce complexity maintained by Read the Docs&#39; core team</p>
+
+</li>
+               <li>               <p>Make Read the Docs responsible for Sphinx support and delegate other tools to the community</p>
+
+</li>
+               <li>               <p>Eventually support upload pre-build docs</p>
+
+</li>
+               <li>               <p>Allow us to add a feature with a defined contract without worry about breaking old builds</p>
+
+</li>
+               <li>               <p>Introduce         <code class='verbatim'>build.builder: 2</code>
+ config (does not install pre-defined packages) for these new features</p>
+
+</li>
+               <li>               <p>Motivate users to migrate to         <code class='verbatim'>v2</code>
+ to finally deprecate this magic by educating users</p>
+
+</li>
+            </ul>
+
+
+<h2>Steps ran by the builder</h2>
+               <p>Read the Docs currently controls all the build process. Users are only allowed to modify very limited behavior by using a         <code class='verbatim'>.readthedocs.yaml</code>
+ file. This drove us to implement features like         <code class='verbatim'>sphinx.fail_on_warning</code>
+,         <code class='verbatim'>submodules</code>
+, among others, at a high implementation and maintenance cost to the core team. Besides, this hasn&#39;t been enough for more advanced users that require more control over these commands.</p>
+
+               <p>This document proposes to clearly define the steps the builder ran and allow users to override them depending on their needings:</p>
+
+                          <ul>               <li>               <p>Newbie user / simple platform usage: Read the Docs controls all the commands (current builder)</p>
+
+</li>
+               <li>               <p>Intermediate user: ability to override one or more commands plus running pre/post hooks</p>
+
+</li>
+               <li>               <p>Advanced user: controls <em>all the commands</em> executed by the builder</p>
+
+</li>
+            </ul>
+
+               <p>The steps identified so far are:</p>
+
+                          <ol>               <li>               <p>Checkout</p>
+
+</li>
+               <li>               <p>Expose project data via environment variables (\*)</p>
+
+</li>
+               <li>               <p>Create environment (virtualenv / conda)</p>
+
+</li>
+               <li>               <p>Install dependencies</p>
+
+</li>
+               <li>               <p>Build documentation</p>
+
+</li>
+               <li>               <p>Generate defined contract (        <code class='verbatim'>metadata.yaml</code>
+)</p>
+
+</li>
+               <li>               <p>Post-process HTML (\*)</p>
+
+</li>
+               <li>               <p>Upload to storage (\*)</p>
+
+</li>
+            </ol>
+
+               <p>Steps marked with <em>(\*)</em> are managed by Read the Docs and can&#39;t be overwritten.</p>
+
+
+<h2>Defined contract</h2>
+               <p>Projects building on Read the Docs must provide a         <code class='verbatim'>metadata.yaml</code>
+ file after running their last command. This file contains all the data required by Read the Docs to be able to add its integrations. If this file is not provided or malformed, Read the Docs will fail the build and stop the process communicating to the user that there was a problem with the         <code class='verbatim'>metadata.yaml</code>
+ and we require them to fix the problem.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>There is no restriction about how this file is generated (e.g. generated with Python, Bash, statically uploaded to the repository, etc) Read the Docs does not have control over it and it&#39;s only responsible for generating it when building with Sphinx.</p>
+
+</div>
+
+
+               <p>The following is an example of a         <code class='verbatim'>metadata.yaml</code>
+ that is generated by Read the Docs when building Sphinx documentation:</p>
+
+               <pre># metadata.yaml
+version: 1
+tool:
+  name: sphinx
+  version: 3.5.1
+  builder: html
+readthedocs:
+  html_output: ./_build/html/
+  pdf_output: ./_build/pdf/myproject.pdf
+  epub_output: ./_build/pdf/myproject.epub
+  search:
+    enabled: true
+    css_identifier: #search-form &gt; input[name=&#34;q&#34;]
+  analytics: false
+  flyout: false
+  canonical: docs.myproject.com
+  language: en</pre>
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>The         <code class='verbatim'>metadata.yaml</code>
+ contract is not defined yet. This is just an example of what we could expect from it to be able to add our integrations.</p>
+
+</div>
+
+
+
+<h2>Config file</h2>
+               <p>As we mentioned, we want all users to use the same config file and have a clear way to override commands as they need. This will be done by using the current         <code class='verbatim'>.readthedocs.yaml</code>
+ file that we already have by adding two new keys:         <code class='verbatim'>build.jobs</code>
+ and         <code class='verbatim'>build.commands</code>
+.</p>
+
+               <p>If neither         <code class='verbatim'>build.jobs</code>
+ or         <code class='verbatim'>build.commands</code>
+ are present in the config file, Read the Docs will execute the builder we currently support without modification, keeping compatibility with all projects already building successfully.</p>
+
+               <p>When users make usage of         <code class='verbatim'>jobs:</code>
+ or         <code class='verbatim'>commands:</code>
+ keys we are not responsible for them in case they fail. In these cases, we only check for a         <code class='verbatim'>metadata.yaml</code>
+ file and run our code to add the integrations.</p>
+
+
+<h3>``build.jobs``</h3>
+               <p>It allows users to execute one or multiple pre/post hooks and/or overwrite one or multiple commands. These are some examples where this is useful:</p>
+
+                          <ul>               <li>               <p>User wants to pass an extra argument to         <code class='verbatim'>sphinx-build</code>
+</p>
+
+</li>
+               <li>               <p>Project requires to execute a command <em>before</em> building</p>
+
+</li>
+               <li>               <p>User has a personal/private PyPI URL</p>
+
+</li>
+               <li>               <p>Install project with <code class='not-implemented'>:None:None:`pip install -e`</code> (see https://github.com/readthedocs/readthedocs.org/issues/6243)</p>
+
+</li>
+               <li>               <p>Disable git shallow clone (see https://github.com/readthedocs/readthedocs.org/issues/5989)</p>
+
+</li>
+               <li>               <p>Call <code class='not-implemented'>:None:None:`pip install`</code> with <code class='not-implemented'>:None:None:`--constraint`</code> (see https://github.com/readthedocs/readthedocs.org/issues/7258)</p>
+
+</li>
+               <li>               <p>Do something _before_ install (see https://github.com/readthedocs/readthedocs.org/issues/6662)</p>
+
+</li>
+               <li>               <p>Use a conda lock file to create the environment (see https://github.com/readthedocs/readthedocs.org/issues/7772)</p>
+
+</li>
+               <li>               <p>Run a check after the build is done (e.g.         <code class='verbatim'>sphinx-build -W -b linkcheck . _build/html</code>
+)</p>
+
+</li>
+               <li>               <p>Create virtualenv with         <code class='verbatim'>--system-site-packages</code>
+</p>
+
+</li>
+               <li>               <p>etc</p>
+
+</li>
+            </ul>
+
+               <pre># .readthedocs.yaml
+build:
+  builder: 2
+  jobs:
+    pre_checkout:
+    checkout: git clone --branch main https://github.com/readthedocs/readthedocs.org
+    post_checkout:
+    pre_create_environment:
+    create_environment: python -m virtualenv venv
+    post_create_environment:
+    pre_install:
+    install: pip install -r requirements.txt
+    post_install:
+    pre_build:
+    build:
+      html: sphinx-build -T -j auto -E -b html -d _build/doctrees -D language=en . _build/html
+      pdf: latexmk -r latexmkrc -pdf -f -dvi- -ps- -jobname=test-builds -interaction=nonstopmode
+      epub: sphinx -T -j auto -b epub -d _build/doctrees -D language=en . _build/epub
+    post_build:
+    pre_metadata:
+    metadata: ./metadata_sphinx.py
+    post_medatada:</pre>
+                           <div class='admonition'>
+    <div>note</div>
+        <p><em>All these commands</em> are executed passing all the exposed environment variables.</p>
+
+</div>
+
+
+               <p>If the user only provides a subset of these jobs, we ran our default commands if the user does not provide them (see         <code class='verbatim'>design/future-builder:Steps ran by the builder</code>
+). For example, the following YAML is enough when the project requires running Doxygen as a pre-build step:</p>
+
+               <pre># .readthedocs.yaml
+build:
+  builder: 2
+  jobs:
+    # https://breathe.readthedocs.io/en/latest/readthedocs.html#generating-doxygen-xml-files
+    pre_build: cd ../doxygen; doxygen</pre>
+
+<h3>``build.commands``</h3>
+               <p>It allows users to have full control over the commands executed in the build process. These are some examples where this is useful:</p>
+
+                          <ul>               <li>               <p>project with a custom build process that does map ours</p>
+
+</li>
+               <li>               <p>specific requirements that we can&#39;t/want to cover as a general rule</p>
+
+</li>
+               <li>               <p>build documentation with a different tool than Sphinx</p>
+
+</li>
+            </ul>
+
+               <pre># .readthedocs.yaml
+build:
+  builder: 2
+  commands:
+    - git clone --branch main https://github.com/readthedocs/readthedocs.org
+    - pip install -r requirements.txt
+    - sphinx-build -T -j auto -E -b html -d _build/doctrees -D language=en . _build/html
+    - ./metadata.py</pre>
+
+<h2>Intermediate steps for rollout</h2>
+                          <ol>               <li>               <p>Remove all the exposed data in the         <code class='verbatim'>conf.py.tmpl</code>
+ file and move it to         <code class='verbatim'>metadata.yaml</code>
+</p>
+
+</li>
+               <li>               <p>Define structure required for         <code class='verbatim'>metadata.yaml</code>
+ as contract</p>
+
+</li>
+               <li>               <p>Define the environment variables required (e.g. some from         <code class='verbatim'>html_context</code>
+) and execute all commands with them</p>
+
+</li>
+               <li>               <p>Build documentation using this contract</p>
+
+</li>
+               <li>               <p>Leave         <code class='verbatim'>readthedocs-sphinx-ext</code>
+ as the only package installed and extension install in         <code class='verbatim'>conf.py.tmpl</code>
+</p>
+
+</li>
+               <li>               <p>Add         <code class='verbatim'>build.builder: 2</code>
+ config without any <em>magic</em></p>
+
+</li>
+               <li>               <p>Build everything needed to support         <code class='verbatim'>build.jobs</code>
+ and         <code class='verbatim'>build.commands</code>
+ keys</p>
+
+</li>
+               <li>               <p>Write guides about how to use the new keys</p>
+
+</li>
+               <li>               <p>Re-write         <code class='verbatim'>readthedocs-sphinx-ext</code>
+ features to post-process HTML features</p>
+
+</li>
+            </ol>
+
+
+<h2>Final notes</h2>
+                          <ul>               <li>               <p>The migration path from         <code class='verbatim'>v1</code>
+ to         <code class='verbatim'>v2</code>
+ will require users to explicitly specify their requirements   (we don&#39;t install pre-defined packages anymore)</p>
+
+</li>
+               <li>               <p>We probably not want to support         <code class='verbatim'>build.jobs</code>
+ on         <code class='verbatim'>v1</code>
+ to reduce core team&#39;s time maintaining that code   without the ability to update it due to projects randomly breaking.</p>
+
+</li>
+               <li>               <p>We would be able to start building documentation using new tools without having to <em>integrate them</em>.</p>
+
+</li>
+               <li>               <p>Building on Read the Docs with a new tool will require:   - the user to execute a different set of commands by overriding the defaults.   - the project/build/user to expose a         <code class='verbatim'>metadata.yaml</code>
+ with the contract that Read the Docs expects.   - none, some or all the integrations will be added to the HTML output (these have to be implemented at Read the Docs core)</p>
+
+</li>
+               <li>               <p>We are not responsible for extra formats (e.g. PDF, ePub, etc) on other tools.</p>
+
+</li>
+               <li>               <p>Focus on support Sphinx with nice integrations made in a tool-agnostic way that can be re-used.</p>
+
+</li>
+               <li>               <p>Removing the manipulation of         <code class='verbatim'>conf.py.tmpl</code>
+ does not require us to implement the same manipulation   for projects using the new potential feature         <code class='verbatim'>sphinx.yaml</code>
+ file.</p>
+
+</li>
+            </ul>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

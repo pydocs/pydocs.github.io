@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Configuration File V2</h1>
+               <p>Read the Docs supports configuring your documentation builds with a YAML file. The         <code class='verbatim'>configuration file &lt;index&gt;</code>
+ must be in the root directory of your project and be named         <code class='verbatim'>.readthedocs.yaml</code>
+.</p>
+
+               <p>All options are applied to the version containing this file. Below is an example YAML file which shows the most common configuration options:</p>
+
+               <pre class='not-implemented'>
+.. tabs:: 
+    .. tab:: Sphinx
+
+       .. code:: yaml
+
+          # .readthedocs.yaml
+          # Read the Docs configuration file
+          # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+          # Required
+          version: 2
+
+          # Set the version of Python and other tools you might need
+          build:
+            os: ubuntu-20.04
+            tools:
+              python: &#34;3.9&#34;
+              # You can also specify other tool versions:
+              # nodejs: &#34;16&#34;
+              # rust: &#34;1.55&#34;
+              # golang: &#34;1.17&#34;
+
+          # Build documentation in the docs/ directory with Sphinx
+          sphinx:
+             configuration: docs/conf.py
+
+          # If using Sphinx, optionally build your docs in additional formats such as PDF
+          # formats:
+          #    - pdf
+
+          # Optionally declare the Python requirements required to build your docs
+          python:
+             install:
+             - requirements: docs/requirements.txt
+
+    .. tab:: MkDocs
+
+       .. code:: yaml
+
+          # .readthedocs.yaml
+          # Read the Docs configuration file
+          # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+          # Required
+          version: 2
+
+          # Set the version of Python and other tools you might need
+          build:
+            os: ubuntu-20.04
+            tools:
+              python: &#34;3.9&#34;
+
+          mkdocs:
+            configuration: mkdocs.yml
+
+          # Optionally declare the Python requirements required to build your docs
+          python:
+             install:
+             - requirements: docs/requirements.txt</pre>
+
+
+
+<h2>Supported settings</h2>
+               <p>Read the Docs validates every configuration file. Any configuration option that isn&#39;t supported will make the build fail. This is to avoid typos and provide feedback on invalid configurations.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>When using a v2 configuration file, the local settings from the web interface are ignored.</p>
+
+</div>
+
+
+               <pre class='not-implemented'>
+.. contents:: 
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;depth&#39;, &#39;3&#39;)
+    </pre>
+
+
+
+<h3>version</h3>
+                          <dl>               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2</pre>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>If you don&#39;t provide the version, <code class='not-implemented'>:None:doc:`v1 &lt;v1&gt;`</code> will be used.</p>
+
+</div>
+
+
+
+<h3>formats</h3>
+               <p>Additional formats of the documentation to be built, apart from the default HTML.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>htmlzip</code>
+,         <code class='verbatim'>pdf</code>
+,         <code class='verbatim'>epub</code>
+,         <code class='verbatim'>all</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    # Default
+    formats: []</pre>
+
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    # Build PDF &amp; ePub
+    formats:
+      - epub
+      - pdf</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>You can use the         <code class='verbatim'>all</code>
+ keyword to indicate all formats.</p>
+
+        <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    # Build all formats
+    formats: all</pre>
+
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>At the moment, only Sphinx supports additional formats.         <code class='verbatim'>pdf</code>
+,         <code class='verbatim'>epub</code>
+, and         <code class='verbatim'>htmlzip</code>
+ output is not yet supported when using MkDocs.</p>
+
+</div>
+
+
+
+<h3>python</h3>
+               <p>Configuration of the Python environment to be used.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    python:
+      install:
+        - requirements: docs/requirements.txt
+        - method: pip
+          path: .
+          extra_requirements:
+            - docs
+        - method: setuptools
+          path: another/package
+      system_packages: true</pre>
+
+
+
+<h4>python.version</h4>
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>This option is now deprecated and replaced by <code class='not-implemented'>:None:ref:`config-file/v2:build.tools.python`</code>. See <code class='not-implemented'>:None:ref:`config-file/v2:python.version (legacy)`</code> for the description of this option.</p>
+
+</div>
+
+
+
+<h4>python.install</h4>
+               <p>List of installation methods of packages and requirements. You can have several of the following methods.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h5>Requirements file</h5>
+               <p>Install packages from a requirements file.</p>
+
+               <p>The path to the requirements file, relative to the root of the project.</p>
+
+                          <dl>               <dt>                           Key  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>requirements</code>
+</p>
+
+               </dd>
+               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    python:
+      version: &#34;3.7&#34;
+      install:
+        - requirements: docs/requirements.txt
+        - requirements: requirements.txt</pre>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>If you are using a <code class='not-implemented'>:None:ref:`Conda &lt;config-file/v2:conda&gt;`</code> environment to manage the build, this setting will not have any effect. Instead add the extra requirements to the         <code class='verbatim'>environment</code>
+ file of Conda.</p>
+
+</div>
+
+
+
+<h5>Packages</h5>
+               <p>Install the project using         <code class='verbatim'>python setup.py install</code>
+ or         <code class='verbatim'>pip install</code>
+.</p>
+
+               <p>The path to the package, relative to the root of the project.</p>
+
+                          <dl>               <dt>                           Key  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>The installation method.</p>
+
+                          <dl>               <dt>                           Key  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>method</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>pip</code>
+,         <code class='verbatim'>setuptools</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>pip</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p><code class='not-implemented'>:None:None:`Extra requirements`</code> section to install in addition to the <code class='not-implemented'>:None:None:`package dependencies`</code>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Extra Requirements: https://setuptools.readthedocs.io/en/latest/userguide/dependency_management.html#optional-dependencies&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _package dependencies: https://setuptools.readthedocs.io/en/latest/userguide/dependency_management.html#declaring-required-dependency&#39;&gt;
+           </pre>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>You need to install your project with         <code class='verbatim'>pip</code>
+ to use         <code class='verbatim'>extra_requirements</code>
+.</p>
+
+</div>
+
+
+                          <dl>               <dt>                           Key  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>extra_requirements</code>
+</p>
+
+               </dd>
+               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Example:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    python:
+      version: &#34;3.7&#34;
+      install:
+        - method: pip
+          path: .
+          extra_requirements:
+            - docs
+        - method: setuptools
+          path: package</pre>
+
+
+               <p>With the previous settings, Read the Docs will execute the next commands:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash $
+    pip install .[docs]
+    python package/setup.py install</pre>
+
+
+
+<h4>python.system_packages</h4>
+               <p>Give the virtual environment access to the global site-packages directory.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>bool</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>If you are using a <code class='not-implemented'>:None:ref:`Conda &lt;config-file/v2:conda&gt;`</code> environment to manage the build, this setting will not have any effect, since the virtual environment creation is managed by Conda.</p>
+
+</div>
+
+
+
+<h3>conda</h3>
+               <p>Configuration for Conda support.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    conda:
+      environment: environment.yml</pre>
+
+
+
+<h4>conda.environment</h4>
+               <p>The path to the Conda environment file, relative to the root of the project.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h3>build</h3>
+               <p>Configuration for the documentation build process. This allows you to specify the base Read the Docs image used to build the documentation, and control the versions of several tools: Python, Node.js, Rust, and Go.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      os: ubuntu-20.04
+      tools:
+        python: &#34;3.9&#34;
+        nodejs: &#34;16&#34;
+        rust: &#34;1.55&#34;
+        golang: &#34;1.17&#34;</pre>
+
+
+
+<h4>build.os</h4>
+               <p>The Docker image used for building the docs. Image names refer to the operating system Read the Docs uses to build them.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Arbitrary Docker images are not supported.</p>
+
+</div>
+
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>ubuntu-20.04</code>
+,         <code class='verbatim'>ubuntu-22.04</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.tools</h4>
+               <p>Version specifiers for each tool. It must contain at least one tool.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>dict</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>python</code>
+,         <code class='verbatim'>nodejs</code>
+,         <code class='verbatim'>rust</code>
+,         <code class='verbatim'>golang</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>true</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.tools.python</h4>
+               <p>Python version to use. You can use several interpreters and versions, from CPython, PyPy, Miniconda, and Mamba.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>If you use Miniconda3 or Mambaforge, you can select the Python version using the         <code class='verbatim'>environment.yml</code>
+ file. See our <code class='not-implemented'>:None:doc:`/guides/conda`</code> guide for more information.</p>
+
+</div>
+
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                           <ul>               <li>               <p>        <code class='verbatim'>2.7</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3</code>
+ (last stable CPython version)</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.6</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.7</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.8</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.9</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.10</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>3.11</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>pypy3.7</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>pypy3.8</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>pypy3.9</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>miniconda3-4.7</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>mambaforge-4.10</code>
+</p>
+
+</li>
+            </ul>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.tools.nodejs</h4>
+               <p>Node.js version to use.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                           <ul>               <li>               <p>        <code class='verbatim'>14</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>16</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>18</code>
+</p>
+
+</li>
+            </ul>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.tools.rust</h4>
+               <p>Rust version to use.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                           <ul>               <li>               <p>        <code class='verbatim'>1.55</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>1.61</code>
+</p>
+
+</li>
+            </ul>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.tools.golang</h4>
+               <p>Go version to use.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                           <ul>               <li>               <p>        <code class='verbatim'>1.17</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>1.18</code>
+</p>
+
+</li>
+            </ul>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.apt_packages</h4>
+               <p>List of <code class='not-implemented'>:None:None:`APT packages`</code> to install. Our build servers run Ubuntu 18.04, with the default set of package repositories installed. We don&#39;t currently support PPA&#39;s or other custom repositories.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _APT packages: https://packages.ubuntu.com/&#39;&gt;
+           </pre>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      apt_packages:
+        - libclang
+        - cmake</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>When possible avoid installing Python packages using apt (        <code class='verbatim'>python3-numpy</code>
+ for example), <code class='not-implemented'>:None:ref:`use pip or Conda instead &lt;guides/reproducible-builds:pinning dependencies&gt;`</code>.</p>
+
+</div>
+
+
+
+<h4>build.jobs</h4>
+               <p>Commands to be run before or after a Read the Docs         <code class='verbatim'>pre-defined build jobs</code>
+. This allows you to run custom commands at a particular moment in the build process. See         <code class='verbatim'>/build-customization</code>
+ for more details.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      os: ubuntu-22.04
+      tools:
+        python: &#34;3.10&#34;
+      jobs:
+        pre_create_environment:
+          - echo &#34;Command run at &#39;pre_create_environment&#39; step&#34;
+        post_build:
+          - echo &#34;Command run at &#39;post_build&#39; step&#34;
+          - echo `date`</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Each key under         <code class='verbatim'>build.jobs</code>
+ must be a list of strings.         <code class='verbatim'>build.os</code>
+ and         <code class='verbatim'>build.tools</code>
+ are also required to use         <code class='verbatim'>build.jobs</code>
+.</p>
+
+</div>
+
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>dict</code>
+</p>
+
+               </dd>
+               <dt>                           Allowedkeys  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>post_checkout</code>
+,         <code class='verbatim'>pre_system_dependencies</code>
+,         <code class='verbatim'>post_system_dependencies</code>
+,            <code class='verbatim'>pre_create_environment</code>
+,         <code class='verbatim'>post_create_environment</code>
+,         <code class='verbatim'>pre_install</code>
+,         <code class='verbatim'>post_install</code>
+,            <code class='verbatim'>pre_build</code>
+,         <code class='verbatim'>post_build</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>{}</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h4>build.commands</h4>
+               <p>Specify a list of commands that Read the Docs will run on the build process. When         <code class='verbatim'>build.commands</code>
+ is used, none of the         <code class='verbatim'>pre-defined build jobs</code>
+ will be executed. (see         <code class='verbatim'>/build-customization</code>
+ for more details). This allows you to run custom commands and control the build process completely. The         <code class='verbatim'>_readthedocs/html</code>
+ directory (relative to the checkout&#39;s path) will be uploaded and hosted by Read the Docs.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>This feature is in a <em>beta phase</em> and could suffer incompatible changes or even removed completely in the near feature. It does not yet support some of the Read the Docs&#39; integrations like the <code class='not-implemented'>:None:term:`flyout menu`</code>, search and ads. However, integrating all of them is part of the plan. Use it under your own responsibility.</p>
+
+</div>
+
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      os: ubuntu-22.04
+      tools:
+        python: &#34;3.10&#34;
+      commands:
+        - pip install pelican
+        - pelican --settings docs/pelicanconf.py --output _readthedocs/html/ docs/</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>        <code class='verbatim'>build.os</code>
+ and         <code class='verbatim'>build.tools</code>
+ are also required when using         <code class='verbatim'>build.commands</code>
+.</p>
+
+</div>
+
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Required  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h3>sphinx</h3>
+               <p>Configuration for Sphinx documentation (this is the default documentation type).</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    sphinx:
+      builder: html
+      configuration: conf.py
+      fail_on_warning: true</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>If you want to pin Sphinx to a specific version, use a         <code class='verbatim'>requirements.txt</code>
+ or         <code class='verbatim'>environment.yml</code>
+ file (see <code class='not-implemented'>:None:ref:`config-file/v2:requirements file`</code> and  <code class='not-implemented'>:None:ref:`config-file/v2:conda.environment`</code>). If you are using a metadata file to describe code dependencies like         <code class='verbatim'>setup.py</code>
+,         <code class='verbatim'>pyproject.toml</code>
+, or similar, you can use the         <code class='verbatim'>extra_requirements</code>
+ option (see <code class='not-implemented'>:None:ref:`config-file/v2:packages`</code>). This also allows you to override <code class='not-implemented'>:None:ref:`the default pinning done by Read the Docs
+if your project was created before October 2020 &lt;build-default-versions:external dependencies&gt;`</code>.</p>
+
+</div>
+
+
+
+<h4>sphinx.builder</h4>
+               <p>The builder type for the Sphinx documentation.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>html</code>
+,         <code class='verbatim'>dirhtml</code>
+,         <code class='verbatim'>singlehtml</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>html</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>The         <code class='verbatim'>htmldir</code>
+ builder option was renamed to         <code class='verbatim'>dirhtml</code>
+ to use the same name as sphinx. Configurations using the old name will continue working.</p>
+
+</div>
+
+
+
+<h4>sphinx.configuration</h4>
+               <p>The path to the         <code class='verbatim'>conf.py</code>
+ file, relative to the root of the project.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>null</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>If the value is         <code class='verbatim'>null</code>
+, Read the Docs will try to find a         <code class='verbatim'>conf.py</code>
+ file in your project.</p>
+
+
+<h4>sphinx.fail_on_warning</h4>
+               <p>Turn warnings into errors (<code class='not-implemented'>:None:option:`-W &lt;sphinx:sphinx-build.-W&gt;`</code> and <code class='not-implemented'>:None:option:`--keep-going &lt;sphinx:sphinx-build.--keep-going&gt;`</code> options). This means the build fails if there is a warning and exits with exit status 1.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>bool</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h3>mkdocs</h3>
+               <p>Configuration for MkDocs documentation.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    mkdocs:
+      configuration: mkdocs.yml
+      fail_on_warning: false</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>If you want to pin MkDocs to a specific version, use a         <code class='verbatim'>requirements.txt</code>
+ or         <code class='verbatim'>environment.yml</code>
+ file (see <code class='not-implemented'>:None:ref:`config-file/v2:requirements file`</code> and  <code class='not-implemented'>:None:ref:`config-file/v2:conda.environment`</code>). If you are using a metadata file to describe code dependencies like         <code class='verbatim'>setup.py</code>
+,         <code class='verbatim'>pyproject.toml</code>
+, or similar, you can use the         <code class='verbatim'>extra_requirements</code>
+ option (see <code class='not-implemented'>:None:ref:`config-file/v2:packages`</code>). This also allows you to override <code class='not-implemented'>:None:ref:`the default pinning done by Read the Docs
+if your project was created before March 2021 &lt;build-default-versions:external dependencies&gt;`</code>.</p>
+
+</div>
+
+
+
+<h4>mkdocs.configuration</h4>
+               <p>The path to the         <code class='verbatim'>mkdocs.yml</code>
+ file, relative to the root of the project.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>path</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>null</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>If the value is         <code class='verbatim'>null</code>
+, Read the Docs will try to find a         <code class='verbatim'>mkdocs.yml</code>
+ file in your project.</p>
+
+
+<h4>mkdocs.fail_on_warning</h4>
+               <p><a link href="https://www.mkdocs.org/user-guide/configuration/#strict" class='external'>Turn warnings into errors</a>. This means that the build stops at the first warning and exits with exit status 1.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>bool</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+
+<h3>submodules</h3>
+               <p>VCS submodules configuration.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Only Git is supported at the moment.</p>
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>You can&#39;t use         <code class='verbatim'>include</code>
+ and         <code class='verbatim'>exclude</code>
+ settings for submodules at the same time.</p>
+
+</div>
+
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    submodules:
+      include:
+        - one
+        - two
+      recursive: true</pre>
+
+
+
+<h4>submodules.include</h4>
+               <p>List of submodules to be included.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>You can use the         <code class='verbatim'>all</code>
+ keyword to include all submodules.</p>
+
+        <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    submodules:
+      include: all</pre>
+
+
+</div>
+
+
+
+<h4>submodules.exclude</h4>
+               <p>List of submodules to be excluded.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>You can use the         <code class='verbatim'>all</code>
+ keyword to exclude all submodules. This is the same as         <code class='verbatim'>include: []</code>
+.</p>
+
+        <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    submodules:
+      exclude: all</pre>
+
+
+</div>
+
+
+
+<h4>submodules.recursive</h4>
+               <p>Do a recursive clone of the submodules.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>bool</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>false</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>This is ignored if there aren&#39;t submodules to clone.</p>
+
+</div>
+
+
+
+<h3>search</h3>
+               <p>Settings for more control over         <code class='verbatim'>/server-side-search</code>
+.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    search:
+      ranking:
+        api/v1/*: -1
+        api/v2/*: 4
+      ignore:
+        - 404.html</pre>
+
+
+
+<h4>search.ranking</h4>
+               <p>Set a custom search rank over pages matching a pattern.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>map</code>
+ of patterns to ranks</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>{}</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Patterns are matched against the final html pages produced by the build (you should try to match <code class='not-implemented'>:None:None:`index.html`</code>, not <code class='not-implemented'>:None:None:`docs/index.rst`</code>). Patterns can include some special characters:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>*</code>
+ matches everything</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>?</code>
+ matches any single character</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>[seq]</code>
+ matches any character in         <code class='verbatim'>seq</code>
+</p>
+
+</li>
+            </ul>
+
+               <p>The rank can be an integer number between -10 and 10 (inclusive). Pages with a rank closer to -10 will appear further down the list of results, and pages with a rank closer to 10 will appear higher in the list of results. Note that 0 means <em>normal rank</em>, not <em>no rank</em>.</p>
+
+               <p>If you are looking to completely ignore a page, check         <code class='verbatim'>config-file/v2:search.ignore</code>
+.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    search:
+      ranking:
+        # Match a single file
+        tutorial.html: 2
+
+        # Match all files under the api/v1 directory
+        api/v1/*: -5
+
+        # Match all files that end with tutorial.html
+        &#39;*/tutorial.html&#39;: 3</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>The final rank will be the last pattern to match the page.</p>
+
+</div>
+
+
+               <pre class='not-implemented'>
+.. tip:: 
+    Is better to decrease the rank of pages you want to deprecate,
+    rather than increasing the rank of the other pages.</pre>
+
+
+
+<h4>search.ignore</h4>
+               <p>Don&#39;t index files matching a pattern. This is, you won&#39;t see search results from these files.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>list</code>
+ of patterns</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>[&#39;search.html&#39;, &#39;search/index.html&#39;, &#39;404.html&#39;, &#39;404/index.html&#39;]</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Patterns are matched against the final html pages produced by the build (you should try to match <code class='not-implemented'>:None:None:`index.html`</code>, not <code class='not-implemented'>:None:None:`docs/index.rst`</code>). Patterns can include some special characters:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>*</code>
+ matches everything</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>?</code>
+ matches any single character</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>[seq]</code>
+ matches any character in         <code class='verbatim'>seq</code>
+</p>
+
+</li>
+            </ul>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    search:
+       ignore:
+         # Ignore a single file
+         - 404.html
+
+         # Ignore all files under the search/ directory
+         - search/*
+
+         # Ignore all files that end with ref.html
+         - &#39;*/ref.html&#39;</pre>
+
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    search:
+       ignore:
+         # Custom files to ignore
+         - file.html
+         - api/v1/*
+
+         # Defaults
+         - search.html
+         - search/index.html
+         - 404.html
+         - 404/index.html&#39;</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Since Read the Docs fallbacks to the original search engine when no results are found, you may still see search results from ignored pages.</p>
+
+</div>
+
+
+
+<h2>Schema</h2>
+               <p>You can see the complete schema <a link href="https://github.com/readthedocs/readthedocs.org/blob/main/readthedocs/rtd_tests/fixtures/spec/v2/schema.json" class='external'>here</a>.</p>
+
+
+<h2>Legacy ``build`` specification</h2>
+               <p>The legacy         <code class='verbatim'>build</code>
+ specification used a different set of Docker images, and only allowed you to specify the Python version. It remains supported for backwards compatibility reasons. Check out the         <code class='verbatim'>config-file/v2:build</code>
+ above for an alternative method that is more flexible.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      image: latest
+      apt_packages:
+        - libclang
+        - cmake
+
+    python:
+      version: &#34;3.7&#34;</pre>
+
+
+               <p>The legacy         <code class='verbatim'>build</code>
+ specification also supports the         <code class='verbatim'>apt_packages</code>
+ key described above.</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>When using the new specification, the         <code class='verbatim'>build.image</code>
+ and         <code class='verbatim'>python.version</code>
+ options cannot be used. Doing so will error the build.</p>
+
+</div>
+
+
+
+<h3>build (legacy)</h3>
+
+<h4>build.image (legacy)</h4>
+               <p>The Docker image used for building the docs.</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Options  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>stable</code>
+,         <code class='verbatim'>latest</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>latest</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+               <p>Each image support different Python versions and has different packages installed, as defined here:</p>
+
+                          <ul>               <li>               <p><a link href="https://github.com/readthedocs/readthedocs-docker-images/tree/releases/5.x" class='external'>stable</a>: <code class='not-implemented'>:None:buildpyversions:`stable`</code></p>
+
+</li>
+               <li>               <p><a link href="https://github.com/readthedocs/readthedocs-docker-images/tree/releases/6.x" class='external'>latest</a>: <code class='not-implemented'>:None:buildpyversions:`latest`</code></p>
+
+</li>
+            </ul>
+
+
+<h4>python.version (legacy)</h4>
+               <p>The Python version (this depends on         <code class='verbatim'>config-file/v2:build.image (legacy)</code>
+).</p>
+
+                          <dl>               <dt>                           Type  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>string</code>
+</p>
+
+               </dd>
+               <dt>                           Default  
+               </dt>
+               <dd>                <p>        <code class='verbatim'>3</code>
+</p>
+
+               </dd>
+           </dl>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Make sure to use quotes (        <code class='verbatim'>&#34;</code>
+) to make it a string. We previously supported using numbers here, but that approach is deprecated.</p>
+
+</div>
+
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>If you are using a <code class='not-implemented'>:None:ref:`Conda &lt;config-file/v2:conda&gt;`</code> environment to manage the build, this setting will not have any effect, as the Python version is managed by Conda.</p>
+
+</div>
+
+
+
+<h2>Migrating from v1</h2>
+
+<h3>Changes</h3>
+                          <ul>               <li>               <p>The version setting is required. See         <code class='verbatim'>config-file/v2:version</code>
+.</p>
+
+</li>
+               <li>               <p>The default value of the         <code class='verbatim'>config-file/v2:formats</code>
+ setting has changed to         <code class='verbatim'>[]</code>
+   and it doesn&#39;t include the values from the web interface.</p>
+
+</li>
+               <li>               <p>The top setting         <code class='verbatim'>requirements_file</code>
+ was moved to         <code class='verbatim'>python.install</code>
+   and we don&#39;t try to find a requirements file if the option isn&#39;t present.   See         <code class='verbatim'>config-file/v2:Requirements file</code>
+.</p>
+
+</li>
+               <li>               <p>The setting         <code class='verbatim'>conda.file</code>
+ was renamed to         <code class='verbatim'>conda.environment</code>
+.   See         <code class='verbatim'>config-file/v2:conda.environment</code>
+.</p>
+
+</li>
+               <li>               <p>The         <code class='verbatim'>build.image</code>
+ setting has been replaced by         <code class='verbatim'>build.os</code>
+.   See         <code class='verbatim'>config-file/v2:build.os</code>
+.   Alternatively, you can use the legacy         <code class='verbatim'>build.image</code>
+   that now has only two options:         <code class='verbatim'>latest</code>
+ (default) and         <code class='verbatim'>stable</code>
+.</p>
+
+</li>
+               <li>               <p>The settings         <code class='verbatim'>python.setup_py_install</code>
+ and         <code class='verbatim'>python.pip_install</code>
+ were replaced by         <code class='verbatim'>python.install</code>
+.   And now it accepts a path to the package.   See         <code class='verbatim'>config-file/v2:Packages</code>
+.</p>
+
+</li>
+               <li>               <p>The setting         <code class='verbatim'>python.use_system_site_packages</code>
+ was renamed to         <code class='verbatim'>python.system_packages</code>
+.   See         <code class='verbatim'>config-file/v2:python.system_packages</code>
+.</p>
+
+</li>
+               <li>               <p>The build will fail if there are invalid keys (strict mode).</p>
+
+</li>
+            </ul>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>Some values from the web interface are no longer respected, please see <code class='not-implemented'>:None:ref:`config-file/v2:Migrating from the web interface`</code> if you have settings there.</p>
+
+</div>
+
+
+
+<h3>New settings</h3>
+                          <ul>               <li>               <p>        <code class='verbatim'>config-file/v2:sphinx</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>config-file/v2:mkdocs</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>config-file/v2:submodules</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>config-file/v2:python.install</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>config-file/v2:search</code>
+</p>
+
+</li>
+            </ul>
+
+
+<h2>Migrating from the web interface</h2>
+               <p>This should be pretty straightforward, just go to the <code class='not-implemented'>:None:guilabel:`Admin`</code> &gt; <code class='not-implemented'>:None:guilabel:`Advanced settings`</code>, and find their respective setting in         <code class='verbatim'>here &lt;config-file/v2:Supported settings&gt;</code>
+.</p>
+
+               <p>Not all settings in the web interface are per version, but are per project. These settings aren&#39;t supported via the configuration file.</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>Name</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Repository URL</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Repository type</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Language</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Programming language</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Project homepage</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Tags</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Single version</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Default branch</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Default version</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Show versions warning</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Privacy level</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>Analytics code</code>
+</p>
+
+</li>
+            </ul>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

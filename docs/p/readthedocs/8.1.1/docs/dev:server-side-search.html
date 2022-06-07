@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Server Side Search</h1>
+               <p>Read the Docs uses <code class='not-implemented'>:None:None:`Elasticsearch_`</code> instead of the built in Sphinx search for providing better search results. Documents are indexed in the Elasticsearch index and the search is made through the API. All the Search Code is open source and lives in the <code class='not-implemented'>:None:None:`GitHub Repository`</code>. Currently we are using <code class='not-implemented'>:None:None:`Elasticsearch 6.3`</code>.</p>
+
+
+<h2>Local development configuration</h2>
+               <p>Elasticsearch is installed and run as part of the         <code class='verbatim'>development installation guide &lt;/install&gt;</code>
+.</p>
+
+
+<h3>Indexing into Elasticsearch</h3>
+               <p>For using search, you need to index data to the Elasticsearch Index. Run         <code class='verbatim'>reindex_elasticsearch</code>
+ management command:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.manage reindex_elasticsearch</pre>
+
+
+               <p>For performance optimization, we implemented our own version of management command rather than the built in management command provided by the <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code> package.</p>
+
+
+<h3>Auto indexing</h3>
+               <p>By default, Auto Indexing is turned off in development mode. To turn it on, change the         <code class='verbatim'>ELASTICSEARCH_DSL_AUTOSYNC</code>
+ settings to <code class='not-implemented'>:None:None:`True`</code> in the <code class='not-implemented'>:None:None:`readthedocs/settings/dev.py`</code> file. After that, whenever a documentation successfully builds, or project gets added, the search index will update automatically.</p>
+
+
+<h2>Architecture</h2>
+               <p>The search architecture is divided into 2 parts.</p>
+
+                          <ul>               <li>               <p>One part is responsible for <strong>indexing</strong> the documents and projects (        <code class='verbatim'>documents.py</code>
+)</p>
+
+</li>
+               <li>               <p>The other part is responsible for <strong>querying</strong> the Index to show the proper results to users (        <code class='verbatim'>faceted_search.py</code>
+)</p>
+
+</li>
+            </ul>
+
+               <p>We use the <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code> package for our Document abstraction. <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code> is a wrapper around <code class='not-implemented'>:None:None:`elasticsearch-dsl`</code> for easy configuration with Django.</p>
+
+
+<h3>Indexing</h3>
+               <p>All the Sphinx documents are indexed into Elasticsearch after the build is successful. Currently, we do not index MkDocs documents to elasticsearch, but <a link href="https://github.com/readthedocs/readthedocs.org/issues/1088" class='external'>any kind of help is welcome</a>.</p>
+
+
+<h3>Troubleshooting</h3>
+               <p>If you get an error like:     </p>
+
+               <pre>RequestError(400, &#39;search_phase_execution_exception&#39;, &#39;failed to create query: ...</pre>
+               <p>You can fix this by deleting the page index and         <code class='verbatim'>re-indexing &lt;server-side-search:indexing into elasticsearch&gt;</code>
+:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.manage &#39;search_index --delete&#39;
+    inv docker.manage reindex_elasticsearch</pre>
+
+
+
+<h4>How we index documentations</h4>
+               <p>After any build is successfully finished, <code class='not-implemented'>:None:None:`HTMLFile`</code> objects are created for each of the         <code class='verbatim'>HTML</code>
+ files and the old version&#39;s <code class='not-implemented'>:None:None:`HTMLFile`</code> object is deleted. By default, <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code> package listens to the <code class='not-implemented'>:None:None:`post_create`</code>/<code class='not-implemented'>:None:None:`post_delete`</code> signals to index/delete documents, but it has performance drawbacks as it send HTTP request whenever any <code class='not-implemented'>:None:None:`HTMLFile`</code> objects is created or deleted. To optimize the performance, <code class='not-implemented'>:None:None:`bulk_post_create`</code> and <code class='not-implemented'>:None:None:`bulk_post_delete`</code> <code class='not-implemented'>:None:None:`signals_`</code> are dispatched with list of <code class='not-implemented'>:None:None:`HTMLFIle`</code> objects so its possible to bulk index documents in elasticsearch ( <code class='not-implemented'>:None:None:`bulk_post_create`</code> signal is dispatched for created and <code class='not-implemented'>:None:None:`bulk_post_delete`</code> is dispatched for deleted objects). Both of the signals are dispatched with the list of the instances of <code class='not-implemented'>:None:None:`HTMLFile`</code> in <code class='not-implemented'>:None:None:`instance_list`</code> parameter.</p>
+
+               <p>We listen to the <code class='not-implemented'>:None:None:`bulk_post_create`</code> and <code class='not-implemented'>:None:None:`bulk_post_delete`</code> signals in our <code class='not-implemented'>:None:None:`Search`</code> application and index/delete the documentation content from the <code class='not-implemented'>:None:None:`HTMLFile`</code> instances.</p>
+
+
+<h4>How we index projects</h4>
+               <p>We also index project information in our search index so that the user can search for projects from the main site. We listen to the <code class='not-implemented'>:None:None:`post_create`</code> and <code class='not-implemented'>:None:None:`post_delete`</code> signals of <code class='not-implemented'>:None:None:`Project`</code> model and index/delete into Elasticsearch accordingly.</p>
+
+
+<h4>Elasticsearch document</h4>
+               <p><code class='not-implemented'>:None:None:`elasticsearch-dsl`</code> provides a model-like wrapper for <code class='not-implemented'>:None:None:`the Elasticsearch document`</code>. As per requirements of <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code>, it is stored in the <code class='not-implemented'>:None:None:`readthedocs/search/documents.py`</code> file.</p>
+
+                           <blockquote><p><strong>ProjectDocument:</strong> It is used for indexing projects. Signal listener of     <code class='not-implemented'>:None:None:`django-elasticsearch-dsl`</code> listens to the <code class='not-implemented'>:None:None:`post_save`</code> signal of <code class='not-implemented'>:None:None:`Project`</code> model and     then index/delete into Elasticsearch.</p>
+<p><strong>PageDocument</strong>: It is used for indexing documentation of projects.     As mentioned above, our <code class='not-implemented'>:None:None:`Search`</code> app listens to the <code class='not-implemented'>:None:None:`bulk_post_create`</code> and <code class='not-implemented'>:None:None:`bulk_post_delete`</code>     signals and indexes/deleted documentation into Elasticsearch. The signal listeners are in     the <code class='not-implemented'>:None:None:`readthedocs/search/signals.py`</code> file. Both of the signals are dispatched     after a successful documentation build.</p>
+<p>The fields and ES Datatypes are specified in the <code class='not-implemented'>:None:None:`PageDocument`</code>. The indexable data is taken     from <code class='not-implemented'>:None:None:`processed_json`</code> property of <code class='not-implemented'>:None:None:`HTMLFile`</code>. This property provides python dictionary with     document data like <code class='not-implemented'>:None:None:`title`</code>, <code class='not-implemented'>:None:None:`sections`</code>, <code class='not-implemented'>:None:None:`path`</code> etc.</p>
+</blockquote>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Elasticsearch: https://www.elastic.co/products/elasticsearch&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _Elasticsearch 6.3: https://www.elastic.co/guide/en/elasticsearch/reference/6.3/index.html&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _GitHub Repository: https://github.com/readthedocs/readthedocs.org/tree/main/readthedocs/search&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _the Elasticsearch document: https://www.elastic.co/guide/en/elasticsearch/guide/current/document.html&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _django-elasticsearch-dsl: https://github.com/sabricot/django-elasticsearch-dsl&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _elasticsearch-dsl: https://elasticsearch-dsl.readthedocs.io/en/latest/&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _signals: https://docs.djangoproject.com/en/2.1/topics/signals/&#39;&gt;
+           </pre>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

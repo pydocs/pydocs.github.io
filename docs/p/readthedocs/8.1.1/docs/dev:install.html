@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Development Installation</h1>
+               <pre class='not-implemented'>
+.. meta:: 
+    (&#39;description lang=en&#39;, &#39;Install a local development instance of Read the Docs with our step by step guide.&#39;)
+    </pre>
+
+
+               <p>These are development setup and         <code class='verbatim'>standards &lt;install:Core team standards&gt;</code>
+ that are adhered to by the core development team while developing Read the Docs and related services. If you are a contributor to Read the Docs, it might a be a good idea to follow these guidelines as well.</p>
+
+               <p>To follow these instructions you will need a Unix-like operating system, or <a link href="https://docs.microsoft.com/en-us/windows/wsl/" class='external'>Windows Subsystem for Linux (WSL)</a>. Other operating systems are not supported.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>We do not recommend to follow this guide to deploy an instance of Read the Docs for production usage. Take into account that this setup is only useful for developing purposes.</p>
+
+</div>
+
+
+
+<h2>Set up your environment</h2>
+                          <ol>               <li>               <p>install <a link href="https://www.docker.com/" class='external'>Docker</a> following <a link href="https://docs.docker.com/install/" class='external'>their installation guide</a>.</p>
+
+</li>
+               <li>               <p>clone the         <code class='verbatim'>readthedocs.org</code>
+ repository:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    git clone --recurse-submodules https://github.com/readthedocs/readthedocs.org/</pre>
+
+
+</li>
+               <li>               <p>install the requirements from         <code class='verbatim'>common</code>
+ submodule:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    pip install -r common/dockerfiles/requirements.txt</pre>
+
+
+</li>
+               <li>               <p>build the Docker image for the servers:</p>
+
+                           <div class='admonition'>
+    <div>warning</div>
+        <p>This command could take a while to finish since it will download several Docker images.</p>
+
+</div>
+
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.build</pre>
+
+
+               <pre class='not-implemented'>
+.. tip:: 
+    If you pass the ``GITHUB_TOKEN`` and ``GITHUB_USER`` environment variables to this command,
+       it will add support for readthedocs-ext.</pre>
+
+
+</li>
+               <li>               <p>pull down Docker images for the builders:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.pull --only-required</pre>
+
+
+</li>
+               <li>               <p>start all the containers:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.up  --init  # --init is only needed the first time</pre>
+
+
+</li>
+               <li>               <p>go to http://community.dev.readthedocs.io to access your local instance of Read the Docs.</p>
+
+</li>
+            </ol>
+
+
+<h2>Check that everything works</h2>
+                          <ol>               <li>               <p>go to http://community.dev.readthedocs.io and check that the appearance and style looks correct    (otherwise the MinIO buckets might be misconfigured, see above)</p>
+
+</li>
+               <li>               <p>login as         <code class='verbatim'>admin</code>
+ /          <code class='verbatim'>admin</code>
+ and verify that the project list appears</p>
+
+</li>
+               <li>               <p>go to the &#34;Read the Docs&#34; project, click on the &#34;Build version&#34; button to build         <code class='verbatim'>latest</code>
+,    and wait until it finishes</p>
+
+</li>
+               <li>               <p>click on the &#34;View docs&#34; button to browse the documentation, and verify that it works</p>
+
+</li>
+            </ol>
+
+
+<h2>Working with Docker Compose</h2>
+               <p>We wrote a wrapper with         <code class='verbatim'>invoke</code>
+ around         <code class='verbatim'>docker-compose</code>
+ to have some shortcuts and save some work while typing docker compose commands. This section explains these         <code class='verbatim'>invoke</code>
+ commands:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>        <code class='verbatim'>inv docker.build</code>
+</p>
+</dt>
+               <dd><p>Builds the generic Docker image used by our servers (web, celery, build and proxito).</p>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.up</code>
+</p>
+</dt>
+               <dd><p>Starts all the containers needed to run Read the Docs completely.</p>
+           <ul>               <li>               <p>        <code class='verbatim'>--no-search</code>
+ can be passed to disable search</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>--init</code>
+ is used the first time this command is ran to run initial migrations, create an admin user, etc</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>--no-reload</code>
+ makes all celery processes and django runserver       to use no reload and do not watch for files changes</p>
+
+</li>
+            </ul>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.shell</code>
+</p>
+</dt>
+               <dd><p>Opens a shell in a container (web by default).</p>
+           <ul>               <li>               <p>        <code class='verbatim'>--no-running</code>
+ spins up a new container and open a shell</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>--container</code>
+ specifies in which container the shell is open</p>
+
+</li>
+            </ul>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.manage {command}</code>
+</p>
+</dt>
+               <dd><p>Executes a Django management command in a container.</p>
+<pre class='not-implemented'>
+.. tip:: 
+    Useful when modifying models to run ``makemigrations``.</pre>
+
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.down</code>
+</p>
+</dt>
+               <dd><p>Stops and removes all containers running.</p>
+           <ul>               <li>               <p>        <code class='verbatim'>--volumes</code>
+ will remove the volumes as well (database data will be lost)</p>
+
+</li>
+            </ul>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.restart {containers}</code>
+</p>
+</dt>
+               <dd><p>Restarts the containers specified (automatically restarts NGINX when needed).</p>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.attach {container}</code>
+</p>
+</dt>
+               <dd><p>Grab STDIN/STDOUT control of a running container.</p>
+<pre class='not-implemented'>
+.. tip:: 
+    Useful to debug with ``pdb``. Once the program has stopped in your pdb line,
+        you can run ``inv docker.attach web`` and jump into a pdb session
+        (it also works with ipdb and pdb++)</pre>
+
+<pre class='not-implemented'>
+.. tip:: 
+    You can hit CTRL-p CTRL-p to detach it without stopping the running process.</pre>
+
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.test</code>
+</p>
+</dt>
+               <dd><p>Runs all the test suites inside the container.</p>
+           <ul>               <li>               <p>        <code class='verbatim'>--arguments</code>
+ will pass arguments to Tox command (e.g.         <code class='verbatim'>--arguments &#34;-e py310 -- -k test_api&#34;</code>
+)</p>
+
+</li>
+            </ul>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.pull</code>
+</p>
+</dt>
+               <dd><p>Downloads and tags all the Docker images required for builders.</p>
+           <ul>               <li>               <p>        <code class='verbatim'>--only-required</code>
+ pulls only the image         <code class='verbatim'>ubuntu-20.04</code>
+.</p>
+
+</li>
+            </ul>
+</dd>
+               <dt><p>        <code class='verbatim'>inv docker.buildassets</code>
+</p>
+</dt>
+               <dd><p>Build all the assets and &#34;deploy&#34; them to the storage.</p>
+</dd>
+           </dl>
+
+
+<h3>Adding a new Python dependency</h3>
+               <p>The Docker image for the servers is built with the requirements defined in the current checked out branch. In case you need to add a new Python dependency while developing, you can use the         <code class='verbatim'>common/dockerfiles/entrypoints/common.sh</code>
+ script as shortcut.</p>
+
+               <p>This script is run at startup on all the servers (web, celery, builder, proxito) which allows you to test your dependency without re-building the whole image. To do this, add the         <code class='verbatim'>pip</code>
+ command required for your dependency in         <code class='verbatim'>common.sh</code>
+ file:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: bash
+    # common.sh
+    pip install my-dependency==1.2.3</pre>
+
+
+               <p>Once the PR that adds this dependency was merged, you can rebuild the image so the dependency is added to the Docker image itself and it&#39;s not needed to be installed each time the container spins up.</p>
+
+
+<h3>Debugging Celery</h3>
+               <p>In order to step into the worker process, you can&#39;t use         <code class='verbatim'>pdb</code>
+ or         <code class='verbatim'>ipdb</code>
+, but you can use         <code class='verbatim'>celery.contrib.rdb</code>
+:</p>
+
+               <pre class='not-implemented'>
+.. code-block:: python
+    from celery.contrib import rdb; rdb.set_trace()</pre>
+
+
+               <p>When the breakpoint is hit, the Celery worker will pause on the breakpoint and will alert you on STDOUT of a port to connect to. You can open a shell into the container with         <code class='verbatim'>inv docker.shell celery</code>
+ (or         <code class='verbatim'>build</code>
+) and then use         <code class='verbatim'>telnet</code>
+ or         <code class='verbatim'>netcat</code>
+ to connect to the debug process port:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    nc 127.0.0.1 6900</pre>
+
+
+               <p>The         <code class='verbatim'>rdb</code>
+ debugger is similar to         <code class='verbatim'>pdb</code>
+, there is no         <code class='verbatim'>ipdb</code>
+ for remote debugging currently.</p>
+
+
+<h3>Configuring connected accounts</h3>
+               <p>These are optional steps to setup the         <code class='verbatim'>connected accounts &lt;rtd:connected-accounts&gt;</code>
+ (GitHub, GitLab, and BitBucket) in your development environment. This will allow you to login to your local development instance using your GitHub, Bitbucket, or GitLab credentials and this makes the process of importing repositories easier.</p>
+
+               <p>However, because these services will not be able to connect back to your local development instance,         <code class='verbatim'>incoming webhooks &lt;rtd:integrations&gt;</code>
+ will not function correctly. For some services, the webhooks will fail to be added when the repository is imported. For others, the webhook will simply fail to connect when there are new commits to the repository.</p>
+
+               <pre class='not-implemented'>
+.. figure:: /_static/images/development/bitbucket-oauth-setup.png
+    (&#39;align&#39;, &#39;center&#39;)
+    (&#39;figwidth&#39;, &#39;80%&#39;)
+    Configuring an OAuth consumer for local development on Bitbucket</pre>
+
+
+                          <ul>               <li>               <p>Configure the applications on GitHub, Bitbucket, and GitLab.   For each of these, the callback URI is         <code class='verbatim'>http://community.dev.readthedocs.io/accounts/&lt;provider&gt;/login/callback/</code>
+   where         <code class='verbatim'>&lt;provider&gt;</code>
+ is one of         <code class='verbatim'>github</code>
+,         <code class='verbatim'>gitlab</code>
+, or         <code class='verbatim'>bitbucket_oauth2</code>
+.   When setup, you will be given a &#34;Client ID&#34; (also called an &#34;Application ID&#34; or just &#34;Key&#34;) and a &#34;Secret&#34;.</p>
+
+</li>
+               <li>               <p>Take the &#34;Client ID&#34; and &#34;Secret&#34; for each service and enter it in your local Django admin at:           <code class='verbatim'>http://community.dev.readthedocs.io/admin/socialaccount/socialapp/</code>
+.   Make sure to apply it to the &#34;Site&#34;.</p>
+
+</li>
+            </ul>
+
+
+<h2>Troubleshooting</h2>
+
+<h3>Builds fail with a generic error</h3>
+               <p>There are projects that do not use the default Docker image downloaded when setting up the development environment. These extra images are not downloaded by default because they are big and they are not required in all cases. However, if you are seeing the following error</p>
+
+               <pre class='not-implemented'>
+.. figure:: /_static/images/development/read-the-docs-build-failing.png
+    (&#39;align&#39;, &#39;center&#39;)
+    (&#39;figwidth&#39;, &#39;80%&#39;)
+    Build failing with a generic error</pre>
+
+
+               <p>and in the console where the logs are shown you see something like         <code class='verbatim'>BuildAppError: No such image: readthedocs/build:ubuntu-22.04</code>
+, that means the application wasn&#39;t able to find the Docker image required to build that project and it failed.</p>
+
+               <p>In this case, you can run a command to download all the optional Docker images:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    inv docker.pull</pre>
+
+
+               <p>However, if you prefer to download only the <em>specific</em> image required for that project and save some space on disk, you have to follow these steps:</p>
+
+                          <ol>               <li>               <p>go to https://hub.docker.com/r/readthedocs/build/tags</p>
+
+</li>
+               <li>               <p>find the latest tag for the image shown in the logs    (in this example is         <code class='verbatim'>readthedocs/build:ubuntu-22.04</code>
+, which the current latest tag on that page is         <code class='verbatim'>ubuntu-22.04-2022.03.15</code>
+)</p>
+
+</li>
+               <li>               <p>run the Docker command to pull it:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    docker pull readthedocs/build:ubuntu-22.04-2022.03.15</pre>
+
+
+</li>
+               <li>               <p>tag the downloaded Docker image for the app to findit:</p>
+
+               <pre class='not-implemented'>
+.. prompt:: bash
+    docker tag readthedocs/build:ubuntu-22.04-2022.03.15 readthedocs/build:ubuntu-22.04</pre>
+
+
+</li>
+            </ol>
+
+               <p>Once this is done, you should be able to trigger a new build on that project and it should succeed.</p>
+
+
+<h2>Core team standards</h2>
+               <p>Core team members expect to have a development environment that closely approximates our production environment, in order to spot bugs and logical inconsistencies before they make their way to production.</p>
+
+               <p>This solution gives us many features that allows us to have an environment closer to production:</p>
+
+               <!-- deflist -->
+           <dl>
+               <dt><p>Celery runs as a separate process</p>
+</dt>
+               <dd><p>Avoids masking bugs that could be introduced by Celery tasks in a race conditions.</p>
+</dd>
+               <dt><p>Celery runs multiple processes</p>
+</dt>
+               <dd><p>We run celery with multiple worker processes to discover race conditions     between tasks.</p>
+</dd>
+               <dt><p>Docker for builds</p>
+</dt>
+               <dd><p>Docker is used for a build backend instead of the local host build backend.     There are a number of differences between the two execution methods in how     processes are executed, what is installed, and what can potentially leak     through and mask bugs -- for example, local SSH agent allowing code check     not normally possible.</p>
+</dd>
+               <dt><p>Serve documentation under a subdomain</p>
+</dt>
+               <dd><p>There are a number of resolution bugs and cross-domain behavior that can     only be caught by using <code class='not-implemented'>:None:None:`USE_SUBDOMAIN`</code> setting.</p>
+</dd>
+               <dt><p>PostgreSQL as a database</p>
+</dt>
+               <dd><p>It is recommended that Postgres be used as the default database whenever     possible, as SQLite has issues with our Django version and we use Postgres     in production.  Differences between Postgres and SQLite should be masked for     the most part however, as Django does abstract database procedures, and we     don&#39;t do any Postgres-specific operations yet.</p>
+</dd>
+               <dt><p>Celery is isolated from database</p>
+</dt>
+               <dd><p>Celery workers on our build servers do not have database access and need     to be written to use API access instead.</p>
+</dd>
+               <dt><p>Use NGINX as web server</p>
+</dt>
+               <dd><p>All the site is served via NGINX with the ability to change some configuration locally.</p>
+</dd>
+               <dt><p>MinIO as Django storage backend</p>
+</dt>
+               <dd><p>All static and media files are served using Minio --an emulator of S3,     which is the one used in production.</p>
+</dd>
+               <dt><p>Serve documentation via El Proxito</p>
+</dt>
+               <dd><p>Documentation is proxied by NGINX to El Proxito and proxied back to NGINX to be served finally.     El Proxito is a small application put in front of the documentation to serve files     from the Django Storage Backend.</p>
+</dd>
+               <dt><p>Search enabled by default</p>
+</dt>
+               <dd><p>Elasticsearch is properly configured and enabled by default.     All the documentation indexes are updated after a build is finished.</p>
+</dd>
+           </dl>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>

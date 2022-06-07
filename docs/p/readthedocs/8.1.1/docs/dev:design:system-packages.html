@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <script type="text/x-mathjax-config">
+      // this should process only math inside  span with tex2jax_process class
+      MathJax.Hub.Config({
+          extensions: ["tex2jax.js"],
+          jax: ["input/TeX", "output/HTML-CSS"],
+          tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+          },
+          "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js">
+    </script>
+    <link rel="stylesheet" href="/papyri.css">
+    <link rel="stylesheet" href="/pygments.css">
+<style>
+
+    header > brand {
+        /*border-right: 1px solid #ccc;
+          border-left: 1px solid #ccc;*/
+        margin-left: 15px;
+        padding: 0px;
+        display: inline-block; 
+        width: 67px;
+    }
+
+    brand > a {
+        text-decoration: None;
+
+    }
+    brand >a> img {
+            display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    bottom: -10px;
+
+   }
+    .container {
+       max-width: 800px;
+       padding-left: 210px;
+       padding-top: 30px;
+    }
+</style>
+</head><body class="tex2jax_ignore">
+    <header>
+        <brand><a href='/'><img src='/favicon.ico'/></a></brand>
+        <nav> / <a href='/' >p</a>  &nbsp;/&nbsp; 
+                <div class="dropdown">
+                <a href=readthedocs>readthedocs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                     </div>
+                </div>
+                <div class="dropdown">
+                <a href='/p/readthedocs/8.1.1/api/readthedocs'>8.1.1</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+<a href="/p/readthedocs/8.1.1/api/readthedocs">8.1.1</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href='/p/readthedocs/8.1.1/api/readthedocs'>docs</a>&nbsp;/&nbsp;
+                    <div class="dropdown-content">
+                        <a href="/p/readthedocs/8.1.1/api/readthedocs">API</a>
+                        <a href="/p/readthedocs/8.1.1/gallery">Gallery</a>
+                        <a href="/p/readthedocs/8.1.1/examples">Examples</a>
+                        <a href="/p/readthedocs/8.1.1/docs">Narrative</a>
+                     </div>
+                </div>
+
+</nav>
+    </header>
+    <div class='container'>
+
+    <div class="sidenav">
+        <i class="fab fa-python"></i>
+        <a href="#">Project Logo ^</a>
+    <a href="#">readthedocs</a>
+    <a href="#">8.1.1</a>
+        <a class='external' href="https://github.com/readthedocs/readthedocs.org">GitHub</a>
+    <hr/>
+    <hr/>
+    </div><!--end sidenav-->
+
+
+
+
+
+
+
+<h1>Allow Installation of System Packages</h1>
+               <p>Currently we don&#39;t allow executing arbitrary commands in the build process. The more common use case is to install extra dependencies.</p>
+
+               <pre class='not-implemented'>
+.. contents:: 
+    (&#39;local&#39;, &#39;&#39;)
+    (&#39;depth&#39;, &#39;3&#39;)
+    </pre>
+
+
+
+<h2>Current status</h2>
+               <p>There is a workaround when using Sphinx to run arbitrary commands, this is executing the commands inside the         <code class='verbatim'>conf.py</code>
+ file. There isn&#39;t a workaround for MkDocs, but this problem is more common in Sphinx, since users need to install some extra dependencies in order to use autodoc or build Jupyter Notebooks.</p>
+
+               <p>However, installation of some dependencies require root access, or are easier to install using         <code class='verbatim'>apt</code>
+. Most of the CI services allow to use         <code class='verbatim'>apt</code>
+ or execute any command with         <code class='verbatim'>sudo</code>
+, so users are more familiar with that workflow.</p>
+
+               <p>Some users use Conda instead of pip to install dependencies in order to avoid these problems, but not all pip users are familiar with Conda, or want to migrate to Conda just to use Read the Docs.</p>
+
+
+<h2>Security concerns</h2>
+               <p>Builds are run in a Docker container, but the app controlling that container lives in the same server. Allowing to execute arbitrary commands with super user privileges may introduce some security issues.</p>
+
+
+<h2>Exposing ``apt install``</h2>
+               <p>For the previous reasons we won&#39;t allow to execute arbitrary commands with root (yet), but instead allow only to install extra packages using         <code class='verbatim'>apt</code>
+.</p>
+
+               <p>We would expose this through the config file. Users will provide a list of packages to install, and under the hook we would run:</p>
+
+                          <ul>               <li>               <p>        <code class='verbatim'>apt update -y</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>apt install -y {packages}</code>
+</p>
+
+</li>
+            </ul>
+
+               <p>These commands will be run before the Python setup step and after the clone step.</p>
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>All package names must be validated to avoid injection of extra options (like         <code class='verbatim'>-v</code>
+).</p>
+
+</div>
+
+
+
+<h2>Using ``docker exec``</h2>
+               <p>Currently we use         <code class='verbatim'>docker exec</code>
+ to execute commands in a running container. This command also allows to pass a user which is used to run the commands (<code class='not-implemented'>:None:None:`#8058`</code>). We can run the         <code class='verbatim'>apt</code>
+ commands in our current containers using a super user momentarily.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _#8058: https://github.com/readthedocs/readthedocs.org/pull/8058&#39;&gt;
+           </pre>
+
+
+<h2>Config file</h2>
+               <p>The config file can add an additional mapping         <code class='verbatim'>build.apt_packages</code>
+ to a list of packages to install.</p>
+
+               <pre class='not-implemented'>
+.. code-block:: yaml
+    version: 2
+
+    build:
+      apt_packages:
+         - cmatrix
+         - mysql-server</pre>
+
+
+                           <div class='admonition'>
+    <div>note</div>
+        <p>Other names that were considered were:</p>
+
+                   <ul>               <li>               <p>        <code class='verbatim'>build.packages</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>build.extra_packages</code>
+</p>
+
+</li>
+               <li>               <p>        <code class='verbatim'>build.system_packages</code>
+</p>
+
+</li>
+            </ul>
+
+        <p>These were rejected to avoid confusion with existing keys, and to be explicit about the type of package.</p>
+
+</div>
+
+
+
+<h2>Possible problems</h2>
+                          <ul>               <li>               <p>Some users may require to pass some additional flags or install from a ppa.</p>
+
+</li>
+               <li>               <p>Some packages may require some additional setup after installation.</p>
+
+</li>
+            </ul>
+
+
+<h2>Other possible solutions</h2>
+                          <ul>               <li>               <p>We can allow to run the containers as root doing something similar to what Travis does:   They have one tool to convert the config file to a shell script (<code class='not-implemented'>:None:None:`travis-build_`</code>),   and another that spins a docker container, executes that shell script and streams the logs back (<code class='not-implemented'>:None:None:`travis-worker_`</code>).</p>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _travis-build: https://github.com/travis-ci/travis-build&#39;&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _travis-worker: https://github.com/travis-ci/worker&#39;&gt;
+           </pre>
+
+</li>
+               <li>               <p>A similar solution could be implemented using <code class='not-implemented'>:None:None:`AWS Lambda`</code>.</p>
+
+                          <pre class='not-implemented'>
+            &lt;Comment: 
+   |value: &#34;.. NOTE: Haven&#39;t done much research around this,\n     but I remember David mentioned this a time ago.&#34;
+   |&gt;
+           </pre>
+
+                          <pre class='not-implemented'>
+            &lt;Unimplemented &#39;target&#39; &#39;.. _AWS Lambda: https://aws.amazon.com/lambda/&#39;&gt;
+           </pre>
+
+</li>
+            </ul>
+
+               <p>This of course would require a large amount of work, but may be useful for the future.</p>
+
+
+<h3 id="section-Examples">Examples</h3>
+         See :
+    
+
+
+<h3>Local connectivity graph</h3>
+<p>Hover to see nodes names; edges to Self not shown, Caped at 50 nodes.</p>
+
+<p> Using a canvas is more power efficient and can get hundred of nodes ; but does not allow hyperlinks; , arrows
+or text (beyond on hover) </p> 
+<canvas class='graph' width="800" height="500"></canvas>
+<p> SVG is more flexible but power hungry; and does not scale well to 50 + nodes. </p> 
+
+<svg class='graph' width="600" height="500"></svg>
+
+<p>All aboves nodes referred to, (or are referred from) current nodes; Edges from Self to other have been omitted
+(or all nodes would be connected to the central node "self" which is not useful). Nodes are colored by the library
+they belong to, and scaled with the number of references pointing them</p>
+
+<hr>
+
+    GitHub : <a class='external' href='https://github.com/readthedocs/readthedocs.org/blob//None#LNone'>None#None</a>
+<br/>
+
+type: None <br/>
+Commit: <br/>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+    <style type="text/css">
+        .node {};
+        .link { stroke: #999; stroke-opacity: .6; stroke-width: 1px; };
+    </style>
+<script>
+    window._data_graph = {};
+</script>
+<script type="text/javascript" src='/graph_canvas.js'></script>
+<script type="text/javascript" src='/graph_svg.js'></script>
+
+
+</div>
+</body>
+</html>
